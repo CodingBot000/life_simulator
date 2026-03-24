@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 32,
+    "job": "developer",
+    "risk_tolerance": "low",
+    "priority": ["stability", "income", "work_life_balance"]
+  },
+  "decision": {
+    "optionA": "현재 회사에 남는다",
+    "optionB": "스타트업으로 이직한다",
+    "context": "현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다."
+  }
+}

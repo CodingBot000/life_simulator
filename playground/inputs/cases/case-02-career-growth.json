@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 29,
+    "job": "developer",
+    "risk_tolerance": "high",
+    "priority": ["growth", "ownership", "learning"]
+  },
+  "decision": {
+    "optionA": "대기업 플랫폼팀에 남는다",
+    "optionB": "AI 스타트업으로 이직한다",
+    "context": "현재 회사는 시스템과 프로세스가 잘 잡혀 있지만 개인이 내리는 제품 영향력은 작다. 생성형 AI 제품을 빠르게 만들 수 있는 환경에 끌리지만 실패 가능성도 알고 있다."
+  }
+}

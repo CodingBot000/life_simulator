@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 37,
+    "job": "senior developer",
+    "risk_tolerance": "low",
+    "priority": ["growth", "stress_management", "compensation"]
+  },
+  "decision": {
+    "optionA": "매니저 트랙으로 전환한다",
+    "optionB": "IC 트랙에 남는다",
+    "context": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다."
+  }
+}

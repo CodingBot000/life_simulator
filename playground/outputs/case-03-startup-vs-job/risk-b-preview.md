@@ -1,0 +1,142 @@
+# Risk B Request Preview
+
+- Request file: `playground/outputs/case-03-startup-vs-job/risk-b-request.json`
+- Prompt file: `prompts/risk.md`
+- Input source: `playground/inputs/cases/case-03-startup-vs-job.json`
+- Previous result: `playground/outputs/case-03-startup-vs-job/planner-result.json`
+- Previous result: `playground/outputs/case-03-startup-vs-job/scenario-b-result.json`
+
+## Prompt
+
+```md
+너는 의사결정 시뮬레이션 체인의 Risk Analyst다.
+
+목표:
+- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.
+- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.
+- 이유는 추상적 표현보다 구체적인 근거를 우선한다.
+
+입력 데이터 형식:
+```json
+{
+  "optionLabel": "A",
+  "userProfile": {
+    "age": 32,
+    "job": "developer",
+    "risk_tolerance": "low",
+    "priority": ["stability", "income", "work_life_balance"]
+  },
+  "selectedOption": "현재 회사에 남는다",
+  "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+  "factors": ["stability", "income", "growth", "work_life_balance"],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": ["stability", "income", "growth", "work_life_balance"]
+  },
+  "scenario": {
+    "three_months": "",
+    "one_year": "",
+    "three_years": ""
+  }
+}
+```
+
+판단 규칙:
+- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.
+- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.
+- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.
+- 막연한 공포 조장은 금지한다.
+- 입력에 없는 사실을 만들어 단정하지 않는다.
+- 응답은 반드시 유효한 JSON만 반환한다.
+- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
+
+출력 JSON 형식:
+```json
+{
+  "risk_level": "low | medium | high",
+  "reasons": []
+}
+```
+```
+
+## Input JSON
+
+```json
+{
+  "optionLabel": "B",
+  "userProfile": {
+    "age": 34,
+    "job": "product manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "independence",
+      "growth",
+      "income"
+    ]
+  },
+  "selectedOption": "안정적인 IT 회사에 취업한다",
+  "decisionContext": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.",
+  "factors": [
+    "수입 안정성",
+    "성장 가능성",
+    "업무 자율성과 독립성",
+    "생활비 및 대출 상환 부담 대응 가능성",
+    "중간 수준의 리스크 감내도와의 적합성"
+  ],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": [
+      "수입 안정성",
+      "성장 가능성",
+      "업무 자율성과 독립성",
+      "생활비 및 대출 상환 부담 대응 가능성",
+      "중간 수준의 리스크 감내도와의 적합성"
+    ]
+  },
+  "scenario": {
+    "three_months": "안정적인 IT 회사에 입사한 뒤 3개월쯤 지나면 가장 먼저 느끼는 변화는 수입이 다시 예측 가능해졌다는 안도감이다. 월급이 정기적으로 들어오면서 생활비와 대출 상환 계획이 다시 정리되고, 당장 현금흐름을 걱정하던 압박은 줄어든다. 다만 업무는 이미 검증된 제품과 프로세스 안에서 진행되기 때문에, 직접 방향을 정하고 빠르게 실험하던 사이드프로젝트 때보다 자율성과 독립성은 제한적으로 느껴질 수 있다. 대신 제품 조직 내에서 데이터, 운영, 협업 구조를 체계적으로 배우며 성장 가능성을 확인하게 되고, ‘지금은 기반을 다지는 시기’라고 받아들이면서도 한편으로는 내 아이디어를 더 주도적으로 실행하고 싶다는 마음이 완전히 사라지지는 않는다. 전체적으로는 중간 수준의 리스크 감내도에 맞는 선택이었다는 생각이 들지만, 안정과 독립성 사이의 간극을 의식하기 시작하는 시점이다.",
+    "one_year": "1년이 지나면 회사 생활의 리듬에 익숙해지고, 성과를 내는 방식도 보다 명확해진다. 수입 안정성은 여전히 큰 장점으로 작용해 대출 상환 부담은 관리 가능한 수준으로 유지되고, 생활비 때문에 즉흥적으로 커리어 결정을 내려야 하는 압박도 줄어든다. 연봉 인상이나 성과급이 크지는 않더라도 예측 가능한 범위 안에서 개선되면 심리적으로는 꽤 안정감을 준다. 성장 측면에서는 제품 운영, 사용자 지표, 조직 내 의사결정 구조를 깊게 이해하며 PM으로서 역량이 단단해지지만, 동시에 회사 안에서의 성장과 내가 진짜 원하는 독립적인 제품 경험 사이에 차이가 있다는 점도 선명해진다. 그래서 퇴근 후나 주말에 작은 검증형 사이드프로젝트를 다시 시작할 가능성이 높다. 이때의 감정은 ‘창업을 당장 뛰어들기엔 아직 부담스럽지만, 완전히 포기하고 싶지도 않다’에 가깝고, 결과적으로 안정적인 직장을 기반으로 리스크를 통제하며 다음 선택지를 준비하는 흐름이 만들어진다.",
+    "three_years": "3년 정도 지나면 이 선택의 성격이 더 분명해진다. 안정적인 회사에 남아 있으면 수입과 경력은 비교적 꾸준히 쌓이고, 생활비와 대출 상환 대응 능력도 초반보다 훨씬 여유로워질 가능성이 크다. 중간 수준의 리스크 성향을 가진 사람에게는 이런 누적된 안전판이 실제로 큰 의미가 있어서, 무리한 도전 없이도 다음 단계를 선택할 수 있는 폭이 넓어진다. 다만 업무 자율성과 독립성에 대한 우선순위가 높은 만큼, 회사 안에서 권한이 커지지 않거나 맡는 역할이 반복적으로 느껴지면 답답함이 다시 커질 수 있다. 반대로 내부에서 신규 제품이나 작은 사업 단위를 맡게 되면, 안정성을 유지한 채 독립성 욕구를 일부 충족하는 방향으로 만족도가 올라간다. 결국 3년 뒤의 모습은 ‘완전히 안전해서 모든 갈증이 해소된 상태’라기보다, 재무적 기반과 실무 역량을 확보한 대신 독립적으로 무언가를 만들고 싶은 욕구를 더 구체적이고 현실적인 계획으로 바꿔놓은 상태에 가깝다."
+  }
+}
+```
+
+## Expected Output Schema
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "risk_level",
+    "reasons"
+  ]
+}
+```
+
+## Provider Payload Preview
+
+```json
+{
+  "runner": "codex exec",
+  "call_status": "ready",
+  "output_file": "playground/outputs/case-03-startup-vs-job/risk-b-result.json"
+}
+```

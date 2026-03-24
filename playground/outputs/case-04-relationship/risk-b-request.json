@@ -1,0 +1,80 @@
+{
+  "stage": "risk",
+  "generated_at": "2026-03-24T10:51:05Z",
+  "description": "Prepared request payload for Codex CLI live execution.",
+  "prompt_file": "prompts/risk.md",
+  "input_source": "playground/inputs/cases/case-04-relationship.json",
+  "previous_stage_result_files": [
+    "playground/outputs/case-04-relationship/planner-result.json",
+    "playground/outputs/case-04-relationship/scenario-b-result.json"
+  ],
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"optionLabel\": \"A\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
+  "expected_output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "risk_level": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "reasons": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "risk_level",
+      "reasons"
+    ]
+  },
+  "input_data": {
+    "optionLabel": "B",
+    "userProfile": {
+      "age": 31,
+      "job": "marketer",
+      "risk_tolerance": "low",
+      "priority": [
+        "emotional_stability",
+        "trust",
+        "long_term_compatibility"
+      ]
+    },
+    "selectedOption": "관계를 정리한다",
+    "decisionContext": "상대와 애정은 있지만 장거리와 반복되는 갈등으로 미래 계획이 자주 흔들린다. 혼자가 되는 불안도 있지만, 계속 버티는 것이 더 건강한지 확신이 서지 않는다.",
+    "factors": [
+      "정서적 안정성",
+      "신뢰 수준",
+      "장기적 관계 적합성",
+      "장거리 관계의 지속 가능성",
+      "반복되는 갈등의 해결 가능성"
+    ],
+    "plannerResult": {
+      "decision_type": "relationship",
+      "factors": [
+        "정서적 안정성",
+        "신뢰 수준",
+        "장기적 관계 적합성",
+        "장거리 관계의 지속 가능성",
+        "반복되는 갈등의 해결 가능성"
+      ]
+    },
+    "scenario": {
+      "three_months": "관계를 정리한 직후 3개월은 허전함과 불안이 꽤 크게 느껴진다. 애정이 있었던 만큼 혼자가 된 감정이 쉽게 사라지지 않고, 위험을 크게 감수하지 않는 성향 때문에 내가 너무 성급했나 하는 생각도 몇 번씩 든다. 하지만 장거리로 인한 일정 조율 스트레스와 반복되는 갈등은 눈에 띄게 줄어들어 일상 리듬은 오히려 안정된다. 감정 기복은 남아 있어도, 신뢰가 흔들릴 때마다 관계 전체가 불안정해졌던 패턴을 돌아보면서 정서적 안정성과 장거리 지속 가능성이 생각보다 중요한 문제였다는 점을 점점 받아들이게 된다.",
+      "one_year": "1년쯤 지나면 이별의 충격보다는 생활의 안정감이 더 크게 체감된다. 연락을 이어가며 애매하게 붙잡고 있지 않았기 때문에 감정이 반복해서 흔들리는 일은 줄고, 일과 인간관계에도 집중이 돌아온다. 가끔은 좋은 기억이 떠올라 아쉽지만, 장기적으로 봤을 때 서로 원하는 삶의 방향과 갈등을 해결하는 방식이 충분히 맞지 않았다는 점을 더 차분하게 이해하게 된다. 특히 신뢰와 장기적 관계 적합성을 중요하게 여기는 본인에게는, 애정만으로 버티는 관계보다 예측 가능하고 안정적인 관계가 더 필요하다는 기준이 분명해진다.",
+      "three_years": "3년 뒤에는 이 선택을 감정적인 단절이라기보다 삶의 방향을 정리한 결정으로 보게 될 가능성이 크다. 당시에는 외로움이 컸지만, 반복되는 갈등과 장거리의 불확실성 속에서 계속 흔들리는 상태보다 혼자서 안정된 기반을 만드는 쪽이 본인 성향에는 더 맞았다는 점이 분명해진다. 이후 새로운 관계를 시작하더라도 신뢰가 쌓이는 속도, 갈등 해결 방식, 함께 그릴 수 있는 장기 계획을 더 현실적으로 살피게 되고, 감정이 있어도 지속 가능성이 낮으면 무리해서 끌고 가지 않게 된다. 완전히 미련이 사라지지는 않아도, 이별이 삶을 망친 사건으로 남기보다는 정서적 안정성과 장기적 호환성을 우선하게 만든 경험으로 정리될 가능성이 높다."
+    }
+  },
+  "input_json": "{\n  \"optionLabel\": \"B\",\n  \"userProfile\": {\n    \"age\": 31,\n    \"job\": \"marketer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\n      \"emotional_stability\",\n      \"trust\",\n      \"long_term_compatibility\"\n    ]\n  },\n  \"selectedOption\": \"관계를 정리한다\",\n  \"decisionContext\": \"상대와 애정은 있지만 장거리와 반복되는 갈등으로 미래 계획이 자주 흔들린다. 혼자가 되는 불안도 있지만, 계속 버티는 것이 더 건강한지 확신이 서지 않는다.\",\n  \"factors\": [\n    \"정서적 안정성\",\n    \"신뢰 수준\",\n    \"장기적 관계 적합성\",\n    \"장거리 관계의 지속 가능성\",\n    \"반복되는 갈등의 해결 가능성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"relationship\",\n    \"factors\": [\n      \"정서적 안정성\",\n      \"신뢰 수준\",\n      \"장기적 관계 적합성\",\n      \"장거리 관계의 지속 가능성\",\n      \"반복되는 갈등의 해결 가능성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"관계를 정리한 직후 3개월은 허전함과 불안이 꽤 크게 느껴진다. 애정이 있었던 만큼 혼자가 된 감정이 쉽게 사라지지 않고, 위험을 크게 감수하지 않는 성향 때문에 내가 너무 성급했나 하는 생각도 몇 번씩 든다. 하지만 장거리로 인한 일정 조율 스트레스와 반복되는 갈등은 눈에 띄게 줄어들어 일상 리듬은 오히려 안정된다. 감정 기복은 남아 있어도, 신뢰가 흔들릴 때마다 관계 전체가 불안정해졌던 패턴을 돌아보면서 정서적 안정성과 장거리 지속 가능성이 생각보다 중요한 문제였다는 점을 점점 받아들이게 된다.\",\n    \"one_year\": \"1년쯤 지나면 이별의 충격보다는 생활의 안정감이 더 크게 체감된다. 연락을 이어가며 애매하게 붙잡고 있지 않았기 때문에 감정이 반복해서 흔들리는 일은 줄고, 일과 인간관계에도 집중이 돌아온다. 가끔은 좋은 기억이 떠올라 아쉽지만, 장기적으로 봤을 때 서로 원하는 삶의 방향과 갈등을 해결하는 방식이 충분히 맞지 않았다는 점을 더 차분하게 이해하게 된다. 특히 신뢰와 장기적 관계 적합성을 중요하게 여기는 본인에게는, 애정만으로 버티는 관계보다 예측 가능하고 안정적인 관계가 더 필요하다는 기준이 분명해진다.\",\n    \"three_years\": \"3년 뒤에는 이 선택을 감정적인 단절이라기보다 삶의 방향을 정리한 결정으로 보게 될 가능성이 크다. 당시에는 외로움이 컸지만, 반복되는 갈등과 장거리의 불확실성 속에서 계속 흔들리는 상태보다 혼자서 안정된 기반을 만드는 쪽이 본인 성향에는 더 맞았다는 점이 분명해진다. 이후 새로운 관계를 시작하더라도 신뢰가 쌓이는 속도, 갈등 해결 방식, 함께 그릴 수 있는 장기 계획을 더 현실적으로 살피게 되고, 감정이 있어도 지속 가능성이 낮으면 무리해서 끌고 가지 않게 된다. 완전히 미련이 사라지지는 않아도, 이별이 삶을 망친 사건으로 남기보다는 정서적 안정성과 장기적 호환성을 우선하게 만든 경험으로 정리될 가능성이 높다.\"\n  }\n}",
+  "provider_payload": {
+    "runner": "codex exec",
+    "call_status": "ready",
+    "output_file": "playground/outputs/case-04-relationship/risk-b-result.json"
+  }
+}

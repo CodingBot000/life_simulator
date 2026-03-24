@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 34,
+    "job": "product manager",
+    "risk_tolerance": "medium",
+    "priority": ["independence", "growth", "income"]
+  },
+  "decision": {
+    "optionA": "작은 SaaS를 창업한다",
+    "optionB": "안정적인 IT 회사에 취업한다",
+    "context": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다."
+  }
+}

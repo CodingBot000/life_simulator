@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 35,
+    "job": "office worker",
+    "risk_tolerance": "high",
+    "priority": ["independence", "income", "stability"]
+  },
+  "decision": {
+    "optionA": "소규모 카페를 창업한다",
+    "optionB": "회사를 취업해 안정적으로 일한다",
+    "context": "오랫동안 카페 운영을 꿈꿔왔고 어느 정도 모아둔 자금도 있다. 다만 자영업 경험은 없고, 최근 경기 변동성이 커져 창업 타이밍이 맞는지 고민하고 있다."
+  }
+}

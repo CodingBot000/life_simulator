@@ -1,0 +1,142 @@
+# Risk A Request Preview
+
+- Request file: `playground/outputs/case-03-startup-vs-job/risk-a-request.json`
+- Prompt file: `prompts/risk.md`
+- Input source: `playground/inputs/cases/case-03-startup-vs-job.json`
+- Previous result: `playground/outputs/case-03-startup-vs-job/planner-result.json`
+- Previous result: `playground/outputs/case-03-startup-vs-job/scenario-a-result.json`
+
+## Prompt
+
+```md
+너는 의사결정 시뮬레이션 체인의 Risk Analyst다.
+
+목표:
+- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.
+- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.
+- 이유는 추상적 표현보다 구체적인 근거를 우선한다.
+
+입력 데이터 형식:
+```json
+{
+  "optionLabel": "A",
+  "userProfile": {
+    "age": 32,
+    "job": "developer",
+    "risk_tolerance": "low",
+    "priority": ["stability", "income", "work_life_balance"]
+  },
+  "selectedOption": "현재 회사에 남는다",
+  "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+  "factors": ["stability", "income", "growth", "work_life_balance"],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": ["stability", "income", "growth", "work_life_balance"]
+  },
+  "scenario": {
+    "three_months": "",
+    "one_year": "",
+    "three_years": ""
+  }
+}
+```
+
+판단 규칙:
+- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.
+- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.
+- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.
+- 막연한 공포 조장은 금지한다.
+- 입력에 없는 사실을 만들어 단정하지 않는다.
+- 응답은 반드시 유효한 JSON만 반환한다.
+- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
+
+출력 JSON 형식:
+```json
+{
+  "risk_level": "low | medium | high",
+  "reasons": []
+}
+```
+```
+
+## Input JSON
+
+```json
+{
+  "optionLabel": "A",
+  "userProfile": {
+    "age": 34,
+    "job": "product manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "independence",
+      "growth",
+      "income"
+    ]
+  },
+  "selectedOption": "작은 SaaS를 창업한다",
+  "decisionContext": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.",
+  "factors": [
+    "수입 안정성",
+    "성장 가능성",
+    "업무 자율성과 독립성",
+    "생활비 및 대출 상환 부담 대응 가능성",
+    "중간 수준의 리스크 감내도와의 적합성"
+  ],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": [
+      "수입 안정성",
+      "성장 가능성",
+      "업무 자율성과 독립성",
+      "생활비 및 대출 상환 부담 대응 가능성",
+      "중간 수준의 리스크 감내도와의 적합성"
+    ]
+  },
+  "scenario": {
+    "three_months": "처음 3개월은 기대감과 긴장감이 함께 크다. 직접 문제를 정의하고 제품 방향을 정하는 과정에서 업무 자율성과 독립성은 분명히 커져 만족감이 높지만, 동시에 기능 범위를 줄이고 출시 속도를 맞추느라 일상이 빡빡해진다. 중간 수준의 리스크 감내도에 맞춰 초기부터 큰 비용을 쓰기보다 작게 검증하려 하고, 생활비와 대출 상환 부담 때문에 고정지출을 재점검하며 월별 현금흐름을 세심하게 관리하게 된다. 아직 수입 안정성은 낮아 불안한 날도 있지만, 몇 명의 초기 사용자가 실제로 반응을 보이기 시작하면 성장 가능성에 대한 확신이 아주 조금 생긴다.",
+    "one_year": "1년쯤 지나면 제품은 한두 번의 방향 수정 끝에 특정 고객층에 조금 더 맞춰지고, 소규모이지만 꾸준히 결제하는 사용자가 생긴다. 큰 수익은 아니어도 매출이 반복적으로 들어오면서 완전한 불확실성에서는 벗어나지만, 생활비와 대출 상환을 모두 넉넉히 감당하기에는 여전히 빠듯할 수 있다. 대신 직접 고객 인터뷰, 가격 조정, 기능 우선순위 판단까지 해보며 성장 속도는 회사에 있을 때보다 훨씬 가파르게 느껴진다. 독립적으로 일하는 만족은 크지만, 매출 변동과 혼자 결정해야 하는 부담 때문에 심리적으로 흔들리는 시기도 있고, 그래서 무리한 확장보다 수입 안정성을 조금씩 높이는 방향으로 운영 방식을 보수적으로 다듬게 된다.",
+    "three_years": "3년 후에는 이 선택이 자신의 일 방식과 맞는지 비교적 분명해진다. SaaS가 완전히 폭발적으로 성장하지는 않더라도, 특정 시장에서 쓸모 있는 도구로 자리 잡으면 이전보다 예측 가능한 매출 구조를 만들 수 있고, 생활비와 대출 상환도 어느 정도 계획적으로 대응할 가능성이 높아진다. 반대로 성장 속도가 기대보다 느리더라도, 그 과정에서 제품 개발, 고객 확보, 수익화 경험을 축적해 이후 다른 창업이나 프리랜스, 작은 팀 운영으로 이어질 기반이 생긴다. 즉 수입 안정성은 대기업 수준만큼 강하지 않지만, 업무 자율성과 독립성은 가장 크게 확보되고, 성장 가능성도 본인 실행력에 따라 계속 열려 있다. 중간 수준의 리스크를 감당하는 사람에게는 불안과 보람이 함께 가는 선택이지만, 시간이 지날수록 단순한 충동이 아니라 스스로 만든 경력의 방향으로 굳어질 가능성이 크다."
+  }
+}
+```
+
+## Expected Output Schema
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "risk_level",
+    "reasons"
+  ]
+}
+```
+
+## Provider Payload Preview
+
+```json
+{
+  "runner": "codex exec",
+  "call_status": "ready",
+  "output_file": "playground/outputs/case-03-startup-vs-job/risk-a-result.json"
+}
+```

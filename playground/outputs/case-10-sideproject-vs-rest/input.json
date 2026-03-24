@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 34,
+    "job": "product manager",
+    "risk_tolerance": "low",
+    "priority": ["health", "sustainability", "future_optionality"]
+  },
+  "decision": {
+    "optionA": "퇴근 후 사이드프로젝트를 계속한다",
+    "optionB": "휴식과 회복에 집중한다",
+    "context": "본업이 바쁜데도 개인 프로젝트를 6개월째 이어오고 있어 포트폴리오와 가능성은 커지고 있다. 하지만 최근 수면과 집중력이 급격히 떨어져 번아웃 직전이라는 느낌도 강하다."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 31,
+    "job": "marketer",
+    "risk_tolerance": "low",
+    "priority": ["emotional_stability", "trust", "long_term_compatibility"]
+  },
+  "decision": {
+    "optionA": "현재 연애를 계속 이어간다",
+    "optionB": "관계를 정리한다",
+    "context": "상대와 애정은 있지만 장거리와 반복되는 갈등으로 미래 계획이 자주 흔들린다. 혼자가 되는 불안도 있지만, 계속 버티는 것이 더 건강한지 확신이 서지 않는다."
+  }
+}

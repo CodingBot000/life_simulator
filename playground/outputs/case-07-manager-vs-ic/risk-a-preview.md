@@ -1,0 +1,142 @@
+# Risk A Request Preview
+
+- Request file: `playground/outputs/case-07-manager-vs-ic/risk-a-request.json`
+- Prompt file: `prompts/risk.md`
+- Input source: `playground/inputs/cases/case-07-manager-vs-ic.json`
+- Previous result: `playground/outputs/case-07-manager-vs-ic/planner-result.json`
+- Previous result: `playground/outputs/case-07-manager-vs-ic/scenario-a-result.json`
+
+## Prompt
+
+```md
+너는 의사결정 시뮬레이션 체인의 Risk Analyst다.
+
+목표:
+- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.
+- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.
+- 이유는 추상적 표현보다 구체적인 근거를 우선한다.
+
+입력 데이터 형식:
+```json
+{
+  "optionLabel": "A",
+  "userProfile": {
+    "age": 32,
+    "job": "developer",
+    "risk_tolerance": "low",
+    "priority": ["stability", "income", "work_life_balance"]
+  },
+  "selectedOption": "현재 회사에 남는다",
+  "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+  "factors": ["stability", "income", "growth", "work_life_balance"],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": ["stability", "income", "growth", "work_life_balance"]
+  },
+  "scenario": {
+    "three_months": "",
+    "one_year": "",
+    "three_years": ""
+  }
+}
+```
+
+판단 규칙:
+- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.
+- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.
+- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.
+- 막연한 공포 조장은 금지한다.
+- 입력에 없는 사실을 만들어 단정하지 않는다.
+- 응답은 반드시 유효한 JSON만 반환한다.
+- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
+
+출력 JSON 형식:
+```json
+{
+  "risk_level": "low | medium | high",
+  "reasons": []
+}
+```
+```
+
+## Input JSON
+
+```json
+{
+  "optionLabel": "A",
+  "userProfile": {
+    "age": 37,
+    "job": "senior developer",
+    "risk_tolerance": "low",
+    "priority": [
+      "growth",
+      "stress_management",
+      "compensation"
+    ]
+  },
+  "selectedOption": "매니저 트랙으로 전환한다",
+  "decisionContext": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다.",
+  "factors": [
+    "성장 경로 적합성",
+    "스트레스 관리 가능성",
+    "보상 수준과 보상 성장성",
+    "역할 변화의 안정성과 불확실성",
+    "기술적 깊이 유지 가능성"
+  ],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": [
+      "성장 경로 적합성",
+      "스트레스 관리 가능성",
+      "보상 수준과 보상 성장성",
+      "역할 변화의 안정성과 불확실성",
+      "기술적 깊이 유지 가능성"
+    ]
+  },
+  "scenario": {
+    "three_months": "매니저 트랙으로 전환한 직후 3개월은 기대와 불안이 같이 간다. 겉으로는 역할이 명확해져 안정적으로 보이지만, 실제로는 1:1 면담, 일정 조율, 채용 참여, 다른 팀과의 커뮤니케이션이 갑자기 늘면서 하루가 잘게 끊겨 스트레스가 예상보다 크게 느껴진다. 특히 직접 코드를 오래 붙잡는 시간이 줄어들어 기술적 깊이가 느슨해지는 것 같아 아쉬움도 든다. 다만 senior developer로 쌓은 신뢰가 있어 팀원들은 비교적 협조적이고, 회사도 갑작스러운 평가 부담보다는 적응 기간을 주기 때문에 역할 변화의 불확실성은 아주 크지 않다. 보상은 소폭 인상되거나 다음 평가에서 반영될 가능성이 보여 현실적인 동기부여는 되지만, 당장 큰 차이는 아니다. 본인도 리스크를 크게 지고 싶어 하지 않기 때문에 완전히 관리 중심으로 달리기보다, 기술 리뷰나 아키텍처 논의는 계속 붙잡으려는 식으로 균형점을 찾으려 한다.",
+    "one_year": "1년쯤 지나면 이 선택이 자신에게 어느 정도 맞는지 더 분명해진다. 사람 관리 자체는 여전히 에너지를 쓰게 만들지만, 갈등을 초기에 정리하고 우선순위를 조율하는 방식에 익숙해지면서 스트레스는 처음보다 관리 가능한 수준으로 내려온다. 성장 경로 측면에서는 개인 기여자 시절과 다른 종류의 성취감이 생긴다. 팀원의 성과를 끌어올리거나 조직 내 의사결정을 정리하는 역할에서 영향력이 커지기 때문이다. 대신 기술적 깊이는 의식적으로 시간을 확보하지 않으면 확실히 얕아진다. 그래서 주간 기술 리뷰를 직접 주도하거나 중요한 설계 이슈에는 계속 참여하는 식으로 연결고리를 유지하게 된다. 보상은 관리 역할이 반영되며 이전보다 나아질 가능성이 높고, 향후 상승 폭도 개인 기여자 트랙과 비교해 나쁘지 않다는 점이 확인된다. 다만 성취의 내용이 ‘내가 잘 만드는 것’에서 ‘팀이 잘 움직이게 만드는 것’으로 바뀌기 때문에, 그 전환을 받아들이는 정도에 따라 만족감이 갈린다.",
+    "three_years": "3년 후에는 매니저 트랙이 일시적 실험이 아니라 경력의 한 축으로 자리잡았을 가능성이 크다. 낮은 위험 선호 성향 덕분에 무리하게 조직을 키우거나 과도한 책임을 떠안기보다, 감당 가능한 범위 안에서 팀 운영과 성과 관리를 안정적으로 해내는 스타일이 굳어진다. 그 결과 역할 자체의 안정성은 높아지고, 보상도 누적적으로 개선되어 생활 측면의 만족은 전반적으로 올라갈 수 있다. 반면 기술적 깊이 유지 가능성은 가장 큰 과제로 남는다. 꾸준히 설계 검토와 기술 방향성에 관여했다면 ‘기술을 이해하는 매니저’로 강점이 생기지만, 그렇지 못했다면 예전처럼 깊게 구현을 파고드는 감각은 분명 줄어든다. 감정적으로는 초반의 불안은 많이 사라지지만, 때때로 ‘나는 관리자로 성장하고 있는가, 아니면 원래 좋아하던 기술에서 멀어지고 있는가’라는 질문이 다시 올라온다. 결국 이 선택은 극적인 성공이나 실패라기보다, 보상과 조직 영향력은 커지는 대신 기술 몰입의 비중은 줄어드는 방향으로 서서히 굳어지는 현실적인 경로가 된다."
+  }
+}
+```
+
+## Expected Output Schema
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "risk_level",
+    "reasons"
+  ]
+}
+```
+
+## Provider Payload Preview
+
+```json
+{
+  "runner": "codex exec",
+  "call_status": "ready",
+  "output_file": "playground/outputs/case-07-manager-vs-ic/risk-a-result.json"
+}
+```

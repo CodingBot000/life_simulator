@@ -1,0 +1,78 @@
+{
+  "stage": "risk",
+  "generated_at": "2026-03-24T08:34:07Z",
+  "description": "Prepared request payload for Codex CLI live execution.",
+  "prompt_file": "prompts/risk.md",
+  "input_source": "playground/inputs/sample-input.json",
+  "previous_stage_result_files": [
+    "playground/outputs/planner-result.json",
+    "playground/outputs/scenario-b-result.json"
+  ],
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"optionLabel\": \"A\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
+  "expected_output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "risk_level": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "reasons": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "risk_level",
+      "reasons"
+    ]
+  },
+  "input_data": {
+    "optionLabel": "B",
+    "userProfile": {
+      "age": 32,
+      "job": "developer",
+      "risk_tolerance": "low",
+      "priority": [
+        "stability",
+        "income",
+        "work_life_balance"
+      ]
+    },
+    "selectedOption": "스타트업으로 이직한다",
+    "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+    "factors": [
+      "안정성 및 리스크",
+      "현재 및 향후 소득",
+      "업무-삶 균형",
+      "커리어 성장 가능성"
+    ],
+    "plannerResult": {
+      "decision_type": "career_change",
+      "factors": [
+        "안정성 및 리스크",
+        "현재 및 향후 소득",
+        "업무-삶 균형",
+        "커리어 성장 가능성"
+      ]
+    },
+    "scenario": {
+      "three_months": "스타트업으로 옮긴 직후 3개월은 성장 기대감과 동시에 불안감이 함께 커진다. 개발자로서 맡는 범위가 넓어져 기획, 배포, 장애 대응까지 빠르게 익히게 되며 커리어 성장 가능성은 분명히 체감된다. 다만 리스크를 낮게 감수하는 성향이라 회사의 자금 상황, 조직 변화 속도, 불명확한 프로세스가 심리적으로 자주 걸린다. 연봉은 이전보다 아주 크게 나빠지지 않더라도 성과보상이나 스톡옵션 비중이 있어 현재 소득의 확실성은 다소 낮아지고, 초반 적응과 잦은 커뮤니케이션 때문에 업무-삶 균형도 예전보다 흔들리기 쉽다.",
+      "one_year": "1년쯤 지나면 제품과 팀의 흐름을 이해하면서 초반의 혼란은 줄고, 문제를 빠르게 해결하는 핵심 인력으로 자리잡을 가능성이 크다. 정체감은 확실히 줄어들고 기술적·사업적 시야가 넓어져 성장 측면의 만족감은 이전 회사보다 높다. 반면 안정성을 중시하는 성향 때문에 투자 유치, 매출, 인력 변동 같은 뉴스에 예민해지고, '내 선택이 장기적으로 안전한가'를 계속 점검하게 된다. 소득은 기본급 기준으로 큰 폭의 상승이 없을 수 있지만, 역할 확대에 따라 협상 여지가 생기고 향후 이직 시장 가치도 올라간다. 업무-삶 균형은 스스로 선을 긋기 시작하면 어느 정도 회복되지만, 출시 전후나 이슈가 큰 시기에는 다시 길게 일하는 구간이 반복된다.",
+      "three_years": "3년 후에는 한 회사 안에서 짧은 시간에 여러 역할을 경험한 덕분에 커리어 성장의 폭은 꽤 커져 있다. 특정 도메인과 제품 전반을 이해하는 개발자로 인정받으며, 시니어나 리드에 가까운 책임을 맡을 가능성이 높다. 현재 및 향후 소득도 초기에 느꼈던 불확실성에 비해 개선될 수 있지만, 대기업처럼 예측 가능한 보상 구조는 아니어서 안정감은 완전히 같아지지 않는다. 회사가 크게 흔들리지 않고 버틴다면 이전보다 높은 연봉과 더 넓은 선택지를 얻겠지만, 그 과정 내내 낮은 리스크 성향 때문에 마음 한편의 긴장은 남아 있을 수 있다. 업무-삶 균형은 팀 문화와 개인의 경계 설정에 따라 관리 가능한 수준이 되지만, 안정성과 균형을 최우선으로 두는 사람에게는 '성장은 얻었지만 편안함은 줄었다'는 현실적인 평가가 남을 가능성이 크다."
+    }
+  },
+  "input_json": "{\n  \"optionLabel\": \"B\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\n      \"stability\",\n      \"income\",\n      \"work_life_balance\"\n    ]\n  },\n  \"selectedOption\": \"스타트업으로 이직한다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\n    \"안정성 및 리스크\",\n    \"현재 및 향후 소득\",\n    \"업무-삶 균형\",\n    \"커리어 성장 가능성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"안정성 및 리스크\",\n      \"현재 및 향후 소득\",\n      \"업무-삶 균형\",\n      \"커리어 성장 가능성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"스타트업으로 옮긴 직후 3개월은 성장 기대감과 동시에 불안감이 함께 커진다. 개발자로서 맡는 범위가 넓어져 기획, 배포, 장애 대응까지 빠르게 익히게 되며 커리어 성장 가능성은 분명히 체감된다. 다만 리스크를 낮게 감수하는 성향이라 회사의 자금 상황, 조직 변화 속도, 불명확한 프로세스가 심리적으로 자주 걸린다. 연봉은 이전보다 아주 크게 나빠지지 않더라도 성과보상이나 스톡옵션 비중이 있어 현재 소득의 확실성은 다소 낮아지고, 초반 적응과 잦은 커뮤니케이션 때문에 업무-삶 균형도 예전보다 흔들리기 쉽다.\",\n    \"one_year\": \"1년쯤 지나면 제품과 팀의 흐름을 이해하면서 초반의 혼란은 줄고, 문제를 빠르게 해결하는 핵심 인력으로 자리잡을 가능성이 크다. 정체감은 확실히 줄어들고 기술적·사업적 시야가 넓어져 성장 측면의 만족감은 이전 회사보다 높다. 반면 안정성을 중시하는 성향 때문에 투자 유치, 매출, 인력 변동 같은 뉴스에 예민해지고, '내 선택이 장기적으로 안전한가'를 계속 점검하게 된다. 소득은 기본급 기준으로 큰 폭의 상승이 없을 수 있지만, 역할 확대에 따라 협상 여지가 생기고 향후 이직 시장 가치도 올라간다. 업무-삶 균형은 스스로 선을 긋기 시작하면 어느 정도 회복되지만, 출시 전후나 이슈가 큰 시기에는 다시 길게 일하는 구간이 반복된다.\",\n    \"three_years\": \"3년 후에는 한 회사 안에서 짧은 시간에 여러 역할을 경험한 덕분에 커리어 성장의 폭은 꽤 커져 있다. 특정 도메인과 제품 전반을 이해하는 개발자로 인정받으며, 시니어나 리드에 가까운 책임을 맡을 가능성이 높다. 현재 및 향후 소득도 초기에 느꼈던 불확실성에 비해 개선될 수 있지만, 대기업처럼 예측 가능한 보상 구조는 아니어서 안정감은 완전히 같아지지 않는다. 회사가 크게 흔들리지 않고 버틴다면 이전보다 높은 연봉과 더 넓은 선택지를 얻겠지만, 그 과정 내내 낮은 리스크 성향 때문에 마음 한편의 긴장은 남아 있을 수 있다. 업무-삶 균형은 팀 문화와 개인의 경계 설정에 따라 관리 가능한 수준이 되지만, 안정성과 균형을 최우선으로 두는 사람에게는 '성장은 얻었지만 편안함은 줄었다'는 현실적인 평가가 남을 가능성이 크다.\"\n  }\n}",
+  "provider_payload": {
+    "runner": "codex exec",
+    "call_status": "ready",
+    "output_file": "playground/outputs/risk-b-result.json"
+  }
+}

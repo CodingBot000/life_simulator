@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 28,
+    "job": "research assistant",
+    "risk_tolerance": "medium",
+    "priority": ["long_term_growth", "short_term_income", "expertise"]
+  },
+  "decision": {
+    "optionA": "해외 대학원에 진학한다",
+    "optionB": "바로 실무 취업한다",
+    "context": "장기적으로는 특정 분야 전문성을 갖춘 커리어를 만들고 싶지만, 학비와 생활비 부담 때문에 단기 수입도 무시하기 어렵다. 현장 경험을 먼저 쌓는 편이 나을지 계속 고민 중이다."
+  }
+}

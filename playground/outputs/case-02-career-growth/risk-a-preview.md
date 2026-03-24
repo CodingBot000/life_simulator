@@ -1,0 +1,142 @@
+# Risk A Request Preview
+
+- Request file: `playground/outputs/case-02-career-growth/risk-a-request.json`
+- Prompt file: `prompts/risk.md`
+- Input source: `playground/inputs/cases/case-02-career-growth.json`
+- Previous result: `playground/outputs/case-02-career-growth/planner-result.json`
+- Previous result: `playground/outputs/case-02-career-growth/scenario-a-result.json`
+
+## Prompt
+
+```md
+너는 의사결정 시뮬레이션 체인의 Risk Analyst다.
+
+목표:
+- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.
+- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.
+- 이유는 추상적 표현보다 구체적인 근거를 우선한다.
+
+입력 데이터 형식:
+```json
+{
+  "optionLabel": "A",
+  "userProfile": {
+    "age": 32,
+    "job": "developer",
+    "risk_tolerance": "low",
+    "priority": ["stability", "income", "work_life_balance"]
+  },
+  "selectedOption": "현재 회사에 남는다",
+  "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+  "factors": ["stability", "income", "growth", "work_life_balance"],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": ["stability", "income", "growth", "work_life_balance"]
+  },
+  "scenario": {
+    "three_months": "",
+    "one_year": "",
+    "three_years": ""
+  }
+}
+```
+
+판단 규칙:
+- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.
+- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.
+- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.
+- 막연한 공포 조장은 금지한다.
+- 입력에 없는 사실을 만들어 단정하지 않는다.
+- 응답은 반드시 유효한 JSON만 반환한다.
+- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
+
+출력 JSON 형식:
+```json
+{
+  "risk_level": "low | medium | high",
+  "reasons": []
+}
+```
+```
+
+## Input JSON
+
+```json
+{
+  "optionLabel": "A",
+  "userProfile": {
+    "age": 29,
+    "job": "developer",
+    "risk_tolerance": "high",
+    "priority": [
+      "growth",
+      "ownership",
+      "learning"
+    ]
+  },
+  "selectedOption": "대기업 플랫폼팀에 남는다",
+  "decisionContext": "현재 회사는 시스템과 프로세스가 잘 잡혀 있지만 개인이 내리는 제품 영향력은 작다. 생성형 AI 제품을 빠르게 만들 수 있는 환경에 끌리지만 실패 가능성도 알고 있다.",
+  "factors": [
+    "성장 속도와 커리어 확장성",
+    "제품 영향력과 오너십 수준",
+    "생성형 AI 학습 및 실전 경험 기회",
+    "조직 안정성과 실패 리스크",
+    "프로세스 체계와 실행 속도"
+  ],
+  "plannerResult": {
+    "decision_type": "career_change",
+    "factors": [
+      "성장 속도와 커리어 확장성",
+      "제품 영향력과 오너십 수준",
+      "생성형 AI 학습 및 실전 경험 기회",
+      "조직 안정성과 실패 리스크",
+      "프로세스 체계와 실행 속도"
+    ]
+  },
+  "scenario": {
+    "three_months": "대기업 플랫폼팀에 남은 뒤 처음 3개월은 선택이 크게 틀리지 않았다는 안도감이 있다. 조직 안정성과 잘 정리된 프로세스 덕분에 큰 혼선 없이 일하고, 리뷰·배포·협업 방식도 예측 가능해 심리적 부담은 낮다. 다만 성향상 빠른 성장과 학습을 원하기 때문에, 이미 갖춰진 시스템 안에서 맡는 일이 개선과 최적화 중심으로 흐르자 답답함도 함께 느낀다. 제품 의사결정에 직접 미치는 영향은 여전히 제한적이어서 오너십에 대한 갈증이 생기지만, 대신 대규모 트래픽과 안정성 문제를 다루며 기술적 깊이는 쌓인다. 생성형 AI에 대한 관심은 사라지지 않아 사내 스터디, 해커톤, 작은 자동화 실험에 손을 대보지만, 실제 서비스 반영까지는 승인과 검토 단계가 많아 실행 속도는 기대보다 느리다.",
+    "one_year": "1년쯤 지나면 감정은 더 복합적이다. 한편으로는 대기업 환경에서 플랫폼 설계, 운영 안정성, 여러 팀과의 조율 경험이 쌓여 커리어 확장성의 기반은 분명히 넓어진다. 평판 좋은 조직에서 일한 이력과 안정적인 보상은 자신감을 주고, 실패 리스크가 낮다는 점도 마음을 편하게 만든다. 다른 한편으로는 본인이 원했던 성장의 속도와 오너십 수준이 생각보다 크지 않다는 사실이 더 선명해진다. 생성형 AI 관련해서는 사내 파일럿이나 업무 효율화 도구 개발에 부분적으로 참여할 가능성이 있지만, 핵심 제품을 빠르게 밀어붙이는 경험과는 거리가 있다. 결국 ‘기술적으로는 단단해졌지만, 내가 주도해서 뭔가를 시장에 내놓고 있다는 감각은 약하다’는 인식이 생기고, 안정성과 학습 사이에서 남는 아쉬움을 구체적으로 자각하게 된다.",
+    "three_years": "3년 후에는 이 선택의 장단점이 뚜렷하게 누적된다. 플랫폼팀에 계속 남아 있었다면 대규모 시스템, 조직 간 의존성 조정, 장애 예방과 같은 영역에서 강한 전문성을 가진 시니어 개발자로 자리 잡을 가능성이 높다. 이는 커리어의 안전판이 되고, 경기 변동이나 조직 변화 속에서도 비교적 견고한 위치를 제공한다. 동시에 제품 영향력과 오너십에 대한 갈증은 완전히 사라지지 않는다. 생성형 AI도 업무에 점점 스며들어 관련 경험이 어느 정도 생기지만, 주도적으로 실험하고 빠르게 실패하며 배우는 환경과는 결이 달라 학습의 밀도는 제한적일 수 있다. 감정적으로는 ‘경력은 안정적으로 좋아졌고 시장에서 설명 가능한 강점도 많아졌지만, 내가 원했던 속도의 성장과 주도성은 늦어졌다’는 평가에 가까워진다. 결과적으로 이 선택은 실패를 크게 줄여 주는 대신, 높은 리스크를 감수하더라도 빠르게 배우고 크게 소유하고 싶었던 성향에는 완전히 맞지 않는, 안정적이지만 약간 보수적인 경로로 남는다."
+  }
+}
+```
+
+## Expected Output Schema
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "risk_level",
+    "reasons"
+  ]
+}
+```
+
+## Provider Payload Preview
+
+```json
+{
+  "runner": "codex exec",
+  "call_status": "ready",
+  "output_file": "playground/outputs/case-02-career-growth/risk-a-result.json"
+}
+```

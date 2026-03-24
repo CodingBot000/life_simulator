@@ -1,0 +1,13 @@
+{
+  "userProfile": {
+    "age": 33,
+    "job": "product designer",
+    "risk_tolerance": "medium",
+    "priority": ["freedom", "income", "stability"]
+  },
+  "decision": {
+    "optionA": "프리랜서로 전환한다",
+    "optionB": "정규직을 유지한다",
+    "context": "최근 외부 프로젝트 제안을 몇 번 받으면서 독립적으로 일할 수 있다는 자신감이 생겼다. 하지만 고정 수입과 팀 동료가 주는 안정감도 쉽게 포기하기 어렵다."
+  }
+}
