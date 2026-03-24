@@ -5,4 +5,4 @@ out
 .env
 npm-debug.log*
 docs/
-
+.DS_Store
