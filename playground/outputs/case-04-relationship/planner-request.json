@@ -1,9 +1,9 @@
 {
   "stage": "planner",
-  "generated_at": "2026-03-24T10:50:11Z",
+  "generated_at": "2026-03-25T11:33:30Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/planner.md",
-  "input_source": "playground/inputs/cases/case-04-relationship.json",
+  "input_source": "./playground/inputs/cases/case-04-relationship.json",
   "previous_stage_result_files": [],
   "prompt_text": "너는 의사결정 시뮬레이션 체인의 Planner Agent다.\n\n목표:\n- 사용자 프로필과 decision 입력을 읽고 의사결정 유형을 한 줄로 분류한다.\n- 이후 단계에서 재사용할 핵심 비교 요소 factors를 3~6개 도출한다.\n- factors는 실제로 A/B 선택지를 비교할 때 의미가 있는 항목만 남긴다.\n\n입력 데이터 형식:\n```json\n{\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"decision\": {\n    \"optionA\": \"현재 회사에 남는다\",\n    \"optionB\": \"스타트업으로 이직한다\",\n    \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n  }\n}\n```\n\n판단 규칙:\n- `decision_type`은 `career_change`, `relationship`, `financial`, `living`, `education`처럼 짧고 재사용 가능한 범주형 문자열로 작성한다.\n- `factors`는 실제 비교 기준이 되는 문자열 배열이어야 한다.\n- `priority`, `risk_tolerance`, `decision.context`를 반드시 반영한다.\n- 입력에 없는 사실을 추가로 만들지 않는다.\n- 응답은 반드시 한국어 기반의 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"decision_type\": \"\",\n  \"factors\": []\n}\n```",
   "expected_output_schema": {

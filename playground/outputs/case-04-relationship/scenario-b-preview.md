@@ -2,7 +2,7 @@
 
 - Request file: `playground/outputs/case-04-relationship/scenario-b-request.json`
 - Prompt file: `prompts/scenario.md`
-- Input source: `playground/inputs/cases/case-04-relationship.json`
+- Input source: `./playground/inputs/cases/case-04-relationship.json`
 - Previous result: `playground/outputs/case-04-relationship/planner-result.json`
 
 ## Prompt
@@ -72,20 +72,20 @@
   "selectedOption": "관계를 정리한다",
   "decisionContext": "상대와 애정은 있지만 장거리와 반복되는 갈등으로 미래 계획이 자주 흔들린다. 혼자가 되는 불안도 있지만, 계속 버티는 것이 더 건강한지 확신이 서지 않는다.",
   "factors": [
-    "정서적 안정성",
-    "신뢰 수준",
-    "장기적 관계 적합성",
-    "장거리 관계의 지속 가능성",
-    "반복되는 갈등의 해결 가능성"
+    "관계 유지와 정리 각각이 주는 정서적 안정감",
+    "상대에 대한 신뢰를 회복하고 유지할 가능성",
+    "장거리와 반복되는 갈등을 감당할 수 있는 관계의 지속 가능성",
+    "미래 계획을 안정적으로 함께 세울 수 있는지",
+    "장기적으로 더 건강한 선택인지와 혼자가 되는 불안의 크기"
   ],
   "plannerResult": {
     "decision_type": "relationship",
     "factors": [
-      "정서적 안정성",
-      "신뢰 수준",
-      "장기적 관계 적합성",
-      "장거리 관계의 지속 가능성",
-      "반복되는 갈등의 해결 가능성"
+      "관계 유지와 정리 각각이 주는 정서적 안정감",
+      "상대에 대한 신뢰를 회복하고 유지할 가능성",
+      "장거리와 반복되는 갈등을 감당할 수 있는 관계의 지속 가능성",
+      "미래 계획을 안정적으로 함께 세울 수 있는지",
+      "장기적으로 더 건강한 선택인지와 혼자가 되는 불안의 크기"
     ]
   }
 }

@@ -2,7 +2,7 @@
 
 - Request file: `playground/outputs/case-04-relationship/planner-request.json`
 - Prompt file: `prompts/planner.md`
-- Input source: `playground/inputs/cases/case-04-relationship.json`
+- Input source: `./playground/inputs/cases/case-04-relationship.json`
 - Previous result: `(none)`
 
 ## Prompt

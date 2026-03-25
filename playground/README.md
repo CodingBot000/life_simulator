@@ -7,7 +7,7 @@
 
 - `prompts/*.md`를 실제 프롬프트 원본으로 관리한다.
 - 단계별 입력 구조가 맞는지 빠르게 검증한다.
-- planner -> scenario -> risk -> advisor 체인 연결이 올바른지 확인한다.
+- planner -> scenario -> risk -> A/B reasoning -> advisor -> reflection 체인 연결이 올바른지 확인한다.
 - 로컬 터미널에서 `codex exec`로 실제 결과 JSON을 생성한다.
 - 필요 시 `CODEX_COMPOSE_ONLY=1`로 request composition만 수행할 수 있다.
 - 테스트 케이스별 결과를 별도 output 폴더로 분리해 덮어쓰기를 방지한다.
@@ -39,7 +39,9 @@ playground/
     run-planner.sh
     run-scenario.sh
     run-risk.sh
+    run-ab-reasoning.sh
     run-advisor.sh
+    run-reflection.sh
     run-full-pipeline.sh
     run-case.sh
     run-all-cases.sh
@@ -60,11 +62,20 @@ playground/
   - scenario 결과를 바탕으로 risk 요청 payload를 만든다.
   - 기본적으로 `risk-a-result.json`, `risk-b-result.json`을 생성한다.
   - 모델 미실행 대비용 stub도 함께 만든다.
+- `scripts/run-ab-reasoning.sh`
+  - planner, scenario, risk 결과를 합쳐 A/B reasoning 요청 payload를 만든다.
+  - 기본적으로 `reasoning-result.json`을 생성한다.
+  - 모델 미실행 대비용 stub도 함께 만든다.
 - `scripts/run-advisor.sh`
-  - planner, scenario, risk 결과를 합쳐 advisor 요청 payload를 만든다.
+  - planner, scenario, risk, reasoning 결과를 합쳐 advisor 요청 payload를 만든다.
   - 기본적으로 `advisor-result.json`을 생성한다.
+  - compose-only 검증을 위한 `advisor-result.stub.json`도 함께 만든다.
+- `scripts/run-reflection.sh`
+  - planner, scenario, risk, reasoning, advisor 결과를 다시 평가하는 reflection 요청 payload를 만든다.
+  - 기본적으로 `reflection-result.json`을 생성한다.
+  - compose-only 또는 결과 점검용 `reflection-result.stub.json`도 함께 만든다.
 - `scripts/run-full-pipeline.sh`
-  - planner -> scenario -> risk -> advisor 순서로 전체 파이프라인을 실행한다.
+  - planner -> scenario -> risk -> A/B reasoning -> advisor -> reflection 순서로 전체 파이프라인을 실행한다.
   - 입력 파일 경로와 output 디렉토리를 인자로 받을 수 있다.
   - 실행 완료 후 `summary.md`를 생성한다.
 - `scripts/run-case.sh`
@@ -106,7 +117,9 @@ codex login
 ./playground/scripts/run-planner.sh ./playground/inputs/cases/case-01-career-stability.json ./playground/outputs/case-01-career-stability
 ./playground/scripts/run-scenario.sh all ./playground/inputs/cases/case-01-career-stability.json ./playground/outputs/case-01-career-stability
 ./playground/scripts/run-risk.sh all ./playground/inputs/cases/case-01-career-stability.json ./playground/outputs/case-01-career-stability
+./playground/scripts/run-ab-reasoning.sh ./playground/inputs/cases/case-01-career-stability.json ./playground/outputs/case-01-career-stability
 ./playground/scripts/run-advisor.sh ./playground/inputs/cases/case-01-career-stability.json ./playground/outputs/case-01-career-stability
+./playground/scripts/run-reflection.sh ./playground/inputs/cases/case-01-career-stability.json ./playground/outputs/case-01-career-stability
 ```
 
 request 조합만 보고 싶다면 compose-only 모드를 쓴다.
@@ -143,9 +156,15 @@ playground/outputs/case-01-career-stability/
   risk-b-request.json
   risk-b-preview.md
   risk-b-result.json
+  reasoning-request.json
+  reasoning-preview.md
+  reasoning-result.json
   advisor-request.json
   advisor-preview.md
   advisor-result.json
+  reflection-request.json
+  reflection-preview.md
+  reflection-result.json
   summary.md
 ```
 
@@ -154,7 +173,7 @@ stub 결과 파일도 함께 생성될 수 있다.
 ## summary.md 보는 법
 
 - `summary.md`는 전체 JSON을 열지 않고도 케이스 품질을 빠르게 보는 용도다.
-- 입력 요약, planner factors, scenario A/B, risk A/B, advisor 추천이 한 파일에 모여 있다.
+- 입력 요약, planner factors, scenario A/B, risk A/B, A/B reasoning, advisor 추천, reflection 점수가 한 파일에 모여 있다.
 - 사람이 여러 케이스를 순서대로 훑어보기에 가장 먼저 열어야 하는 파일이다.
 
 ## evaluations/checklist.md 활용 방법
@@ -162,6 +181,7 @@ stub 결과 파일도 함께 생성될 수 있다.
 - [`evaluations/checklist.md`](/Users/switch/Development/Web/life_simulator/playground/evaluations/checklist.md) 는 케이스별 수동 평가 기준이다.
 - `summary.md`를 먼저 읽고, 필요할 때 해당 JSON 원문을 열어 확인한다.
 - 각 케이스에 대해 Realism, Consistency, Profile Alignment, Recommendation Clarity를 1~5로 기록한다.
+- reflection 결과가 있으면 수동 점검 전에 자동 평가 초안을 참고할 수 있다.
 
 ## 실제 LLM 연결 시 재사용 포인트
 

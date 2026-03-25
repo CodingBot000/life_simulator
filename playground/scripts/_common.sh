@@ -224,6 +224,214 @@ JSON
 }
 JSON
       ;;
+    reasoning)
+      cat <<'JSON'
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "type": "string"
+    },
+    "input_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "user_profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "type": "number"
+            },
+            "job": {
+              "type": "string"
+            },
+            "risk_tolerance": {
+              "type": "string",
+              "enum": ["low", "medium", "high"]
+            },
+            "priority": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          "required": ["age", "job", "risk_tolerance", "priority"]
+        },
+        "decision_options": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "optionA": {
+              "type": "string"
+            },
+            "optionB": {
+              "type": "string"
+            },
+            "context": {
+              "type": "string"
+            }
+          },
+          "required": ["optionA", "optionB", "context"]
+        },
+        "planner_goal": {
+          "type": "string"
+        }
+      },
+      "required": ["user_profile", "decision_options", "planner_goal"]
+    },
+    "reasoning": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "a_reasoning": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "stance": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "key_assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "pros": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "cons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "recommended_option": {
+              "type": "string",
+              "enum": ["A", "B"]
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": ["stance", "summary", "key_assumptions", "pros", "cons", "recommended_option", "confidence"]
+        },
+        "b_reasoning": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "stance": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "key_assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "pros": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "cons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "recommended_option": {
+              "type": "string",
+              "enum": ["A", "B"]
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": ["stance", "summary", "key_assumptions", "pros", "cons", "recommended_option", "confidence"]
+        },
+        "comparison": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "agreements": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "conflicts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "which_fits_user_better": {
+              "type": "string",
+              "enum": ["A", "B"]
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": ["agreements", "conflicts", "which_fits_user_better", "reason"]
+        },
+        "final_selection": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "selected_reasoning": {
+              "type": "string",
+              "enum": ["A", "B"]
+            },
+            "selected_option": {
+              "type": "string",
+              "enum": ["A", "B"]
+            },
+            "why_selected": {
+              "type": "string"
+            },
+            "decision_confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": ["selected_reasoning", "selected_option", "why_selected", "decision_confidence"]
+        }
+      },
+      "required": ["a_reasoning", "b_reasoning", "comparison", "final_selection"]
+    }
+  },
+  "required": ["case_id", "input_summary", "reasoning"]
+}
+JSON
+      ;;
     advisor)
       cat <<'JSON'
 {
@@ -236,9 +444,105 @@ JSON
     },
     "reason": {
       "type": "string"
+    },
+    "reasoning_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selected_reasoning": {
+          "type": "string",
+          "enum": ["A", "B"]
+        },
+        "core_why": {
+          "type": "string"
+        },
+        "decision_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["selected_reasoning", "core_why", "decision_confidence"]
     }
   },
-  "required": ["recommended_option", "reason"]
+  "required": ["recommended_option", "reason", "reasoning_basis"]
+}
+JSON
+      ;;
+    reflection)
+      cat <<'JSON'
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "realism": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "consistency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "profile_alignment": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "recommendation_clarity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      },
+      "required": ["realism", "consistency", "profile_alignment", "recommendation_clarity"]
+    },
+    "issues": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["scenario", "risk", "reasoning", "advisor", "profile"]
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["type", "description"]
+      }
+    },
+    "improvement_suggestions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "target": {
+            "type": "string",
+            "enum": ["planner", "scenario", "risk", "reasoning", "advisor"]
+          },
+          "suggestion": {
+            "type": "string"
+          }
+        },
+        "required": ["target", "suggestion"]
+      }
+    },
+    "overall_comment": {
+      "type": "string"
+    }
+  },
+  "required": ["scores", "issues", "improvement_suggestions", "overall_comment"]
 }
 JSON
       ;;
@@ -345,12 +649,75 @@ validate_stage_result() {
         (.reasons | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0))
       ' "$result_file" >/dev/null
       ;;
+    reasoning)
+      jq -e '
+        type == "object" and
+        ((keys | sort) == ["case_id", "input_summary", "reasoning"]) and
+        (.case_id | type == "string" and length > 0) and
+        (.input_summary | type == "object") and
+        ((.input_summary | keys | sort) == ["decision_options", "planner_goal", "user_profile"]) and
+        (.input_summary.user_profile | type == "object") and
+        ((.input_summary.user_profile | keys | sort) == ["age", "job", "priority", "risk_tolerance"]) and
+        (.input_summary.user_profile.age | type == "number") and
+        (.input_summary.user_profile.job | type == "string" and length > 0) and
+        (.input_summary.user_profile.risk_tolerance | IN("low", "medium", "high")) and
+        (.input_summary.user_profile.priority | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
+        (.input_summary.decision_options | type == "object") and
+        ((.input_summary.decision_options | keys | sort) == ["context", "optionA", "optionB"]) and
+        (.input_summary.decision_options.optionA | type == "string" and length > 0) and
+        (.input_summary.decision_options.optionB | type == "string" and length > 0) and
+        (.input_summary.decision_options.context | type == "string" and length > 0) and
+        (.input_summary.planner_goal | type == "string" and length > 0) and
+        (.reasoning | type == "object") and
+        ((.reasoning | keys | sort) == ["a_reasoning", "b_reasoning", "comparison", "final_selection"]) and
+        ([.reasoning.a_reasoning, .reasoning.b_reasoning] | all(
+          .[];
+          ((keys | sort) == ["confidence", "cons", "key_assumptions", "pros", "recommended_option", "stance", "summary"]) and
+          (.stance | type == "string" and length > 0) and
+          (.summary | type == "string" and length > 0) and
+          (.key_assumptions | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
+          (.pros | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
+          (.cons | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
+          (.recommended_option | IN("A", "B")) and
+          (.confidence | type == "number" and . >= 0 and . <= 1)
+        )) and
+        (.reasoning.comparison | type == "object") and
+        ((.reasoning.comparison | keys | sort) == ["agreements", "conflicts", "reason", "which_fits_user_better"]) and
+        (.reasoning.comparison.agreements | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
+        (.reasoning.comparison.conflicts | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
+        (.reasoning.comparison.which_fits_user_better | IN("A", "B")) and
+        (.reasoning.comparison.reason | type == "string" and length > 0) and
+        (.reasoning.final_selection | type == "object") and
+        ((.reasoning.final_selection | keys | sort) == ["decision_confidence", "selected_option", "selected_reasoning", "why_selected"]) and
+        (.reasoning.final_selection.selected_reasoning | IN("A", "B")) and
+        (.reasoning.final_selection.selected_option | IN("A", "B")) and
+        (.reasoning.final_selection.why_selected | type == "string" and length > 0) and
+        (.reasoning.final_selection.decision_confidence | type == "number" and . >= 0 and . <= 1)
+      ' "$result_file" >/dev/null
+      ;;
     advisor)
       jq -e '
         type == "object" and
-        ((keys | sort) == ["reason", "recommended_option"]) and
+        ((keys | sort) == ["reason", "reasoning_basis", "recommended_option"]) and
         (.recommended_option | IN("A", "B")) and
-        (.reason | type == "string" and length > 0)
+        (.reason | type == "string" and length > 0) and
+        (.reasoning_basis | type == "object") and
+        ((.reasoning_basis | keys | sort) == ["core_why", "decision_confidence", "selected_reasoning"]) and
+        (.reasoning_basis.selected_reasoning | IN("A", "B")) and
+        (.reasoning_basis.core_why | type == "string" and length > 0) and
+        (.reasoning_basis.decision_confidence | type == "number" and . >= 0 and . <= 1)
+      ' "$result_file" >/dev/null
+      ;;
+    reflection)
+      jq -e '
+        type == "object" and
+        ((keys | sort) == ["improvement_suggestions", "issues", "overall_comment", "scores"]) and
+        (.scores | type == "object") and
+        ((.scores | keys | sort) == ["consistency", "profile_alignment", "realism", "recommendation_clarity"]) and
+        ([.scores[]] | all(.[]; type == "number" and floor == . and . >= 1 and . <= 5)) and
+        (.issues | type == "array" and length >= 1 and all(.[]; type == "object" and ((keys | sort) == ["description", "type"]) and (.type | IN("scenario", "risk", "reasoning", "advisor", "profile")) and (.description | type == "string" and length > 0))) and
+        (.improvement_suggestions | type == "array" and length >= 1 and all(.[]; type == "object" and ((keys | sort) == ["suggestion", "target"]) and (.target | IN("planner", "scenario", "risk", "reasoning", "advisor")) and (.suggestion | type == "string" and length > 0))) and
+        (.overall_comment | type == "string" and length > 0)
       ' "$result_file" >/dev/null
       ;;
     *)
@@ -431,7 +798,9 @@ write_case_summary() {
   local scenario_b_file
   local risk_a_file
   local risk_b_file
+  local reasoning_file
   local advisor_file
+  local reflection_file
   local case_id
 
   if [ ! -f "$input_file" ]; then
@@ -445,7 +814,9 @@ write_case_summary() {
   scenario_b_file="$(resolve_stage_result_file "scenario-b")"
   risk_a_file="$(resolve_stage_result_file "risk-a")"
   risk_b_file="$(resolve_stage_result_file "risk-b")"
+  reasoning_file="$(resolve_stage_result_file "reasoning")"
   advisor_file="$(resolve_stage_result_file "advisor")"
+  reflection_file="$(resolve_stage_result_file "reflection")"
   case_id="$(case_id_from_output_dir "$OUTPUTS_DIR")"
 
   {
@@ -490,9 +861,54 @@ write_case_summary() {
       printf -- '- %s\n' "$reason"
     done < <(jq -r '.reasons[]' "$risk_b_file")
 
+    printf '\n## A/B Reasoning\n\n'
+    printf '### A Reasoning\n\n'
+    printf -- '- stance: %s\n' "$(jq -r '.reasoning.a_reasoning.stance' "$reasoning_file")"
+    printf -- '- recommended option: %s\n' "$(jq -r '.reasoning.a_reasoning.recommended_option' "$reasoning_file")"
+    printf -- '- summary: %s\n' "$(jq -r '.reasoning.a_reasoning.summary' "$reasoning_file" | normalize_inline_text)"
+
+    printf '\n### B Reasoning\n\n'
+    printf -- '- stance: %s\n' "$(jq -r '.reasoning.b_reasoning.stance' "$reasoning_file")"
+    printf -- '- recommended option: %s\n' "$(jq -r '.reasoning.b_reasoning.recommended_option' "$reasoning_file")"
+    printf -- '- summary: %s\n' "$(jq -r '.reasoning.b_reasoning.summary' "$reasoning_file" | normalize_inline_text)"
+
+    printf '\n### Comparison\n\n'
+    printf -- '- agreements: %s\n' "$(jq -r '.reasoning.comparison.agreements | join("; ")' "$reasoning_file" | normalize_inline_text)"
+    printf -- '- conflicts: %s\n' "$(jq -r '.reasoning.comparison.conflicts | join("; ")' "$reasoning_file" | normalize_inline_text)"
+    printf -- '- which fits user better: %s\n' "$(jq -r '.reasoning.comparison.which_fits_user_better' "$reasoning_file")"
+    printf -- '- reason: %s\n' "$(jq -r '.reasoning.comparison.reason' "$reasoning_file" | normalize_inline_text)"
+
+    printf '\n### Final Selection\n\n'
+    printf -- '- selected reasoning: %s\n' "$(jq -r '.reasoning.final_selection.selected_reasoning' "$reasoning_file")"
+    printf -- '- selected option: %s\n' "$(jq -r '.reasoning.final_selection.selected_option' "$reasoning_file")"
+    printf -- '- why selected: %s\n' "$(jq -r '.reasoning.final_selection.why_selected' "$reasoning_file" | normalize_inline_text)"
+    printf -- '- decision confidence: %s\n' "$(jq -r '.reasoning.final_selection.decision_confidence' "$reasoning_file")"
+
     printf '\n## Advisor\n\n'
     printf -- '- Recommended option: %s\n' "$(jq -r '.recommended_option' "$advisor_file")"
     printf -- '- Reason: %s\n' "$(jq -r '.reason' "$advisor_file" | normalize_inline_text)"
+    printf -- '- Reasoning basis: reasoning %s / confidence %s / %s\n' \
+      "$(jq -r '.reasoning_basis.selected_reasoning' "$advisor_file")" \
+      "$(jq -r '.reasoning_basis.decision_confidence' "$advisor_file")" \
+      "$(jq -r '.reasoning_basis.core_why' "$advisor_file" | normalize_inline_text)"
+
+    printf '\n## Reflection\n\n'
+    printf -- '- realism: %s\n' "$(jq -r '.scores.realism' "$reflection_file")"
+    printf -- '- consistency: %s\n' "$(jq -r '.scores.consistency' "$reflection_file")"
+    printf -- '- profile_alignment: %s\n' "$(jq -r '.scores.profile_alignment' "$reflection_file")"
+    printf -- '- recommendation_clarity: %s\n' "$(jq -r '.scores.recommendation_clarity' "$reflection_file")"
+
+    printf '\n### 주요 문제\n\n'
+    while IFS= read -r issue; do
+      printf -- '- %s\n' "$issue"
+    done < <(jq -r '.issues[] | "[\(.type)] \(.description | gsub("[\\r\\n]+"; " "))"' "$reflection_file")
+
+    printf '\n### 개선 방향\n\n'
+    while IFS= read -r suggestion; do
+      printf -- '- %s\n' "$suggestion"
+    done < <(jq -r '.improvement_suggestions[] | "[\(.target)] \(.suggestion | gsub("[\\r\\n]+"; " "))"' "$reflection_file")
+
+    printf '\n- Overall comment: %s\n' "$(jq -r '.overall_comment | gsub("[\\r\\n]+"; " ")' "$reflection_file")"
   } > "$summary_file"
 
   echo "Created $(relative_to_root "$summary_file")"

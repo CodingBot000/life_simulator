@@ -1,0 +1,4 @@
+{
+  "recommended_option": "B",
+  "reason": "사용자의 risk_tolerance가 medium이고 최우선 기준이 independence이므로, 현재 stub 비교에서는 위험도 차이를 더 낮게 만드는 선택을 우선 추천한다. riskA=medium, riskB=medium이며 이 문장은 compose-only 검증용 임시 추천 사유다."
+}

@@ -4,9 +4,11 @@ import { useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 
 import type {
+  AbReasoningResult,
   AdvisorResult,
   DecisionInput,
   PlannerResult,
+  ReflectionResult,
   RiskResult,
   RiskTolerance,
   ScenarioResult,
@@ -185,6 +187,200 @@ function RiskCard({
   );
 }
 
+function formatConfidence(value: number) {
+  return `${Math.round(value * 100)}%`;
+}
+
+function ReasoningLensCard({
+  title,
+  accentClass,
+  reasoning,
+}: {
+  title: string;
+  accentClass: string;
+  reasoning: AbReasoningResult["reasoning"]["a_reasoning"];
+}) {
+  return (
+    <div className="rounded-[24px] border border-slate-900/8 bg-white/75 p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            {title}
+          </p>
+          <h4 className="mt-2 text-lg font-semibold text-slate-950">
+            {reasoning.stance}
+          </h4>
+        </div>
+        <span
+          className={`rounded-full border px-3 py-1 text-sm font-semibold ${accentClass}`}
+        >
+          Option {reasoning.recommended_option}
+        </span>
+      </div>
+      <p className="mt-4 text-sm leading-7 text-slate-700">{reasoning.summary}</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Confidence
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {formatConfidence(reasoning.confidence)}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4 sm:col-span-2">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Key Assumptions
+          </p>
+          <ul className="mt-2 grid gap-2">
+            {reasoning.key_assumptions.map((item) => (
+              <li key={item} className="text-sm leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">
+            Pros
+          </p>
+          <ul className="mt-2 grid gap-2">
+            {reasoning.pros.map((item) => (
+              <li key={item} className="text-sm leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-rose-900/10 bg-rose-50/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-rose-800">
+            Cons
+          </p>
+          <ul className="mt-2 grid gap-2">
+            {reasoning.cons.map((item) => (
+              <li key={item} className="text-sm leading-7 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
+  return (
+    <section className="card-surface rounded-[28px] p-6">
+      <p className="section-label">A/B Reasoning</p>
+      <div className="mt-2 flex items-start justify-between gap-4">
+        <div>
+          <h3 className="display-font text-2xl font-semibold text-slate-950">
+            판단 후보안 비교
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-slate-600">
+            {reasoning.input_summary.planner_goal}
+          </p>
+        </div>
+        <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
+          Case {reasoning.case_id}
+        </span>
+      </div>
+
+      <div className="mt-6 grid gap-4 xl:grid-cols-2">
+        <ReasoningLensCard
+          title="Reasoning A"
+          accentClass="border-emerald-900/10 bg-emerald-600/[0.12] text-emerald-900"
+          reasoning={reasoning.reasoning.a_reasoning}
+        />
+        <ReasoningLensCard
+          title="Reasoning B"
+          accentClass="border-amber-900/10 bg-amber-500/[0.14] text-amber-950"
+          reasoning={reasoning.reasoning.b_reasoning}
+        />
+      </div>
+
+      <div className="mt-5 grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+        <div className="rounded-[24px] border border-slate-900/8 bg-white/75 p-5">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Comparison
+          </p>
+          <p className="mt-3 text-sm leading-7 text-slate-700">
+            {reasoning.reasoning.comparison.reason}
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/70 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">
+                Agreements
+              </p>
+              <ul className="mt-2 grid gap-2">
+                {reasoning.reasoning.comparison.agreements.map((item) => (
+                  <li key={item} className="text-sm leading-7 text-slate-700">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-rose-900/10 bg-rose-50/70 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-rose-800">
+                Conflicts
+              </p>
+              <ul className="mt-2 grid gap-2">
+                {reasoning.reasoning.comparison.conflicts.map((item) => (
+                  <li key={item} className="text-sm leading-7 text-slate-700">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p className="mt-4 text-sm font-semibold text-slate-950">
+            사용자 적합 옵션: {reasoning.reasoning.comparison.which_fits_user_better}
+          </p>
+        </div>
+
+        <div className="rounded-[24px] border border-slate-900/8 bg-slate-950 p-5 text-white">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+            Final Selection
+          </p>
+          <div className="mt-4 grid gap-3">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+                Selected Reasoning
+              </p>
+              <p className="mt-2 text-2xl font-semibold">
+                {reasoning.reasoning.final_selection.selected_reasoning}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+                Selected Option
+              </p>
+              <p className="mt-2 text-2xl font-semibold">
+                {reasoning.reasoning.final_selection.selected_option}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+                Confidence
+              </p>
+              <p className="mt-2 text-2xl font-semibold">
+                {formatConfidence(
+                  reasoning.reasoning.final_selection.decision_confidence,
+                )}
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-7 text-white/80">
+            {reasoning.reasoning.final_selection.why_selected}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
   return (
     <section className="card-surface-strong rounded-[32px] p-6">
@@ -197,7 +393,117 @@ function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
           Option {advisor.recommended_option}
         </span>
       </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Selected Reasoning
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {advisor.reasoning_basis.selected_reasoning}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4 sm:col-span-2">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Decision Confidence
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {formatConfidence(advisor.reasoning_basis.decision_confidence)}
+          </p>
+        </div>
+      </div>
       <p className="mt-4 text-sm leading-7 text-slate-700">{advisor.reason}</p>
+      <p className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
+        {advisor.reasoning_basis.core_why}
+      </p>
+    </section>
+  );
+}
+
+function ReflectionCard({ reflection }: { reflection: ReflectionResult }) {
+  const scoreEntries: Array<{
+    label: keyof ReflectionResult["scores"];
+    value: number;
+  }> = [
+    { label: "realism", value: reflection.scores.realism },
+    { label: "consistency", value: reflection.scores.consistency },
+    {
+      label: "profile_alignment",
+      value: reflection.scores.profile_alignment,
+    },
+    {
+      label: "recommendation_clarity",
+      value: reflection.scores.recommendation_clarity,
+    },
+  ];
+
+  return (
+    <section className="card-surface rounded-[28px] p-6">
+      <p className="section-label">Reflection</p>
+      <div className="mt-2 flex items-start justify-between gap-4">
+        <h3 className="display-font text-2xl font-semibold text-slate-950">
+          결과 검증
+        </h3>
+      </div>
+      <p className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
+        {reflection.overall_comment}
+      </p>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        {scoreEntries.map((score) => (
+          <div
+            key={score.label}
+            className="rounded-2xl border border-slate-900/8 bg-white/70 p-4"
+          >
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+              {score.label}
+            </p>
+            <p className="mt-2 text-2xl font-semibold text-slate-950">
+              {score.value}
+              <span className="ml-1 text-sm font-medium text-slate-500">/ 5</span>
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 grid gap-5">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Issues
+          </p>
+          <ul className="mt-3 grid gap-3">
+            {reflection.issues.map((issue, index) => (
+              <li
+                key={`${issue.type}-${index}`}
+                className="rounded-2xl border border-rose-900/10 bg-rose-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
+              >
+                <span className="mr-2 rounded-full bg-rose-900 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+                  {issue.type}
+                </span>
+                {issue.description}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Improvements
+          </p>
+          <ul className="mt-3 grid gap-3">
+            {reflection.improvement_suggestions.map((item, index) => (
+              <li
+                key={`${item.target}-${index}`}
+                className="rounded-2xl border border-amber-900/10 bg-amber-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
+              >
+                <span className="mr-2 rounded-full bg-amber-700 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+                  {item.target}
+                </span>
+                {item.suggestion}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
   );
 }
@@ -255,8 +561,8 @@ export default function HomePage() {
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
               사용자 프로필과 두 가지 선택지를 입력하면 Planner, Scenario,
-              Risk, Advisor 순서의 6단계 체인으로 현실적인 판단 결과를
-              생성합니다.
+              Risk, A/B Reasoning, Advisor, Reflection 순서의 8단계 체인으로
+              결과 생성과 검증을 함께 수행합니다.
             </p>
           </div>
 
@@ -267,7 +573,9 @@ export default function HomePage() {
               "3. Scenario B",
               "4. Risk A",
               "5. Risk B",
-              "6. Advisor",
+              "6. A/B Reasoning",
+              "7. Advisor",
+              "8. Reflection",
             ].map((step) => (
               <span
                 key={step}
@@ -438,8 +746,8 @@ export default function HomePage() {
                 Agent chain 실행 중
               </h2>
               <p className="mt-3">
-                Planner부터 Advisor까지 순서대로 실행하고 있습니다. 응답이
-                도착하면 결과 카드가 자동으로 채워집니다.
+                Planner부터 A/B Reasoning, Reflection까지 순서대로 실행하고
+                있습니다. 응답이 도착하면 결과 카드가 자동으로 채워집니다.
               </p>
             </div>
           ) : null}
@@ -451,8 +759,8 @@ export default function HomePage() {
                 결과 대기 중
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                좌측 폼을 제출하면 Planner, 시나리오, 리스크, 최종 추천이
-                카드 형태로 정리됩니다.
+                좌측 폼을 제출하면 Planner, 시나리오, 리스크, A/B reasoning,
+                최종 추천, reflection 검증 결과가 카드 형태로 정리됩니다.
               </p>
             </div>
           ) : null}
@@ -464,7 +772,9 @@ export default function HomePage() {
               <TimelineCard title="선택지 B 시나리오" scenario={result.scenarioB} />
               <RiskCard title="Risk A" risk={result.riskA} />
               <RiskCard title="Risk B" risk={result.riskB} />
+              <ReasoningCard reasoning={result.reasoning} />
               <AdvisorCard advisor={result.advisor} />
+              <ReflectionCard reflection={result.reflection} />
             </>
           ) : null}
         </section>
