@@ -28,8 +28,14 @@ echo "Running scenario..."
 echo "Running risk..."
 "$SCRIPT_DIR/run-risk.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
 
+echo "Running A/B reasoning..."
+"$SCRIPT_DIR/run-ab-reasoning.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
+
 echo "Running advisor..."
 "$SCRIPT_DIR/run-advisor.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
+
+echo "Running reflection..."
+"$SCRIPT_DIR/run-reflection.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
 
 write_case_summary "$OUTPUTS_DIR/input.json"
 

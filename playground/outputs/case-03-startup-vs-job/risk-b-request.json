@@ -1,6 +1,6 @@
 {
   "stage": "risk",
-  "generated_at": "2026-03-24T10:49:54Z",
+  "generated_at": "2026-03-24T19:24:06Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/risk.md",
   "input_source": "playground/inputs/cases/case-03-startup-vs-job.json",

@@ -1,10 +1,14 @@
 import "server-only";
 
 import {
+  abReasoningPrompt,
+  abReasoningSchema,
   advisorPrompt,
   advisorSchema,
   plannerPrompt,
   plannerSchema,
+  reflectionPrompt,
+  reflectionSchema,
   riskPrompt,
   riskSchema,
   scenarioPrompt,
@@ -12,9 +16,11 @@ import {
 } from "@/lib/prompts";
 import { generateStructuredOutput } from "@/lib/openai";
 import type {
+  AbReasoningResult,
   AdvisorResult,
   DecisionInput,
   PlannerResult,
+  ReflectionResult,
   RiskResult,
   ScenarioResult,
   SimulationResponse,
@@ -128,6 +134,32 @@ export async function runRiskB(
   });
 }
 
+export async function runAbReasoning(
+  userProfile: UserProfile,
+  decision: DecisionInput,
+  planner: PlannerResult,
+  scenarioA: ScenarioResult,
+  scenarioB: ScenarioResult,
+  riskA: RiskResult,
+  riskB: RiskResult,
+): Promise<AbReasoningResult> {
+  return generateStructuredOutput<AbReasoningResult>({
+    schemaName: "ab_reasoning_result",
+    schema: abReasoningSchema,
+    prompt: abReasoningPrompt,
+    input: formatPayload({
+      caseId: "interactive-session",
+      userProfile,
+      decision,
+      plannerResult: planner,
+      scenarioA,
+      scenarioB,
+      riskA,
+      riskB,
+    }),
+  });
+}
+
 export async function runAdvisor(
   userProfile: UserProfile,
   decision: DecisionInput,
@@ -136,6 +168,7 @@ export async function runAdvisor(
   scenarioB: ScenarioResult,
   riskA: RiskResult,
   riskB: RiskResult,
+  reasoning: AbReasoningResult,
 ): Promise<AdvisorResult> {
   return generateStructuredOutput<AdvisorResult>({
     schemaName: "advisor_result",
@@ -144,13 +177,41 @@ export async function runAdvisor(
     input: formatPayload({
       userProfile,
       decision,
-      previousResults: {
-        planner,
-        scenarioA,
-        scenarioB,
-        riskA,
-        riskB,
-      },
+      plannerResult: planner,
+      scenarioA,
+      scenarioB,
+      riskA,
+      riskB,
+      abReasoning: reasoning,
+    }),
+  });
+}
+
+export async function runReflection(
+  userProfile: UserProfile,
+  decision: DecisionInput,
+  planner: PlannerResult,
+  scenarioA: ScenarioResult,
+  scenarioB: ScenarioResult,
+  riskA: RiskResult,
+  riskB: RiskResult,
+  reasoning: AbReasoningResult,
+  advisor: AdvisorResult,
+): Promise<ReflectionResult> {
+  return generateStructuredOutput<ReflectionResult>({
+    schemaName: "reflection_result",
+    schema: reflectionSchema,
+    prompt: reflectionPrompt,
+    input: formatPayload({
+      userProfile,
+      decision,
+      plannerResult: planner,
+      scenarioA,
+      scenarioB,
+      riskA,
+      riskB,
+      abReasoning: reasoning,
+      advisorResult: advisor,
     }),
   });
 }
@@ -174,7 +235,7 @@ export async function runSimulationChain(
   const riskB = await runRiskB(userProfile, decision, planner, scenarioB);
   logStep("riskB", riskB);
 
-  const advisor = await runAdvisor(
+  const reasoning = await runAbReasoning(
     userProfile,
     decision,
     planner,
@@ -183,7 +244,32 @@ export async function runSimulationChain(
     riskA,
     riskB,
   );
+  logStep("reasoning", reasoning);
+
+  const advisor = await runAdvisor(
+    userProfile,
+    decision,
+    planner,
+    scenarioA,
+    scenarioB,
+    riskA,
+    riskB,
+    reasoning,
+  );
   logStep("advisor", advisor);
+
+  const reflection = await runReflection(
+    userProfile,
+    decision,
+    planner,
+    scenarioA,
+    scenarioB,
+    riskA,
+    riskB,
+    reasoning,
+    advisor,
+  );
+  logStep("reflection", reflection);
 
   return {
     planner,
@@ -191,6 +277,8 @@ export async function runSimulationChain(
     scenarioB,
     riskA,
     riskB,
+    reasoning,
     advisor,
+    reflection,
   };
 }

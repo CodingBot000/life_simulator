@@ -2,7 +2,7 @@
 
 - Request file: `playground/outputs/case-01-career-stability/scenario-a-request.json`
 - Prompt file: `prompts/scenario.md`
-- Input source: `playground/inputs/cases/case-01-career-stability.json`
+- Input source: `./playground/inputs/cases/case-01-career-stability.json`
 - Previous result: `playground/outputs/case-01-career-stability/planner-result.json`
 
 ## Prompt
@@ -72,20 +72,20 @@
   "selectedOption": "현재 회사에 남는다",
   "decisionContext": "현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.",
   "factors": [
-    "고용 안정성",
+    "고용 및 생활 안정성",
     "연봉 및 복지 수준",
     "역할 변화와 커리어 성장 가능성",
-    "새로운 기술을 가까이에서 다룰 기회",
-    "일과 삶의 균형 및 생활 안정성"
+    "새로운 기술을 가까이서 다룰 기회",
+    "워라밸 유지 가능성"
   ],
   "plannerResult": {
     "decision_type": "career_change",
     "factors": [
-      "고용 안정성",
+      "고용 및 생활 안정성",
       "연봉 및 복지 수준",
       "역할 변화와 커리어 성장 가능성",
-      "새로운 기술을 가까이에서 다룰 기회",
-      "일과 삶의 균형 및 생활 안정성"
+      "새로운 기술을 가까이서 다룰 기회",
+      "워라밸 유지 가능성"
     ]
   }
 }

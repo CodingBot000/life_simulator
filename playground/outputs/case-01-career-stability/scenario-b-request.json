@@ -1,9 +1,9 @@
 {
   "stage": "scenario",
-  "generated_at": "2026-03-24T10:47:18Z",
+  "generated_at": "2026-03-25T12:48:16Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/scenario.md",
-  "input_source": "playground/inputs/cases/case-01-career-stability.json",
+  "input_source": "./playground/inputs/cases/case-01-career-stability.json",
   "previous_stage_result_files": [
     "playground/outputs/case-01-career-stability/planner-result.json"
   ],
@@ -43,24 +43,24 @@
     "selectedOption": "스타트업으로 이직한다",
     "decisionContext": "현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.",
     "factors": [
-      "고용 안정성",
+      "고용 및 생활 안정성",
       "연봉 및 복지 수준",
       "역할 변화와 커리어 성장 가능성",
-      "새로운 기술을 가까이에서 다룰 기회",
-      "일과 삶의 균형 및 생활 안정성"
+      "새로운 기술을 가까이서 다룰 기회",
+      "워라밸 유지 가능성"
     ],
     "plannerResult": {
       "decision_type": "career_change",
       "factors": [
-        "고용 안정성",
+        "고용 및 생활 안정성",
         "연봉 및 복지 수준",
         "역할 변화와 커리어 성장 가능성",
-        "새로운 기술을 가까이에서 다룰 기회",
-        "일과 삶의 균형 및 생활 안정성"
+        "새로운 기술을 가까이서 다룰 기회",
+        "워라밸 유지 가능성"
       ]
     }
   },
-  "input_json": "{\n  \"optionLabel\": \"B\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\n      \"stability\",\n      \"income\",\n      \"work_life_balance\"\n    ]\n  },\n  \"selectedOption\": \"스타트업으로 이직한다\",\n  \"decisionContext\": \"현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.\",\n  \"factors\": [\n    \"고용 안정성\",\n    \"연봉 및 복지 수준\",\n    \"역할 변화와 커리어 성장 가능성\",\n    \"새로운 기술을 가까이에서 다룰 기회\",\n    \"일과 삶의 균형 및 생활 안정성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"고용 안정성\",\n      \"연봉 및 복지 수준\",\n      \"역할 변화와 커리어 성장 가능성\",\n      \"새로운 기술을 가까이에서 다룰 기회\",\n      \"일과 삶의 균형 및 생활 안정성\"\n    ]\n  }\n}",
+  "input_json": "{\n  \"optionLabel\": \"B\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\n      \"stability\",\n      \"income\",\n      \"work_life_balance\"\n    ]\n  },\n  \"selectedOption\": \"스타트업으로 이직한다\",\n  \"decisionContext\": \"현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.\",\n  \"factors\": [\n    \"고용 및 생활 안정성\",\n    \"연봉 및 복지 수준\",\n    \"역할 변화와 커리어 성장 가능성\",\n    \"새로운 기술을 가까이서 다룰 기회\",\n    \"워라밸 유지 가능성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"고용 및 생활 안정성\",\n      \"연봉 및 복지 수준\",\n      \"역할 변화와 커리어 성장 가능성\",\n      \"새로운 기술을 가까이서 다룰 기회\",\n      \"워라밸 유지 가능성\"\n    ]\n  }\n}",
   "provider_payload": {
     "runner": "codex exec",
     "call_status": "ready",

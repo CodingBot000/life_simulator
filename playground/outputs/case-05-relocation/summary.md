@@ -49,3 +49,22 @@
 
 - Recommended option: B
 - Reason: 사용자의 위험 감수 성향이 low가 아니라 medium이고, 우선순위가 stability만이 아니라 experience와 future_opportunity까지 포함되어 있다는 점을 기준으로 보면 B가 더 적합하다. A는 현재의 안정성과 커리어 연속성은 가장 잘 지키지만, 경험과 장기 기회 측면에서는 아쉬움이 누적될 가능성이 크다. 반면 B는 초기에 언어·비자·수입 안정성 부담이 분명하지만 risk_level이 medium 수준에 머물고, 1년 이후 적응이 진행되며 3년 시점에는 해외 실무 경험과 더 넓은 커리어 선택지가 실제 자산이 된다. 즉 안정성을 일부 감수하더라도 새로운 경험과 미래 기회 확대를 함께 얻으려는 현재 우선순위에는 B가 더 잘 맞는다.
+
+## Reflection
+
+- realism: 4
+- consistency: 4
+- profile_alignment: 3
+- recommendation_clarity: 4
+
+### 주요 문제
+
+- [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 stability을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
+- [advisor] advisor가 B를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
+
+### 개선 방향
+
+- [scenario] 각 시간 축 문장에서 stability 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
+- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
+
+- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
