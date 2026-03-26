@@ -10,6 +10,7 @@
 - Previous result: `playground/outputs/case-02-career-growth/scenario-b-result.json`
 - Previous result: `playground/outputs/case-02-career-growth/risk-a-result.json`
 - Previous result: `playground/outputs/case-02-career-growth/risk-b-result.json`
+- Previous result: `playground/outputs/case-02-career-growth/guardrail-result.json`
 
 ## Prompt
 
@@ -296,6 +297,12 @@
       "3년 관점에서 생성형 AI 실전 경험과 오너십은 커리어 자산이 되지만, 합병·전략 수정·팀 재편 같은 조직 불확실성이 끝까지 남는다.",
       "다만 사용자는 성장·오너십·학습을 최우선으로 두고 위험 감수 성향도 높아, 같은 불확실성이라도 체감 위험은 완화되는 편이다."
     ]
+  },
+  "guardrailResult": {
+    "guardrail_triggered": false,
+    "triggers": [],
+    "strategy": [],
+    "final_mode": "normal"
   }
 }
 ```

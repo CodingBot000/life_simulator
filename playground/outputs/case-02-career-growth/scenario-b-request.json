@@ -1,6 +1,6 @@
 {
   "stage": "scenario",
-  "generated_at": "2026-03-26T12:30:29Z",
+  "generated_at": "2026-03-26T18:57:41Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/scenario.md",
   "input_source": "playground/inputs/cases/case-02-career-growth.json",

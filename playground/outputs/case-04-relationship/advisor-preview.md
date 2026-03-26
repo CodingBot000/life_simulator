@@ -10,6 +10,7 @@
 - Previous result: `playground/outputs/case-04-relationship/scenario-b-result.json`
 - Previous result: `playground/outputs/case-04-relationship/risk-a-result.json`
 - Previous result: `playground/outputs/case-04-relationship/risk-b-result.json`
+- Previous result: `playground/outputs/case-04-relationship/guardrail-result.json`
 
 ## Prompt
 
@@ -296,6 +297,16 @@
       "1년~3년 시나리오에서는 장거리와 반복 갈등 속에서 미래 계획을 안정적으로 맞추기 어려웠다는 판단이 선명해지고, 신뢰와 장기적 궁합 기준이 더 분명해져 장기 리스크는 낮아진다.",
       "즉 위험의 중심은 관계를 정리한 선택 자체보다 초기 상실감과 외로움의 충격에 있으며, 장기적으로는 불안정한 관계를 계속 유지하는 경우보다 우선순위와의 충돌이 적다."
     ]
+  },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": [
+      "high_risk"
+    ],
+    "strategy": [
+      "risk_warning"
+    ],
+    "final_mode": "cautious"
   }
 }
 ```

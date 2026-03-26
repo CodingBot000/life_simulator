@@ -10,6 +10,7 @@
 - Previous result: `playground/outputs/case-09-overseas-study-vs-work/scenario-b-result.json`
 - Previous result: `playground/outputs/case-09-overseas-study-vs-work/risk-a-result.json`
 - Previous result: `playground/outputs/case-09-overseas-study-vs-work/risk-b-result.json`
+- Previous result: `playground/outputs/case-09-overseas-study-vs-work/guardrail-result.json`
 
 ## Prompt
 
@@ -297,6 +298,12 @@
       "1년 이후에는 퇴근 후 강의·자격 준비·관련 프로젝트를 병행해야 할 가능성이 높아 보여, 수입은 유지되더라도 시간과 에너지를 추가로 써야 원하는 전문성을 따라잡을 수 있다.",
       "3년 시점에도 어떤 프로젝트를 맡았는지에 따라 전문성의 선명도가 크게 갈리므로, 안정성과 수입은 확보해도 장기 커리어 방향이 흐려질 가능성이 있어 전체 위험도는 중간 수준이다."
     ]
+  },
+  "guardrailResult": {
+    "guardrail_triggered": false,
+    "triggers": [],
+    "strategy": [],
+    "final_mode": "normal"
   }
 }
 ```

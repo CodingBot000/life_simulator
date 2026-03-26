@@ -1,12 +1,12 @@
 {
   "decision": "B",
-  "confidence": 0.70,
+  "confidence": 0.5499999999999999,
   "recommended_option": "B",
-  "reason": "router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=high, riskB=medium이며 최우선 기준이 emotional_stability이므로 현재 stub에서는 B를 추천한다.",
-  "guardrail_applied": false,
+  "reason": "guardrail이 cautious 모드로 전환됐기 때문에 결론 강도를 낮춘다. 핵심 trigger는 high_risk이고 대응 strategy는 risk_warning다. 사용자의 최우선 기준이 emotional_stability인 점은 유지하되 riskA=high, riskB=medium를 더 무겁게 반영해 현재는 B 쪽을 조심스럽게 권한다.",
+  "guardrail_applied": true,
   "reasoning_basis": {
     "selected_reasoning": "B",
-    "core_why": "scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.",
-    "decision_confidence": 0.70
+    "core_why": "guardrail이 위험 신호를 감지했으므로 최종 선택을 뒤집기보다는 confidence를 낮추고 위험 경고를 전면에 두는 것이 적절하다.",
+    "decision_confidence": 0.5499999999999999
   }
 }

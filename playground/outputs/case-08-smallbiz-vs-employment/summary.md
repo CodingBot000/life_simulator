@@ -115,6 +115,7 @@
 - triggers: reasoning_conflict
 - strategy: neutralize_decision
 - final_mode: cautious
+- guardrail correctness: good
 
 ## Advisor
 

@@ -1,6 +1,10 @@
 {
-  "guardrail_triggered": false,
-  "triggers": [],
-  "strategy": [],
-  "final_mode": "normal"
+  "guardrail_triggered": true,
+  "triggers": [
+    "ambiguity_high"
+  ],
+  "strategy": [
+    "ask_more_info"
+  ],
+  "final_mode": "cautious"
 }

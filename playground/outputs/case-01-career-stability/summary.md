@@ -115,6 +115,7 @@
 - triggers: ambiguity_high, reasoning_conflict, high_risk
 - strategy: ask_more_info, neutralize_decision, risk_warning
 - final_mode: blocked
+- guardrail correctness: good
 
 ## Advisor
 

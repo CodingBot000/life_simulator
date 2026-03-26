@@ -1,29 +1,35 @@
 {
+  "evaluation": "guardrail final_mode=cautious 조건에서 advisor가 약한 추천과 낮아진 confidence로 위험 신호를 충분히 반영했는지 다시 점검한다.",
   "scores": {
     "realism": 4,
     "consistency": 4,
-    "profile_alignment": 3,
+    "profile_alignment": 4,
     "recommendation_clarity": 4
   },
   "issues": [
     {
-      "type": "profile",
-      "description": "planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 growth을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다."
+      "type": "advisor",
+      "description": "advisor decision=B, confidence=0.51, guardrail_applied=true 조합이 guardrail final_mode=cautious 및 위험 신호(routing risk=low, ambiguity=medium, riskA=medium, riskB=medium)와 어떻게 연결되는지 문장 수준에서 더 직접적으로 드러나야 한다."
     },
     {
-      "type": "advisor",
-      "description": "advisor가 B를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다."
+      "type": "scenario",
+      "description": "standard 경로에서는 scenario 비교가 핵심이므로, 각 옵션의 시간축 변화가 최우선 priority와 어떻게 연결되는지 더 직접적으로 드러낼 필요가 있다."
     }
   ],
   "improvement_suggestions": [
     {
-      "target": "scenario",
-      "suggestion": "각 시간 축 문장에서 growth 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라."
+      "target": "advisor",
+      "suggestion": "advisor reason에 조심스러운 추천임을 직접 밝히고 risk/uncertainty가 confidence를 낮춘 이유를 한 문장으로 덧붙여라."
     },
     {
-      "target": "advisor",
-      "suggestion": "최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라."
+      "target": "scenario",
+      "suggestion": "scenario A/B의 3개월, 1년, 3년 문장마다 사용자의 최우선 priority 유지 여부를 한 문장씩 명시하라."
     }
   ],
-  "overall_comment": "전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다."
+  "overall_comment": "cautious 모드 전환은 적절하며, 위험 신호를 유지한 채 추천 강도를 낮춘 점이 현재 실행 경로와 잘 맞는다.",
+  "guardrail_review": {
+    "was_needed": true,
+    "was_triggered": true,
+    "correctness": "good"
+  }
 }

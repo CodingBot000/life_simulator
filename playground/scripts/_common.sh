@@ -13,6 +13,24 @@ compose_only_enabled() {
   [ "${CODEX_COMPOSE_ONLY:-0}" = "1" ]
 }
 
+array_to_json() {
+  jq -cn '$ARGS.positional' --args "$@"
+}
+
+has_value() {
+  local needle="$1"
+  shift
+
+  local item
+  for item in "$@"; do
+    if [ "$item" = "$needle" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 require_jq() {
   if ! command -v jq >/dev/null 2>&1; then
     echo "Error: jq is required for the playground scripts." >&2
@@ -201,26 +219,279 @@ summary_path() {
   printf '%s/summary.md\n' "$OUTPUTS_DIR"
 }
 
+aggregate_summary_path() {
+  printf '%s/summary.md\n' "$OUTPUTS_ROOT_DIR"
+}
+
 write_default_guardrail_result() {
+  local execution_mode="${1:-$(infer_execution_mode_from_artifacts)}"
   local stub_file
   local result_file
+  local routing_file=""
+  local risk_a_file=""
+  local risk_b_file=""
+  local state_context_file
+  local routing_risk_level="low"
+  local routing_ambiguity="low"
+  local risk_a_level="not_run"
+  local risk_b_level="not_run"
+  local state_unknown_count="0"
+  local guardrail_triggered="false"
+  local final_mode="normal"
+  local triggers_json
+  local strategy_json
+  local -a triggers=()
+  local -a strategies=()
 
   require_jq
 
   stub_file="$(stage_stub_path "guardrail")"
   result_file="$(stage_result_path "guardrail")"
+  state_context_file="$(state_context_path)"
 
-  jq -n '{
-    guardrail_triggered: false,
-    triggers: [],
-    strategy: [],
-    final_mode: "normal"
-  }' > "$stub_file"
+  if [ -f "$state_context_file" ]; then
+    state_unknown_count="$(jq -r '[.user_state.profile_state.risk_preference, .user_state.profile_state.decision_style, .user_state.situational_state.career_stage, .user_state.situational_state.financial_pressure, .user_state.situational_state.time_pressure, .user_state.situational_state.emotional_state] | map(select(. == "unknown" or . == "none")) | length' "$state_context_file")"
+  fi
+
+  if routing_file="$(optional_stage_result_file "routing" 2>/dev/null)"; then
+    routing_risk_level="$(jq -r '.routing.risk_level' "$routing_file")"
+    routing_ambiguity="$(jq -r '.routing.ambiguity' "$routing_file")"
+  fi
+
+  if risk_a_file="$(optional_stage_result_file "risk-a" 2>/dev/null)"; then
+    risk_b_file="$(resolve_stage_result_file "risk-b")"
+    risk_a_level="$(jq -r '.risk_level' "$risk_a_file")"
+    risk_b_level="$(jq -r '.risk_level' "$risk_b_file")"
+  fi
+
+  if [ "$routing_ambiguity" = "high" ] || [ "$state_unknown_count" -ge 3 ]; then
+    triggers+=("ambiguity_high")
+    strategies+=("ask_more_info")
+  fi
+
+  if [ "$routing_risk_level" = "high" ] || [ "$risk_a_level" = "high" ] || [ "$risk_b_level" = "high" ]; then
+    triggers+=("high_risk")
+    strategies+=("risk_warning")
+  fi
+
+  if [ "${#triggers[@]}" -gt 0 ]; then
+    guardrail_triggered="true"
+    final_mode="cautious"
+  fi
+
+  triggers_json='[]'
+  strategy_json='[]'
+
+  if [ "${#triggers[@]}" -gt 0 ]; then
+    triggers_json="$(array_to_json "${triggers[@]}")"
+    strategy_json="$(array_to_json "${strategies[@]}")"
+  fi
+
+  jq -n \
+    --argjson guardrail_triggered "$guardrail_triggered" \
+    --argjson triggers "$triggers_json" \
+    --argjson strategy "$strategy_json" \
+    --arg final_mode "$final_mode" \
+    '{
+      guardrail_triggered: $guardrail_triggered,
+      triggers: $triggers,
+      strategy: $strategy,
+      final_mode: $final_mode
+    }' > "$stub_file"
 
   cp "$stub_file" "$result_file"
 
   echo "Created $(relative_to_root "$stub_file")"
-  echo "Created $(relative_to_root "$result_file") as default normal guardrail output"
+  echo "Created $(relative_to_root "$result_file") as derived guardrail output for execution_mode=$execution_mode"
+}
+
+write_default_reflection_result() {
+  local execution_mode="${1:-$(infer_execution_mode_from_artifacts)}"
+  local stub_file
+  local result_file
+  local advisor_file
+  local guardrail_file=""
+  local routing_file=""
+  local risk_a_file=""
+  local risk_b_file=""
+  local advisor_decision
+  local advisor_confidence
+  local advisor_guardrail_applied
+  local guardrail_final_mode="normal"
+  local guardrail_triggered="false"
+  local guardrail_was_needed="false"
+  local guardrail_correctness="good"
+  local routing_risk_level="low"
+  local routing_ambiguity="low"
+  local risk_a_level="not_run"
+  local risk_b_level="not_run"
+  local evaluation_text
+  local overall_comment
+  local stage_issue_type="advisor"
+  local stage_issue_text
+  local stage_target="advisor"
+  local stage_suggestion_text
+
+  require_jq
+
+  stub_file="$(stage_stub_path "reflection")"
+  result_file="$(stage_result_path "reflection")"
+  advisor_file="$(resolve_stage_result_file "advisor")"
+
+  advisor_decision="$(jq -r '.decision' "$advisor_file")"
+  advisor_confidence="$(jq -r '.confidence' "$advisor_file")"
+  advisor_guardrail_applied="$(jq -r '.guardrail_applied' "$advisor_file")"
+
+  if guardrail_file="$(optional_stage_result_file "guardrail" 2>/dev/null)"; then
+    guardrail_triggered="$(jq -r '.guardrail_triggered' "$guardrail_file")"
+    guardrail_final_mode="$(jq -r '.final_mode' "$guardrail_file")"
+  fi
+
+  if routing_file="$(optional_stage_result_file "routing" 2>/dev/null)"; then
+    routing_risk_level="$(jq -r '.routing.risk_level' "$routing_file")"
+    routing_ambiguity="$(jq -r '.routing.ambiguity' "$routing_file")"
+  fi
+
+  if risk_a_file="$(optional_stage_result_file "risk-a" 2>/dev/null)"; then
+    risk_b_file="$(resolve_stage_result_file "risk-b")"
+    risk_a_level="$(jq -r '.risk_level' "$risk_a_file")"
+    risk_b_level="$(jq -r '.risk_level' "$risk_b_file")"
+  fi
+
+  if [ "$guardrail_triggered" = "true" ] || [ "$guardrail_final_mode" != "normal" ] || [ "$routing_risk_level" = "high" ] || [ "$routing_ambiguity" = "high" ] || [ "$risk_a_level" = "high" ] || [ "$risk_b_level" = "high" ]; then
+    guardrail_was_needed="true"
+  fi
+
+  if [ "$guardrail_was_needed" = "true" ] && [ "$guardrail_triggered" = "false" ]; then
+    guardrail_correctness="missing"
+  elif [ "$guardrail_was_needed" = "false" ] && [ "$guardrail_triggered" = "true" ]; then
+    guardrail_correctness="over"
+  fi
+
+  case "$execution_mode" in
+    light)
+      stage_issue_type="profile"
+      stage_issue_text="light 경로에서는 planner와 advisor만 사용하므로, 우선순위와 risk_tolerance가 추천 근거에 얼마나 직접 연결됐는지 더 선명하게 보여줄 필요가 있다."
+      stage_target="planner"
+      stage_suggestion_text="planner에서 최우선 priority와 risk_tolerance를 한 줄 요약으로 고정해 advisor reason이 그대로 재사용할 수 있게 하라."
+      ;;
+    standard)
+      stage_issue_type="scenario"
+      stage_issue_text="standard 경로에서는 scenario 비교가 핵심이므로, 각 옵션의 시간축 변화가 최우선 priority와 어떻게 연결되는지 더 직접적으로 드러낼 필요가 있다."
+      stage_target="scenario"
+      stage_suggestion_text="scenario A/B의 3개월, 1년, 3년 문장마다 사용자의 최우선 priority 유지 여부를 한 문장씩 명시하라."
+      ;;
+    careful)
+      stage_issue_type="risk"
+      stage_issue_text="careful 경로에서는 risk 판단이 guardrail 필요성에 직접 연결되므로, risk 차이가 advisor reason에 어떻게 반영됐는지 더 또렷해야 한다."
+      stage_target="risk"
+      stage_suggestion_text="risk 단계에서 high/medium 차이를 advisor가 그대로 인용할 수 있도록 단기 리스크와 장기 리스크를 분리해 적어라."
+      ;;
+    *)
+      stage_issue_type="advisor"
+      stage_issue_text="현재 실행 경로의 핵심 증거가 advisor reason에 압축돼 있어, 어떤 근거가 결론을 지탱하는지 추적성이 약해질 수 있다."
+      stage_target="advisor"
+      stage_suggestion_text="advisor reason을 routing, 핵심 증거, 최종 선택 순서로 다시 정리해 guardrail 영향이 한눈에 보이게 하라."
+      ;;
+  esac
+
+  case "$guardrail_final_mode" in
+    blocked)
+      evaluation_text="guardrail final_mode=blocked 조건에서 advisor가 결론을 보류한 판단이 현재 증거 수준에 비해 과하거나 부족하지 않은지 다시 점검한다."
+      overall_comment="blocked 모드에서는 결론 보류 자체는 타당하지만, 어떤 추가 정보가 들어오면 판단을 재개할지까지 적어야 검증 가능성이 높아진다."
+      ;;
+    cautious)
+      evaluation_text="guardrail final_mode=cautious 조건에서 advisor가 약한 추천과 낮아진 confidence로 위험 신호를 충분히 반영했는지 다시 점검한다."
+      overall_comment="cautious 모드 전환은 적절하며, 위험 신호를 유지한 채 추천 강도를 낮춘 점이 현재 실행 경로와 잘 맞는다."
+      ;;
+    *)
+      evaluation_text="guardrail final_mode=normal 조건에서 advisor가 불필요하게 보수적이지 않으면서도 현재 실행 경로의 증거를 충분히 연결했는지 다시 점검한다."
+      overall_comment="normal 모드에서는 현재 추천 강도가 크게 과하지 않지만, 사용된 근거 축을 더 분명히 적으면 검증 추적성이 좋아진다."
+      ;;
+  esac
+
+  jq -n \
+    --arg execution_mode "$execution_mode" \
+    --arg advisor_decision "$advisor_decision" \
+    --argjson advisor_confidence "$advisor_confidence" \
+    --arg advisor_guardrail_applied "$advisor_guardrail_applied" \
+    --arg guardrail_final_mode "$guardrail_final_mode" \
+    --arg risk_a_level "$risk_a_level" \
+    --arg risk_b_level "$risk_b_level" \
+    --arg routing_risk_level "$routing_risk_level" \
+    --arg routing_ambiguity "$routing_ambiguity" \
+    --arg evaluation_text "$evaluation_text" \
+    --arg overall_comment "$overall_comment" \
+    --arg stage_issue_type "$stage_issue_type" \
+    --arg stage_issue_text "$stage_issue_text" \
+    --arg stage_target "$stage_target" \
+    --arg stage_suggestion_text "$stage_suggestion_text" \
+    --argjson guardrail_was_needed "$guardrail_was_needed" \
+    --argjson guardrail_was_triggered "$guardrail_triggered" \
+    --arg guardrail_correctness "$guardrail_correctness" \
+    '{
+      evaluation: $evaluation_text,
+      scores: {
+        realism: 4,
+        consistency: (if $guardrail_correctness == "good" then 4 else 2 end),
+        profile_alignment: 4,
+        recommendation_clarity: (
+          if $guardrail_final_mode == "blocked" then 3
+          elif $guardrail_final_mode == "cautious" then 4
+          else 4
+          end
+        )
+      },
+      issues: [
+        {
+          type: "advisor",
+          description: (
+            "advisor decision=" + $advisor_decision
+            + ", confidence=" + ($advisor_confidence | tostring)
+            + ", guardrail_applied=" + $advisor_guardrail_applied
+            + " 조합이 guardrail final_mode=" + $guardrail_final_mode
+            + " 및 위험 신호(routing risk=" + $routing_risk_level
+            + ", ambiguity=" + $routing_ambiguity
+            + ", riskA=" + $risk_a_level
+            + ", riskB=" + $risk_b_level
+            + ")와 어떻게 연결되는지 문장 수준에서 더 직접적으로 드러나야 한다."
+          )
+        },
+        {
+          type: $stage_issue_type,
+          description: $stage_issue_text
+        }
+      ],
+      improvement_suggestions: [
+        {
+          target: "advisor",
+          suggestion: (
+            if $guardrail_final_mode == "blocked" then
+              "advisor reason에 추가 정보 필요 조건과 결론 재개 기준을 직접 적어 blocked 판단의 근거를 명확히 하라."
+            elif $guardrail_final_mode == "cautious" then
+              "advisor reason에 조심스러운 추천임을 직접 밝히고 risk/uncertainty가 confidence를 낮춘 이유를 한 문장으로 덧붙여라."
+            else
+              "advisor reason에 사용된 핵심 증거 축을 routing과 함께 적어 normal 추천이 왜 과도하게 보수적이지 않은지 보여줘라."
+            end
+          )
+        },
+        {
+          target: $stage_target,
+          suggestion: $stage_suggestion_text
+        }
+      ],
+      overall_comment: $overall_comment,
+      guardrail_review: {
+        was_needed: $guardrail_was_needed,
+        was_triggered: $guardrail_was_triggered,
+        correctness: $guardrail_correctness
+      }
+    }' > "$stub_file"
+
+  cp "$stub_file" "$result_file"
+
+  echo "Created $(relative_to_root "$stub_file")"
+  echo "Created $(relative_to_root "$result_file") as derived reflection output for execution_mode=$execution_mode"
 }
 
 copy_input_snapshot() {
@@ -1261,7 +1532,7 @@ write_case_summary() {
     guardrail_file="$(resolve_stage_result_file "guardrail")"
   fi
 
-  if stage_enabled_in_selected_path "$selected_path_json" "reflection"; then
+  if reflection_file="$(optional_stage_result_file "reflection" 2>/dev/null)"; then
     reflection_file="$(resolve_stage_result_file "reflection")"
   fi
 
@@ -1406,6 +1677,9 @@ write_case_summary() {
       printf -- '- triggers: %s\n' "$(jq -r 'if (.triggers | length) > 0 then .triggers | join(", ") else "none" end' "$guardrail_file")"
       printf -- '- strategy: %s\n' "$(jq -r 'if (.strategy | length) > 0 then .strategy | join(", ") else "none" end' "$guardrail_file")"
       printf -- '- final_mode: %s\n' "$(jq -r '.final_mode' "$guardrail_file")"
+      if [ -n "$reflection_file" ]; then
+        printf -- '- guardrail correctness: %s\n' "$(jq -r '.guardrail_review.correctness' "$reflection_file")"
+      fi
     else
       printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
     fi
@@ -1446,6 +1720,202 @@ write_case_summary() {
       printf '\n- Overall comment: %s\n' "$(jq -r '.overall_comment | gsub("[\\r\\n]+"; " ")' "$reflection_file")"
     else
       printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
+  } > "$summary_file"
+
+  echo "Created $(relative_to_root "$summary_file")"
+}
+
+write_guardrail_verification_summary() {
+  local summary_file
+  local total_cases=0
+  local normal_cases=0
+  local cautious_cases=0
+  local blocked_cases=0
+  local good_cases=0
+  local over_cases=0
+  local missing_cases=0
+  local case_dir
+  local case_id
+  local guardrail_file
+  local advisor_file
+  local reflection_file
+  local case_summary_file
+  local final_mode
+  local guardrail_triggered
+  local decision
+  local recommended_option
+  local guardrail_applied
+  local confidence
+  local reason
+  local correctness
+  local failure_text
+  local -a case_summary_lines=()
+  local -a failure_lines=()
+  local -a case_failures=()
+
+  require_jq
+
+  summary_file="$(aggregate_summary_path)"
+
+  while IFS= read -r case_dir; do
+    case_id="$(basename "$case_dir")"
+    guardrail_file="$case_dir/guardrail-result.json"
+    advisor_file="$case_dir/advisor-result.json"
+    reflection_file="$case_dir/reflection-result.json"
+    case_summary_file="$case_dir/summary.md"
+    case_failures=()
+
+    if [ ! -f "$guardrail_file" ] && [ -f "$case_dir/guardrail-result.stub.json" ]; then
+      guardrail_file="$case_dir/guardrail-result.stub.json"
+    fi
+
+    if [ ! -f "$advisor_file" ] && [ -f "$case_dir/advisor-result.stub.json" ]; then
+      advisor_file="$case_dir/advisor-result.stub.json"
+    fi
+
+    if [ ! -f "$reflection_file" ] && [ -f "$case_dir/reflection-result.stub.json" ]; then
+      reflection_file="$case_dir/reflection-result.stub.json"
+    fi
+
+    if [ ! -f "$guardrail_file" ] || [ ! -f "$advisor_file" ] || [ ! -f "$reflection_file" ]; then
+      failure_text=""
+
+      if [ ! -f "$guardrail_file" ]; then
+        failure_text="missing guardrail-result.json"
+      fi
+
+      if [ ! -f "$advisor_file" ]; then
+        if [ -n "$failure_text" ]; then
+          failure_text="$failure_text; "
+        fi
+        failure_text="${failure_text}missing advisor-result.json"
+      fi
+
+      if [ ! -f "$reflection_file" ]; then
+        if [ -n "$failure_text" ]; then
+          failure_text="$failure_text; "
+        fi
+        failure_text="${failure_text}missing reflection-result.json"
+        missing_cases=$((missing_cases + 1))
+      fi
+
+      total_cases=$((total_cases + 1))
+      case_summary_lines+=("- ${case_id}: \`$(relative_to_root "$case_summary_file")\`")
+      failure_lines+=("- ${case_id}: ${failure_text}")
+      continue
+    fi
+
+    total_cases=$((total_cases + 1))
+    case_summary_lines+=("- ${case_id}: \`$(relative_to_root "$case_summary_file")\`")
+
+    final_mode="$(jq -r '.final_mode' "$guardrail_file")"
+    guardrail_triggered="$(jq -r '.guardrail_triggered' "$guardrail_file")"
+    decision="$(jq -r '.decision' "$advisor_file")"
+    recommended_option="$(jq -r '.recommended_option' "$advisor_file")"
+    guardrail_applied="$(jq -r '.guardrail_applied' "$advisor_file")"
+    confidence="$(jq -r '.confidence' "$advisor_file")"
+    reason="$(jq -r '.reason' "$advisor_file")"
+    correctness="$(jq -r '.guardrail_review.correctness' "$reflection_file")"
+
+    case "$final_mode" in
+      normal)
+        normal_cases=$((normal_cases + 1))
+        ;;
+      cautious)
+        cautious_cases=$((cautious_cases + 1))
+        ;;
+      blocked)
+        blocked_cases=$((blocked_cases + 1))
+        ;;
+    esac
+
+    case "$correctness" in
+      good)
+        good_cases=$((good_cases + 1))
+        ;;
+      over)
+        over_cases=$((over_cases + 1))
+        ;;
+      missing)
+        missing_cases=$((missing_cases + 1))
+        ;;
+    esac
+
+    case "$final_mode" in
+      blocked)
+        if [ "$decision" != "undecided" ] || [ "$recommended_option" != "undecided" ]; then
+          case_failures+=("blocked인데 recommendation이 undecided가 아님")
+        fi
+        if [ "$guardrail_applied" != "true" ]; then
+          case_failures+=("blocked인데 advisor에 guardrail_applied=true가 아님")
+        fi
+        if [[ ! "$reason" =~ 추가[[:space:]]정보|결론[[:space:]]보류|결론을[[:space:]]내리지[[:space:]]않는다|보류|정리하기[[:space:]]어렵 ]]; then
+          case_failures+=("blocked reason에 추가 정보 필요 또는 결론 보류 의미가 부족함")
+        fi
+        ;;
+      cautious)
+        if [ "$guardrail_applied" != "true" ]; then
+          case_failures+=("cautious인데 advisor에 guardrail_applied=true가 아님")
+        fi
+        if [ "$(jq -rn --argjson confidence "$confidence" '$confidence > 0.75')" = "true" ]; then
+          case_failures+=("cautious인데 confidence가 과도하게 높음")
+        fi
+        if [[ ! "$reason" =~ risk|위험|불확실|조심 ]]; then
+          case_failures+=("cautious reason에 risk 또는 uncertainty 반영이 약함")
+        fi
+        ;;
+      normal)
+        if [ "$decision" = "undecided" ] || [ "$recommended_option" = "undecided" ]; then
+          case_failures+=("normal인데 undecided 출력이 포함됨")
+        fi
+        if [[ "$reason" =~ ask_more_info|추가[[:space:]]정보|결론[[:space:]]보류|조심스럽게 ]]; then
+          case_failures+=("normal인데 과도하게 보수적인 reason이 포함됨")
+        fi
+        ;;
+    esac
+
+    if [ "$correctness" != "good" ]; then
+      case_failures+=("guardrail correctness=${correctness}")
+    fi
+
+    if [ "${#case_failures[@]}" -gt 0 ]; then
+      failure_text=""
+      for reason in "${case_failures[@]}"; do
+        if [ -n "$failure_text" ]; then
+          failure_text="$failure_text; "
+        fi
+        failure_text="${failure_text}${reason}"
+      done
+      failure_lines+=("- ${case_id}: ${failure_text}")
+    fi
+  done < <(find "$OUTPUTS_ROOT_DIR" -maxdepth 1 -mindepth 1 -type d -name 'case-*' | sort)
+
+  {
+    printf '# Playground Outputs\n\n'
+    printf -- '- generated_at: %s\n' "$(timestamp_utc)"
+
+    printf '\n## Case Summaries\n\n'
+    if [ "${#case_summary_lines[@]}" -gt 0 ]; then
+      printf '%s\n' "${case_summary_lines[@]}"
+    else
+      printf -- '- none\n'
+    fi
+
+    printf '\n## Guardrail Verification Summary\n\n'
+    printf -- '- total cases: %s\n' "$total_cases"
+    printf -- '- normal cases: %s\n' "$normal_cases"
+    printf -- '- cautious cases: %s\n' "$cautious_cases"
+    printf -- '- blocked cases: %s\n' "$blocked_cases"
+    printf -- '- good: %s\n' "$good_cases"
+    printf -- '- over: %s\n' "$over_cases"
+    printf -- '- missing: %s\n' "$missing_cases"
+
+    printf '\n### Failure Cases\n\n'
+    if [ "${#failure_lines[@]}" -gt 0 ]; then
+      printf '%s\n' "${failure_lines[@]}"
+    else
+      printf -- '- none\n'
     fi
   } > "$summary_file"
 

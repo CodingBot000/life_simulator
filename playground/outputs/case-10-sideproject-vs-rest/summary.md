@@ -115,6 +115,7 @@
 - triggers: reasoning_conflict, high_risk
 - strategy: neutralize_decision, risk_warning
 - final_mode: cautious
+- guardrail correctness: good
 
 ## Advisor
 

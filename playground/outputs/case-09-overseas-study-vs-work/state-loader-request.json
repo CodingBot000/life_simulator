@@ -1,6 +1,6 @@
 {
   "stage": "state_loader",
-  "generated_at": "2026-03-26T12:30:42Z",
+  "generated_at": "2026-03-26T18:57:55Z",
   "description": "Prepared request payload for state-context generation.",
   "prompt_file": "prompts/state_loader.md",
   "input_source": "playground/inputs/cases/case-09-overseas-study-vs-work.json",

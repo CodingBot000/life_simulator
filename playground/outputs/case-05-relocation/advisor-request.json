@@ -1,6 +1,6 @@
 {
   "stage": "advisor",
-  "generated_at": "2026-03-26T12:30:36Z",
+  "generated_at": "2026-03-26T18:57:48Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/advisor.md",
   "input_source": "playground/inputs/cases/case-05-relocation.json",

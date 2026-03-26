@@ -87,20 +87,38 @@
 
 ## Guardrail
 
-- guardrail_triggered: false
-- triggers: none
-- strategy: none
-- final_mode: normal
+- guardrail_triggered: true
+- triggers: high_risk
+- strategy: risk_warning
+- final_mode: cautious
+- guardrail correctness: good
 
 ## Advisor
 
 - Decision: B
-- Confidence: 0.70
-- Guardrail applied: false
+- Confidence: 0.5499999999999999
+- Guardrail applied: true
 - Recommended option: B
-- Reason: router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=high, riskB=medium이며 최우선 기준이 emotional_stability이므로 현재 stub에서는 B를 추천한다.
-- Reasoning basis: reasoning B / confidence 0.70 / scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.
+- Reason: guardrail이 cautious 모드로 전환됐기 때문에 결론 강도를 낮춘다. 핵심 trigger는 high_risk이고 대응 strategy는 risk_warning다. 사용자의 최우선 기준이 emotional_stability인 점은 유지하되 riskA=high, riskB=medium를 더 무겁게 반영해 현재는 B 쪽을 조심스럽게 권한다.
+- Reasoning basis: reasoning B / confidence 0.5499999999999999 / guardrail이 위험 신호를 감지했으므로 최종 선택을 뒤집기보다는 confidence를 낮추고 위험 경고를 전면에 두는 것이 적절하다.
 
 ## Reflection
 
-- Skipped in execution_mode=careful
+- evaluation: guardrail final_mode=cautious 조건에서 advisor가 약한 추천과 낮아진 confidence로 위험 신호를 충분히 반영했는지 다시 점검한다.
+- realism: 4
+- consistency: 4
+- profile_alignment: 4
+- recommendation_clarity: 4
+- guardrail_review: needed=true / triggered=true / correctness=good
+
+### 주요 문제
+
+- [advisor] advisor decision=B, confidence=0.5499999999999999, guardrail_applied=true 조합이 guardrail final_mode=cautious 및 위험 신호(routing risk=medium, ambiguity=medium, riskA=high, riskB=medium)와 어떻게 연결되는지 문장 수준에서 더 직접적으로 드러나야 한다.
+- [risk] careful 경로에서는 risk 판단이 guardrail 필요성에 직접 연결되므로, risk 차이가 advisor reason에 어떻게 반영됐는지 더 또렷해야 한다.
+
+### 개선 방향
+
+- [advisor] advisor reason에 조심스러운 추천임을 직접 밝히고 risk/uncertainty가 confidence를 낮춘 이유를 한 문장으로 덧붙여라.
+- [risk] risk 단계에서 high/medium 차이를 advisor가 그대로 인용할 수 있도록 단기 리스크와 장기 리스크를 분리해 적어라.
+
+- Overall comment: cautious 모드 전환은 적절하며, 위험 신호를 유지한 채 추천 강도를 낮춘 점이 현재 실행 경로와 잘 맞는다.

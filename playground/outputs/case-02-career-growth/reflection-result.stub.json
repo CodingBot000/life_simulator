@@ -1,29 +1,35 @@
 {
+  "evaluation": "guardrail final_mode=normal 조건에서 advisor가 불필요하게 보수적이지 않으면서도 현재 실행 경로의 증거를 충분히 연결했는지 다시 점검한다.",
   "scores": {
     "realism": 4,
     "consistency": 4,
-    "profile_alignment": 3,
+    "profile_alignment": 4,
     "recommendation_clarity": 4
   },
   "issues": [
     {
-      "type": "profile",
-      "description": "planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 growth을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다."
+      "type": "advisor",
+      "description": "advisor decision=B, confidence=0.70, guardrail_applied=false 조합이 guardrail final_mode=normal 및 위험 신호(routing risk=medium, ambiguity=medium, riskA=medium, riskB=medium)와 어떻게 연결되는지 문장 수준에서 더 직접적으로 드러나야 한다."
     },
     {
-      "type": "advisor",
-      "description": "advisor가 B를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다."
+      "type": "risk",
+      "description": "careful 경로에서는 risk 판단이 guardrail 필요성에 직접 연결되므로, risk 차이가 advisor reason에 어떻게 반영됐는지 더 또렷해야 한다."
     }
   ],
   "improvement_suggestions": [
     {
-      "target": "scenario",
-      "suggestion": "각 시간 축 문장에서 growth 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라."
+      "target": "advisor",
+      "suggestion": "advisor reason에 사용된 핵심 증거 축을 routing과 함께 적어 normal 추천이 왜 과도하게 보수적이지 않은지 보여줘라."
     },
     {
-      "target": "advisor",
-      "suggestion": "최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라."
+      "target": "risk",
+      "suggestion": "risk 단계에서 high/medium 차이를 advisor가 그대로 인용할 수 있도록 단기 리스크와 장기 리스크를 분리해 적어라."
     }
   ],
-  "overall_comment": "전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다."
+  "overall_comment": "normal 모드에서는 현재 추천 강도가 크게 과하지 않지만, 사용된 근거 축을 더 분명히 적으면 검증 추적성이 좋아진다.",
+  "guardrail_review": {
+    "was_needed": false,
+    "was_triggered": false,
+    "correctness": "good"
+  }
 }

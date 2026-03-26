@@ -178,7 +178,7 @@ GUARDRAIL_RESULT_FILE=""
 GUARDRAIL_RESULT_COMPACT='null'
 GUARDRAIL_RESULT_REL=""
 
-if stage_enabled_in_selected_path "$SELECTED_PATH_JSON" "guardrail"; then
+if GUARDRAIL_RESULT_FILE="$(optional_stage_result_file "guardrail" 2>/dev/null)"; then
   GUARDRAIL_RESULT_FILE="$(resolve_stage_result_file "guardrail")"
   GUARDRAIL_RESULT_COMPACT="$(read_json_compact "$GUARDRAIL_RESULT_FILE")"
   GUARDRAIL_RESULT_REL="$(relative_to_root "$GUARDRAIL_RESULT_FILE")"
