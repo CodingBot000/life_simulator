@@ -1,6 +1,6 @@
 {
   "stage": "advisor",
-  "generated_at": "2026-03-26T09:57:23Z",
+  "generated_at": "2026-03-26T12:30:43Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/advisor.md",
   "input_source": "playground/inputs/cases/case-09-overseas-study-vs-work.json",
@@ -13,20 +13,37 @@
     "playground/outputs/case-09-overseas-study-vs-work/risk-a-result.json",
     "playground/outputs/case-09-overseas-study-vs-work/risk-b-result.json"
   ],
-  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Advisor Agent다.\n\n목표:\n- executionMode에 따라 제공된 upstream 결과만 사용해 A/B 중 하나를 추천한다.\n- 원본 case input과 state summary를 최우선 기준으로 사용한다.\n- `abReasoning.reasoning.final_selection`이 있으면 이를 기본 출발점으로 삼되, 없으면 planner/scenario/risk를 직접 비교한다.\n- 결론은 분명해야 하며, 양비론이나 회피 답변은 금지한다.\n\n입력 데이터 형식:\n```json\n{\n  \"executionMode\": \"light | standard | careful | full\",\n  \"routing\": {\n    \"execution_mode\": \"light\",\n    \"selected_path\": [\"planner\", \"advisor\"]\n  },\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-001\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain stability-growth tradeoffs explicitly\"\n    }\n  },\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenarioA\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"scenarioB\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"riskA\": {\n    \"risk_level\": \"low\",\n    \"reasons\": []\n  },\n  \"riskB\": {\n    \"risk_level\": \"high\",\n    \"reasons\": []\n  },\n  \"abReasoning\": {\n    \"case_id\": \"case-001\",\n    \"input_summary\": {\n      \"user_profile\": {\n        \"age\": 32,\n        \"job\": \"developer\",\n        \"risk_tolerance\": \"low\",\n        \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"decision_options\": {\n        \"optionA\": \"현재 회사에 남는다\",\n        \"optionB\": \"스타트업으로 이직한다\",\n        \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n      },\n      \"planner_goal\": \"안정성과 성장성 중 사용자에게 더 맞는 선택을 판별한다\"\n    },\n    \"reasoning\": {\n      \"a_reasoning\": {\n        \"stance\": \"conservative\",\n        \"summary\": \"\",\n        \"key_assumptions\": [],\n        \"pros\": [],\n        \"cons\": [],\n        \"recommended_option\": \"A\",\n        \"confidence\": 0.74\n      },\n      \"b_reasoning\": {\n        \"stance\": \"opportunity_seeking\",\n        \"summary\": \"\",\n        \"key_assumptions\": [],\n        \"pros\": [],\n        \"cons\": [],\n        \"recommended_option\": \"B\",\n        \"confidence\": 0.61\n      },\n      \"comparison\": {\n        \"agreements\": [],\n        \"conflicts\": [],\n        \"which_fits_user_better\": \"A\",\n        \"reason\": \"\"\n      },\n      \"final_selection\": {\n        \"selected_reasoning\": \"A\",\n        \"selected_option\": \"A\",\n        \"why_selected\": \"\",\n        \"decision_confidence\": 0.72\n      }\n    }\n  }\n}\n```\n\n주의:\n- `plannerResult`는 항상 존재한다.\n- `scenarioA`, `scenarioB`는 `standard`, `careful`, `full`에서만 존재할 수 있다.\n- `riskA`, `riskB`는 `careful`, `full`에서만 존재할 수 있다.\n- `abReasoning`은 `full`에서만 존재할 수 있다.\n- 없는 필드는 추측으로 보완하지 말고, 존재하는 입력만으로 판단한다.\n\n판단 규칙:\n- 반드시 `recommended_option`에 `A` 또는 `B` 중 하나만 넣는다.\n- 추천 사유는 `stateContext.state_summary`, `profile_state.top_priorities`, `situational_state`, `memory_state`에 직접 연결해야 한다.\n- `abReasoning`이 있으면 final_selection을 그대로 복붙하지 말고 state-aware 근거로 재구성한다.\n- `abReasoning`이 없으면 planner/scenario/risk를 직접 종합해 `reasoning_basis.selected_reasoning`에 최종 추천과 가장 가까운 축(`A` 또는 `B`)을 기록한다.\n- `reasoning_basis`에는 선택된 reasoning 축, 핵심 판단 근거, confidence를 구조적으로 남긴다.\n- 두 선택지를 공정하게 비교하되 결론은 하나로 수렴시킨다.\n- 입력에 없는 새로운 사실을 추가하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"recommended_option\": \"A | B\",\n  \"reason\": \"\",\n  \"reasoning_basis\": {\n    \"selected_reasoning\": \"A | B\",\n    \"core_why\": \"\",\n    \"decision_confidence\": 0.0\n  }\n}\n```",
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Advisor Agent다.\n\n목표:\n- executionMode에 따라 제공된 upstream 결과만 사용해 `A`, `B`, `undecided` 중 하나로 결론을 정리한다.\n- 원본 case input과 state summary를 최우선 기준으로 사용한다.\n- `abReasoning.reasoning.final_selection`이 있으면 이를 기본 출발점으로 삼되, 없으면 planner/scenario/risk를 직접 비교한다.\n- `guardrailResult`가 있으면 그 모드에 맞춰 결론 강도를 조절한다.\n- `guardrailResult.final_mode = \"blocked\"`이면 최종 결론을 내리지 말고 추가 정보 요청으로 전환한다.\n\n입력 데이터 형식:\n```json\n{\n  \"executionMode\": \"light | standard | careful | full\",\n  \"routing\": {\n    \"execution_mode\": \"light\",\n    \"selected_path\": [\"planner\", \"advisor\"]\n  },\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-001\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain stability-growth tradeoffs explicitly\"\n    }\n  },\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenarioA\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"scenarioB\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"riskA\": {\n    \"risk_level\": \"low\",\n    \"reasons\": []\n  },\n  \"riskB\": {\n    \"risk_level\": \"high\",\n    \"reasons\": []\n  },\n  \"abReasoning\": {\n    \"case_id\": \"case-001\",\n    \"input_summary\": {\n      \"user_profile\": {\n        \"age\": 32,\n        \"job\": \"developer\",\n        \"risk_tolerance\": \"low\",\n        \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"decision_options\": {\n        \"optionA\": \"현재 회사에 남는다\",\n        \"optionB\": \"스타트업으로 이직한다\",\n        \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n      },\n      \"planner_goal\": \"안정성과 성장성 중 사용자에게 더 맞는 선택을 판별한다\"\n    },\n    \"reasoning\": {\n      \"a_reasoning\": {\n        \"stance\": \"conservative\",\n        \"summary\": \"\",\n        \"key_assumptions\": [],\n        \"pros\": [],\n        \"cons\": [],\n        \"recommended_option\": \"A\",\n        \"confidence\": 0.74\n      },\n      \"b_reasoning\": {\n        \"stance\": \"opportunity_seeking\",\n        \"summary\": \"\",\n        \"key_assumptions\": [],\n        \"pros\": [],\n        \"cons\": [],\n        \"recommended_option\": \"B\",\n        \"confidence\": 0.61\n      },\n      \"comparison\": {\n        \"agreements\": [],\n        \"conflicts\": [],\n        \"which_fits_user_better\": \"A\",\n        \"reason\": \"\"\n      },\n      \"final_selection\": {\n        \"selected_reasoning\": \"A\",\n        \"selected_option\": \"A\",\n        \"why_selected\": \"\",\n        \"decision_confidence\": 0.72\n      }\n    }\n  },\n  \"guardrailResult\": {\n    \"guardrail_triggered\": true,\n    \"triggers\": [\"reasoning_conflict\"],\n    \"strategy\": [\"neutralize_decision\"],\n    \"final_mode\": \"cautious\"\n  }\n}\n```\n\n주의:\n- `plannerResult`는 항상 존재한다.\n- `scenarioA`, `scenarioB`는 `standard`, `careful`, `full`에서만 존재할 수 있다.\n- `riskA`, `riskB`는 `careful`, `full`에서만 존재할 수 있다.\n- `abReasoning`은 `full`에서만 존재할 수 있다.\n- `guardrailResult`는 `full`에서만 존재할 수 있다.\n- 없는 필드는 추측으로 보완하지 말고, 존재하는 입력만으로 판단한다.\n\n판단 규칙:\n- 출력의 `decision`은 반드시 `A`, `B`, `undecided` 중 하나여야 한다.\n- `recommended_option`은 `decision`과 동일한 값을 넣는다.\n- 추천 사유는 `stateContext.state_summary`, `profile_state.top_priorities`, `situational_state`, `memory_state`에 직접 연결해야 한다.\n- `abReasoning`이 있으면 final_selection을 그대로 복붙하지 말고 state-aware 근거로 재구성한다.\n- `abReasoning`이 없으면 planner/scenario/risk를 직접 종합해 `reasoning_basis.selected_reasoning`에 최종 추천과 가장 가까운 축(`A` 또는 `B`)을 기록한다.\n- `guardrailResult.final_mode == \"normal\"`이면 기존처럼 추천한다.\n- `guardrailResult.final_mode == \"cautious\"`이면 추천은 가능하지만 확신을 낮추고 risk를 분명히 강조한다.\n- `guardrailResult.final_mode == \"blocked\"`이면 `decision = \"undecided\"`로 두고, 왜 추가 정보가 필요한지 설명한다.\n- `guardrail_applied`는 guardrail이 실제로 행동을 바꿨을 때만 `true`다.\n- `confidence`는 0~1 범위 숫자여야 하며, `reasoning_basis.decision_confidence`와 같은 값을 넣는다.\n- `reasoning_basis`에는 선택된 reasoning 축, 핵심 판단 근거, confidence를 구조적으로 남긴다.\n- `blocked`가 아니면 두 선택지를 공정하게 비교하되 결론은 하나로 수렴시킨다.\n- 입력에 없는 새로운 사실을 추가하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"decision\": \"A | B | undecided\",\n  \"confidence\": 0.0,\n  \"reason\": \"\",\n  \"guardrail_applied\": true,\n  \"recommended_option\": \"A | B | undecided\",\n  \"reasoning_basis\": {\n    \"selected_reasoning\": \"A | B | undecided\",\n    \"core_why\": \"\",\n    \"decision_confidence\": 0.0\n  }\n}\n```",
   "expected_output_schema": {
     "type": "object",
     "additionalProperties": false,
     "properties": {
+      "decision": {
+        "type": "string",
+        "enum": [
+          "A",
+          "B",
+          "undecided"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "reason": {
+        "type": "string"
+      },
+      "guardrail_applied": {
+        "type": "boolean"
+      },
       "recommended_option": {
         "type": "string",
         "enum": [
           "A",
-          "B"
+          "B",
+          "undecided"
         ]
-      },
-      "reason": {
-        "type": "string"
       },
       "reasoning_basis": {
         "type": "object",
@@ -36,7 +53,8 @@
             "type": "string",
             "enum": [
               "A",
-              "B"
+              "B",
+              "undecided"
             ]
           },
           "core_why": {
@@ -56,8 +74,11 @@
       }
     },
     "required": [
-      "recommended_option",
+      "decision",
+      "confidence",
       "reason",
+      "guardrail_applied",
+      "recommended_option",
       "reasoning_basis"
     ]
   },

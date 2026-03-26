@@ -1,6 +1,9 @@
 {
+  "decision": "B",
+  "confidence": 0.70,
   "recommended_option": "B",
   "reason": "router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=medium, riskB=medium이며 최우선 기준이 growth이므로 현재 stub에서는 B를 추천한다.",
+  "guardrail_applied": false,
   "reasoning_basis": {
     "selected_reasoning": "B",
     "core_why": "scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.",

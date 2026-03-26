@@ -12,6 +12,7 @@ export const plannerPrompt = loadPrompt("planner.md");
 export const scenarioPrompt = loadPrompt("scenario.md");
 export const riskPrompt = loadPrompt("risk.md");
 export const abReasoningPrompt = loadPrompt("ab_reasoning.md");
+export const guardrailPrompt = loadPrompt("guardrail.md");
 export const advisorPrompt = loadPrompt("advisor.md");
 export const reflectionPrompt = loadPrompt("reflection.md");
 
@@ -419,16 +420,69 @@ export const abReasoningSchema = {
   required: ["case_id", "input_summary", "reasoning"],
 } as const;
 
+export const guardrailSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    guardrail_triggered: {
+      type: "boolean",
+    },
+    triggers: {
+      type: "array",
+      items: {
+        type: "string",
+        enum: [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk",
+        ],
+      },
+      uniqueItems: true,
+    },
+    strategy: {
+      type: "array",
+      items: {
+        type: "string",
+        enum: [
+          "ask_more_info",
+          "neutralize_decision",
+          "soft_recommendation",
+          "risk_warning",
+        ],
+      },
+      uniqueItems: true,
+    },
+    final_mode: {
+      type: "string",
+      enum: ["normal", "cautious", "blocked"],
+    },
+  },
+  required: ["guardrail_triggered", "triggers", "strategy", "final_mode"],
+} as const;
+
 export const advisorSchema = {
   type: "object",
   additionalProperties: false,
   properties: {
-    recommended_option: {
+    decision: {
       type: "string",
-      enum: ["A", "B"],
+      enum: ["A", "B", "undecided"],
+    },
+    confidence: {
+      type: "number",
+      minimum: 0,
+      maximum: 1,
     },
     reason: {
       type: "string",
+    },
+    guardrail_applied: {
+      type: "boolean",
+    },
+    recommended_option: {
+      type: "string",
+      enum: ["A", "B", "undecided"],
     },
     reasoning_basis: {
       type: "object",
@@ -436,7 +490,7 @@ export const advisorSchema = {
       properties: {
         selected_reasoning: {
           type: "string",
-          enum: ["A", "B"],
+          enum: ["A", "B", "undecided"],
         },
         core_why: {
           type: "string",
@@ -450,13 +504,23 @@ export const advisorSchema = {
       required: ["selected_reasoning", "core_why", "decision_confidence"],
     },
   },
-  required: ["recommended_option", "reason", "reasoning_basis"],
+  required: [
+    "decision",
+    "confidence",
+    "reason",
+    "guardrail_applied",
+    "recommended_option",
+    "reasoning_basis",
+  ],
 } as const;
 
 export const reflectionSchema = {
   type: "object",
   additionalProperties: false,
   properties: {
+    evaluation: {
+      type: "string",
+    },
     scores: {
       type: "object",
       additionalProperties: false,
@@ -528,6 +592,30 @@ export const reflectionSchema = {
     overall_comment: {
       type: "string",
     },
+    guardrail_review: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        was_needed: {
+          type: "boolean",
+        },
+        was_triggered: {
+          type: "boolean",
+        },
+        correctness: {
+          type: "string",
+          enum: ["good", "over", "missing"],
+        },
+      },
+      required: ["was_needed", "was_triggered", "correctness"],
+    },
   },
-  required: ["scores", "issues", "improvement_suggestions", "overall_comment"],
+  required: [
+    "evaluation",
+    "scores",
+    "issues",
+    "improvement_suggestions",
+    "overall_comment",
+    "guardrail_review",
+  ],
 } as const;

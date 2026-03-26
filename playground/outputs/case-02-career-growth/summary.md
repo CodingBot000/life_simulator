@@ -85,8 +85,18 @@
 
 - Skipped in execution_mode=careful
 
+## Guardrail
+
+- guardrail_triggered: false
+- triggers: none
+- strategy: none
+- final_mode: normal
+
 ## Advisor
 
+- Decision: B
+- Confidence: 0.70
+- Guardrail applied: false
 - Recommended option: B
 - Reason: router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=medium, riskB=medium이며 최우선 기준이 growth이므로 현재 stub에서는 B를 추천한다.
 - Reasoning basis: reasoning B / confidence 0.70 / scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.

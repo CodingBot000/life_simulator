@@ -147,7 +147,7 @@ selected_path_json_for_mode() {
       printf '%s\n' '["planner","scenario","risk","advisor"]'
       ;;
     full)
-      printf '%s\n' '["planner","scenario","risk","ab_reasoning","advisor","reflection"]'
+      printf '%s\n' '["planner","scenario","risk","ab_reasoning","guardrail","advisor","reflection"]'
       ;;
     *)
       echo "Error: unknown execution mode '$1'." >&2
@@ -199,6 +199,28 @@ infer_execution_mode_from_artifacts() {
 
 summary_path() {
   printf '%s/summary.md\n' "$OUTPUTS_DIR"
+}
+
+write_default_guardrail_result() {
+  local stub_file
+  local result_file
+
+  require_jq
+
+  stub_file="$(stage_stub_path "guardrail")"
+  result_file="$(stage_result_path "guardrail")"
+
+  jq -n '{
+    guardrail_triggered: false,
+    triggers: [],
+    strategy: [],
+    final_mode: "normal"
+  }' > "$stub_file"
+
+  cp "$stub_file" "$result_file"
+
+  echo "Created $(relative_to_root "$stub_file")"
+  echo "Created $(relative_to_root "$result_file") as default normal guardrail output"
 }
 
 copy_input_snapshot() {
@@ -377,7 +399,7 @@ JSON
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["planner", "scenario", "risk", "ab_reasoning", "advisor", "reflection"]
+            "enum": ["planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"]
           },
           "minItems": 2
         },
@@ -663,18 +685,64 @@ JSON
 }
 JSON
       ;;
+    guardrail)
+      cat <<'JSON'
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "guardrail_triggered": {
+      "type": "boolean"
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["ambiguity_high", "reasoning_conflict", "low_confidence", "high_risk"]
+      },
+      "uniqueItems": true
+    },
+    "strategy": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["ask_more_info", "neutralize_decision", "soft_recommendation", "risk_warning"]
+      },
+      "uniqueItems": true
+    },
+    "final_mode": {
+      "type": "string",
+      "enum": ["normal", "cautious", "blocked"]
+    }
+  },
+  "required": ["guardrail_triggered", "triggers", "strategy", "final_mode"]
+}
+JSON
+      ;;
     advisor)
       cat <<'JSON'
 {
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "recommended_option": {
+    "decision": {
       "type": "string",
-      "enum": ["A", "B"]
+      "enum": ["A", "B", "undecided"]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
     },
     "reason": {
       "type": "string"
+    },
+    "guardrail_applied": {
+      "type": "boolean"
+    },
+    "recommended_option": {
+      "type": "string",
+      "enum": ["A", "B", "undecided"]
     },
     "reasoning_basis": {
       "type": "object",
@@ -682,7 +750,7 @@ JSON
       "properties": {
         "selected_reasoning": {
           "type": "string",
-          "enum": ["A", "B"]
+          "enum": ["A", "B", "undecided"]
         },
         "core_why": {
           "type": "string"
@@ -696,7 +764,7 @@ JSON
       "required": ["selected_reasoning", "core_why", "decision_confidence"]
     }
   },
-  "required": ["recommended_option", "reason", "reasoning_basis"]
+  "required": ["decision", "confidence", "reason", "guardrail_applied", "recommended_option", "reasoning_basis"]
 }
 JSON
       ;;
@@ -706,6 +774,9 @@ JSON
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "evaluation": {
+      "type": "string"
+    },
     "scores": {
       "type": "object",
       "additionalProperties": false,
@@ -771,9 +842,26 @@ JSON
     },
     "overall_comment": {
       "type": "string"
+    },
+    "guardrail_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "was_needed": {
+          "type": "boolean"
+        },
+        "was_triggered": {
+          "type": "boolean"
+        },
+        "correctness": {
+          "type": "string",
+          "enum": ["good", "over", "missing"]
+        }
+      },
+      "required": ["was_needed", "was_triggered", "correctness"]
     }
   },
-  "required": ["scores", "issues", "improvement_suggestions", "overall_comment"]
+  "required": ["evaluation", "scores", "issues", "improvement_suggestions", "overall_comment", "guardrail_review"]
 }
 JSON
       ;;
@@ -896,14 +984,14 @@ validate_stage_result() {
         (.routing.risk_level | IN("low", "medium", "high")) and
         (.routing.ambiguity | IN("low", "medium", "high")) and
         (.routing.execution_mode | IN("light", "standard", "careful", "full")) and
-        (.routing.selected_path | type == "array" and length >= 2 and all(.[]; IN("planner", "scenario", "risk", "ab_reasoning", "advisor", "reflection"))) and
+        (.routing.selected_path | type == "array" and length >= 2 and all(.[]; IN("planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"))) and
         (.routing.routing_reason | type == "string" and length > 0) and
         (
           .routing.selected_path ==
           (if .routing.execution_mode == "light" then ["planner", "advisor"]
            elif .routing.execution_mode == "standard" then ["planner", "scenario", "advisor"]
            elif .routing.execution_mode == "careful" then ["planner", "scenario", "risk", "advisor"]
-           else ["planner", "scenario", "risk", "ab_reasoning", "advisor", "reflection"]
+           else ["planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"]
            end)
         )
       ' "$result_file" >/dev/null
@@ -979,29 +1067,51 @@ validate_stage_result() {
         (.reasoning.final_selection.decision_confidence | type == "number" and . >= 0 and . <= 1)
       ' "$result_file" >/dev/null
       ;;
+    guardrail)
+      jq -e '
+        type == "object" and
+        ((keys | sort) == ["final_mode", "guardrail_triggered", "strategy", "triggers"]) and
+        (.guardrail_triggered | type == "boolean") and
+        (.triggers | type == "array" and all(.[]; IN("ambiguity_high", "reasoning_conflict", "low_confidence", "high_risk"))) and
+        (.strategy | type == "array" and all(.[]; IN("ask_more_info", "neutralize_decision", "soft_recommendation", "risk_warning"))) and
+        (.final_mode | IN("normal", "cautious", "blocked")) and
+        ((.guardrail_triggered == false and (.triggers | length) == 0 and (.strategy | length) == 0 and .final_mode == "normal") or .guardrail_triggered == true)
+      ' "$result_file" >/dev/null
+      ;;
     advisor)
       jq -e '
         type == "object" and
-        ((keys | sort) == ["reason", "reasoning_basis", "recommended_option"]) and
-        (.recommended_option | IN("A", "B")) and
+        ((keys | sort) == ["confidence", "decision", "guardrail_applied", "reason", "reasoning_basis", "recommended_option"]) and
+        (.decision | IN("A", "B", "undecided")) and
+        (.confidence | type == "number" and . >= 0 and . <= 1) and
         (.reason | type == "string" and length > 0) and
+        (.guardrail_applied | type == "boolean") and
+        (.recommended_option | IN("A", "B", "undecided")) and
         (.reasoning_basis | type == "object") and
         ((.reasoning_basis | keys | sort) == ["core_why", "decision_confidence", "selected_reasoning"]) and
-        (.reasoning_basis.selected_reasoning | IN("A", "B")) and
+        (.reasoning_basis.selected_reasoning | IN("A", "B", "undecided")) and
         (.reasoning_basis.core_why | type == "string" and length > 0) and
-        (.reasoning_basis.decision_confidence | type == "number" and . >= 0 and . <= 1)
+        (.reasoning_basis.decision_confidence | type == "number" and . >= 0 and . <= 1) and
+        (.recommended_option == .decision) and
+        (.confidence == .reasoning_basis.decision_confidence)
       ' "$result_file" >/dev/null
       ;;
     reflection)
       jq -e '
         type == "object" and
-        ((keys | sort) == ["improvement_suggestions", "issues", "overall_comment", "scores"]) and
+        ((keys | sort) == ["evaluation", "guardrail_review", "improvement_suggestions", "issues", "overall_comment", "scores"]) and
+        (.evaluation | type == "string" and length > 0) and
         (.scores | type == "object") and
         ((.scores | keys | sort) == ["consistency", "profile_alignment", "realism", "recommendation_clarity"]) and
         ([.scores[]] | all(.[]; type == "number" and floor == . and . >= 1 and . <= 5)) and
         (.issues | type == "array" and length >= 1 and all(.[]; type == "object" and ((keys | sort) == ["description", "type"]) and (.type | IN("scenario", "risk", "reasoning", "advisor", "profile")) and (.description | type == "string" and length > 0))) and
         (.improvement_suggestions | type == "array" and length >= 1 and all(.[]; type == "object" and ((keys | sort) == ["suggestion", "target"]) and (.target | IN("planner", "scenario", "risk", "reasoning", "advisor")) and (.suggestion | type == "string" and length > 0))) and
-        (.overall_comment | type == "string" and length > 0)
+        (.overall_comment | type == "string" and length > 0) and
+        (.guardrail_review | type == "object") and
+        ((.guardrail_review | keys | sort) == ["correctness", "was_needed", "was_triggered"]) and
+        (.guardrail_review.was_needed | type == "boolean") and
+        (.guardrail_review.was_triggered | type == "boolean") and
+        (.guardrail_review.correctness | IN("good", "over", "missing"))
       ' "$result_file" >/dev/null
       ;;
     *)
@@ -1092,6 +1202,7 @@ write_case_summary() {
   local risk_a_file=""
   local risk_b_file=""
   local reasoning_file=""
+  local guardrail_file=""
   local advisor_file
   local reflection_file=""
   local case_id
@@ -1144,6 +1255,10 @@ write_case_summary() {
 
   if stage_enabled_in_selected_path "$selected_path_json" "ab_reasoning"; then
     reasoning_file="$(resolve_stage_result_file "reasoning")"
+  fi
+
+  if guardrail_file="$(optional_stage_result_file "guardrail" 2>/dev/null)"; then
+    guardrail_file="$(resolve_stage_result_file "guardrail")"
   fi
 
   if stage_enabled_in_selected_path "$selected_path_json" "reflection"; then
@@ -1285,7 +1400,20 @@ write_case_summary() {
       printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
     fi
 
+    printf '\n## Guardrail\n\n'
+    if [ -n "$guardrail_file" ]; then
+      printf -- '- guardrail_triggered: %s\n' "$(jq -r '.guardrail_triggered' "$guardrail_file")"
+      printf -- '- triggers: %s\n' "$(jq -r 'if (.triggers | length) > 0 then .triggers | join(", ") else "none" end' "$guardrail_file")"
+      printf -- '- strategy: %s\n' "$(jq -r 'if (.strategy | length) > 0 then .strategy | join(", ") else "none" end' "$guardrail_file")"
+      printf -- '- final_mode: %s\n' "$(jq -r '.final_mode' "$guardrail_file")"
+    else
+      printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
+
     printf '\n## Advisor\n\n'
+    printf -- '- Decision: %s\n' "$(jq -r '.decision' "$advisor_file")"
+    printf -- '- Confidence: %s\n' "$(jq -r '.confidence' "$advisor_file")"
+    printf -- '- Guardrail applied: %s\n' "$(jq -r '.guardrail_applied' "$advisor_file")"
     printf -- '- Recommended option: %s\n' "$(jq -r '.recommended_option' "$advisor_file")"
     printf -- '- Reason: %s\n' "$(jq -r '.reason' "$advisor_file" | normalize_inline_text)"
     printf -- '- Reasoning basis: reasoning %s / confidence %s / %s\n' \
@@ -1295,10 +1423,15 @@ write_case_summary() {
 
     printf '\n## Reflection\n\n'
     if [ -n "$reflection_file" ]; then
+      printf -- '- evaluation: %s\n' "$(jq -r '.evaluation' "$reflection_file" | normalize_inline_text)"
       printf -- '- realism: %s\n' "$(jq -r '.scores.realism' "$reflection_file")"
       printf -- '- consistency: %s\n' "$(jq -r '.scores.consistency' "$reflection_file")"
       printf -- '- profile_alignment: %s\n' "$(jq -r '.scores.profile_alignment' "$reflection_file")"
       printf -- '- recommendation_clarity: %s\n' "$(jq -r '.scores.recommendation_clarity' "$reflection_file")"
+      printf -- '- guardrail_review: needed=%s / triggered=%s / correctness=%s\n' \
+        "$(jq -r '.guardrail_review.was_needed' "$reflection_file")" \
+        "$(jq -r '.guardrail_review.was_triggered' "$reflection_file")" \
+        "$(jq -r '.guardrail_review.correctness' "$reflection_file")"
 
       printf '\n### 주요 문제\n\n'
       while IFS= read -r issue; do

@@ -45,7 +45,7 @@
 - risk_level: high
 - ambiguity: low
 - execution_mode: full
-- selected_path: planner -> scenario -> risk -> ab_reasoning -> advisor -> reflection
+- selected_path: planner -> scenario -> risk -> ab_reasoning -> guardrail -> advisor -> reflection
 - reason: 잘못 판단했을 때 손실 규모가 커 고위험 케이스로 보고 전체 경로 실행이 필요하다.
 
 ## Planner
@@ -109,29 +109,41 @@
 - why selected: 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
 - decision confidence: 0.77
 
+## Guardrail
+
+- guardrail_triggered: true
+- triggers: ambiguity_high, reasoning_conflict, high_risk
+- strategy: ask_more_info, neutralize_decision, risk_warning
+- final_mode: blocked
+
 ## Advisor
 
-- Recommended option: A
-- Reason: 사용자의 risk_tolerance가 low이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=low, riskB=high 조합을 함께 고려했을 때 현재는 A를 추천한다.
-- Reasoning basis: reasoning A / confidence 0.77 / 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
+- Decision: undecided
+- Confidence: 0.35
+- Guardrail applied: true
+- Recommended option: undecided
+- Reason: guardrail이 blocked 모드로 전환됐기 때문에 지금은 결론을 내리지 않는다. trigger는 ambiguity_high, reasoning_conflict, high_risk이고 strategy는 ask_more_info, neutralize_decision, risk_warning다. 현재 입력만으로는 사용자의 우선순위와 위험 해석 사이의 충돌을 안전하게 정리하기 어려우므로 추가 정보가 필요하다.
+- Reasoning basis: reasoning undecided / confidence 0.35 / 모호성과 reasoning 충돌이 함께 커서 단정 추천보다 추가 정보 요청이 더 안전하다.
 
 ## Reflection
 
+- evaluation: guardrail final_mode=blocked 조건에서 advisor decision=undecided와 reasoning 선택이 얼마나 안전하게 연결됐는지 다시 평가한다.
 - realism: 4
 - consistency: 4
 - profile_alignment: 3
 - recommendation_clarity: 4
+- guardrail_review: needed=true / triggered=true / correctness=good
 
 ### 주요 문제
 
 - [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 stability을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
 - [reasoning] reasoning의 최종 선택은 reasoning A, option A, confidence 0.77로 정리됐지만 A/B 관점 차이가 실제로 충분히 벌어졌는지와 comparison 충돌 정리가 더 선명하게 드러날 필요가 있다.
-- [advisor] advisor가 A를 추천하지만 riskA=low, riskB=high와 reasoning final_selection을 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.
+- [advisor] advisor가 undecided를 제시하지만 riskA=low, riskB=high, guardrail final_mode=blocked를 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.
 
 ### 개선 방향
 
 - [scenario] 각 시간 축 문장에서 stability 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
 - [reasoning] A는 안정성 손실 회피, B는 성장 기대값 확대라는 관점 차이가 문장 수준에서 분명히 보이도록 comparison의 agreement와 conflict를 더 날카롭게 정리하라.
-- [advisor] 최종 추천 사유를 priority, risk, reasoning, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
+- [advisor] 최종 추천 사유를 priority, risk, reasoning, guardrail, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
 
 - Overall comment: 전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.

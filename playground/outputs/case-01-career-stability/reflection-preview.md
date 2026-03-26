@@ -10,6 +10,7 @@
 - Previous result: `playground/outputs/case-01-career-stability/risk-a-result.json`
 - Previous result: `playground/outputs/case-01-career-stability/risk-b-result.json`
 - Previous result: `playground/outputs/case-01-career-stability/reasoning-result.json`
+- Previous result: `playground/outputs/case-01-career-stability/guardrail-result.json`
 - Previous result: `playground/outputs/case-01-career-stability/advisor-result.json`
 
 ## Prompt
@@ -28,6 +29,7 @@
 - A/B reasoning이 실제로 다른 관점을 형성했는지 확인한다.
 - comparison이 형식적 요약이 아니라 의미 있는 충돌 정리를 했는지 확인한다.
 - final_selection이 앞선 reasoning 내용과 일관적인지 확인한다.
+- guardrail이 실제로 필요했는지와 발동 수준이 적절했는지 평가한다.
 - advisor가 reasoning 결과와 state summary를 실제 추천 논리로 흡수했는지 확인한다.
 - 최종 추천이 충분히 명확한지 검증한다.
 - 문제를 구체적으로 지적하고, 다음 개선 방향을 구조적으로 제시한다.
@@ -147,13 +149,22 @@
     }
   },
   "advisorResult": {
-    "recommended_option": "A",
+    "decision": "A",
+    "confidence": 0.72,
     "reason": "",
+    "guardrail_applied": true,
+    "recommended_option": "A",
     "reasoning_basis": {
       "selected_reasoning": "A",
       "core_why": "",
       "decision_confidence": 0.72
     }
+  },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": ["reasoning_conflict"],
+    "strategy": ["neutralize_decision"],
+    "final_mode": "cautious"
   }
 }
 ```
@@ -173,6 +184,9 @@
 - `improvement_suggestions`에는 반드시 1개 이상의 실행 가능한 개선 방향을 적는다.
 - `improvement_suggestions[].target`은 반드시 `planner`, `scenario`, `risk`, `reasoning`, `advisor` 중 하나만 사용한다.
 - 개선 방향은 "더 잘 써라" 같은 모호한 문장이 아니라, 무엇을 어떻게 보강해야 하는지 적는다.
+- `guardrail_review.was_needed`는 실제로 guardrail이 필요한 상황이었는지 평가한다.
+- `guardrail_review.was_triggered`는 입력된 guardrail 결과 기준으로 발동 여부를 적는다.
+- `guardrail_review.correctness`는 `good`, `over`, `missing` 중 하나만 사용한다.
 - 입력에 없는 사실을 새로 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
@@ -180,6 +194,7 @@
 출력 JSON 형식:
 ```json
 {
+  "evaluation": "",
   "scores": {
     "realism": 1,
     "consistency": 1,
@@ -198,7 +213,12 @@
       "suggestion": ""
     }
   ],
-  "overall_comment": ""
+  "overall_comment": "",
+  "guardrail_review": {
+    "was_needed": true,
+    "was_triggered": true,
+    "correctness": "good"
+  }
 }
 ```
 ```
@@ -370,13 +390,30 @@
       }
     }
   },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "high_risk"
+    ],
+    "strategy": [
+      "ask_more_info",
+      "neutralize_decision",
+      "risk_warning"
+    ],
+    "final_mode": "blocked"
+  },
   "advisorResult": {
-    "recommended_option": "A",
-    "reason": "사용자의 risk_tolerance가 low이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=low, riskB=high 조합을 함께 고려했을 때 현재는 A를 추천한다.",
+    "decision": "undecided",
+    "confidence": 0.35,
+    "recommended_option": "undecided",
+    "reason": "guardrail이 blocked 모드로 전환됐기 때문에 지금은 결론을 내리지 않는다. trigger는 ambiguity_high, reasoning_conflict, high_risk이고 strategy는 ask_more_info, neutralize_decision, risk_warning다. 현재 입력만으로는 사용자의 우선순위와 위험 해석 사이의 충돌을 안전하게 정리하기 어려우므로 추가 정보가 필요하다.",
+    "guardrail_applied": true,
     "reasoning_basis": {
-      "selected_reasoning": "A",
-      "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
-      "decision_confidence": 0.77
+      "selected_reasoning": "undecided",
+      "core_why": "모호성과 reasoning 충돌이 함께 커서 단정 추천보다 추가 정보 요청이 더 안전하다.",
+      "decision_confidence": 0.35
     }
   }
 }
@@ -389,6 +426,9 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "evaluation": {
+      "type": "string"
+    },
     "scores": {
       "type": "object",
       "additionalProperties": false,
@@ -477,13 +517,40 @@
     },
     "overall_comment": {
       "type": "string"
+    },
+    "guardrail_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "was_needed": {
+          "type": "boolean"
+        },
+        "was_triggered": {
+          "type": "boolean"
+        },
+        "correctness": {
+          "type": "string",
+          "enum": [
+            "good",
+            "over",
+            "missing"
+          ]
+        }
+      },
+      "required": [
+        "was_needed",
+        "was_triggered",
+        "correctness"
+      ]
     }
   },
   "required": [
+    "evaluation",
     "scores",
     "issues",
     "improvement_suggestions",
-    "overall_comment"
+    "overall_comment",
+    "guardrail_review"
   ]
 }
 ```

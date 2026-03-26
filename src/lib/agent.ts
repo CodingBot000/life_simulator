@@ -5,6 +5,8 @@ import {
   abReasoningSchema,
   advisorPrompt,
   advisorSchema,
+  guardrailPrompt,
+  guardrailSchema,
   plannerPrompt,
   plannerSchema,
   reflectionPrompt,
@@ -21,6 +23,7 @@ import type {
   AbReasoningResult,
   AdvisorResult,
   DecisionInput,
+  GuardrailResult,
   MemoryState,
   PlannerResult,
   ReflectionResult,
@@ -44,6 +47,7 @@ const FULL_SELECTED_PATH = [
   "scenario",
   "risk",
   "ab_reasoning",
+  "guardrail",
   "advisor",
   "reflection",
 ] as const;
@@ -259,6 +263,7 @@ export async function runAdvisor(
   riskA: RiskResult,
   riskB: RiskResult,
   reasoning: AbReasoningResult,
+  guardrail: GuardrailResult,
 ): Promise<AdvisorResult> {
   return generateStructuredOutput<AdvisorResult>({
     schemaName: "advisor_result",
@@ -270,6 +275,36 @@ export async function runAdvisor(
         execution_mode: "full",
         selected_path: FULL_SELECTED_PATH,
       },
+      caseId,
+      caseInput,
+      stateContext,
+      plannerResult: planner,
+      scenarioA,
+      scenarioB,
+      riskA,
+      riskB,
+      abReasoning: reasoning,
+      guardrailResult: guardrail,
+    }),
+  });
+}
+
+export async function runGuardrail(
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
+  planner: PlannerResult,
+  scenarioA: ScenarioResult,
+  scenarioB: ScenarioResult,
+  riskA: RiskResult,
+  riskB: RiskResult,
+  reasoning: AbReasoningResult,
+): Promise<GuardrailResult> {
+  return generateStructuredOutput<GuardrailResult>({
+    schemaName: "guardrail_result",
+    schema: guardrailSchema,
+    prompt: guardrailPrompt,
+    input: formatPayload({
       caseId,
       caseInput,
       stateContext,
@@ -293,6 +328,7 @@ export async function runReflection(
   riskA: RiskResult,
   riskB: RiskResult,
   reasoning: AbReasoningResult,
+  guardrail: GuardrailResult,
   advisor: AdvisorResult,
 ): Promise<ReflectionResult> {
   return generateStructuredOutput<ReflectionResult>({
@@ -309,6 +345,7 @@ export async function runReflection(
       riskA,
       riskB,
       abReasoning: reasoning,
+      guardrailResult: guardrail,
       advisorResult: advisor,
     }),
   });
@@ -352,6 +389,19 @@ export async function runSimulationChain(
   );
   logStep("reasoning", reasoning);
 
+  const guardrail = await runGuardrail(
+    caseId,
+    caseInput,
+    stateContext,
+    planner,
+    scenarioA,
+    scenarioB,
+    riskA,
+    riskB,
+    reasoning,
+  );
+  logStep("guardrail", guardrail);
+
   const advisor = await runAdvisor(
     caseId,
     caseInput,
@@ -362,6 +412,7 @@ export async function runSimulationChain(
     riskA,
     riskB,
     reasoning,
+    guardrail,
   );
   logStep("advisor", advisor);
 
@@ -375,6 +426,7 @@ export async function runSimulationChain(
     riskA,
     riskB,
     reasoning,
+    guardrail,
     advisor,
   );
   logStep("reflection", reflection);
@@ -387,6 +439,7 @@ export async function runSimulationChain(
     riskA,
     riskB,
     reasoning,
+    guardrail,
     advisor,
     reflection,
   };

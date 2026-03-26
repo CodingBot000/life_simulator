@@ -1,0 +1,10 @@
+{
+  "guardrail_triggered": true,
+  "triggers": [
+    "reasoning_conflict"
+  ],
+  "strategy": [
+    "neutralize_decision"
+  ],
+  "final_mode": "cautious"
+}

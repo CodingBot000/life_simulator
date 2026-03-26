@@ -1,9 +1,12 @@
 {
+  "decision": "A",
+  "confidence": 0.5499999999999999,
   "recommended_option": "A",
-  "reason": "사용자의 risk_tolerance가 medium이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 A를 추천한다.",
+  "reason": "guardrail이 cautious 모드로 전환됐기 때문에 결론 강도를 낮춘다. 핵심 trigger는 reasoning_conflict이고 대응 strategy는 neutralize_decision다. 사용자의 최우선 기준이 stability인 점은 유지하되 riskA=medium, riskB=medium를 더 무겁게 반영해 현재는 A 쪽을 조심스럽게 권한다.",
+  "guardrail_applied": true,
   "reasoning_basis": {
     "selected_reasoning": "A",
-    "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
-    "decision_confidence": 0.70
+    "core_why": "guardrail이 위험 신호를 감지했으므로 최종 선택을 뒤집기보다는 confidence를 낮추고 위험 경고를 전면에 두는 것이 적절하다.",
+    "decision_confidence": 0.5499999999999999
   }
 }

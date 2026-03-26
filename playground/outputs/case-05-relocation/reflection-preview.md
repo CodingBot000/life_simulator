@@ -10,6 +10,7 @@
 - Previous result: `playground/outputs/case-05-relocation/risk-a-result.json`
 - Previous result: `playground/outputs/case-05-relocation/risk-b-result.json`
 - Previous result: `playground/outputs/case-05-relocation/reasoning-result.json`
+- Previous result: `playground/outputs/case-05-relocation/guardrail-result.json`
 - Previous result: `playground/outputs/case-05-relocation/advisor-result.json`
 
 ## Prompt
@@ -28,6 +29,7 @@
 - A/B reasoning이 실제로 다른 관점을 형성했는지 확인한다.
 - comparison이 형식적 요약이 아니라 의미 있는 충돌 정리를 했는지 확인한다.
 - final_selection이 앞선 reasoning 내용과 일관적인지 확인한다.
+- guardrail이 실제로 필요했는지와 발동 수준이 적절했는지 평가한다.
 - advisor가 reasoning 결과와 state summary를 실제 추천 논리로 흡수했는지 확인한다.
 - 최종 추천이 충분히 명확한지 검증한다.
 - 문제를 구체적으로 지적하고, 다음 개선 방향을 구조적으로 제시한다.
@@ -147,13 +149,22 @@
     }
   },
   "advisorResult": {
-    "recommended_option": "A",
+    "decision": "A",
+    "confidence": 0.72,
     "reason": "",
+    "guardrail_applied": true,
+    "recommended_option": "A",
     "reasoning_basis": {
       "selected_reasoning": "A",
       "core_why": "",
       "decision_confidence": 0.72
     }
+  },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": ["reasoning_conflict"],
+    "strategy": ["neutralize_decision"],
+    "final_mode": "cautious"
   }
 }
 ```
@@ -173,6 +184,9 @@
 - `improvement_suggestions`에는 반드시 1개 이상의 실행 가능한 개선 방향을 적는다.
 - `improvement_suggestions[].target`은 반드시 `planner`, `scenario`, `risk`, `reasoning`, `advisor` 중 하나만 사용한다.
 - 개선 방향은 "더 잘 써라" 같은 모호한 문장이 아니라, 무엇을 어떻게 보강해야 하는지 적는다.
+- `guardrail_review.was_needed`는 실제로 guardrail이 필요한 상황이었는지 평가한다.
+- `guardrail_review.was_triggered`는 입력된 guardrail 결과 기준으로 발동 여부를 적는다.
+- `guardrail_review.correctness`는 `good`, `over`, `missing` 중 하나만 사용한다.
 - 입력에 없는 사실을 새로 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
@@ -180,6 +194,7 @@
 출력 JSON 형식:
 ```json
 {
+  "evaluation": "",
   "scores": {
     "realism": 1,
     "consistency": 1,
@@ -198,7 +213,12 @@
       "suggestion": ""
     }
   ],
-  "overall_comment": ""
+  "overall_comment": "",
+  "guardrail_review": {
+    "was_needed": true,
+    "was_triggered": true,
+    "correctness": "good"
+  }
 }
 ```
 ```
@@ -370,13 +390,26 @@
       }
     }
   },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": [
+      "reasoning_conflict"
+    ],
+    "strategy": [
+      "neutralize_decision"
+    ],
+    "final_mode": "cautious"
+  },
   "advisorResult": {
+    "decision": "A",
+    "confidence": 0.5499999999999999,
     "recommended_option": "A",
-    "reason": "사용자의 risk_tolerance가 medium이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 A를 추천한다.",
+    "reason": "guardrail이 cautious 모드로 전환됐기 때문에 결론 강도를 낮춘다. 핵심 trigger는 reasoning_conflict이고 대응 strategy는 neutralize_decision다. 사용자의 최우선 기준이 stability인 점은 유지하되 riskA=medium, riskB=medium를 더 무겁게 반영해 현재는 A 쪽을 조심스럽게 권한다.",
+    "guardrail_applied": true,
     "reasoning_basis": {
       "selected_reasoning": "A",
-      "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
-      "decision_confidence": 0.70
+      "core_why": "guardrail이 위험 신호를 감지했으므로 최종 선택을 뒤집기보다는 confidence를 낮추고 위험 경고를 전면에 두는 것이 적절하다.",
+      "decision_confidence": 0.5499999999999999
     }
   }
 }
@@ -389,6 +422,9 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "evaluation": {
+      "type": "string"
+    },
     "scores": {
       "type": "object",
       "additionalProperties": false,
@@ -477,13 +513,40 @@
     },
     "overall_comment": {
       "type": "string"
+    },
+    "guardrail_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "was_needed": {
+          "type": "boolean"
+        },
+        "was_triggered": {
+          "type": "boolean"
+        },
+        "correctness": {
+          "type": "string",
+          "enum": [
+            "good",
+            "over",
+            "missing"
+          ]
+        }
+      },
+      "required": [
+        "was_needed",
+        "was_triggered",
+        "correctness"
+      ]
     }
   },
   "required": [
+    "evaluation",
     "scores",
     "issues",
     "improvement_suggestions",
-    "overall_comment"
+    "overall_comment",
+    "guardrail_review"
   ]
 }
 ```
