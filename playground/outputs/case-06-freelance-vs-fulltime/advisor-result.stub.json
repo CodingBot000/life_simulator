@@ -1,4 +1,9 @@
 {
   "recommended_option": "B",
-  "reason": "사용자의 risk_tolerance가 medium이고 최우선 기준이 freedom이므로, 현재 stub 비교에서는 위험도 차이를 더 낮게 만드는 선택을 우선 추천한다. riskA=medium, riskB=medium이며 이 문장은 compose-only 검증용 임시 추천 사유다."
+  "reason": "router가 standard 경로를 선택해 scenarioA/B까지 비교했다. 최우선 기준이 freedom이고 risk_tolerance가 medium이므로 현재 stub에서는 B를 추천한다.",
+  "reasoning_basis": {
+    "selected_reasoning": "B",
+    "core_why": "scenarioA와 scenarioB까지 비교한 결과, 사용자의 우선순위와 더 잘 맞는 흐름을 advisor가 직접 선택했다.",
+    "decision_confidence": 0.66
+  }
 }

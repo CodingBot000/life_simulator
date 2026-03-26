@@ -1,0 +1,30 @@
+{
+  "case_id": "case-10-sideproject-vs-rest",
+  "user_state": {
+    "profile_state": {
+      "risk_preference": "low",
+      "decision_style": "deliberate",
+      "top_priorities": [
+        "health",
+        "sustainability",
+        "future_optionality"
+      ]
+    },
+    "situational_state": {
+      "career_stage": "mid",
+      "financial_pressure": "unknown",
+      "time_pressure": "high",
+      "emotional_state": "strained"
+    },
+    "memory_state": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    }
+  },
+  "state_summary": {
+    "decision_bias": "leans conservative under uncertainty",
+    "current_constraint": "time pressure is high; emotional state is strained",
+    "agent_guidance": "explain tradeoffs around health, sustainability, future_optionality while respecting time pressure is high; emotional state is strained"
+  }
+}

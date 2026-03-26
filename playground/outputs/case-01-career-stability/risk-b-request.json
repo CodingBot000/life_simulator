@@ -1,14 +1,15 @@
 {
   "stage": "risk",
-  "generated_at": "2026-03-25T12:48:16Z",
+  "generated_at": "2026-03-26T09:57:07Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/risk.md",
-  "input_source": "./playground/inputs/cases/case-01-career-stability.json",
+  "input_source": "playground/inputs/cases/case-01-career-stability.json",
   "previous_stage_result_files": [
+    "playground/outputs/case-01-career-stability/state-context.json",
     "playground/outputs/case-01-career-stability/planner-result.json",
     "playground/outputs/case-01-career-stability/scenario-b-result.json"
   ],
-  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"optionLabel\": \"A\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 객관적 위험뿐 아니라 이 사용자에게 더 크게 작용하는 위험을 반영한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    }\n  },\n  \"stateContext\": {\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain stability-growth tradeoffs explicitly\"\n    }\n  },\n  \"optionLabel\": \"A\",\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `stateContext.user_state`, `state_summary`를 함께 고려한다.\n- `profile_state.top_priorities`, `risk_preference`, `situational_state` 때문에 더 커지는 위험이 있으면 명시한다.\n- `memory_state.repeated_patterns`가 현재 선택에서 다시 반복될 가능성이 있으면 반영한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
   "expected_output_schema": {
     "type": "object",
     "additionalProperties": false,
@@ -35,17 +36,55 @@
     ]
   },
   "input_data": {
-    "optionLabel": "B",
-    "userProfile": {
-      "age": 32,
-      "job": "developer",
-      "risk_tolerance": "low",
-      "priority": [
-        "stability",
-        "income",
-        "work_life_balance"
-      ]
+    "caseId": "case-01-career-stability",
+    "caseInput": {
+      "userProfile": {
+        "age": 32,
+        "job": "developer",
+        "risk_tolerance": "low",
+        "priority": [
+          "stability",
+          "income",
+          "work_life_balance"
+        ]
+      },
+      "decision": {
+        "optionA": "현재 회사에 남는다",
+        "optionB": "스타트업으로 이직한다",
+        "context": "현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다."
+      }
     },
+    "stateContext": {
+      "case_id": "case-01-career-stability",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "low",
+          "decision_style": "deliberate",
+          "top_priorities": [
+            "stability",
+            "income",
+            "work_life_balance"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "medium",
+          "time_pressure": "unknown",
+          "emotional_state": "unknown"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "leans conservative under uncertainty",
+        "current_constraint": "financial pressure is medium",
+        "agent_guidance": "explain tradeoffs around stability, income, work_life_balance while respecting financial pressure is medium"
+      }
+    },
+    "optionLabel": "B",
     "selectedOption": "스타트업으로 이직한다",
     "decisionContext": "현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.",
     "factors": [
@@ -71,7 +110,7 @@
       "three_years": "3년 후에는 이직의 의미가 더 현실적으로 정리된다. 회사가 일정 수준 이상 자리를 잡았다면, 당신은 새로운 기술과 빠른 실행 환경을 경험한 개발자로서 시장가치가 높아지고 다음 커리어 선택지도 넓어진다. 그 경우 초반의 불안은 줄고, 성장 측면에서는 분명한 성과를 느끼지만, 안정성과 워라밸은 여전히 대기업이나 안정적인 조직보다 덜 예측 가능하다고 받아들이게 된다. 반대로 회사가 기대만큼 성장하지 못하더라도, 극단적 실패라기보다 연봉·복지·고용 안정성의 한계를 체감하며 다시 더 안정적인 회사로 이동할 준비를 하게 될 가능성이 높다. 즉, 이 선택은 낮은 위험 선호를 가진 사람에게 마음 편한 길은 아니지만, 생활 안정성을 일부 감수하는 대신 역할 변화, 기술 경험, 커리어 성장의 폭을 실제로 넓히는 방향으로 작동할 가능성이 크다."
     }
   },
-  "input_json": "{\n  \"optionLabel\": \"B\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\n      \"stability\",\n      \"income\",\n      \"work_life_balance\"\n    ]\n  },\n  \"selectedOption\": \"스타트업으로 이직한다\",\n  \"decisionContext\": \"현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.\",\n  \"factors\": [\n    \"고용 및 생활 안정성\",\n    \"연봉 및 복지 수준\",\n    \"역할 변화와 커리어 성장 가능성\",\n    \"새로운 기술을 가까이서 다룰 기회\",\n    \"워라밸 유지 가능성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"고용 및 생활 안정성\",\n      \"연봉 및 복지 수준\",\n      \"역할 변화와 커리어 성장 가능성\",\n      \"새로운 기술을 가까이서 다룰 기회\",\n      \"워라밸 유지 가능성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"스타트업으로 옮긴 직후 3개월은 기대감과 긴장감이 함께 간다. 개발자로서 더 가까이에서 새로운 기술 스택과 제품 의사결정을 접하면서 역할 범위가 넓어져, 이전 회사에서 느끼던 정체감은 다소 줄어든다. 다만 낮은 위험 감수 성향 때문에 고용 및 생활 안정성에 대한 불안은 쉽게 사라지지 않고, 연봉이나 복지 조건이 이전보다 조금 낮거나 불확실하게 느껴질 수 있다. 초기에는 업무 구조가 빠르게 바뀌고 책임이 넓어져 퇴근 후에도 머리가 바쁜 날이 많아 워라밸은 일시적으로 흔들리지만, 동시에 배우는 속도와 성장 체감은 분명히 커진다.\",\n    \"one_year\": \"1년쯤 지나면 업무 흐름과 팀 문화에 익숙해지면서 감정의 기복은 줄고, 이직이 완전히 무모한 선택은 아니었다는 안도감이 생길 가능성이 크다. 새로운 기술을 실제 서비스에 적용한 경험이 쌓여 역할 변화와 커리어 성장 가능성은 이전보다 뚜렷해지고, 작은 조직에서 주도적으로 문제를 푼 경험이 이력에도 남는다. 반면 안정성과 워라밸은 회사 상황에 따라 편차가 커서, 제품 일정이나 투자 환경이 좋지 않으면 야근이 잦아지고 생활 리듬이 흔들릴 수 있다. 연봉은 기본급만 보면 큰 차이가 없더라도 성과 보상이나 스톡옵션 기대가 포함돼 체감이 복합적이며, 복지는 이전 직장보다 단순해져 아쉬움이 남을 수 있다.\",\n    \"three_years\": \"3년 후에는 이직의 의미가 더 현실적으로 정리된다. 회사가 일정 수준 이상 자리를 잡았다면, 당신은 새로운 기술과 빠른 실행 환경을 경험한 개발자로서 시장가치가 높아지고 다음 커리어 선택지도 넓어진다. 그 경우 초반의 불안은 줄고, 성장 측면에서는 분명한 성과를 느끼지만, 안정성과 워라밸은 여전히 대기업이나 안정적인 조직보다 덜 예측 가능하다고 받아들이게 된다. 반대로 회사가 기대만큼 성장하지 못하더라도, 극단적 실패라기보다 연봉·복지·고용 안정성의 한계를 체감하며 다시 더 안정적인 회사로 이동할 준비를 하게 될 가능성이 높다. 즉, 이 선택은 낮은 위험 선호를 가진 사람에게 마음 편한 길은 아니지만, 생활 안정성을 일부 감수하는 대신 역할 변화, 기술 경험, 커리어 성장의 폭을 실제로 넓히는 방향으로 작동할 가능성이 크다.\"\n  }\n}",
+  "input_json": "{\n  \"caseId\": \"case-01-career-stability\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\n        \"stability\",\n        \"income\",\n        \"work_life_balance\"\n      ]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-01-career-stability\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\n          \"stability\",\n          \"income\",\n          \"work_life_balance\"\n        ]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"unknown\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain tradeoffs around stability, income, work_life_balance while respecting financial pressure is medium\"\n    }\n  },\n  \"optionLabel\": \"B\",\n  \"selectedOption\": \"스타트업으로 이직한다\",\n  \"decisionContext\": \"현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.\",\n  \"factors\": [\n    \"고용 및 생활 안정성\",\n    \"연봉 및 복지 수준\",\n    \"역할 변화와 커리어 성장 가능성\",\n    \"새로운 기술을 가까이서 다룰 기회\",\n    \"워라밸 유지 가능성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"고용 및 생활 안정성\",\n      \"연봉 및 복지 수준\",\n      \"역할 변화와 커리어 성장 가능성\",\n      \"새로운 기술을 가까이서 다룰 기회\",\n      \"워라밸 유지 가능성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"스타트업으로 옮긴 직후 3개월은 기대감과 긴장감이 함께 간다. 개발자로서 더 가까이에서 새로운 기술 스택과 제품 의사결정을 접하면서 역할 범위가 넓어져, 이전 회사에서 느끼던 정체감은 다소 줄어든다. 다만 낮은 위험 감수 성향 때문에 고용 및 생활 안정성에 대한 불안은 쉽게 사라지지 않고, 연봉이나 복지 조건이 이전보다 조금 낮거나 불확실하게 느껴질 수 있다. 초기에는 업무 구조가 빠르게 바뀌고 책임이 넓어져 퇴근 후에도 머리가 바쁜 날이 많아 워라밸은 일시적으로 흔들리지만, 동시에 배우는 속도와 성장 체감은 분명히 커진다.\",\n    \"one_year\": \"1년쯤 지나면 업무 흐름과 팀 문화에 익숙해지면서 감정의 기복은 줄고, 이직이 완전히 무모한 선택은 아니었다는 안도감이 생길 가능성이 크다. 새로운 기술을 실제 서비스에 적용한 경험이 쌓여 역할 변화와 커리어 성장 가능성은 이전보다 뚜렷해지고, 작은 조직에서 주도적으로 문제를 푼 경험이 이력에도 남는다. 반면 안정성과 워라밸은 회사 상황에 따라 편차가 커서, 제품 일정이나 투자 환경이 좋지 않으면 야근이 잦아지고 생활 리듬이 흔들릴 수 있다. 연봉은 기본급만 보면 큰 차이가 없더라도 성과 보상이나 스톡옵션 기대가 포함돼 체감이 복합적이며, 복지는 이전 직장보다 단순해져 아쉬움이 남을 수 있다.\",\n    \"three_years\": \"3년 후에는 이직의 의미가 더 현실적으로 정리된다. 회사가 일정 수준 이상 자리를 잡았다면, 당신은 새로운 기술과 빠른 실행 환경을 경험한 개발자로서 시장가치가 높아지고 다음 커리어 선택지도 넓어진다. 그 경우 초반의 불안은 줄고, 성장 측면에서는 분명한 성과를 느끼지만, 안정성과 워라밸은 여전히 대기업이나 안정적인 조직보다 덜 예측 가능하다고 받아들이게 된다. 반대로 회사가 기대만큼 성장하지 못하더라도, 극단적 실패라기보다 연봉·복지·고용 안정성의 한계를 체감하며 다시 더 안정적인 회사로 이동할 준비를 하게 될 가능성이 높다. 즉, 이 선택은 낮은 위험 선호를 가진 사람에게 마음 편한 길은 아니지만, 생활 안정성을 일부 감수하는 대신 역할 변화, 기술 경험, 커리어 성장의 폭을 실제로 넓히는 방향으로 작동할 가능성이 크다.\"\n  }\n}",
   "provider_payload": {
     "runner": "codex exec",
     "call_status": "ready",

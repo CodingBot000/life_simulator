@@ -10,7 +10,10 @@ OUTPUTS_DIR="$(resolve_output_dir "$INPUT_FILE" "${2:-}")"
 ensure_output_dir
 copy_input_snapshot "$INPUT_FILE"
 
+CASE_ID="$(case_id_from_output_dir "$OUTPUTS_DIR")"
 BASE_INPUT_COMPACT="$(read_json_compact "$INPUT_FILE")"
+STATE_CONTEXT_FILE="$(state_context_path)"
+STATE_CONTEXT_COMPACT="$(read_json_compact "$STATE_CONTEXT_FILE")"
 PLANNER_RESULT_FILE="$(resolve_stage_result_file "planner")"
 SCENARIO_A_RESULT_FILE="$(resolve_stage_result_file "scenario-a")"
 SCENARIO_B_RESULT_FILE="$(resolve_stage_result_file "scenario-b")"
@@ -45,7 +48,9 @@ SELECTED_OPTION="$(jq -r '.reasoning.final_selection.selected_option' "$REASONIN
 DECISION_CONFIDENCE="$(jq -r '.reasoning.final_selection.decision_confidence' "$REASONING_RESULT_FILE")"
 
 INPUT_DATA_COMPACT="$(jq -cn \
+  --arg case_id "$CASE_ID" \
   --argjson base_input "$BASE_INPUT_COMPACT" \
+  --argjson state_context "$STATE_CONTEXT_COMPACT" \
   --argjson planner_result "$PLANNER_RESULT_COMPACT" \
   --argjson scenario_a "$SCENARIO_A_RESULT_COMPACT" \
   --argjson scenario_b "$SCENARIO_B_RESULT_COMPACT" \
@@ -54,8 +59,9 @@ INPUT_DATA_COMPACT="$(jq -cn \
   --argjson ab_reasoning "$REASONING_RESULT_COMPACT" \
   --argjson advisor_result "$ADVISOR_RESULT_COMPACT" \
   '{
-    userProfile: $base_input.userProfile,
-    decision: $base_input.decision,
+    caseId: $case_id,
+    caseInput: $base_input,
+    stateContext: $state_context,
     plannerResult: $planner_result,
     scenarioA: $scenario_a,
     scenarioB: $scenario_b,
@@ -77,7 +83,7 @@ jq -n \
   --arg input_json "$INPUT_JSON" \
   --argjson input_data "$INPUT_DATA_COMPACT" \
   --argjson expected_output_schema "$SCHEMA_JSON" \
-  --argjson previous_stage_result_files "[\"$(relative_to_root "$PLANNER_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_A_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_B_RESULT_FILE")\", \"$(relative_to_root "$RISK_A_RESULT_FILE")\", \"$(relative_to_root "$RISK_B_RESULT_FILE")\", \"$(relative_to_root "$REASONING_RESULT_FILE")\", \"$(relative_to_root "$ADVISOR_RESULT_FILE")\"]" \
+  --argjson previous_stage_result_files "[\"$(relative_to_root "$STATE_CONTEXT_FILE")\", \"$(relative_to_root "$PLANNER_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_A_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_B_RESULT_FILE")\", \"$(relative_to_root "$RISK_A_RESULT_FILE")\", \"$(relative_to_root "$RISK_B_RESULT_FILE")\", \"$(relative_to_root "$REASONING_RESULT_FILE")\", \"$(relative_to_root "$ADVISOR_RESULT_FILE")\"]" \
   '{
     stage: $stage,
     generated_at: $generated_at,

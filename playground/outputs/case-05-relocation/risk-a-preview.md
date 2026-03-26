@@ -3,6 +3,7 @@
 - Request file: `playground/outputs/case-05-relocation/risk-a-request.json`
 - Prompt file: `prompts/risk.md`
 - Input source: `playground/inputs/cases/case-05-relocation.json`
+- Previous result: `playground/outputs/case-05-relocation/state-context.json`
 - Previous result: `playground/outputs/case-05-relocation/planner-result.json`
 - Previous result: `playground/outputs/case-05-relocation/scenario-a-result.json`
 
@@ -13,19 +14,52 @@
 
 목표:
 - 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.
-- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.
+- 객관적 위험뿐 아니라 이 사용자에게 더 크게 작용하는 위험을 반영한다.
 - 이유는 추상적 표현보다 구체적인 근거를 우선한다.
 
 입력 데이터 형식:
 ```json
 {
-  "optionLabel": "A",
-  "userProfile": {
-    "age": 32,
-    "job": "developer",
-    "risk_tolerance": "low",
-    "priority": ["stability", "income", "work_life_balance"]
+  "caseId": "case-001",
+  "caseInput": {
+    "userProfile": {
+      "age": 32,
+      "job": "developer",
+      "risk_tolerance": "low",
+      "priority": ["stability", "income", "work_life_balance"]
+    },
+    "decision": {
+      "optionA": "현재 회사에 남는다",
+      "optionB": "스타트업으로 이직한다",
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+    }
   },
+  "stateContext": {
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "low",
+        "decision_style": "deliberate",
+        "top_priorities": ["stability", "income", "work_life_balance"]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "medium",
+        "time_pressure": "unknown",
+        "emotional_state": "uncertain"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "leans conservative under uncertainty",
+      "current_constraint": "financial pressure is medium",
+      "agent_guidance": "explain stability-growth tradeoffs explicitly"
+    }
+  },
+  "optionLabel": "A",
   "selectedOption": "현재 회사에 남는다",
   "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
   "factors": ["stability", "income", "growth", "work_life_balance"],
@@ -44,7 +78,9 @@
 판단 규칙:
 - `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.
 - `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.
-- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.
+- `scenario`의 시간 축 전개와 `stateContext.user_state`, `state_summary`를 함께 고려한다.
+- `profile_state.top_priorities`, `risk_preference`, `situational_state` 때문에 더 커지는 위험이 있으면 명시한다.
+- `memory_state.repeated_patterns`가 현재 선택에서 다시 반복될 가능성이 있으면 반영한다.
 - 막연한 공포 조장은 금지한다.
 - 입력에 없는 사실을 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
@@ -63,17 +99,55 @@
 
 ```json
 {
-  "optionLabel": "A",
-  "userProfile": {
-    "age": 30,
-    "job": "backend developer",
-    "risk_tolerance": "medium",
-    "priority": [
-      "stability",
-      "experience",
-      "future_opportunity"
-    ]
+  "caseId": "case-05-relocation",
+  "caseInput": {
+    "userProfile": {
+      "age": 30,
+      "job": "backend developer",
+      "risk_tolerance": "medium",
+      "priority": [
+        "stability",
+        "experience",
+        "future_opportunity"
+      ]
+    },
+    "decision": {
+      "optionA": "한국에 남아 현재 커리어를 이어간다",
+      "optionB": "일본으로 이주해 새 직장을 찾는다",
+      "context": "해외 생활 경험과 장기적인 커리어 확장을 원하지만, 언어와 비자 문제 때문에 초기 적응 실패 가능성도 현실적으로 크다. 현재 한국에서는 무난한 팀과 안정적인 연봉을 유지하고 있다."
+    }
   },
+  "stateContext": {
+    "case_id": "case-05-relocation",
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "medium",
+        "decision_style": "exploratory",
+        "top_priorities": [
+          "stability",
+          "experience",
+          "future_opportunity"
+        ]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "medium",
+        "time_pressure": "unknown",
+        "emotional_state": "cautiously_optimistic"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "balances stability and upside",
+      "current_constraint": "financial pressure is medium; emotional state is cautiously_optimistic",
+      "agent_guidance": "explain tradeoffs around stability, experience, future_opportunity while respecting financial pressure is medium; emotional state is cautiously_optimistic"
+    }
+  },
+  "optionLabel": "A",
   "selectedOption": "한국에 남아 현재 커리어를 이어간다",
   "decisionContext": "해외 생활 경험과 장기적인 커리어 확장을 원하지만, 언어와 비자 문제 때문에 초기 적응 실패 가능성도 현실적으로 크다. 현재 한국에서는 무난한 팀과 안정적인 연봉을 유지하고 있다.",
   "factors": [

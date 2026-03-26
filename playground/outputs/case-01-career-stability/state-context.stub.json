@@ -1,0 +1,30 @@
+{
+  "case_id": "case-01-career-stability",
+  "user_state": {
+    "profile_state": {
+      "risk_preference": "low",
+      "decision_style": "deliberate",
+      "top_priorities": [
+        "stability",
+        "income",
+        "work_life_balance"
+      ]
+    },
+    "situational_state": {
+      "career_stage": "mid",
+      "financial_pressure": "medium",
+      "time_pressure": "unknown",
+      "emotional_state": "unknown"
+    },
+    "memory_state": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    }
+  },
+  "state_summary": {
+    "decision_bias": "leans conservative under uncertainty",
+    "current_constraint": "financial pressure is medium",
+    "agent_guidance": "explain tradeoffs around stability, income, work_life_balance while respecting financial pressure is medium"
+  }
+}

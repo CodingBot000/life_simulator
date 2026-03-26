@@ -10,6 +10,8 @@ OUTPUTS_DIR="$(resolve_output_dir "$INPUT_FILE" "${2:-}")"
 ensure_output_dir
 copy_input_snapshot "$INPUT_FILE"
 
+CASE_ID="$(case_id_from_output_dir "$OUTPUTS_DIR")"
+STATE_CONTEXT_FILE="$(state_context_path)"
 REQUEST_FILE="$(stage_request_path "planner")"
 PREVIEW_FILE="$(stage_preview_path "planner")"
 STUB_FILE="$(stage_stub_path "planner")"
@@ -17,8 +19,22 @@ RESULT_FILE="$(stage_result_path "planner")"
 PROMPT_FILE="$(prompt_path "planner")"
 PROMPT_TEXT="$(read_prompt "planner")"
 SCHEMA_JSON="$(schema_for_stage "planner")"
-INPUT_DATA_COMPACT="$(read_json_compact "$INPUT_FILE")"
-INPUT_JSON="$(read_json_pretty "$INPUT_FILE")"
+
+if [ ! -f "$STATE_CONTEXT_FILE" ]; then
+  echo "Error: state context file not found: $STATE_CONTEXT_FILE" >&2
+  exit 1
+fi
+
+INPUT_DATA_COMPACT="$(jq -cn \
+  --arg case_id "$CASE_ID" \
+  --argjson case_input "$(read_json_compact "$INPUT_FILE")" \
+  --argjson state_context "$(read_json_compact "$STATE_CONTEXT_FILE")" \
+  '{
+    caseId: $case_id,
+    caseInput: $case_input,
+    stateContext: $state_context
+  }')"
+INPUT_JSON="$(printf '%s' "$INPUT_DATA_COMPACT" | jq .)"
 
 jq -n \
   --arg stage "planner" \
@@ -31,7 +47,7 @@ jq -n \
   --arg input_json "$INPUT_JSON" \
   --argjson input_data "$INPUT_DATA_COMPACT" \
   --argjson expected_output_schema "$SCHEMA_JSON" \
-  --argjson previous_stage_result_files '[]' \
+  --argjson previous_stage_result_files "[\"$(relative_to_root "$STATE_CONTEXT_FILE")\"]" \
   '{
     stage: $stage,
     generated_at: $generated_at,
@@ -55,7 +71,7 @@ jq -n \
   '{
     decision_type: "pending_model_inference",
     factors: (
-      ($input_data.userProfile.priority // [])
+      ($input_data.caseInput.userProfile.priority // [])
       | map(tostring)
       | if length > 0 then .[:6] else ["stability", "income", "work_life_balance"] end
     )

@@ -1,0 +1,173 @@
+{
+  "stage": "state_loader",
+  "generated_at": "2026-03-26T09:57:08Z",
+  "description": "Prepared request payload for state-context generation.",
+  "prompt_file": "prompts/state_loader.md",
+  "input_source": "playground/inputs/cases/case-02-career-growth.json",
+  "previous_stage_result_files": [],
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 State Loader다.\n\n역할:\n- 판단이나 추천을 하지 않는다.\n- 입력 케이스에 있는 사용자 정보, 현재 상황 힌트, prior_memory를 구조화해 공통 상태 컨텍스트만 만든다.\n- downstream agent가 그대로 재사용할 수 있게 일관된 기본값을 채운다.\n\n입력 데이터 형식:\n```json\n{\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"health\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    },\n    \"prior_memory\": {\n      \"recent_similar_decisions\": [\n        {\n          \"topic\": \"job_change\",\n          \"selected_option\": \"stay\",\n          \"outcome_note\": \"felt safe but regretted slow growth\"\n        }\n      ],\n      \"repeated_patterns\": [\n        \"tends to avoid risk under uncertainty\"\n      ],\n      \"consistency_notes\": [\n        \"current recommendation should explain stability-growth tradeoff\"\n      ]\n    },\n    \"state_hints\": {\n      \"profile_state\": {\n        \"decision_style\": \"deliberate\"\n      },\n      \"situational_state\": {\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"high\",\n        \"emotional_state\": \"uncertain\"\n      }\n    }\n  }\n}\n```\n\n구성 규칙:\n- `profile_state`는 잘 변하지 않는 장기 성향만 정리한다.\n- `situational_state`는 현재 제약과 상황 중심으로 정리한다.\n- `memory_state`는 이전 판단 패턴, 후회 패턴, 반복 행동만 정리한다.\n- 입력에 `prior_memory`, `state_hints`가 있으면 우선 반영한다.\n- 입력에 값이 없으면 안전한 기본값을 사용한다.\n- 문자열 기본값은 가능한 한 `unknown` 또는 `none`을 사용한다.\n- 배열 기본값은 `[]`를 사용한다.\n- `top_priorities`는 비어 있지 않다면 입력 우선순위를 보존한다.\n- `recent_similar_decisions`의 각 항목은 `topic`, `selected_option`, `outcome_note`를 모두 채운다.\n- `state_summary`는 새 사실을 만들어내지 말고, 주어진 정보와 명시적 상태를 요약한 문장만 작성한다.\n- `agent_guidance`는 downstream agent가 어떤 tradeoff를 설명해야 하는지 한 문장으로 적는다.\n- 추천, 결론, 정답 선택은 절대 하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"case_id\": \"case-001\",\n  \"user_state\": {\n    \"profile_state\": {\n      \"risk_preference\": \"low\",\n      \"decision_style\": \"deliberate\",\n      \"top_priorities\": [\"stability\", \"income\", \"health\"]\n    },\n    \"situational_state\": {\n      \"career_stage\": \"mid\",\n      \"financial_pressure\": \"high\",\n      \"time_pressure\": \"medium\",\n      \"emotional_state\": \"uncertain\"\n    },\n    \"memory_state\": {\n      \"recent_similar_decisions\": [\n        {\n          \"topic\": \"job_change\",\n          \"selected_option\": \"stay\",\n          \"outcome_note\": \"felt safe but regretted slow growth\"\n        }\n      ],\n      \"repeated_patterns\": [\n        \"tends to avoid risk under uncertainty\"\n      ],\n      \"consistency_notes\": [\n        \"current recommendation should explain stability-growth tradeoff\"\n      ]\n    }\n  },\n  \"state_summary\": {\n    \"decision_bias\": \"leans conservative but regrets missed growth\",\n    \"current_constraint\": \"financial pressure limits aggressive decisions\",\n    \"agent_guidance\": \"prefer low-regret recommendations with explicit tradeoff explanation\"\n  }\n}\n```",
+  "expected_output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "case_id": {
+        "type": "string"
+      },
+      "user_state": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "profile_state": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "risk_preference": {
+                "type": "string"
+              },
+              "decision_style": {
+                "type": "string"
+              },
+              "top_priorities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "risk_preference",
+              "decision_style",
+              "top_priorities"
+            ]
+          },
+          "situational_state": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "career_stage": {
+                "type": "string"
+              },
+              "financial_pressure": {
+                "type": "string"
+              },
+              "time_pressure": {
+                "type": "string"
+              },
+              "emotional_state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "career_stage",
+              "financial_pressure",
+              "time_pressure",
+              "emotional_state"
+            ]
+          },
+          "memory_state": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "recent_similar_decisions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "topic": {
+                      "type": "string"
+                    },
+                    "selected_option": {
+                      "type": "string"
+                    },
+                    "outcome_note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "topic",
+                    "selected_option",
+                    "outcome_note"
+                  ]
+                }
+              },
+              "repeated_patterns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "consistency_notes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "recent_similar_decisions",
+              "repeated_patterns",
+              "consistency_notes"
+            ]
+          }
+        },
+        "required": [
+          "profile_state",
+          "situational_state",
+          "memory_state"
+        ]
+      },
+      "state_summary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "decision_bias": {
+            "type": "string"
+          },
+          "current_constraint": {
+            "type": "string"
+          },
+          "agent_guidance": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision_bias",
+          "current_constraint",
+          "agent_guidance"
+        ]
+      }
+    },
+    "required": [
+      "case_id",
+      "user_state",
+      "state_summary"
+    ]
+  },
+  "input_data": {
+    "caseId": "case-02-career-growth",
+    "caseInput": {
+      "userProfile": {
+        "age": 29,
+        "job": "developer",
+        "risk_tolerance": "high",
+        "priority": [
+          "growth",
+          "ownership",
+          "learning"
+        ]
+      },
+      "decision": {
+        "optionA": "대기업 플랫폼팀에 남는다",
+        "optionB": "AI 스타트업으로 이직한다",
+        "context": "현재 회사는 시스템과 프로세스가 잘 잡혀 있지만 개인이 내리는 제품 영향력은 작다. 생성형 AI 제품을 빠르게 만들 수 있는 환경에 끌리지만 실패 가능성도 알고 있다."
+      }
+    }
+  },
+  "input_json": "{\n  \"caseId\": \"case-02-career-growth\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 29,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"high\",\n      \"priority\": [\n        \"growth\",\n        \"ownership\",\n        \"learning\"\n      ]\n    },\n    \"decision\": {\n      \"optionA\": \"대기업 플랫폼팀에 남는다\",\n      \"optionB\": \"AI 스타트업으로 이직한다\",\n      \"context\": \"현재 회사는 시스템과 프로세스가 잘 잡혀 있지만 개인이 내리는 제품 영향력은 작다. 생성형 AI 제품을 빠르게 만들 수 있는 환경에 끌리지만 실패 가능성도 알고 있다.\"\n    }\n  }\n}",
+  "provider_payload": {
+    "runner": "codex exec",
+    "call_status": "ready",
+    "output_file": "playground/outputs/case-02-career-growth/state-context.json"
+  }
+}

@@ -127,6 +127,76 @@ stage_stub_path() {
   printf '%s/%s-result.stub.json\n' "$OUTPUTS_DIR" "$1"
 }
 
+state_context_path() {
+  printf '%s/state-context.json\n' "$OUTPUTS_DIR"
+}
+
+state_context_stub_path() {
+  printf '%s/state-context.stub.json\n' "$OUTPUTS_DIR"
+}
+
+selected_path_json_for_mode() {
+  case "$1" in
+    light)
+      printf '%s\n' '["planner","advisor"]'
+      ;;
+    standard)
+      printf '%s\n' '["planner","scenario","advisor"]'
+      ;;
+    careful)
+      printf '%s\n' '["planner","scenario","risk","advisor"]'
+      ;;
+    full)
+      printf '%s\n' '["planner","scenario","risk","ab_reasoning","advisor","reflection"]'
+      ;;
+    *)
+      echo "Error: unknown execution mode '$1'." >&2
+      exit 1
+      ;;
+  esac
+}
+
+stage_enabled_in_selected_path() {
+  local selected_path_json="$1"
+  local stage_name="$2"
+
+  jq -e --arg stage_name "$stage_name" 'index($stage_name) != null' <<<"$selected_path_json" >/dev/null
+}
+
+stage_result_exists() {
+  local stage="$1"
+  local actual_file
+  local stub_file
+
+  actual_file="$(stage_result_path "$stage")"
+  stub_file="$(stage_stub_path "$stage")"
+
+  [ -f "$actual_file" ] || [ -f "$stub_file" ]
+}
+
+optional_stage_result_file() {
+  local stage="$1"
+
+  if stage_result_exists "$stage"; then
+    resolve_stage_result_file "$stage"
+    return 0
+  fi
+
+  return 1
+}
+
+infer_execution_mode_from_artifacts() {
+  if stage_result_exists "reasoning"; then
+    printf 'full\n'
+  elif stage_result_exists "risk-a" && stage_result_exists "risk-b"; then
+    printf 'careful\n'
+  elif stage_result_exists "scenario-a" && stage_result_exists "scenario-b"; then
+    printf 'standard\n'
+  else
+    printf 'light\n'
+  fi
+}
+
 summary_path() {
   printf '%s/summary.md\n' "$OUTPUTS_DIR"
 }
@@ -161,6 +231,167 @@ resolve_stage_result_file() {
 
 schema_for_stage() {
   case "$1" in
+    state_loader)
+      cat <<'JSON'
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "type": "string"
+    },
+    "user_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "profile_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "risk_preference": {
+              "type": "string"
+            },
+            "decision_style": {
+              "type": "string"
+            },
+            "top_priorities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["risk_preference", "decision_style", "top_priorities"]
+        },
+        "situational_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "career_stage": {
+              "type": "string"
+            },
+            "financial_pressure": {
+              "type": "string"
+            },
+            "time_pressure": {
+              "type": "string"
+            },
+            "emotional_state": {
+              "type": "string"
+            }
+          },
+          "required": ["career_stage", "financial_pressure", "time_pressure", "emotional_state"]
+        },
+        "memory_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "recent_similar_decisions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "topic": {
+                    "type": "string"
+                  },
+                  "selected_option": {
+                    "type": "string"
+                  },
+                  "outcome_note": {
+                    "type": "string"
+                  }
+                },
+                "required": ["topic", "selected_option", "outcome_note"]
+              }
+            },
+            "repeated_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "consistency_notes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["recent_similar_decisions", "repeated_patterns", "consistency_notes"]
+        }
+      },
+      "required": ["profile_state", "situational_state", "memory_state"]
+    },
+    "state_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision_bias": {
+          "type": "string"
+        },
+        "current_constraint": {
+          "type": "string"
+        },
+        "agent_guidance": {
+          "type": "string"
+        }
+      },
+      "required": ["decision_bias", "current_constraint", "agent_guidance"]
+    }
+  },
+  "required": ["case_id", "user_state", "state_summary"]
+}
+JSON
+      ;;
+    routing)
+      cat <<'JSON'
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "type": "string"
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "complexity": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "risk_level": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "ambiguity": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "execution_mode": {
+          "type": "string",
+          "enum": ["light", "standard", "careful", "full"]
+        },
+        "selected_path": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["planner", "scenario", "risk", "ab_reasoning", "advisor", "reflection"]
+          },
+          "minItems": 2
+        },
+        "routing_reason": {
+          "type": "string"
+        }
+      },
+      "required": ["complexity", "risk_level", "ambiguity", "execution_mode", "selected_path", "routing_reason"]
+    }
+  },
+  "required": ["case_id", "routing"]
+}
+JSON
+      ;;
     planner)
       cat <<'JSON'
 {
@@ -624,6 +855,59 @@ validate_stage_result() {
   fi
 
   case "$stage_type" in
+    state_loader)
+      jq -e '
+        type == "object" and
+        ((keys | sort) == ["case_id", "state_summary", "user_state"]) and
+        (.case_id | type == "string" and length > 0) and
+        (.user_state | type == "object") and
+        ((.user_state | keys | sort) == ["memory_state", "profile_state", "situational_state"]) and
+        (.user_state.profile_state | type == "object") and
+        ((.user_state.profile_state | keys | sort) == ["decision_style", "risk_preference", "top_priorities"]) and
+        (.user_state.profile_state.risk_preference | type == "string" and length > 0) and
+        (.user_state.profile_state.decision_style | type == "string" and length > 0) and
+        (.user_state.profile_state.top_priorities | type == "array" and all(.[]; type == "string")) and
+        (.user_state.situational_state | type == "object") and
+        ((.user_state.situational_state | keys | sort) == ["career_stage", "emotional_state", "financial_pressure", "time_pressure"]) and
+        (.user_state.situational_state.career_stage | type == "string" and length > 0) and
+        (.user_state.situational_state.financial_pressure | type == "string" and length > 0) and
+        (.user_state.situational_state.time_pressure | type == "string" and length > 0) and
+        (.user_state.situational_state.emotional_state | type == "string" and length > 0) and
+        (.user_state.memory_state | type == "object") and
+        ((.user_state.memory_state | keys | sort) == ["consistency_notes", "recent_similar_decisions", "repeated_patterns"]) and
+        (.user_state.memory_state.recent_similar_decisions | type == "array" and all(.[]; type == "object" and ((keys | sort) == ["outcome_note", "selected_option", "topic"]) and (.topic | type == "string" and length > 0) and (.selected_option | type == "string" and length > 0) and (.outcome_note | type == "string" and length > 0))) and
+        (.user_state.memory_state.repeated_patterns | type == "array" and all(.[]; type == "string" and length > 0)) and
+        (.user_state.memory_state.consistency_notes | type == "array" and all(.[]; type == "string" and length > 0)) and
+        (.state_summary | type == "object") and
+        ((.state_summary | keys | sort) == ["agent_guidance", "current_constraint", "decision_bias"]) and
+        (.state_summary.decision_bias | type == "string" and length > 0) and
+        (.state_summary.current_constraint | type == "string" and length > 0) and
+        (.state_summary.agent_guidance | type == "string" and length > 0)
+      ' "$result_file" >/dev/null
+      ;;
+    routing)
+      jq -e '
+        type == "object" and
+        ((keys | sort) == ["case_id", "routing"]) and
+        (.case_id | type == "string" and length > 0) and
+        (.routing | type == "object") and
+        ((.routing | keys | sort) == ["ambiguity", "complexity", "execution_mode", "risk_level", "routing_reason", "selected_path"]) and
+        (.routing.complexity | IN("low", "medium", "high")) and
+        (.routing.risk_level | IN("low", "medium", "high")) and
+        (.routing.ambiguity | IN("low", "medium", "high")) and
+        (.routing.execution_mode | IN("light", "standard", "careful", "full")) and
+        (.routing.selected_path | type == "array" and length >= 2 and all(.[]; IN("planner", "scenario", "risk", "ab_reasoning", "advisor", "reflection"))) and
+        (.routing.routing_reason | type == "string" and length > 0) and
+        (
+          .routing.selected_path ==
+          (if .routing.execution_mode == "light" then ["planner", "advisor"]
+           elif .routing.execution_mode == "standard" then ["planner", "scenario", "advisor"]
+           elif .routing.execution_mode == "careful" then ["planner", "scenario", "risk", "advisor"]
+           else ["planner", "scenario", "risk", "ab_reasoning", "advisor", "reflection"]
+           end)
+        )
+      ' "$result_file" >/dev/null
+      ;;
     planner)
       jq -e '
         type == "object" and
@@ -792,16 +1076,27 @@ run_codex_for_request() {
 
 write_case_summary() {
   local input_file="${1:-$OUTPUTS_DIR/input.json}"
+  local state_context_file
+  local routing_file=""
+  local routing_complexity
+  local routing_risk_level
+  local routing_ambiguity
+  local routing_reason
+  local execution_mode
+  local selected_path_json
+  local selected_path_text
   local summary_file
   local planner_file
-  local scenario_a_file
-  local scenario_b_file
-  local risk_a_file
-  local risk_b_file
-  local reasoning_file
+  local scenario_a_file=""
+  local scenario_b_file=""
+  local risk_a_file=""
+  local risk_b_file=""
+  local reasoning_file=""
   local advisor_file
-  local reflection_file
+  local reflection_file=""
   local case_id
+
+  require_jq
 
   if [ ! -f "$input_file" ]; then
     echo "Error: summary input file not found: $input_file" >&2
@@ -809,15 +1104,51 @@ write_case_summary() {
   fi
 
   summary_file="$(summary_path)"
-  planner_file="$(resolve_stage_result_file "planner")"
-  scenario_a_file="$(resolve_stage_result_file "scenario-a")"
-  scenario_b_file="$(resolve_stage_result_file "scenario-b")"
-  risk_a_file="$(resolve_stage_result_file "risk-a")"
-  risk_b_file="$(resolve_stage_result_file "risk-b")"
-  reasoning_file="$(resolve_stage_result_file "reasoning")"
-  advisor_file="$(resolve_stage_result_file "advisor")"
-  reflection_file="$(resolve_stage_result_file "reflection")"
   case_id="$(case_id_from_output_dir "$OUTPUTS_DIR")"
+  state_context_file="$(state_context_path)"
+
+  if [ ! -f "$state_context_file" ]; then
+    echo "Error: state context file not found: $state_context_file" >&2
+    exit 1
+  fi
+
+  if routing_file="$(optional_stage_result_file "routing" 2>/dev/null)"; then
+    execution_mode="$(jq -r '.routing.execution_mode' "$routing_file")"
+    selected_path_json="$(jq -c '.routing.selected_path' "$routing_file")"
+    routing_complexity="$(jq -r '.routing.complexity' "$routing_file")"
+    routing_risk_level="$(jq -r '.routing.risk_level' "$routing_file")"
+    routing_ambiguity="$(jq -r '.routing.ambiguity' "$routing_file")"
+    routing_reason="$(jq -r '.routing.routing_reason' "$routing_file" | normalize_inline_text)"
+  else
+    execution_mode="$(infer_execution_mode_from_artifacts)"
+    selected_path_json="$(selected_path_json_for_mode "$execution_mode")"
+    routing_complexity="n/a"
+    routing_risk_level="n/a"
+    routing_ambiguity="n/a"
+    routing_reason="router 결과가 없어 현재 아티팩트 기준으로 execution_mode=${execution_mode} 경로를 추정했다."
+  fi
+
+  selected_path_text="$(printf '%s' "$selected_path_json" | jq -r 'join(" -> ")')"
+  planner_file="$(resolve_stage_result_file "planner")"
+  advisor_file="$(resolve_stage_result_file "advisor")"
+
+  if stage_enabled_in_selected_path "$selected_path_json" "scenario"; then
+    scenario_a_file="$(resolve_stage_result_file "scenario-a")"
+    scenario_b_file="$(resolve_stage_result_file "scenario-b")"
+  fi
+
+  if stage_enabled_in_selected_path "$selected_path_json" "risk"; then
+    risk_a_file="$(resolve_stage_result_file "risk-a")"
+    risk_b_file="$(resolve_stage_result_file "risk-b")"
+  fi
+
+  if stage_enabled_in_selected_path "$selected_path_json" "ab_reasoning"; then
+    reasoning_file="$(resolve_stage_result_file "reasoning")"
+  fi
+
+  if stage_enabled_in_selected_path "$selected_path_json" "reflection"; then
+    reflection_file="$(resolve_stage_result_file "reflection")"
+  fi
 
   {
     printf '# %s\n\n' "$case_id"
@@ -835,54 +1166,124 @@ write_case_summary() {
     printf -- '- Option B: %s\n' "$(jq -r '.decision.optionB' "$input_file")"
     printf -- '- Context: %s\n' "$(jq -r '.decision.context' "$input_file" | normalize_inline_text)"
 
+    printf '\n## State Context\n\n'
+    printf '### Profile State\n\n'
+    printf -- '- risk_preference: %s\n' "$(jq -r '.user_state.profile_state.risk_preference' "$state_context_file")"
+    printf -- '- decision_style: %s\n' "$(jq -r '.user_state.profile_state.decision_style' "$state_context_file")"
+    printf -- '- top_priorities: %s\n' "$(jq -r 'if (.user_state.profile_state.top_priorities | length) > 0 then .user_state.profile_state.top_priorities | join(", ") else "none" end' "$state_context_file")"
+
+    printf '\n### Situational State\n\n'
+    printf -- '- career_stage: %s\n' "$(jq -r '.user_state.situational_state.career_stage' "$state_context_file")"
+    printf -- '- financial_pressure: %s\n' "$(jq -r '.user_state.situational_state.financial_pressure' "$state_context_file")"
+    printf -- '- time_pressure: %s\n' "$(jq -r '.user_state.situational_state.time_pressure' "$state_context_file")"
+    printf -- '- emotional_state: %s\n' "$(jq -r '.user_state.situational_state.emotional_state' "$state_context_file")"
+
+    printf '\n### Memory State\n\n'
+    if [ "$(jq '.user_state.memory_state.recent_similar_decisions | length' "$state_context_file")" -gt 0 ]; then
+      while IFS= read -r memory_item; do
+        printf -- '- recent_similar_decisions: %s\n' "$memory_item"
+      done < <(jq -r '.user_state.memory_state.recent_similar_decisions[] | "topic=\(.topic) / selected_option=\(.selected_option) / outcome_note=\(.outcome_note | gsub("[\\r\\n]+"; " "))"' "$state_context_file")
+    else
+      printf -- '- recent_similar_decisions: none\n'
+    fi
+
+    if [ "$(jq '.user_state.memory_state.repeated_patterns | length' "$state_context_file")" -gt 0 ]; then
+      while IFS= read -r pattern; do
+        printf -- '- repeated_patterns: %s\n' "$pattern"
+      done < <(jq -r '.user_state.memory_state.repeated_patterns[]' "$state_context_file")
+    else
+      printf -- '- repeated_patterns: none\n'
+    fi
+
+    if [ "$(jq '.user_state.memory_state.consistency_notes | length' "$state_context_file")" -gt 0 ]; then
+      while IFS= read -r note; do
+        printf -- '- consistency_notes: %s\n' "$note"
+      done < <(jq -r '.user_state.memory_state.consistency_notes[]' "$state_context_file")
+    else
+      printf -- '- consistency_notes: none\n'
+    fi
+
+    printf '\n### State Summary\n\n'
+    printf -- '- decision_bias: %s\n' "$(jq -r '.state_summary.decision_bias' "$state_context_file" | normalize_inline_text)"
+    printf -- '- current_constraint: %s\n' "$(jq -r '.state_summary.current_constraint' "$state_context_file" | normalize_inline_text)"
+    printf -- '- agent_guidance: %s\n' "$(jq -r '.state_summary.agent_guidance' "$state_context_file" | normalize_inline_text)"
+
+    printf '\n## Routing\n\n'
+    printf -- '- complexity: %s\n' "$routing_complexity"
+    printf -- '- risk_level: %s\n' "$routing_risk_level"
+    printf -- '- ambiguity: %s\n' "$routing_ambiguity"
+    printf -- '- execution_mode: %s\n' "$execution_mode"
+    printf -- '- selected_path: %s\n' "$selected_path_text"
+    printf -- '- reason: %s\n' "$routing_reason"
+
     printf '\n## Planner\n\n'
     printf -- '- Decision type: %s\n' "$(jq -r '.decision_type' "$planner_file")"
     printf -- '- Factors: %s\n' "$(jq -r '.factors | join(", ")' "$planner_file")"
 
     printf '\n## Scenario A\n\n'
-    printf -- '- 3 months: %s\n' "$(jq -r '.three_months' "$scenario_a_file" | normalize_inline_text)"
-    printf -- '- 1 year: %s\n' "$(jq -r '.one_year' "$scenario_a_file" | normalize_inline_text)"
-    printf -- '- 3 years: %s\n' "$(jq -r '.three_years' "$scenario_a_file" | normalize_inline_text)"
+    if [ -n "$scenario_a_file" ]; then
+      printf -- '- 3 months: %s\n' "$(jq -r '.three_months' "$scenario_a_file" | normalize_inline_text)"
+      printf -- '- 1 year: %s\n' "$(jq -r '.one_year' "$scenario_a_file" | normalize_inline_text)"
+      printf -- '- 3 years: %s\n' "$(jq -r '.three_years' "$scenario_a_file" | normalize_inline_text)"
+    else
+      printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
 
     printf '\n## Scenario B\n\n'
-    printf -- '- 3 months: %s\n' "$(jq -r '.three_months' "$scenario_b_file" | normalize_inline_text)"
-    printf -- '- 1 year: %s\n' "$(jq -r '.one_year' "$scenario_b_file" | normalize_inline_text)"
-    printf -- '- 3 years: %s\n' "$(jq -r '.three_years' "$scenario_b_file" | normalize_inline_text)"
+    if [ -n "$scenario_b_file" ]; then
+      printf -- '- 3 months: %s\n' "$(jq -r '.three_months' "$scenario_b_file" | normalize_inline_text)"
+      printf -- '- 1 year: %s\n' "$(jq -r '.one_year' "$scenario_b_file" | normalize_inline_text)"
+      printf -- '- 3 years: %s\n' "$(jq -r '.three_years' "$scenario_b_file" | normalize_inline_text)"
+    else
+      printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
 
     printf '\n## Risk A\n\n'
-    printf -- '- Level: %s\n' "$(jq -r '.risk_level' "$risk_a_file")"
-    while IFS= read -r reason; do
-      printf -- '- %s\n' "$reason"
-    done < <(jq -r '.reasons[]' "$risk_a_file")
+    if [ -n "$risk_a_file" ]; then
+      printf -- '- Level: %s\n' "$(jq -r '.risk_level' "$risk_a_file")"
+      while IFS= read -r reason; do
+        printf -- '- %s\n' "$reason"
+      done < <(jq -r '.reasons[]' "$risk_a_file")
+    else
+      printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
 
     printf '\n## Risk B\n\n'
-    printf -- '- Level: %s\n' "$(jq -r '.risk_level' "$risk_b_file")"
-    while IFS= read -r reason; do
-      printf -- '- %s\n' "$reason"
-    done < <(jq -r '.reasons[]' "$risk_b_file")
+    if [ -n "$risk_b_file" ]; then
+      printf -- '- Level: %s\n' "$(jq -r '.risk_level' "$risk_b_file")"
+      while IFS= read -r reason; do
+        printf -- '- %s\n' "$reason"
+      done < <(jq -r '.reasons[]' "$risk_b_file")
+    else
+      printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
 
     printf '\n## A/B Reasoning\n\n'
-    printf '### A Reasoning\n\n'
-    printf -- '- stance: %s\n' "$(jq -r '.reasoning.a_reasoning.stance' "$reasoning_file")"
-    printf -- '- recommended option: %s\n' "$(jq -r '.reasoning.a_reasoning.recommended_option' "$reasoning_file")"
-    printf -- '- summary: %s\n' "$(jq -r '.reasoning.a_reasoning.summary' "$reasoning_file" | normalize_inline_text)"
+    if [ -n "$reasoning_file" ]; then
+      printf '### A Reasoning\n\n'
+      printf -- '- stance: %s\n' "$(jq -r '.reasoning.a_reasoning.stance' "$reasoning_file")"
+      printf -- '- recommended option: %s\n' "$(jq -r '.reasoning.a_reasoning.recommended_option' "$reasoning_file")"
+      printf -- '- summary: %s\n' "$(jq -r '.reasoning.a_reasoning.summary' "$reasoning_file" | normalize_inline_text)"
 
-    printf '\n### B Reasoning\n\n'
-    printf -- '- stance: %s\n' "$(jq -r '.reasoning.b_reasoning.stance' "$reasoning_file")"
-    printf -- '- recommended option: %s\n' "$(jq -r '.reasoning.b_reasoning.recommended_option' "$reasoning_file")"
-    printf -- '- summary: %s\n' "$(jq -r '.reasoning.b_reasoning.summary' "$reasoning_file" | normalize_inline_text)"
+      printf '\n### B Reasoning\n\n'
+      printf -- '- stance: %s\n' "$(jq -r '.reasoning.b_reasoning.stance' "$reasoning_file")"
+      printf -- '- recommended option: %s\n' "$(jq -r '.reasoning.b_reasoning.recommended_option' "$reasoning_file")"
+      printf -- '- summary: %s\n' "$(jq -r '.reasoning.b_reasoning.summary' "$reasoning_file" | normalize_inline_text)"
 
-    printf '\n### Comparison\n\n'
-    printf -- '- agreements: %s\n' "$(jq -r '.reasoning.comparison.agreements | join("; ")' "$reasoning_file" | normalize_inline_text)"
-    printf -- '- conflicts: %s\n' "$(jq -r '.reasoning.comparison.conflicts | join("; ")' "$reasoning_file" | normalize_inline_text)"
-    printf -- '- which fits user better: %s\n' "$(jq -r '.reasoning.comparison.which_fits_user_better' "$reasoning_file")"
-    printf -- '- reason: %s\n' "$(jq -r '.reasoning.comparison.reason' "$reasoning_file" | normalize_inline_text)"
+      printf '\n### Comparison\n\n'
+      printf -- '- agreements: %s\n' "$(jq -r '.reasoning.comparison.agreements | join("; ")' "$reasoning_file" | normalize_inline_text)"
+      printf -- '- conflicts: %s\n' "$(jq -r '.reasoning.comparison.conflicts | join("; ")' "$reasoning_file" | normalize_inline_text)"
+      printf -- '- which fits user better: %s\n' "$(jq -r '.reasoning.comparison.which_fits_user_better' "$reasoning_file")"
+      printf -- '- reason: %s\n' "$(jq -r '.reasoning.comparison.reason' "$reasoning_file" | normalize_inline_text)"
 
-    printf '\n### Final Selection\n\n'
-    printf -- '- selected reasoning: %s\n' "$(jq -r '.reasoning.final_selection.selected_reasoning' "$reasoning_file")"
-    printf -- '- selected option: %s\n' "$(jq -r '.reasoning.final_selection.selected_option' "$reasoning_file")"
-    printf -- '- why selected: %s\n' "$(jq -r '.reasoning.final_selection.why_selected' "$reasoning_file" | normalize_inline_text)"
-    printf -- '- decision confidence: %s\n' "$(jq -r '.reasoning.final_selection.decision_confidence' "$reasoning_file")"
+      printf '\n### Final Selection\n\n'
+      printf -- '- selected reasoning: %s\n' "$(jq -r '.reasoning.final_selection.selected_reasoning' "$reasoning_file")"
+      printf -- '- selected option: %s\n' "$(jq -r '.reasoning.final_selection.selected_option' "$reasoning_file")"
+      printf -- '- why selected: %s\n' "$(jq -r '.reasoning.final_selection.why_selected' "$reasoning_file" | normalize_inline_text)"
+      printf -- '- decision confidence: %s\n' "$(jq -r '.reasoning.final_selection.decision_confidence' "$reasoning_file")"
+    else
+      printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
 
     printf '\n## Advisor\n\n'
     printf -- '- Recommended option: %s\n' "$(jq -r '.recommended_option' "$advisor_file")"
@@ -893,22 +1294,26 @@ write_case_summary() {
       "$(jq -r '.reasoning_basis.core_why' "$advisor_file" | normalize_inline_text)"
 
     printf '\n## Reflection\n\n'
-    printf -- '- realism: %s\n' "$(jq -r '.scores.realism' "$reflection_file")"
-    printf -- '- consistency: %s\n' "$(jq -r '.scores.consistency' "$reflection_file")"
-    printf -- '- profile_alignment: %s\n' "$(jq -r '.scores.profile_alignment' "$reflection_file")"
-    printf -- '- recommendation_clarity: %s\n' "$(jq -r '.scores.recommendation_clarity' "$reflection_file")"
+    if [ -n "$reflection_file" ]; then
+      printf -- '- realism: %s\n' "$(jq -r '.scores.realism' "$reflection_file")"
+      printf -- '- consistency: %s\n' "$(jq -r '.scores.consistency' "$reflection_file")"
+      printf -- '- profile_alignment: %s\n' "$(jq -r '.scores.profile_alignment' "$reflection_file")"
+      printf -- '- recommendation_clarity: %s\n' "$(jq -r '.scores.recommendation_clarity' "$reflection_file")"
 
-    printf '\n### 주요 문제\n\n'
-    while IFS= read -r issue; do
-      printf -- '- %s\n' "$issue"
-    done < <(jq -r '.issues[] | "[\(.type)] \(.description | gsub("[\\r\\n]+"; " "))"' "$reflection_file")
+      printf '\n### 주요 문제\n\n'
+      while IFS= read -r issue; do
+        printf -- '- %s\n' "$issue"
+      done < <(jq -r '.issues[] | "[\(.type)] \(.description | gsub("[\\r\\n]+"; " "))"' "$reflection_file")
 
-    printf '\n### 개선 방향\n\n'
-    while IFS= read -r suggestion; do
-      printf -- '- %s\n' "$suggestion"
-    done < <(jq -r '.improvement_suggestions[] | "[\(.target)] \(.suggestion | gsub("[\\r\\n]+"; " "))"' "$reflection_file")
+      printf '\n### 개선 방향\n\n'
+      while IFS= read -r suggestion; do
+        printf -- '- %s\n' "$suggestion"
+      done < <(jq -r '.improvement_suggestions[] | "[\(.target)] \(.suggestion | gsub("[\\r\\n]+"; " "))"' "$reflection_file")
 
-    printf '\n- Overall comment: %s\n' "$(jq -r '.overall_comment | gsub("[\\r\\n]+"; " ")' "$reflection_file")"
+      printf '\n- Overall comment: %s\n' "$(jq -r '.overall_comment | gsub("[\\r\\n]+"; " ")' "$reflection_file")"
+    else
+      printf -- '- Skipped in execution_mode=%s\n' "$execution_mode"
+    fi
   } > "$summary_file"
 
   echo "Created $(relative_to_root "$summary_file")"

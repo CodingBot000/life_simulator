@@ -12,6 +12,42 @@
 - Option B: 정규직을 유지한다
 - Context: 최근 외부 프로젝트 제안을 몇 번 받으면서 독립적으로 일할 수 있다는 자신감이 생겼다. 하지만 고정 수입과 팀 동료가 주는 안정감도 쉽게 포기하기 어렵다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: medium
+- decision_style: exploratory
+- top_priorities: freedom, income, stability
+
+### Situational State
+
+- career_stage: mid
+- financial_pressure: high
+- time_pressure: medium
+- emotional_state: cautiously_optimistic
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: balances stability and upside
+- current_constraint: financial pressure is high; time pressure is medium; emotional state is cautiously_optimistic
+- agent_guidance: explain tradeoffs around freedom, income, stability while respecting financial pressure is high; time pressure is medium; emotional state is cautiously_optimistic
+
+## Routing
+
+- complexity: medium
+- risk_level: low
+- ambiguity: medium
+- execution_mode: standard
+- selected_path: planner -> scenario -> advisor
+- reason: 중간 수준의 변수는 있으나 주된 검토는 시나리오 비교로 구조화 가능해 standard 경로를 선택한다.
+
 ## Planner
 
 - Decision type: career_change
@@ -31,39 +67,22 @@
 
 ## Risk A
 
-- Level: medium
-- 초기 3개월에는 외부 프로젝트 1~2건을 계약으로 연결할 가능성이 있지만, 월별 수입이 고정되지 않고 견적 조율·세금·계약 검토까지 직접 맡아야 해 수입과 운영 부담이 함께 커진다.
-- 1년 시점에도 반복 고객이 생겨 수입이 높아지는 달이 있더라도 바쁜 달과 한가한 달의 차이가 크다고 제시되어 있어, 사용자의 우선순위인 income과 stability를 동시에 안정적으로 충족시키기 어렵다.
-- 자유도와 업무 자율성은 3개월, 1년, 3년 모두에서 뚜렷하게 높아져 freedom 우선순위와는 잘 맞지만, 팀 협업이 즉시 사라지고 느슨한 네트워크로 대체되어 안정감 측면의 손실이 남는다.
-- 3년 후에는 장기 고객과 반복 협업으로 예측 가능성이 다소 높아지지만 고정급 수준의 안정성은 대체되지 않는다고 되어 있어, 중간 수준의 위험 감내 성향에는 감당 가능하지만 낮은 위험 선택으로 보기는 어렵다.
+- Skipped in execution_mode=standard
 
 ## Risk B
 
-- Level: medium
-- 고정 수입과 예측 가능한 일정, 팀 협업 환경은 유지되어 소득과 안정성 측면의 위험은 낮지만, 사용자의 1순위인 자유는 장기적으로 충분히 충족되지 않는다.
-- 시나리오상 1년 후에도 외부 프로젝트를 본격적으로 활용하지 못한 아쉬움이 남고, 3년 후에는 개인 브랜드 축적과 독립 준비 속도가 느려질 수 있어 기회비용이 누적된다.
-- 정규직 유지 선택은 중간 수준의 위험 감내 성향에는 무리가 없지만, 자유를 우선시하는 성향과 구조적으로 완전히 맞지 않아 시간이 지날수록 방향 재검토 압력이 커질 수 있다.
+- Skipped in execution_mode=standard
+
+## A/B Reasoning
+
+- Skipped in execution_mode=standard
 
 ## Advisor
 
-- Recommended option: A
-- Reason: 사용자의 최우선 가치가 freedom이고 risk_tolerance이 medium인 점을 기준으로 보면 A가 더 적합하다. 시나리오 A는 3개월, 1년, 3년 모두에서 업무 자율성과 일정 통제권이 분명하게 커지고 외부 프로젝트 기회도 실제로 활용할 수 있어 1순위와 직접 맞닿아 있다. 물론 수입 변동성과 안정성 측면에서는 B가 더 강하지만, 두 선택지의 위험 수준이 모두 medium으로 제시된 만큼 중간 수준의 위험 감내 성향에서는 A의 변동성을 감당 가능한 범위로 볼 수 있다. 반대로 B는 income과 stability에는 유리하지만, 자유가 구조적으로 충분히 해소되지 않아 시간이 갈수록 가장 중요한 우선순위의 미충족이 더 크게 남는다. 따라서 이 결정에서는 A를 추천한다.
+- Recommended option: B
+- Reason: router가 standard 경로를 선택해 scenarioA/B까지 비교했다. 최우선 기준이 freedom이고 risk_tolerance가 medium이므로 현재 stub에서는 B를 추천한다.
+- Reasoning basis: reasoning B / confidence 0.66 / scenarioA와 scenarioB까지 비교한 결과, 사용자의 우선순위와 더 잘 맞는 흐름을 advisor가 직접 선택했다.
 
 ## Reflection
 
-- realism: 4
-- consistency: 4
-- profile_alignment: 3
-- recommendation_clarity: 4
-
-### 주요 문제
-
-- [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 freedom을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
-- [advisor] advisor가 A를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
-
-### 개선 방향
-
-- [scenario] 각 시간 축 문장에서 freedom 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
-- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
-
-- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
+- Skipped in execution_mode=standard

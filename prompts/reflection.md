@@ -7,27 +7,56 @@
 
 목표:
 - 전체 결과가 얼마나 현실적이고 일관적인지 평가한다.
-- userProfile이 실제로 반영됐는지 점검한다.
+- stateContext가 실제로 반영됐는지 점검한다.
 - A/B reasoning이 실제로 다른 관점을 형성했는지 확인한다.
 - comparison이 형식적 요약이 아니라 의미 있는 충돌 정리를 했는지 확인한다.
 - final_selection이 앞선 reasoning 내용과 일관적인지 확인한다.
-- advisor가 reasoning 결과를 실제 추천 논리로 흡수했는지 확인한다.
+- advisor가 reasoning 결과와 state summary를 실제 추천 논리로 흡수했는지 확인한다.
 - 최종 추천이 충분히 명확한지 검증한다.
 - 문제를 구체적으로 지적하고, 다음 개선 방향을 구조적으로 제시한다.
 
 입력 데이터 형식:
 ```json
 {
-  "userProfile": {
-    "age": 32,
-    "job": "developer",
-    "risk_tolerance": "low",
-    "priority": ["stability", "income", "work_life_balance"]
+  "caseId": "case-001",
+  "caseInput": {
+    "userProfile": {
+      "age": 32,
+      "job": "developer",
+      "risk_tolerance": "low",
+      "priority": ["stability", "income", "work_life_balance"]
+    },
+    "decision": {
+      "optionA": "현재 회사에 남는다",
+      "optionB": "스타트업으로 이직한다",
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+    }
   },
-  "decision": {
-    "optionA": "현재 회사에 남는다",
-    "optionB": "스타트업으로 이직한다",
-    "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+  "stateContext": {
+    "case_id": "case-001",
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "low",
+        "decision_style": "deliberate",
+        "top_priorities": ["stability", "income", "work_life_balance"]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "medium",
+        "time_pressure": "unknown",
+        "emotional_state": "uncertain"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "leans conservative under uncertainty",
+      "current_constraint": "financial pressure is medium",
+      "agent_guidance": "explain stability-growth tradeoffs explicitly"
+    }
   },
   "plannerResult": {
     "decision_type": "career_change",
@@ -115,7 +144,7 @@
 평가 기준:
 - `realism`: 시나리오 전개와 리스크 판단이 현실적인가?
 - `consistency`: scenario, risk, advisor 사이에 논리 충돌이 없는가?
-- `profile_alignment`: userProfile의 risk_tolerance, priority, context가 실제로 반영됐는가?
+- `profile_alignment`: stateContext와 case input이 실제로 반영됐는가?
 - `recommendation_clarity`: 최종 추천이 명확하고 근거 연결이 충분한가?
 
 평가 규칙:
@@ -123,6 +152,7 @@
 - `issues`에는 반드시 1개 이상의 구체적 문제를 적는다.
 - `issues[].type`은 반드시 `scenario`, `risk`, `reasoning`, `advisor`, `profile` 중 하나만 사용한다.
 - 문제 설명은 추상 평가가 아니라 어떤 결과가 왜 약한지 명확히 적는다.
+- `stateContext.user_state`와 `state_summary`가 실제 문장 수준에서 반영됐는지 별도로 본다.
 - `improvement_suggestions`에는 반드시 1개 이상의 실행 가능한 개선 방향을 적는다.
 - `improvement_suggestions[].target`은 반드시 `planner`, `scenario`, `risk`, `reasoning`, `advisor` 중 하나만 사용한다.
 - 개선 방향은 "더 잘 써라" 같은 모호한 문장이 아니라, 무엇을 어떻게 보강해야 하는지 적는다.

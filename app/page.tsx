@@ -13,6 +13,7 @@ import type {
   RiskTolerance,
   ScenarioResult,
   SimulationResponse,
+  StateContext,
   UserProfile,
 } from "@/lib/types";
 
@@ -138,6 +139,199 @@ function PlannerCard({ planner }: { planner: PlannerResult }) {
               {factor}
             </span>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StateContextCard({ stateContext }: { stateContext: StateContext }) {
+  const { profile_state, situational_state, memory_state } =
+    stateContext.user_state;
+  const summary = stateContext.state_summary;
+
+  return (
+    <section className="card-surface rounded-[28px] p-6">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="section-label">State Context</p>
+          <h3 className="display-font mt-2 text-xl font-semibold text-slate-900">
+            사용자 상태 요약
+          </h3>
+        </div>
+        <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
+          {stateContext.case_id}
+        </span>
+      </div>
+
+      <div className="mt-5 grid gap-4 xl:grid-cols-2">
+        <div className="rounded-[24px] border border-slate-900/8 bg-white/75 p-5">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Profile State
+          </p>
+          <div className="mt-3 grid gap-3">
+            <div className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Risk Preference
+              </p>
+              <p className="mt-2 text-base font-semibold text-slate-950">
+                {profile_state.risk_preference}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Decision Style
+              </p>
+              <p className="mt-2 text-base font-semibold text-slate-950">
+                {profile_state.decision_style}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Top Priorities
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(profile_state.top_priorities.length > 0
+                  ? profile_state.top_priorities
+                  : ["none"]
+                ).map((priority) => (
+                  <span
+                    key={priority}
+                    className="rounded-full border border-amber-900/10 bg-amber-600/[0.08] px-3 py-1 text-sm font-medium text-amber-900"
+                  >
+                    {priority}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[24px] border border-slate-900/8 bg-white/75 p-5">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Situational State
+          </p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            {[
+              ["career_stage", situational_state.career_stage],
+              ["financial_pressure", situational_state.financial_pressure],
+              ["time_pressure", situational_state.time_pressure],
+              ["emotional_state", situational_state.emotional_state],
+            ].map(([label, value]) => (
+              <div
+                key={label}
+                className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4"
+              >
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                  {label}
+                </p>
+                <p className="mt-2 text-base font-semibold text-slate-950">
+                  {value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+        <div className="rounded-[24px] border border-slate-900/8 bg-white/75 p-5">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Memory State
+          </p>
+          <div className="mt-4 grid gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Recent Similar Decisions
+              </p>
+              <ul className="mt-2 grid gap-2">
+                {memory_state.recent_similar_decisions.length > 0 ? (
+                  memory_state.recent_similar_decisions.map((item, index) => (
+                    <li
+                      key={`${item.topic}-${item.selected_option}-${index}`}
+                      className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
+                    >
+                      {item.topic} / {item.selected_option} / {item.outcome_note}
+                    </li>
+                  ))
+                ) : (
+                  <li className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm leading-7 text-slate-500">
+                    none
+                  </li>
+                )}
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Repeated Patterns
+              </p>
+              <ul className="mt-2 grid gap-2">
+                {(memory_state.repeated_patterns.length > 0
+                  ? memory_state.repeated_patterns
+                  : ["none"]
+                ).map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Consistency Notes
+              </p>
+              <ul className="mt-2 grid gap-2">
+                {(memory_state.consistency_notes.length > 0
+                  ? memory_state.consistency_notes
+                  : ["none"]
+                ).map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[24px] border border-slate-900/8 bg-slate-950 p-5 text-white">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+            State Summary
+          </p>
+          <div className="mt-4 grid gap-3">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+                Decision Bias
+              </p>
+              <p className="mt-2 text-sm leading-7 text-white/90">
+                {summary.decision_bias}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+                Current Constraint
+              </p>
+              <p className="mt-2 text-sm leading-7 text-white/90">
+                {summary.current_constraint}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+                Agent Guidance
+              </p>
+              <p className="mt-2 text-sm leading-7 text-white/90">
+                {summary.agent_guidance}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -560,22 +754,24 @@ export default function HomePage() {
               의사결정 시뮬레이션 Agent MVP
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
-              사용자 프로필과 두 가지 선택지를 입력하면 Planner, Scenario,
-              Risk, A/B Reasoning, Advisor, Reflection 순서의 8단계 체인으로
-              결과 생성과 검증을 함께 수행합니다.
+              사용자 프로필과 두 가지 선택지를 입력하면 State Loader가 먼저
+              사용자 상태를 구조화하고, 이어서 Planner, Scenario, Risk, A/B
+              Reasoning, Advisor, Reflection 단계가 그 상태를 공통으로
+              사용합니다.
             </p>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {[
-              "1. Planner",
-              "2. Scenario A",
-              "3. Scenario B",
-              "4. Risk A",
-              "5. Risk B",
-              "6. A/B Reasoning",
-              "7. Advisor",
-              "8. Reflection",
+              "1. State Loader",
+              "2. Planner",
+              "3. Scenario A",
+              "4. Scenario B",
+              "5. Risk A",
+              "6. Risk B",
+              "7. A/B Reasoning",
+              "8. Advisor",
+              "9. Reflection",
             ].map((step) => (
               <span
                 key={step}
@@ -746,8 +942,9 @@ export default function HomePage() {
                 Agent chain 실행 중
               </h2>
               <p className="mt-3">
-                Planner부터 A/B Reasoning, Reflection까지 순서대로 실행하고
-                있습니다. 응답이 도착하면 결과 카드가 자동으로 채워집니다.
+                State Loader부터 Planner, A/B Reasoning, Reflection까지
+                순서대로 실행하고 있습니다. 응답이 도착하면 결과 카드가 자동으로
+                채워집니다.
               </p>
             </div>
           ) : null}
@@ -759,14 +956,16 @@ export default function HomePage() {
                 결과 대기 중
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                좌측 폼을 제출하면 Planner, 시나리오, 리스크, A/B reasoning,
-                최종 추천, reflection 검증 결과가 카드 형태로 정리됩니다.
+                좌측 폼을 제출하면 state context, Planner, 시나리오, 리스크,
+                A/B reasoning, 최종 추천, reflection 검증 결과가 카드 형태로
+                정리됩니다.
               </p>
             </div>
           ) : null}
 
           {result ? (
             <>
+              <StateContextCard stateContext={result.stateContext} />
               <PlannerCard planner={result.planner} />
               <TimelineCard title="선택지 A 시나리오" scenario={result.scenarioA} />
               <TimelineCard title="선택지 B 시나리오" scenario={result.scenarioB} />

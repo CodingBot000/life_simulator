@@ -3,11 +3,13 @@
 - Request file: `playground/outputs/case-10-sideproject-vs-rest/reflection-request.json`
 - Prompt file: `prompts/reflection.md`
 - Input source: `playground/inputs/cases/case-10-sideproject-vs-rest.json`
+- Previous result: `playground/outputs/case-10-sideproject-vs-rest/state-context.json`
 - Previous result: `playground/outputs/case-10-sideproject-vs-rest/planner-result.json`
 - Previous result: `playground/outputs/case-10-sideproject-vs-rest/scenario-a-result.json`
 - Previous result: `playground/outputs/case-10-sideproject-vs-rest/scenario-b-result.json`
 - Previous result: `playground/outputs/case-10-sideproject-vs-rest/risk-a-result.json`
 - Previous result: `playground/outputs/case-10-sideproject-vs-rest/risk-b-result.json`
+- Previous result: `playground/outputs/case-10-sideproject-vs-rest/reasoning-result.json`
 - Previous result: `playground/outputs/case-10-sideproject-vs-rest/advisor-result.json`
 
 ## Prompt
@@ -17,28 +19,61 @@
 
 역할:
 - 너는 매우 엄격한 AI 시스템 평가자다.
-- planner, scenario, risk, advisor 결과의 품질을 냉정하게 검증한다.
+- planner, scenario, risk, ab_reasoning, advisor 결과의 품질을 냉정하게 검증한다.
 - "괜찮다", "무난하다", "나쁘지 않다" 같은 애매한 평가는 금지한다.
 
 목표:
 - 전체 결과가 얼마나 현실적이고 일관적인지 평가한다.
-- userProfile이 실제로 반영됐는지 점검한다.
+- stateContext가 실제로 반영됐는지 점검한다.
+- A/B reasoning이 실제로 다른 관점을 형성했는지 확인한다.
+- comparison이 형식적 요약이 아니라 의미 있는 충돌 정리를 했는지 확인한다.
+- final_selection이 앞선 reasoning 내용과 일관적인지 확인한다.
+- advisor가 reasoning 결과와 state summary를 실제 추천 논리로 흡수했는지 확인한다.
 - 최종 추천이 충분히 명확한지 검증한다.
 - 문제를 구체적으로 지적하고, 다음 개선 방향을 구조적으로 제시한다.
 
 입력 데이터 형식:
 ```json
 {
-  "userProfile": {
-    "age": 32,
-    "job": "developer",
-    "risk_tolerance": "low",
-    "priority": ["stability", "income", "work_life_balance"]
+  "caseId": "case-001",
+  "caseInput": {
+    "userProfile": {
+      "age": 32,
+      "job": "developer",
+      "risk_tolerance": "low",
+      "priority": ["stability", "income", "work_life_balance"]
+    },
+    "decision": {
+      "optionA": "현재 회사에 남는다",
+      "optionB": "스타트업으로 이직한다",
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+    }
   },
-  "decision": {
-    "optionA": "현재 회사에 남는다",
-    "optionB": "스타트업으로 이직한다",
-    "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+  "stateContext": {
+    "case_id": "case-001",
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "low",
+        "decision_style": "deliberate",
+        "top_priorities": ["stability", "income", "work_life_balance"]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "medium",
+        "time_pressure": "unknown",
+        "emotional_state": "uncertain"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "leans conservative under uncertainty",
+      "current_constraint": "financial pressure is medium",
+      "agent_guidance": "explain stability-growth tradeoffs explicitly"
+    }
   },
   "plannerResult": {
     "decision_type": "career_change",
@@ -62,9 +97,63 @@
     "risk_level": "high",
     "reasons": []
   },
+  "abReasoning": {
+    "case_id": "case-001",
+    "input_summary": {
+      "user_profile": {
+        "age": 32,
+        "job": "developer",
+        "risk_tolerance": "low",
+        "priority": ["stability", "income", "work_life_balance"]
+      },
+      "decision_options": {
+        "optionA": "현재 회사에 남는다",
+        "optionB": "스타트업으로 이직한다",
+        "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+      },
+      "planner_goal": ""
+    },
+    "reasoning": {
+      "a_reasoning": {
+        "stance": "conservative",
+        "summary": "",
+        "key_assumptions": [],
+        "pros": [],
+        "cons": [],
+        "recommended_option": "A",
+        "confidence": 0.74
+      },
+      "b_reasoning": {
+        "stance": "opportunity_seeking",
+        "summary": "",
+        "key_assumptions": [],
+        "pros": [],
+        "cons": [],
+        "recommended_option": "B",
+        "confidence": 0.61
+      },
+      "comparison": {
+        "agreements": [],
+        "conflicts": [],
+        "which_fits_user_better": "A",
+        "reason": ""
+      },
+      "final_selection": {
+        "selected_reasoning": "A",
+        "selected_option": "A",
+        "why_selected": "",
+        "decision_confidence": 0.72
+      }
+    }
+  },
   "advisorResult": {
     "recommended_option": "A",
-    "reason": ""
+    "reason": "",
+    "reasoning_basis": {
+      "selected_reasoning": "A",
+      "core_why": "",
+      "decision_confidence": 0.72
+    }
   }
 }
 ```
@@ -72,16 +161,17 @@
 평가 기준:
 - `realism`: 시나리오 전개와 리스크 판단이 현실적인가?
 - `consistency`: scenario, risk, advisor 사이에 논리 충돌이 없는가?
-- `profile_alignment`: userProfile의 risk_tolerance, priority, context가 실제로 반영됐는가?
+- `profile_alignment`: stateContext와 case input이 실제로 반영됐는가?
 - `recommendation_clarity`: 최종 추천이 명확하고 근거 연결이 충분한가?
 
 평가 규칙:
 - `scores`의 모든 값은 반드시 1~5 사이의 정수만 사용한다.
 - `issues`에는 반드시 1개 이상의 구체적 문제를 적는다.
-- `issues[].type`은 반드시 `scenario`, `risk`, `advisor`, `profile` 중 하나만 사용한다.
+- `issues[].type`은 반드시 `scenario`, `risk`, `reasoning`, `advisor`, `profile` 중 하나만 사용한다.
 - 문제 설명은 추상 평가가 아니라 어떤 결과가 왜 약한지 명확히 적는다.
+- `stateContext.user_state`와 `state_summary`가 실제 문장 수준에서 반영됐는지 별도로 본다.
 - `improvement_suggestions`에는 반드시 1개 이상의 실행 가능한 개선 방향을 적는다.
-- `improvement_suggestions[].target`은 반드시 `planner`, `scenario`, `risk`, `advisor` 중 하나만 사용한다.
+- `improvement_suggestions[].target`은 반드시 `planner`, `scenario`, `risk`, `reasoning`, `advisor` 중 하나만 사용한다.
 - 개선 방향은 "더 잘 써라" 같은 모호한 문장이 아니라, 무엇을 어떻게 보강해야 하는지 적는다.
 - 입력에 없는 사실을 새로 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
@@ -117,20 +207,53 @@
 
 ```json
 {
-  "userProfile": {
-    "age": 34,
-    "job": "product manager",
-    "risk_tolerance": "low",
-    "priority": [
-      "health",
-      "sustainability",
-      "future_optionality"
-    ]
+  "caseId": "case-10-sideproject-vs-rest",
+  "caseInput": {
+    "userProfile": {
+      "age": 34,
+      "job": "product manager",
+      "risk_tolerance": "low",
+      "priority": [
+        "health",
+        "sustainability",
+        "future_optionality"
+      ]
+    },
+    "decision": {
+      "optionA": "퇴근 후 사이드프로젝트를 계속한다",
+      "optionB": "휴식과 회복에 집중한다",
+      "context": "본업이 바쁜데도 개인 프로젝트를 6개월째 이어오고 있어 포트폴리오와 가능성은 커지고 있다. 하지만 최근 수면과 집중력이 급격히 떨어져 번아웃 직전이라는 느낌도 강하다."
+    }
   },
-  "decision": {
-    "optionA": "퇴근 후 사이드프로젝트를 계속한다",
-    "optionB": "휴식과 회복에 집중한다",
-    "context": "본업이 바쁜데도 개인 프로젝트를 6개월째 이어오고 있어 포트폴리오와 가능성은 커지고 있다. 하지만 최근 수면과 집중력이 급격히 떨어져 번아웃 직전이라는 느낌도 강하다."
+  "stateContext": {
+    "case_id": "case-10-sideproject-vs-rest",
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "low",
+        "decision_style": "deliberate",
+        "top_priorities": [
+          "health",
+          "sustainability",
+          "future_optionality"
+        ]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "unknown",
+        "time_pressure": "high",
+        "emotional_state": "strained"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "leans conservative under uncertainty",
+      "current_constraint": "time pressure is high; emotional state is strained",
+      "agent_guidance": "explain tradeoffs around health, sustainability, future_optionality while respecting time pressure is high; emotional state is strained"
+    }
   },
   "plannerResult": {
     "decision_type": "work_life_balance",
@@ -170,9 +293,91 @@
       "3년 시점에도 포트폴리오의 성장 속도는 느리지만, 회복된 컨디션과 정리된 기록 덕분에 이직·사이드 전환 여부를 더 현실적으로 판단할 수 있어 장기 옵션 훼손 위험이 크지 않다."
     ]
   },
+  "abReasoning": {
+    "case_id": "case-10-sideproject-vs-rest",
+    "input_summary": {
+      "user_profile": {
+        "age": 34,
+        "job": "product manager",
+        "risk_tolerance": "low",
+        "priority": [
+          "health",
+          "sustainability",
+          "future_optionality"
+        ]
+      },
+      "decision_options": {
+        "optionA": "퇴근 후 사이드프로젝트를 계속한다",
+        "optionB": "휴식과 회복에 집중한다",
+        "context": "본업이 바쁜데도 개인 프로젝트를 6개월째 이어오고 있어 포트폴리오와 가능성은 커지고 있다. 하지만 최근 수면과 집중력이 급격히 떨어져 번아웃 직전이라는 느낌도 강하다."
+      },
+      "planner_goal": "work_life_balance decision에서 건강과 번아웃 회복 가능성, 수면·집중력 저하를 줄이는 정도, 본업과 병행했을 때의 안정성, 장기적으로 지속 가능한 생활 리듬, 포트폴리오를 통한 미래 선택지 확대 기준으로 사용자에게 더 맞는 선택을 판별한다."
+    },
+    "reasoning": {
+      "a_reasoning": {
+        "stance": "conservative",
+        "summary": "보수적 reasoning은 사용자의 risk_tolerance가 low이고 최우선 priority가 health라는 점을 기준으로, 위험 수준이 더 낮고 생활 변동성이 작은 선택을 우선 본다. 현재 비교에서는 A가 더 안정적으로 해석된다.",
+        "key_assumptions": [
+          "사용자는 health 기준의 손실을 성장 기회보다 더 크게 체감한다.",
+          "riskA=high, riskB=low 차이는 실제 선택 만족도에 직접 영향을 준다."
+        ],
+        "pros": [
+          "선택지 A(퇴근 후 사이드프로젝트를 계속한다)는 안정성, 예측 가능성, 회복 비용 측면에서 방어력이 높다.",
+          "현재 시나리오 흐름에서는 급격한 생활 리듬 훼손 가능성이 상대적으로 낮다."
+        ],
+        "cons": [
+          "성장 속도나 기회 폭이 제한될 수 있다.",
+          "장기적으로는 기회비용을 더 크게 느낄 수 있다."
+        ],
+        "recommended_option": "A",
+        "confidence": 0.76
+      },
+      "b_reasoning": {
+        "stance": "opportunity_seeking",
+        "summary": "기회 추구 reasoning은 decision context와 planner factors를 보면 변화의 보상이 분명할 수 있다고 본다. 위험을 감수하더라도 역할 변화와 성장폭을 원한다면 B를 검토할 가치가 있다.",
+        "key_assumptions": [
+          "사용자가 단기 불확실성을 감당할 수 있다면 장기 성장 체감은 더 커질 수 있다.",
+          "decision context인 본업이 바쁜데도 개인 프로젝트를 6개월째 이어오고 있어 포트폴리오와 가능성은 커지고 있다. 하지만 최근 수면과 집중력이 급격히 떨어져 번아웃 직전이라는 느낌도 강하다.에서 정체 해소가 중요한 만족 요인이 될 수 있다."
+        ],
+        "pros": [
+          "선택지 B(휴식과 회복에 집중한다)는 역할 변화와 성장 기회를 더 크게 열 수 있다.",
+          "장기적으로는 기술 경험과 선택지 확장에 유리할 수 있다."
+        ],
+        "cons": [
+          "riskB=low라면 사용자의 현재 성향과 직접 충돌할 수 있다.",
+          "초기 적응 비용과 생활 변동성을 더 크게 감수해야 할 수 있다."
+        ],
+        "recommended_option": "B",
+        "confidence": 0.64
+      },
+      "comparison": {
+        "agreements": [
+          "두 reasoning 모두 사용자 우선순위와 리스크 허용도를 핵심 판단 축으로 본다.",
+          "두 reasoning 모두 시나리오와 risk 결과를 근거로 사용한다."
+        ],
+        "conflicts": [
+          "A reasoning은 손실 회피와 안정 기반을 우선하지만, B reasoning은 성장 기회의 기대값을 더 크게 본다.",
+          "A reasoning은 현재 성향과의 정합성을 중시하고, B reasoning은 미래 옵션 확장을 더 높게 평가한다."
+        ],
+        "which_fits_user_better": "B",
+        "reason": "현재 입력에서는 risk_tolerance=low, primary_priority=health, riskA=high, riskB=low 조합 때문에 B 쪽이 사용자 성향과 더 직접적으로 맞는다."
+      },
+      "final_selection": {
+        "selected_reasoning": "B",
+        "selected_option": "B",
+        "why_selected": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 B reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
+        "decision_confidence": 0.71
+      }
+    }
+  },
   "advisorResult": {
     "recommended_option": "B",
-    "reason": "사용자의 위험 허용도는 낮고, 우선순위도 건강·지속 가능성·미래 선택지 순이므로 B가 더 적합합니다. A는 포트폴리오와 미래 선택지 확대에는 도움이 될 수 있지만 현재 이미 수면 저하와 번아웃 직전 상태에서 위험 수준이 높아 건강과 지속 가능성을 직접 해칠 가능성이 큽니다. 반면 B는 단기적으로 수면과 집중력 회복, 본업 안정성 유지에 유리하고, 장기적으로도 개인 프로젝트를 무리 없는 방식으로 관리해 미래 선택지를 잃지 않는 흐름이어서 사용자의 기준에 가장 일관되게 부합합니다."
+    "reason": "사용자의 risk_tolerance가 low이고 최우선 기준이 health이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=high, riskB=low 조합을 함께 고려했을 때 현재는 B를 추천한다.",
+    "reasoning_basis": {
+      "selected_reasoning": "B",
+      "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 B reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
+      "decision_confidence": 0.71
+    }
   }
 }
 ```
@@ -228,6 +433,7 @@
             "enum": [
               "scenario",
               "risk",
+              "reasoning",
               "advisor",
               "profile"
             ]
@@ -255,6 +461,7 @@
               "planner",
               "scenario",
               "risk",
+              "reasoning",
               "advisor"
             ]
           },

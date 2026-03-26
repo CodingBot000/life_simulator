@@ -13,19 +13,40 @@ import {
   riskSchema,
   scenarioPrompt,
   scenarioSchema,
+  stateLoaderPrompt,
+  stateLoaderSchema,
 } from "@/lib/prompts";
 import { generateStructuredOutput } from "@/lib/openai";
 import type {
   AbReasoningResult,
   AdvisorResult,
   DecisionInput,
+  MemoryState,
   PlannerResult,
   ReflectionResult,
   RiskResult,
   ScenarioResult,
   SimulationResponse,
+  StateContext,
+  StateHints,
   UserProfile,
 } from "@/lib/types";
+
+type CaseInputPayload = {
+  userProfile: UserProfile;
+  decision: DecisionInput;
+  prior_memory?: Partial<MemoryState>;
+  state_hints?: StateHints;
+};
+
+const FULL_SELECTED_PATH = [
+  "planner",
+  "scenario",
+  "risk",
+  "ab_reasoning",
+  "advisor",
+  "reflection",
+] as const;
 
 function formatPayload(payload: unknown): string {
   return JSON.stringify(payload, null, 2);
@@ -35,24 +56,80 @@ function logStep(step: string, payload: unknown) {
   console.info(`[simulate] ${step}`, payload);
 }
 
-export async function runPlanner(
+function normalizePriorMemory(
+  priorMemory?: Partial<MemoryState>,
+): MemoryState | undefined {
+  if (!priorMemory) {
+    return undefined;
+  }
+
+  return {
+    recent_similar_decisions: Array.isArray(priorMemory.recent_similar_decisions)
+      ? priorMemory.recent_similar_decisions
+      : [],
+    repeated_patterns: Array.isArray(priorMemory.repeated_patterns)
+      ? priorMemory.repeated_patterns
+      : [],
+    consistency_notes: Array.isArray(priorMemory.consistency_notes)
+      ? priorMemory.consistency_notes
+      : [],
+  };
+}
+
+function buildCaseInput(
   userProfile: UserProfile,
   decision: DecisionInput,
+  priorMemory?: Partial<MemoryState>,
+  stateHints?: StateHints,
+): CaseInputPayload {
+  const normalizedPriorMemory = normalizePriorMemory(priorMemory);
+
+  return {
+    userProfile,
+    decision,
+    ...(normalizedPriorMemory
+      ? { prior_memory: normalizedPriorMemory }
+      : {}),
+    ...(stateHints ? { state_hints: stateHints } : {}),
+  };
+}
+
+export async function runStateLoader(
+  caseId: string,
+  caseInput: CaseInputPayload,
+): Promise<StateContext> {
+  return generateStructuredOutput<StateContext>({
+    schemaName: "state_context",
+    schema: stateLoaderSchema,
+    prompt: stateLoaderPrompt,
+    input: formatPayload({
+      caseId,
+      caseInput,
+    }),
+  });
+}
+
+export async function runPlanner(
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
 ): Promise<PlannerResult> {
   return generateStructuredOutput<PlannerResult>({
     schemaName: "planner_result",
     schema: plannerSchema,
     prompt: plannerPrompt,
     input: formatPayload({
-      userProfile,
-      decision,
+      caseId,
+      caseInput,
+      stateContext,
     }),
   });
 }
 
 export async function runScenarioA(
-  userProfile: UserProfile,
-  decision: DecisionInput,
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
   planner: PlannerResult,
 ): Promise<ScenarioResult> {
   return generateStructuredOutput<ScenarioResult>({
@@ -60,10 +137,12 @@ export async function runScenarioA(
     schema: scenarioSchema,
     prompt: scenarioPrompt,
     input: formatPayload({
+      caseId,
+      caseInput,
+      stateContext,
       optionLabel: "A",
-      userProfile,
-      selectedOption: decision.optionA,
-      decisionContext: decision.context,
+      selectedOption: caseInput.decision.optionA,
+      decisionContext: caseInput.decision.context,
       factors: planner.factors,
       plannerResult: planner,
     }),
@@ -71,8 +150,9 @@ export async function runScenarioA(
 }
 
 export async function runScenarioB(
-  userProfile: UserProfile,
-  decision: DecisionInput,
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
   planner: PlannerResult,
 ): Promise<ScenarioResult> {
   return generateStructuredOutput<ScenarioResult>({
@@ -80,10 +160,12 @@ export async function runScenarioB(
     schema: scenarioSchema,
     prompt: scenarioPrompt,
     input: formatPayload({
+      caseId,
+      caseInput,
+      stateContext,
       optionLabel: "B",
-      userProfile,
-      selectedOption: decision.optionB,
-      decisionContext: decision.context,
+      selectedOption: caseInput.decision.optionB,
+      decisionContext: caseInput.decision.context,
       factors: planner.factors,
       plannerResult: planner,
     }),
@@ -91,8 +173,9 @@ export async function runScenarioB(
 }
 
 export async function runRiskA(
-  userProfile: UserProfile,
-  decision: DecisionInput,
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
   planner: PlannerResult,
   scenarioA: ScenarioResult,
 ): Promise<RiskResult> {
@@ -101,10 +184,12 @@ export async function runRiskA(
     schema: riskSchema,
     prompt: riskPrompt,
     input: formatPayload({
+      caseId,
+      caseInput,
+      stateContext,
       optionLabel: "A",
-      userProfile,
-      selectedOption: decision.optionA,
-      decisionContext: decision.context,
+      selectedOption: caseInput.decision.optionA,
+      decisionContext: caseInput.decision.context,
       factors: planner.factors,
       plannerResult: planner,
       scenario: scenarioA,
@@ -113,8 +198,9 @@ export async function runRiskA(
 }
 
 export async function runRiskB(
-  userProfile: UserProfile,
-  decision: DecisionInput,
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
   planner: PlannerResult,
   scenarioB: ScenarioResult,
 ): Promise<RiskResult> {
@@ -123,10 +209,12 @@ export async function runRiskB(
     schema: riskSchema,
     prompt: riskPrompt,
     input: formatPayload({
+      caseId,
+      caseInput,
+      stateContext,
       optionLabel: "B",
-      userProfile,
-      selectedOption: decision.optionB,
-      decisionContext: decision.context,
+      selectedOption: caseInput.decision.optionB,
+      decisionContext: caseInput.decision.context,
       factors: planner.factors,
       plannerResult: planner,
       scenario: scenarioB,
@@ -135,8 +223,9 @@ export async function runRiskB(
 }
 
 export async function runAbReasoning(
-  userProfile: UserProfile,
-  decision: DecisionInput,
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
   planner: PlannerResult,
   scenarioA: ScenarioResult,
   scenarioB: ScenarioResult,
@@ -148,9 +237,9 @@ export async function runAbReasoning(
     schema: abReasoningSchema,
     prompt: abReasoningPrompt,
     input: formatPayload({
-      caseId: "interactive-session",
-      userProfile,
-      decision,
+      caseId,
+      caseInput,
+      stateContext,
       plannerResult: planner,
       scenarioA,
       scenarioB,
@@ -161,8 +250,9 @@ export async function runAbReasoning(
 }
 
 export async function runAdvisor(
-  userProfile: UserProfile,
-  decision: DecisionInput,
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
   planner: PlannerResult,
   scenarioA: ScenarioResult,
   scenarioB: ScenarioResult,
@@ -175,8 +265,14 @@ export async function runAdvisor(
     schema: advisorSchema,
     prompt: advisorPrompt,
     input: formatPayload({
-      userProfile,
-      decision,
+      executionMode: "full",
+      routing: {
+        execution_mode: "full",
+        selected_path: FULL_SELECTED_PATH,
+      },
+      caseId,
+      caseInput,
+      stateContext,
       plannerResult: planner,
       scenarioA,
       scenarioB,
@@ -188,8 +284,9 @@ export async function runAdvisor(
 }
 
 export async function runReflection(
-  userProfile: UserProfile,
-  decision: DecisionInput,
+  caseId: string,
+  caseInput: CaseInputPayload,
+  stateContext: StateContext,
   planner: PlannerResult,
   scenarioA: ScenarioResult,
   scenarioB: ScenarioResult,
@@ -203,8 +300,9 @@ export async function runReflection(
     schema: reflectionSchema,
     prompt: reflectionPrompt,
     input: formatPayload({
-      userProfile,
-      decision,
+      caseId,
+      caseInput,
+      stateContext,
       plannerResult: planner,
       scenarioA,
       scenarioB,
@@ -219,25 +317,33 @@ export async function runReflection(
 export async function runSimulationChain(
   userProfile: UserProfile,
   decision: DecisionInput,
+  priorMemory?: Partial<MemoryState>,
+  stateHints?: StateHints,
 ): Promise<SimulationResponse> {
-  const planner = await runPlanner(userProfile, decision);
+  const caseId = "interactive-session";
+  const caseInput = buildCaseInput(userProfile, decision, priorMemory, stateHints);
+  const stateContext = await runStateLoader(caseId, caseInput);
+  logStep("stateContext", stateContext);
+
+  const planner = await runPlanner(caseId, caseInput, stateContext);
   logStep("planner", planner);
 
-  const scenarioA = await runScenarioA(userProfile, decision, planner);
+  const scenarioA = await runScenarioA(caseId, caseInput, stateContext, planner);
   logStep("scenarioA", scenarioA);
 
-  const scenarioB = await runScenarioB(userProfile, decision, planner);
+  const scenarioB = await runScenarioB(caseId, caseInput, stateContext, planner);
   logStep("scenarioB", scenarioB);
 
-  const riskA = await runRiskA(userProfile, decision, planner, scenarioA);
+  const riskA = await runRiskA(caseId, caseInput, stateContext, planner, scenarioA);
   logStep("riskA", riskA);
 
-  const riskB = await runRiskB(userProfile, decision, planner, scenarioB);
+  const riskB = await runRiskB(caseId, caseInput, stateContext, planner, scenarioB);
   logStep("riskB", riskB);
 
   const reasoning = await runAbReasoning(
-    userProfile,
-    decision,
+    caseId,
+    caseInput,
+    stateContext,
     planner,
     scenarioA,
     scenarioB,
@@ -247,8 +353,9 @@ export async function runSimulationChain(
   logStep("reasoning", reasoning);
 
   const advisor = await runAdvisor(
-    userProfile,
-    decision,
+    caseId,
+    caseInput,
+    stateContext,
     planner,
     scenarioA,
     scenarioB,
@@ -259,8 +366,9 @@ export async function runSimulationChain(
   logStep("advisor", advisor);
 
   const reflection = await runReflection(
-    userProfile,
-    decision,
+    caseId,
+    caseInput,
+    stateContext,
     planner,
     scenarioA,
     scenarioB,
@@ -272,6 +380,7 @@ export async function runSimulationChain(
   logStep("reflection", reflection);
 
   return {
+    stateContext,
     planner,
     scenarioA,
     scenarioB,

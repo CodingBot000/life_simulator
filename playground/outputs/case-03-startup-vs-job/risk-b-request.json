@@ -1,14 +1,15 @@
 {
   "stage": "risk",
-  "generated_at": "2026-03-24T19:24:06Z",
+  "generated_at": "2026-03-26T09:57:11Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/risk.md",
   "input_source": "playground/inputs/cases/case-03-startup-vs-job.json",
   "previous_stage_result_files": [
+    "playground/outputs/case-03-startup-vs-job/state-context.json",
     "playground/outputs/case-03-startup-vs-job/planner-result.json",
     "playground/outputs/case-03-startup-vs-job/scenario-b-result.json"
   ],
-  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"optionLabel\": \"A\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 객관적 위험뿐 아니라 이 사용자에게 더 크게 작용하는 위험을 반영한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    }\n  },\n  \"stateContext\": {\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain stability-growth tradeoffs explicitly\"\n    }\n  },\n  \"optionLabel\": \"A\",\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `stateContext.user_state`, `state_summary`를 함께 고려한다.\n- `profile_state.top_priorities`, `risk_preference`, `situational_state` 때문에 더 커지는 위험이 있으면 명시한다.\n- `memory_state.repeated_patterns`가 현재 선택에서 다시 반복될 가능성이 있으면 반영한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
   "expected_output_schema": {
     "type": "object",
     "additionalProperties": false,
@@ -35,17 +36,55 @@
     ]
   },
   "input_data": {
-    "optionLabel": "B",
-    "userProfile": {
-      "age": 34,
-      "job": "product manager",
-      "risk_tolerance": "medium",
-      "priority": [
-        "independence",
-        "growth",
-        "income"
-      ]
+    "caseId": "case-03-startup-vs-job",
+    "caseInput": {
+      "userProfile": {
+        "age": 34,
+        "job": "product manager",
+        "risk_tolerance": "medium",
+        "priority": [
+          "independence",
+          "growth",
+          "income"
+        ]
+      },
+      "decision": {
+        "optionA": "작은 SaaS를 창업한다",
+        "optionB": "안정적인 IT 회사에 취업한다",
+        "context": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다."
+      }
     },
+    "stateContext": {
+      "case_id": "case-03-startup-vs-job",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "deliberate",
+          "top_priorities": [
+            "independence",
+            "growth",
+            "income"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "high",
+          "time_pressure": "unknown",
+          "emotional_state": "uncertain"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "balances stability and upside",
+        "current_constraint": "financial pressure is high; emotional state is uncertain",
+        "agent_guidance": "explain tradeoffs around independence, growth, income while respecting financial pressure is high; emotional state is uncertain"
+      }
+    },
+    "optionLabel": "B",
     "selectedOption": "안정적인 IT 회사에 취업한다",
     "decisionContext": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.",
     "factors": [
@@ -71,7 +110,7 @@
       "three_years": "3년 정도 지나면 이 선택의 성격이 더 분명해진다. 안정적인 회사에 남아 있으면 수입과 경력은 비교적 꾸준히 쌓이고, 생활비와 대출 상환 대응 능력도 초반보다 훨씬 여유로워질 가능성이 크다. 중간 수준의 리스크 성향을 가진 사람에게는 이런 누적된 안전판이 실제로 큰 의미가 있어서, 무리한 도전 없이도 다음 단계를 선택할 수 있는 폭이 넓어진다. 다만 업무 자율성과 독립성에 대한 우선순위가 높은 만큼, 회사 안에서 권한이 커지지 않거나 맡는 역할이 반복적으로 느껴지면 답답함이 다시 커질 수 있다. 반대로 내부에서 신규 제품이나 작은 사업 단위를 맡게 되면, 안정성을 유지한 채 독립성 욕구를 일부 충족하는 방향으로 만족도가 올라간다. 결국 3년 뒤의 모습은 ‘완전히 안전해서 모든 갈증이 해소된 상태’라기보다, 재무적 기반과 실무 역량을 확보한 대신 독립적으로 무언가를 만들고 싶은 욕구를 더 구체적이고 현실적인 계획으로 바꿔놓은 상태에 가깝다."
     }
   },
-  "input_json": "{\n  \"optionLabel\": \"B\",\n  \"userProfile\": {\n    \"age\": 34,\n    \"job\": \"product manager\",\n    \"risk_tolerance\": \"medium\",\n    \"priority\": [\n      \"independence\",\n      \"growth\",\n      \"income\"\n    ]\n  },\n  \"selectedOption\": \"안정적인 IT 회사에 취업한다\",\n  \"decisionContext\": \"그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.\",\n  \"factors\": [\n    \"수입 안정성\",\n    \"성장 가능성\",\n    \"업무 자율성과 독립성\",\n    \"생활비 및 대출 상환 부담 대응 가능성\",\n    \"중간 수준의 리스크 감내도와의 적합성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"수입 안정성\",\n      \"성장 가능성\",\n      \"업무 자율성과 독립성\",\n      \"생활비 및 대출 상환 부담 대응 가능성\",\n      \"중간 수준의 리스크 감내도와의 적합성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"안정적인 IT 회사에 입사한 뒤 3개월쯤 지나면 가장 먼저 느끼는 변화는 수입이 다시 예측 가능해졌다는 안도감이다. 월급이 정기적으로 들어오면서 생활비와 대출 상환 계획이 다시 정리되고, 당장 현금흐름을 걱정하던 압박은 줄어든다. 다만 업무는 이미 검증된 제품과 프로세스 안에서 진행되기 때문에, 직접 방향을 정하고 빠르게 실험하던 사이드프로젝트 때보다 자율성과 독립성은 제한적으로 느껴질 수 있다. 대신 제품 조직 내에서 데이터, 운영, 협업 구조를 체계적으로 배우며 성장 가능성을 확인하게 되고, ‘지금은 기반을 다지는 시기’라고 받아들이면서도 한편으로는 내 아이디어를 더 주도적으로 실행하고 싶다는 마음이 완전히 사라지지는 않는다. 전체적으로는 중간 수준의 리스크 감내도에 맞는 선택이었다는 생각이 들지만, 안정과 독립성 사이의 간극을 의식하기 시작하는 시점이다.\",\n    \"one_year\": \"1년이 지나면 회사 생활의 리듬에 익숙해지고, 성과를 내는 방식도 보다 명확해진다. 수입 안정성은 여전히 큰 장점으로 작용해 대출 상환 부담은 관리 가능한 수준으로 유지되고, 생활비 때문에 즉흥적으로 커리어 결정을 내려야 하는 압박도 줄어든다. 연봉 인상이나 성과급이 크지는 않더라도 예측 가능한 범위 안에서 개선되면 심리적으로는 꽤 안정감을 준다. 성장 측면에서는 제품 운영, 사용자 지표, 조직 내 의사결정 구조를 깊게 이해하며 PM으로서 역량이 단단해지지만, 동시에 회사 안에서의 성장과 내가 진짜 원하는 독립적인 제품 경험 사이에 차이가 있다는 점도 선명해진다. 그래서 퇴근 후나 주말에 작은 검증형 사이드프로젝트를 다시 시작할 가능성이 높다. 이때의 감정은 ‘창업을 당장 뛰어들기엔 아직 부담스럽지만, 완전히 포기하고 싶지도 않다’에 가깝고, 결과적으로 안정적인 직장을 기반으로 리스크를 통제하며 다음 선택지를 준비하는 흐름이 만들어진다.\",\n    \"three_years\": \"3년 정도 지나면 이 선택의 성격이 더 분명해진다. 안정적인 회사에 남아 있으면 수입과 경력은 비교적 꾸준히 쌓이고, 생활비와 대출 상환 대응 능력도 초반보다 훨씬 여유로워질 가능성이 크다. 중간 수준의 리스크 성향을 가진 사람에게는 이런 누적된 안전판이 실제로 큰 의미가 있어서, 무리한 도전 없이도 다음 단계를 선택할 수 있는 폭이 넓어진다. 다만 업무 자율성과 독립성에 대한 우선순위가 높은 만큼, 회사 안에서 권한이 커지지 않거나 맡는 역할이 반복적으로 느껴지면 답답함이 다시 커질 수 있다. 반대로 내부에서 신규 제품이나 작은 사업 단위를 맡게 되면, 안정성을 유지한 채 독립성 욕구를 일부 충족하는 방향으로 만족도가 올라간다. 결국 3년 뒤의 모습은 ‘완전히 안전해서 모든 갈증이 해소된 상태’라기보다, 재무적 기반과 실무 역량을 확보한 대신 독립적으로 무언가를 만들고 싶은 욕구를 더 구체적이고 현실적인 계획으로 바꿔놓은 상태에 가깝다.\"\n  }\n}",
+  "input_json": "{\n  \"caseId\": \"case-03-startup-vs-job\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 34,\n      \"job\": \"product manager\",\n      \"risk_tolerance\": \"medium\",\n      \"priority\": [\n        \"independence\",\n        \"growth\",\n        \"income\"\n      ]\n    },\n    \"decision\": {\n      \"optionA\": \"작은 SaaS를 창업한다\",\n      \"optionB\": \"안정적인 IT 회사에 취업한다\",\n      \"context\": \"그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-03-startup-vs-job\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"medium\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\n          \"independence\",\n          \"growth\",\n          \"income\"\n        ]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"high\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"balances stability and upside\",\n      \"current_constraint\": \"financial pressure is high; emotional state is uncertain\",\n      \"agent_guidance\": \"explain tradeoffs around independence, growth, income while respecting financial pressure is high; emotional state is uncertain\"\n    }\n  },\n  \"optionLabel\": \"B\",\n  \"selectedOption\": \"안정적인 IT 회사에 취업한다\",\n  \"decisionContext\": \"그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.\",\n  \"factors\": [\n    \"수입 안정성\",\n    \"성장 가능성\",\n    \"업무 자율성과 독립성\",\n    \"생활비 및 대출 상환 부담 대응 가능성\",\n    \"중간 수준의 리스크 감내도와의 적합성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"수입 안정성\",\n      \"성장 가능성\",\n      \"업무 자율성과 독립성\",\n      \"생활비 및 대출 상환 부담 대응 가능성\",\n      \"중간 수준의 리스크 감내도와의 적합성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"안정적인 IT 회사에 입사한 뒤 3개월쯤 지나면 가장 먼저 느끼는 변화는 수입이 다시 예측 가능해졌다는 안도감이다. 월급이 정기적으로 들어오면서 생활비와 대출 상환 계획이 다시 정리되고, 당장 현금흐름을 걱정하던 압박은 줄어든다. 다만 업무는 이미 검증된 제품과 프로세스 안에서 진행되기 때문에, 직접 방향을 정하고 빠르게 실험하던 사이드프로젝트 때보다 자율성과 독립성은 제한적으로 느껴질 수 있다. 대신 제품 조직 내에서 데이터, 운영, 협업 구조를 체계적으로 배우며 성장 가능성을 확인하게 되고, ‘지금은 기반을 다지는 시기’라고 받아들이면서도 한편으로는 내 아이디어를 더 주도적으로 실행하고 싶다는 마음이 완전히 사라지지는 않는다. 전체적으로는 중간 수준의 리스크 감내도에 맞는 선택이었다는 생각이 들지만, 안정과 독립성 사이의 간극을 의식하기 시작하는 시점이다.\",\n    \"one_year\": \"1년이 지나면 회사 생활의 리듬에 익숙해지고, 성과를 내는 방식도 보다 명확해진다. 수입 안정성은 여전히 큰 장점으로 작용해 대출 상환 부담은 관리 가능한 수준으로 유지되고, 생활비 때문에 즉흥적으로 커리어 결정을 내려야 하는 압박도 줄어든다. 연봉 인상이나 성과급이 크지는 않더라도 예측 가능한 범위 안에서 개선되면 심리적으로는 꽤 안정감을 준다. 성장 측면에서는 제품 운영, 사용자 지표, 조직 내 의사결정 구조를 깊게 이해하며 PM으로서 역량이 단단해지지만, 동시에 회사 안에서의 성장과 내가 진짜 원하는 독립적인 제품 경험 사이에 차이가 있다는 점도 선명해진다. 그래서 퇴근 후나 주말에 작은 검증형 사이드프로젝트를 다시 시작할 가능성이 높다. 이때의 감정은 ‘창업을 당장 뛰어들기엔 아직 부담스럽지만, 완전히 포기하고 싶지도 않다’에 가깝고, 결과적으로 안정적인 직장을 기반으로 리스크를 통제하며 다음 선택지를 준비하는 흐름이 만들어진다.\",\n    \"three_years\": \"3년 정도 지나면 이 선택의 성격이 더 분명해진다. 안정적인 회사에 남아 있으면 수입과 경력은 비교적 꾸준히 쌓이고, 생활비와 대출 상환 대응 능력도 초반보다 훨씬 여유로워질 가능성이 크다. 중간 수준의 리스크 성향을 가진 사람에게는 이런 누적된 안전판이 실제로 큰 의미가 있어서, 무리한 도전 없이도 다음 단계를 선택할 수 있는 폭이 넓어진다. 다만 업무 자율성과 독립성에 대한 우선순위가 높은 만큼, 회사 안에서 권한이 커지지 않거나 맡는 역할이 반복적으로 느껴지면 답답함이 다시 커질 수 있다. 반대로 내부에서 신규 제품이나 작은 사업 단위를 맡게 되면, 안정성을 유지한 채 독립성 욕구를 일부 충족하는 방향으로 만족도가 올라간다. 결국 3년 뒤의 모습은 ‘완전히 안전해서 모든 갈증이 해소된 상태’라기보다, 재무적 기반과 실무 역량을 확보한 대신 독립적으로 무언가를 만들고 싶은 욕구를 더 구체적이고 현실적인 계획으로 바꿔놓은 상태에 가깝다.\"\n  }\n}",
   "provider_payload": {
     "runner": "codex exec",
     "call_status": "ready",

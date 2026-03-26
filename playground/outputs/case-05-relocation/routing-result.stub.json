@@ -1,0 +1,18 @@
+{
+  "case_id": "case-05-relocation",
+  "routing": {
+    "complexity": "high",
+    "risk_level": "medium",
+    "ambiguity": "high",
+    "execution_mode": "full",
+    "selected_path": [
+      "planner",
+      "scenario",
+      "risk",
+      "ab_reasoning",
+      "advisor",
+      "reflection"
+    ],
+    "routing_reason": "정보 해석 여지가 크고 불확실성이 높아 전체 경로 실행이 필요하다."
+  }
+}

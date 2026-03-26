@@ -1,1 +1,9 @@
-{"recommended_option":"B","reason":"사용자의 위험 감수 성향이 낮고 우선순위가 정서적 안정, 신뢰, 장기적 궁합인 점을 기준으로 보면 B가 더 적합합니다. A는 애정과 익숙함 덕분에 단기 불안은 줄일 수 있지만, 장거리와 반복 갈등이 계속되고 신뢰 회복도 느려 높은 리스크로 제시되어 있어 우선순위와 자주 충돌합니다. 반면 B는 초기에 외로움과 상실감이 크다는 부담이 있지만, 갈등의 직접적 자극과 신뢰 점검 피로가 줄고 시간이 갈수록 정서적 안정과 장기적 궁합 판단이 더 분명해집니다. 따라서 단기 불안보다 장기적 안정과 신뢰 가능성을 더 중시해야 하는 이 경우에는 관계를 정리하는 쪽이 더 일관된 선택입니다."}
+{
+  "recommended_option": "B",
+  "reason": "router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=high, riskB=medium이며 최우선 기준이 emotional_stability이므로 현재 stub에서는 B를 추천한다.",
+  "reasoning_basis": {
+    "selected_reasoning": "B",
+    "core_why": "scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.",
+    "decision_confidence": 0.70
+  }
+}

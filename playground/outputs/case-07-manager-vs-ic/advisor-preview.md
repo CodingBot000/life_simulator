@@ -3,11 +3,11 @@
 - Request file: `playground/outputs/case-07-manager-vs-ic/advisor-request.json`
 - Prompt file: `prompts/advisor.md`
 - Input source: `playground/inputs/cases/case-07-manager-vs-ic.json`
+- Previous result: `playground/outputs/case-07-manager-vs-ic/state-context.json`
+- Previous result: `playground/outputs/case-07-manager-vs-ic/routing-result.json`
 - Previous result: `playground/outputs/case-07-manager-vs-ic/planner-result.json`
 - Previous result: `playground/outputs/case-07-manager-vs-ic/scenario-a-result.json`
 - Previous result: `playground/outputs/case-07-manager-vs-ic/scenario-b-result.json`
-- Previous result: `playground/outputs/case-07-manager-vs-ic/risk-a-result.json`
-- Previous result: `playground/outputs/case-07-manager-vs-ic/risk-b-result.json`
 
 ## Prompt
 
@@ -15,23 +15,58 @@
 너는 의사결정 시뮬레이션 체인의 Advisor Agent다.
 
 목표:
-- scenarioA, scenarioB, riskA, riskB를 비교해 A/B 중 하나만 추천한다.
-- 사용자의 `risk_tolerance`와 `priority`를 최우선 판단 기준으로 사용한다.
+- executionMode에 따라 제공된 upstream 결과만 사용해 A/B 중 하나를 추천한다.
+- 원본 case input과 state summary를 최우선 기준으로 사용한다.
+- `abReasoning.reasoning.final_selection`이 있으면 이를 기본 출발점으로 삼되, 없으면 planner/scenario/risk를 직접 비교한다.
 - 결론은 분명해야 하며, 양비론이나 회피 답변은 금지한다.
 
 입력 데이터 형식:
 ```json
 {
-  "userProfile": {
-    "age": 32,
-    "job": "developer",
-    "risk_tolerance": "low",
-    "priority": ["stability", "income", "work_life_balance"]
+  "executionMode": "light | standard | careful | full",
+  "routing": {
+    "execution_mode": "light",
+    "selected_path": ["planner", "advisor"]
   },
-  "decision": {
-    "optionA": "현재 회사에 남는다",
-    "optionB": "스타트업으로 이직한다",
-    "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+  "caseId": "case-001",
+  "caseInput": {
+    "userProfile": {
+      "age": 32,
+      "job": "developer",
+      "risk_tolerance": "low",
+      "priority": ["stability", "income", "work_life_balance"]
+    },
+    "decision": {
+      "optionA": "현재 회사에 남는다",
+      "optionB": "스타트업으로 이직한다",
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+    }
+  },
+  "stateContext": {
+    "case_id": "case-001",
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "low",
+        "decision_style": "deliberate",
+        "top_priorities": ["stability", "income", "work_life_balance"]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "medium",
+        "time_pressure": "unknown",
+        "emotional_state": "uncertain"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "leans conservative under uncertainty",
+      "current_constraint": "financial pressure is medium",
+      "agent_guidance": "explain stability-growth tradeoffs explicitly"
+    }
   },
   "plannerResult": {
     "decision_type": "career_change",
@@ -54,13 +89,72 @@
   "riskB": {
     "risk_level": "high",
     "reasons": []
+  },
+  "abReasoning": {
+    "case_id": "case-001",
+    "input_summary": {
+      "user_profile": {
+        "age": 32,
+        "job": "developer",
+        "risk_tolerance": "low",
+        "priority": ["stability", "income", "work_life_balance"]
+      },
+      "decision_options": {
+        "optionA": "현재 회사에 남는다",
+        "optionB": "스타트업으로 이직한다",
+        "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+      },
+      "planner_goal": "안정성과 성장성 중 사용자에게 더 맞는 선택을 판별한다"
+    },
+    "reasoning": {
+      "a_reasoning": {
+        "stance": "conservative",
+        "summary": "",
+        "key_assumptions": [],
+        "pros": [],
+        "cons": [],
+        "recommended_option": "A",
+        "confidence": 0.74
+      },
+      "b_reasoning": {
+        "stance": "opportunity_seeking",
+        "summary": "",
+        "key_assumptions": [],
+        "pros": [],
+        "cons": [],
+        "recommended_option": "B",
+        "confidence": 0.61
+      },
+      "comparison": {
+        "agreements": [],
+        "conflicts": [],
+        "which_fits_user_better": "A",
+        "reason": ""
+      },
+      "final_selection": {
+        "selected_reasoning": "A",
+        "selected_option": "A",
+        "why_selected": "",
+        "decision_confidence": 0.72
+      }
+    }
   }
 }
 ```
 
+주의:
+- `plannerResult`는 항상 존재한다.
+- `scenarioA`, `scenarioB`는 `standard`, `careful`, `full`에서만 존재할 수 있다.
+- `riskA`, `riskB`는 `careful`, `full`에서만 존재할 수 있다.
+- `abReasoning`은 `full`에서만 존재할 수 있다.
+- 없는 필드는 추측으로 보완하지 말고, 존재하는 입력만으로 판단한다.
+
 판단 규칙:
 - 반드시 `recommended_option`에 `A` 또는 `B` 중 하나만 넣는다.
-- 추천 사유는 사용자의 우선순위와 리스크 허용도에 직접 연결해야 한다.
+- 추천 사유는 `stateContext.state_summary`, `profile_state.top_priorities`, `situational_state`, `memory_state`에 직접 연결해야 한다.
+- `abReasoning`이 있으면 final_selection을 그대로 복붙하지 말고 state-aware 근거로 재구성한다.
+- `abReasoning`이 없으면 planner/scenario/risk를 직접 종합해 `reasoning_basis.selected_reasoning`에 최종 추천과 가장 가까운 축(`A` 또는 `B`)을 기록한다.
+- `reasoning_basis`에는 선택된 reasoning 축, 핵심 판단 근거, confidence를 구조적으로 남긴다.
 - 두 선택지를 공정하게 비교하되 결론은 하나로 수렴시킨다.
 - 입력에 없는 새로운 사실을 추가하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
@@ -70,7 +164,12 @@
 ```json
 {
   "recommended_option": "A | B",
-  "reason": ""
+  "reason": "",
+  "reasoning_basis": {
+    "selected_reasoning": "A | B",
+    "core_why": "",
+    "decision_confidence": 0.0
+  }
 }
 ```
 ```
@@ -79,20 +178,66 @@
 
 ```json
 {
-  "userProfile": {
-    "age": 37,
-    "job": "senior developer",
-    "risk_tolerance": "low",
-    "priority": [
-      "growth",
-      "stress_management",
-      "compensation"
-    ]
+  "caseId": "case-07-manager-vs-ic",
+  "executionMode": "standard",
+  "caseInput": {
+    "userProfile": {
+      "age": 37,
+      "job": "senior developer",
+      "risk_tolerance": "low",
+      "priority": [
+        "growth",
+        "stress_management",
+        "compensation"
+      ]
+    },
+    "decision": {
+      "optionA": "매니저 트랙으로 전환한다",
+      "optionB": "IC 트랙에 남는다",
+      "context": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다."
+    }
   },
-  "decision": {
-    "optionA": "매니저 트랙으로 전환한다",
-    "optionB": "IC 트랙에 남는다",
-    "context": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다."
+  "stateContext": {
+    "case_id": "case-07-manager-vs-ic",
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "low",
+        "decision_style": "deliberate",
+        "top_priorities": [
+          "growth",
+          "stress_management",
+          "compensation"
+        ]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "unknown",
+        "time_pressure": "unknown",
+        "emotional_state": "unknown"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "leans conservative under uncertainty",
+      "current_constraint": "none",
+      "agent_guidance": "tie the recommendation directly to growth, stress_management, compensation and make the tradeoff explicit"
+    }
+  },
+  "routing": {
+    "complexity": "medium",
+    "risk_level": "low",
+    "ambiguity": "medium",
+    "execution_mode": "standard",
+    "selected_path": [
+      "planner",
+      "scenario",
+      "advisor"
+    ],
+    "routing_reason": "중간 수준의 변수는 있으나 주된 검토는 시나리오 비교로 구조화 가능해 standard 경로를 선택한다."
   },
   "plannerResult": {
     "decision_type": "career_change",
@@ -113,24 +258,6 @@
     "three_months": "IC 트랙에 남기로 한 직후에는 안도감이 먼저 든다. 팀 운영과 인사 이슈를 맡지 않아도 된다는 점에서 스트레스 관리가 가능하다고 느끼고, 당장 익숙한 역할을 유지한다는 점도 저위험 성향에 맞아 심리적으로 안정적이다. 대신 조직이 커지는 흐름 속에서 매니저 역할 제안을 고사한 만큼, 스스로 성장 경로를 분명히 보여줘야 한다는 압박이 생긴다. 그래서 핵심 시스템 개선, 아키텍처 리뷰, 난도 높은 기술 과제에 더 깊게 관여하려 하고, 기술적 깊이를 유지하는 방향은 분명해진다. 다만 보상 측면에서는 관리직보다 상승 속도가 느릴 수 있다는 현실을 체감하면서, 지금 수준의 보상은 유지되지만 앞으로의 성장성에 대한 작은 불안도 함께 남는다.",
     "one_year": "1년 정도 지나면 IC 트랙 안에서도 자신의 위치가 조금 더 선명해진다. 주요 기술 의사결정에 참여하고, 복잡한 문제를 해결하는 사람으로 신뢰를 얻으면서 성장 경로 적합성에 대한 확신이 커진다. 관리 업무에서 오는 감정 소모는 상대적으로 적어 스트레스는 예측 가능하게 유지되지만, 반대로 여러 팀이 기술 판단을 의존하기 시작하면 조율 부담이 완전히 사라지지는 않는다. 그래도 사람 평가나 갈등 중재의 중심에 서지 않는 만큼, 본인이 걱정했던 종류의 스트레스는 피한 편이다. 보상은 큰 폭의 점프보다는 안정적인 인상이나 전문성 기반 보상으로 이어질 가능성이 높고, 회사가 IC 레벨 체계를 잘 운영한다면 만족감이 생기지만, 그렇지 않다면 매니저 트랙 대비 성장 속도가 아쉽게 느껴질 수 있다. 전반적으로 안정성은 높고 기술적 깊이도 유지되지만, ‘내가 이 조직에서 어디까지 갈 수 있나’라는 질문은 더 구체적으로 떠오른다.",
     "three_years": "3년 후에는 선택의 성격이 더 분명하게 드러난다. IC 트랙에 남은 덕분에 특정 도메인이나 시스템에서 깊은 전문성을 쌓아 조직 내 핵심 개인 기여자로 자리잡을 가능성이 크고, 이는 본인이 원했던 기술적 깊이 유지 욕구와 잘 맞는다. 저위험 성향에 맞게 역할 변화의 불확실성을 크게 늘리지 않았기 때문에 경력의 연속성도 안정적으로 이어진다. 다만 조직이 계속 커질수록 영향력의 방식이 달라져, 직접 관리하지 않더라도 기술 리더십과 설득, 우선순위 조율 책임은 늘어난다. 이 과정에서 스트레스는 초기 예상보다 약간 높아질 수 있지만, 사람 관리 중심 스트레스와는 결이 달라 스스로 통제 가능한 수준으로 느낄 가능성이 높다. 보상은 회사의 IC 보상 체계가 성숙해 있으면 충분히 경쟁력 있게 따라가지만, 그렇지 않으면 매니저 트랙 동료와의 격차를 체감하며 아쉬움을 느낄 수 있다. 결국 이 선택은 극적인 승부수보다는, 성장의 방향을 기술 전문성으로 고정하고 스트레스를 관리 가능한 범위 안에 두는 대신, 보상 성장성과 조직 내 위상은 회사 구조에 따라 천천히 갈리는 시나리오에 가깝다."
-  },
-  "riskA": {
-    "risk_level": "medium",
-    "reasons": [
-      "초기 3개월에 1:1 면담, 일정 조율, 채용, 대인 커뮤니케이션이 급증해 스트레스가 예상보다 크게 느껴지는 점은 낮은 위험 선호 성향과 직접 충돌한다.",
-      "1년 이후에는 관리 업무에 적응하며 스트레스가 어느 정도 통제 가능해지고, 회사도 적응 기간을 주는 설정이라 역할 전환의 불확실성이 아주 크지는 않다.",
-      "보상은 단기에는 큰 폭이 아니지만 1년~3년 구간에서 개선 가능성이 높아 보여, 우선순위인 compensation 측면의 하방 위험은 상대적으로 제한적이다.",
-      "가장 큰 중기 리스크는 기술적 깊이 유지다. 본인이 기술 몰입 욕구가 강한데, 이를 의식적으로 지키지 않으면 3년 시점에 만족도가 떨어질 수 있어 growth의 방향성이 흔들릴 수 있다."
-    ]
-  },
-  "riskB": {
-    "risk_level": "medium",
-    "reasons": [
-      "단기적으로는 사람 관리와 인사 이슈를 맡지 않아도 되어, 사용자가 특히 걱정한 스트레스 유형을 크게 줄일 수 있다는 점에서 위험이 낮다.",
-      "1년 이후에는 기술 의사결정과 복잡한 문제 해결에서 성장 경로가 선명해지지만, 조직 내에서 IC 레벨 체계가 얼마나 잘 운영되는지에 따라 성장의 체감 속도가 달라질 수 있다.",
-      "3년 시점에는 기술적 깊이와 경력의 연속성은 확보되기 쉽지만, 보상 성장성이 매니저 트랙보다 느리거나 격차가 벌어질 수 있어 우선순위인 보상 측면에서는 불확실성이 남는다.",
-      "시간이 갈수록 사람 관리는 피하더라도 기술 리더십, 설득, 우선순위 조율 부담은 늘어날 수 있어 스트레스가 완전히 사라지는 선택은 아니다."
-    ]
   }
 }
 ```
@@ -151,11 +278,38 @@
     },
     "reason": {
       "type": "string"
+    },
+    "reasoning_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selected_reasoning": {
+          "type": "string",
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "core_why": {
+          "type": "string"
+        },
+        "decision_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "selected_reasoning",
+        "core_why",
+        "decision_confidence"
+      ]
     }
   },
   "required": [
     "recommended_option",
-    "reason"
+    "reason",
+    "reasoning_basis"
   ]
 }
 ```

@@ -12,6 +12,42 @@
 - Option B: 안정적인 IT 회사에 취업한다
 - Context: 그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: medium
+- decision_style: deliberate
+- top_priorities: independence, growth, income
+
+### Situational State
+
+- career_stage: mid
+- financial_pressure: high
+- time_pressure: unknown
+- emotional_state: uncertain
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: balances stability and upside
+- current_constraint: financial pressure is high; emotional state is uncertain
+- agent_guidance: explain tradeoffs around independence, growth, income while respecting financial pressure is high; emotional state is uncertain
+
+## Routing
+
+- complexity: high
+- risk_level: high
+- ambiguity: medium
+- execution_mode: full
+- selected_path: planner -> scenario -> risk -> ab_reasoning -> advisor -> reflection
+- reason: 잘못 판단했을 때 손실 규모가 커 고위험 케이스로 보고 전체 경로 실행이 필요하다.
+
 ## Planner
 
 - Decision type: career_change
@@ -45,10 +81,39 @@
 - 1년 이후에는 PM 역량과 조직 경험이 쌓여 성장 기반은 생기지만, 사용자가 원하는 '직접 제품을 만드는 경험'과의 차이가 더 선명해져 장기적으로 방향성 갈등이 커질 수 있다.
 - 3년 시점에도 재무적 안전판은 강화되지만, 회사 안에서 권한 확대나 신규 사업 기회가 없으면 반복감과 답답함이 누적될 가능성이 있어 완전한 저위험 선택으로 보기는 어렵다.
 
+## A/B Reasoning
+
+### A Reasoning
+
+- stance: conservative
+- recommended option: A
+- summary: 보수적 reasoning은 사용자의 risk_tolerance가 medium이고 최우선 priority가 independence라는 점을 기준으로, 위험 수준이 더 낮고 생활 변동성이 작은 선택을 우선 본다. 현재 비교에서는 A가 더 안정적으로 해석된다.
+
+### B Reasoning
+
+- stance: opportunity_seeking
+- recommended option: B
+- summary: 기회 추구 reasoning은 decision context와 planner factors를 보면 변화의 보상이 분명할 수 있다고 본다. 위험을 감수하더라도 역할 변화와 성장폭을 원한다면 B를 검토할 가치가 있다.
+
+### Comparison
+
+- agreements: 두 reasoning 모두 사용자 우선순위와 리스크 허용도를 핵심 판단 축으로 본다.; 두 reasoning 모두 시나리오와 risk 결과를 근거로 사용한다.
+- conflicts: A reasoning은 손실 회피와 안정 기반을 우선하지만, B reasoning은 성장 기회의 기대값을 더 크게 본다.; A reasoning은 현재 성향과의 정합성을 중시하고, B reasoning은 미래 옵션 확장을 더 높게 평가한다.
+- which fits user better: A
+- reason: 현재 입력에서는 risk_tolerance=medium, primary_priority=independence, riskA=medium, riskB=medium 조합 때문에 A 쪽이 사용자 성향과 더 직접적으로 맞는다.
+
+### Final Selection
+
+- selected reasoning: A
+- selected option: A
+- why selected: 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
+- decision confidence: 0.70
+
 ## Advisor
 
 - Recommended option: A
-- Reason: 사용자의 우선순위가 `independence`, `growth`, `income` 순서이고 리스크 감내도가 `medium`이기 때문에, 가장 중요한 두 기준에 직접 부합하는 선택은 A다. 시나리오 A는 초기에 수입 안정성이 낮고 대출·생활비 부담으로 압박이 있지만, 직접 제품 방향을 결정하는 높은 독립성과 가파른 학습·성장 가능성을 제공하며 장기적으로 반복 매출과 예측 가능한 구조를 만들 여지도 있다. 반면 B는 수입 안정성에서는 강점이 있지만, 핵심 우선순위인 독립성과 직접 제품을 만드는 경험이 제한되어 장기 만족도와 방향성 측면의 갈등이 더 크다. 따라서 중간 수준의 리스크를 감수할 수 있고 독립성과 성장을 더 중시하는 현재 기준에서는 A를 추천한다.
+- Reason: 사용자의 risk_tolerance가 medium이고 최우선 기준이 independence이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 A를 추천한다.
+- Reasoning basis: reasoning A / confidence 0.70 / 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
 
 ## Reflection
 
@@ -60,11 +125,13 @@
 ### 주요 문제
 
 - [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 independence을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
-- [advisor] advisor가 A를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
+- [reasoning] reasoning의 최종 선택은 reasoning A, option A, confidence 0.70로 정리됐지만 A/B 관점 차이가 실제로 충분히 벌어졌는지와 comparison 충돌 정리가 더 선명하게 드러날 필요가 있다.
+- [advisor] advisor가 A를 추천하지만 riskA=medium, riskB=medium와 reasoning final_selection을 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.
 
 ### 개선 방향
 
 - [scenario] 각 시간 축 문장에서 independence 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
-- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
+- [reasoning] A는 안정성 손실 회피, B는 성장 기대값 확대라는 관점 차이가 문장 수준에서 분명히 보이도록 comparison의 agreement와 conflict를 더 날카롭게 정리하라.
+- [advisor] 최종 추천 사유를 priority, risk, reasoning, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
 
-- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
+- Overall comment: 전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
