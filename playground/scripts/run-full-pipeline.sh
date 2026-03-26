@@ -39,19 +39,22 @@ echo "Running planner..."
 
 case "$MODE" in
   light)
-    echo "Skipping scenario, risk, A/B reasoning, and reflection for light mode."
+    echo "Skipping scenario, risk, A/B reasoning, guardrail, and reflection for light mode."
+    write_default_guardrail_result "$MODE"
     ;;
   standard)
     echo "Running scenario..."
     "$SCRIPT_DIR/run-scenario.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
-    echo "Skipping risk, A/B reasoning, and reflection for standard mode."
+    echo "Skipping risk, A/B reasoning, guardrail, and reflection for standard mode."
+    write_default_guardrail_result "$MODE"
     ;;
   careful)
     echo "Running scenario..."
     "$SCRIPT_DIR/run-scenario.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
     echo "Running risk..."
     "$SCRIPT_DIR/run-risk.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
-    echo "Skipping A/B reasoning and reflection for careful mode."
+    echo "Skipping A/B reasoning, guardrail, and reflection for careful mode."
+    write_default_guardrail_result "$MODE"
     ;;
   full)
     echo "Running scenario..."
@@ -60,6 +63,8 @@ case "$MODE" in
     "$SCRIPT_DIR/run-risk.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
     echo "Running A/B reasoning..."
     "$SCRIPT_DIR/run-ab-reasoning.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
+    echo "Running guardrail..."
+    "$SCRIPT_DIR/run-guardrail.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
     ;;
   *)
     echo "Error: unsupported execution mode '$MODE'." >&2
@@ -74,7 +79,8 @@ if [ "$MODE" = "full" ]; then
   echo "Running reflection..."
   "$SCRIPT_DIR/run-reflection.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
 else
-  echo "Skipping reflection for $MODE mode."
+  echo "Writing derived reflection output for $MODE mode."
+  write_default_reflection_result "$MODE"
 fi
 
 write_case_summary "$OUTPUTS_DIR/input.json"

@@ -85,12 +85,40 @@
 
 - Skipped in execution_mode=careful
 
+## Guardrail
+
+- guardrail_triggered: false
+- triggers: none
+- strategy: none
+- final_mode: normal
+- guardrail correctness: good
+
 ## Advisor
 
+- Decision: B
+- Confidence: 0.70
+- Guardrail applied: false
 - Recommended option: B
 - Reason: router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=medium, riskB=medium이며 최우선 기준이 growth이므로 현재 stub에서는 B를 추천한다.
 - Reasoning basis: reasoning B / confidence 0.70 / scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.
 
 ## Reflection
 
-- Skipped in execution_mode=careful
+- evaluation: guardrail final_mode=normal 조건에서 advisor가 불필요하게 보수적이지 않으면서도 현재 실행 경로의 증거를 충분히 연결했는지 다시 점검한다.
+- realism: 4
+- consistency: 4
+- profile_alignment: 4
+- recommendation_clarity: 4
+- guardrail_review: needed=false / triggered=false / correctness=good
+
+### 주요 문제
+
+- [advisor] advisor decision=B, confidence=0.70, guardrail_applied=false 조합이 guardrail final_mode=normal 및 위험 신호(routing risk=medium, ambiguity=medium, riskA=medium, riskB=medium)와 어떻게 연결되는지 문장 수준에서 더 직접적으로 드러나야 한다.
+- [risk] careful 경로에서는 risk 판단이 guardrail 필요성에 직접 연결되므로, risk 차이가 advisor reason에 어떻게 반영됐는지 더 또렷해야 한다.
+
+### 개선 방향
+
+- [advisor] advisor reason에 사용된 핵심 증거 축을 routing과 함께 적어 normal 추천이 왜 과도하게 보수적이지 않은지 보여줘라.
+- [risk] risk 단계에서 high/medium 차이를 advisor가 그대로 인용할 수 있도록 단기 리스크와 장기 리스크를 분리해 적어라.
+
+- Overall comment: normal 모드에서는 현재 추천 강도가 크게 과하지 않지만, 사용된 근거 축을 더 분명히 적으면 검증 추적성이 좋아진다.

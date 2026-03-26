@@ -23,5 +23,7 @@ if [ "$found_case" -eq 0 ]; then
   exit 1
 fi
 
+write_guardrail_verification_summary
+
 echo "Generated case output directories:"
 find "$OUTPUTS_ROOT_DIR" -maxdepth 1 -mindepth 1 -type d -name 'case-*' | sort

@@ -1,9 +1,12 @@
 {
-  "recommended_option": "A",
-  "reason": "사용자의 risk_tolerance가 low이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=low, riskB=high 조합을 함께 고려했을 때 현재는 A를 추천한다.",
+  "decision": "undecided",
+  "confidence": 0.35,
+  "recommended_option": "undecided",
+  "reason": "guardrail이 blocked 모드로 전환됐기 때문에 지금은 결론을 내리지 않는다. trigger는 ambiguity_high, reasoning_conflict, high_risk이고 strategy는 ask_more_info, neutralize_decision, risk_warning다. 현재 입력만으로는 사용자의 우선순위와 위험 해석 사이의 충돌을 안전하게 정리하기 어려우므로 추가 정보가 필요하다.",
+  "guardrail_applied": true,
   "reasoning_basis": {
-    "selected_reasoning": "A",
-    "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
-    "decision_confidence": 0.77
+    "selected_reasoning": "undecided",
+    "core_why": "모호성과 reasoning 충돌이 함께 커서 단정 추천보다 추가 정보 요청이 더 안전하다.",
+    "decision_confidence": 0.35
   }
 }

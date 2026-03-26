@@ -10,6 +10,7 @@
       "scenario",
       "risk",
       "ab_reasoning",
+      "guardrail",
       "advisor",
       "reflection"
     ],

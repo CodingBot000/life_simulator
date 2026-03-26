@@ -20,6 +20,7 @@ SCENARIO_B_RESULT_FILE="$(resolve_stage_result_file "scenario-b")"
 RISK_A_RESULT_FILE="$(resolve_stage_result_file "risk-a")"
 RISK_B_RESULT_FILE="$(resolve_stage_result_file "risk-b")"
 REASONING_RESULT_FILE="$(resolve_stage_result_file "reasoning")"
+GUARDRAIL_RESULT_FILE="$(resolve_stage_result_file "guardrail")"
 ADVISOR_RESULT_FILE="$(resolve_stage_result_file "advisor")"
 
 PLANNER_RESULT_COMPACT="$(read_json_compact "$PLANNER_RESULT_FILE")"
@@ -28,6 +29,7 @@ SCENARIO_B_RESULT_COMPACT="$(read_json_compact "$SCENARIO_B_RESULT_FILE")"
 RISK_A_RESULT_COMPACT="$(read_json_compact "$RISK_A_RESULT_FILE")"
 RISK_B_RESULT_COMPACT="$(read_json_compact "$RISK_B_RESULT_FILE")"
 REASONING_RESULT_COMPACT="$(read_json_compact "$REASONING_RESULT_FILE")"
+GUARDRAIL_RESULT_COMPACT="$(read_json_compact "$GUARDRAIL_RESULT_FILE")"
 ADVISOR_RESULT_COMPACT="$(read_json_compact "$ADVISOR_RESULT_FILE")"
 
 PROMPT_FILE="$(prompt_path "reflection")"
@@ -40,12 +42,27 @@ RESULT_FILE="$(stage_result_path "reflection")"
 
 PRIMARY_PRIORITY="$(jq -r '.userProfile.priority[0] // "priority_alignment"' "$INPUT_FILE")"
 DECISION_TYPE="$(jq -r '.decision_type' "$PLANNER_RESULT_FILE")"
-ADVISOR_OPTION="$(jq -r '.recommended_option' "$ADVISOR_RESULT_FILE")"
+ADVISOR_OPTION="$(jq -r '.decision' "$ADVISOR_RESULT_FILE")"
 RISK_A_LEVEL="$(jq -r '.risk_level' "$RISK_A_RESULT_FILE")"
 RISK_B_LEVEL="$(jq -r '.risk_level' "$RISK_B_RESULT_FILE")"
 SELECTED_REASONING="$(jq -r '.reasoning.final_selection.selected_reasoning' "$REASONING_RESULT_FILE")"
 SELECTED_OPTION="$(jq -r '.reasoning.final_selection.selected_option' "$REASONING_RESULT_FILE")"
 DECISION_CONFIDENCE="$(jq -r '.reasoning.final_selection.decision_confidence' "$REASONING_RESULT_FILE")"
+GUARDRAIL_TRIGGERED="$(jq -r '.guardrail_triggered' "$GUARDRAIL_RESULT_FILE")"
+GUARDRAIL_FINAL_MODE="$(jq -r '.final_mode' "$GUARDRAIL_RESULT_FILE")"
+GUARDRAIL_TRIGGERS_COUNT="$(jq -r '.triggers | length' "$GUARDRAIL_RESULT_FILE")"
+GUARDRAIL_WAS_NEEDED="false"
+GUARDRAIL_CORRECTNESS="good"
+
+if [ "$GUARDRAIL_TRIGGERS_COUNT" -gt 0 ] || [ "$RISK_A_LEVEL" = "high" ] || [ "$RISK_B_LEVEL" = "high" ]; then
+  GUARDRAIL_WAS_NEEDED="true"
+fi
+
+if [ "$GUARDRAIL_WAS_NEEDED" = "true" ] && [ "$GUARDRAIL_TRIGGERED" = "false" ]; then
+  GUARDRAIL_CORRECTNESS="missing"
+elif [ "$GUARDRAIL_WAS_NEEDED" = "false" ] && [ "$GUARDRAIL_TRIGGERED" = "true" ]; then
+  GUARDRAIL_CORRECTNESS="over"
+fi
 
 INPUT_DATA_COMPACT="$(jq -cn \
   --arg case_id "$CASE_ID" \
@@ -57,6 +74,7 @@ INPUT_DATA_COMPACT="$(jq -cn \
   --argjson risk_a "$RISK_A_RESULT_COMPACT" \
   --argjson risk_b "$RISK_B_RESULT_COMPACT" \
   --argjson ab_reasoning "$REASONING_RESULT_COMPACT" \
+  --argjson guardrail_result "$GUARDRAIL_RESULT_COMPACT" \
   --argjson advisor_result "$ADVISOR_RESULT_COMPACT" \
   '{
     caseId: $case_id,
@@ -68,6 +86,7 @@ INPUT_DATA_COMPACT="$(jq -cn \
     riskA: $risk_a,
     riskB: $risk_b,
     abReasoning: $ab_reasoning,
+    guardrailResult: $guardrail_result,
     advisorResult: $advisor_result
   }')"
 INPUT_JSON="$(printf '%s' "$INPUT_DATA_COMPACT" | jq .)"
@@ -83,7 +102,7 @@ jq -n \
   --arg input_json "$INPUT_JSON" \
   --argjson input_data "$INPUT_DATA_COMPACT" \
   --argjson expected_output_schema "$SCHEMA_JSON" \
-  --argjson previous_stage_result_files "[\"$(relative_to_root "$STATE_CONTEXT_FILE")\", \"$(relative_to_root "$PLANNER_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_A_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_B_RESULT_FILE")\", \"$(relative_to_root "$RISK_A_RESULT_FILE")\", \"$(relative_to_root "$RISK_B_RESULT_FILE")\", \"$(relative_to_root "$REASONING_RESULT_FILE")\", \"$(relative_to_root "$ADVISOR_RESULT_FILE")\"]" \
+  --argjson previous_stage_result_files "[\"$(relative_to_root "$STATE_CONTEXT_FILE")\", \"$(relative_to_root "$PLANNER_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_A_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_B_RESULT_FILE")\", \"$(relative_to_root "$RISK_A_RESULT_FILE")\", \"$(relative_to_root "$RISK_B_RESULT_FILE")\", \"$(relative_to_root "$REASONING_RESULT_FILE")\", \"$(relative_to_root "$GUARDRAIL_RESULT_FILE")\", \"$(relative_to_root "$ADVISOR_RESULT_FILE")\"]" \
   '{
     stage: $stage,
     generated_at: $generated_at,
@@ -111,7 +130,12 @@ jq -n \
   --arg selected_reasoning "$SELECTED_REASONING" \
   --arg selected_option "$SELECTED_OPTION" \
   --arg decision_confidence "$DECISION_CONFIDENCE" \
+  --arg guardrail_final_mode "$GUARDRAIL_FINAL_MODE" \
+  --argjson guardrail_was_needed "$GUARDRAIL_WAS_NEEDED" \
+  --argjson guardrail_was_triggered "$GUARDRAIL_TRIGGERED" \
+  --arg guardrail_correctness "$GUARDRAIL_CORRECTNESS" \
   '{
+    evaluation: ("guardrail final_mode=\($guardrail_final_mode) 조건에서 advisor decision=\($advisor_option)와 reasoning 선택이 얼마나 안전하게 연결됐는지 다시 평가한다."),
     scores: {
       realism: 4,
       consistency: 4,
@@ -129,7 +153,7 @@ jq -n \
       },
       {
         type: "advisor",
-        description: ("advisor가 \($advisor_option)를 추천하지만 riskA=\($risk_a_level), riskB=\($risk_b_level)와 reasoning final_selection을 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.")
+        description: ("advisor가 \($advisor_option)를 제시하지만 riskA=\($risk_a_level), riskB=\($risk_b_level), guardrail final_mode=\($guardrail_final_mode)를 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.")
       }
     ],
     improvement_suggestions: [
@@ -143,10 +167,15 @@ jq -n \
       },
       {
         target: "advisor",
-        suggestion: "최종 추천 사유를 priority, risk, reasoning, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라."
+        suggestion: "최종 추천 사유를 priority, risk, reasoning, guardrail, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라."
       }
     ],
-    overall_comment: "전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다."
+    overall_comment: "전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.",
+    guardrail_review: {
+      was_needed: $guardrail_was_needed,
+      was_triggered: $guardrail_was_triggered,
+      correctness: $guardrail_correctness
+    }
   }' > "$STUB_FILE"
 
 write_request_preview "$REQUEST_FILE" "$PREVIEW_FILE" "Reflection Request Preview"

@@ -1,0 +1,10 @@
+{
+  "guardrail_triggered": true,
+  "triggers": [
+    "high_risk"
+  ],
+  "strategy": [
+    "risk_warning"
+  ],
+  "final_mode": "cautious"
+}

@@ -174,6 +174,16 @@ if stage_enabled_in_selected_path "$SELECTED_PATH_JSON" "ab_reasoning"; then
   REASONING_RESULT_REL="$(relative_to_root "$REASONING_RESULT_FILE")"
 fi
 
+GUARDRAIL_RESULT_FILE=""
+GUARDRAIL_RESULT_COMPACT='null'
+GUARDRAIL_RESULT_REL=""
+
+if GUARDRAIL_RESULT_FILE="$(optional_stage_result_file "guardrail" 2>/dev/null)"; then
+  GUARDRAIL_RESULT_FILE="$(resolve_stage_result_file "guardrail")"
+  GUARDRAIL_RESULT_COMPACT="$(read_json_compact "$GUARDRAIL_RESULT_FILE")"
+  GUARDRAIL_RESULT_REL="$(relative_to_root "$GUARDRAIL_RESULT_FILE")"
+fi
+
 PROMPT_FILE="$(prompt_path "advisor")"
 PROMPT_TEXT="$(read_prompt "advisor")"
 SCHEMA_JSON="$(schema_for_stage "advisor")"
@@ -191,6 +201,7 @@ PREVIOUS_STAGE_RESULT_FILES_JSON="$(jq -cn \
   --arg risk_a_rel "$RISK_A_RESULT_REL" \
   --arg risk_b_rel "$RISK_B_RESULT_REL" \
   --arg reasoning_rel "$REASONING_RESULT_REL" \
+  --arg guardrail_rel "$GUARDRAIL_RESULT_REL" \
   '[
     $state_context_rel,
     $routing_rel,
@@ -199,7 +210,8 @@ PREVIOUS_STAGE_RESULT_FILES_JSON="$(jq -cn \
     $scenario_b_rel,
     $risk_a_rel,
     $risk_b_rel,
-    $reasoning_rel
+    $reasoning_rel,
+    $guardrail_rel
   ] | map(select(length > 0))')"
 
 INPUT_DATA_COMPACT="$(jq -cn \
@@ -215,6 +227,7 @@ INPUT_DATA_COMPACT="$(jq -cn \
   --argjson risk_a "$RISK_A_RESULT_COMPACT" \
   --argjson risk_b "$RISK_B_RESULT_COMPACT" \
   --argjson ab_reasoning "$REASONING_RESULT_COMPACT" \
+  --argjson guardrail_result "$GUARDRAIL_RESULT_COMPACT" \
   '{
     caseId: $case_id,
     executionMode: $execution_mode,
@@ -236,7 +249,8 @@ INPUT_DATA_COMPACT="$(jq -cn \
   + (if $scenario_b != null then {scenarioB: $scenario_b} else {} end)
   + (if $risk_a != null then {riskA: $risk_a} else {} end)
   + (if $risk_b != null then {riskB: $risk_b} else {} end)
-  + (if $ab_reasoning != null then {abReasoning: $ab_reasoning} else {} end)')"
+  + (if $ab_reasoning != null then {abReasoning: $ab_reasoning} else {} end)
+  + (if $guardrail_result != null then {guardrailResult: $guardrail_result} else {} end)')"
 INPUT_JSON="$(printf '%s' "$INPUT_DATA_COMPACT" | jq .)"
 
 OPTION_A="$(jq -r '.decision.optionA' "$INPUT_FILE")"
@@ -253,35 +267,73 @@ if [ -n "$RISK_A_RESULT_FILE" ]; then
   RISK_B_LEVEL="$(jq -r '.risk_level' "$RISK_B_RESULT_FILE")"
 fi
 
+BASE_DECISION=""
+BASE_SELECTED_REASONING=""
+BASE_CONFIDENCE=""
+BASE_CORE_WHY=""
+BASE_REASON_TEXT=""
+
 if [ -n "$REASONING_RESULT_FILE" ]; then
-  SELECTED_REASONING="$(jq -r '.reasoning.final_selection.selected_reasoning' "$REASONING_RESULT_FILE")"
-  STUB_RECOMMENDED_OPTION="$(jq -r '.reasoning.final_selection.selected_option' "$REASONING_RESULT_FILE")"
-  DECISION_CONFIDENCE="$(jq '.reasoning.final_selection.decision_confidence' "$REASONING_RESULT_FILE")"
-  CORE_WHY="$(jq -r '.reasoning.final_selection.why_selected' "$REASONING_RESULT_FILE")"
-  REASON_TEXT="사용자의 risk_tolerance가 ${RISK_TOLERANCE}이고 최우선 기준이 ${PRIMARY_PRIORITY}이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 ${EXECUTION_MODE}이며 riskA=${RISK_A_LEVEL}, riskB=${RISK_B_LEVEL} 조합을 함께 고려했을 때 현재는 ${STUB_RECOMMENDED_OPTION}를 추천한다."
+  BASE_SELECTED_REASONING="$(jq -r '.reasoning.final_selection.selected_reasoning' "$REASONING_RESULT_FILE")"
+  BASE_DECISION="$(jq -r '.reasoning.final_selection.selected_option' "$REASONING_RESULT_FILE")"
+  BASE_CONFIDENCE="$(jq '.reasoning.final_selection.decision_confidence' "$REASONING_RESULT_FILE")"
+  BASE_CORE_WHY="$(jq -r '.reasoning.final_selection.why_selected' "$REASONING_RESULT_FILE")"
+  BASE_REASON_TEXT="사용자의 risk_tolerance가 ${RISK_TOLERANCE}이고 최우선 기준이 ${PRIMARY_PRIORITY}이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 ${EXECUTION_MODE}이며 riskA=${RISK_A_LEVEL}, riskB=${RISK_B_LEVEL} 조합을 함께 고려했을 때 현재는 ${BASE_DECISION}를 추천한다."
 else
-  STUB_RECOMMENDED_OPTION="$(choose_recommendation_without_reasoning "$RISK_TOLERANCE" "$PRIORITY_TEXT" "$OPTION_A" "$OPTION_B" "${RISK_A_LEVEL#not_run}" "${RISK_B_LEVEL#not_run}")"
-  SELECTED_REASONING="$STUB_RECOMMENDED_OPTION"
+  BASE_DECISION="$(choose_recommendation_without_reasoning "$RISK_TOLERANCE" "$PRIORITY_TEXT" "$OPTION_A" "$OPTION_B" "${RISK_A_LEVEL#not_run}" "${RISK_B_LEVEL#not_run}")"
+  BASE_SELECTED_REASONING="$BASE_DECISION"
 
   case "$EXECUTION_MODE" in
     light)
-      DECISION_CONFIDENCE='0.61'
-      CORE_WHY="router가 light 경로를 선택했기 때문에 planner의 비교 기준과 사용자의 우선순위, risk_tolerance만으로 더 맞는 선택을 정리했다."
-      REASON_TEXT="router가 light 경로를 선택해 planner 결과와 userProfile만으로 비교했다. 최우선 기준이 ${PRIMARY_PRIORITY}이고 risk_tolerance가 ${RISK_TOLERANCE}이므로 현재 stub에서는 ${STUB_RECOMMENDED_OPTION}를 추천한다."
+      BASE_CONFIDENCE='0.61'
+      BASE_CORE_WHY="router가 light 경로를 선택했기 때문에 planner의 비교 기준과 사용자의 우선순위, risk_tolerance만으로 더 맞는 선택을 정리했다."
+      BASE_REASON_TEXT="router가 light 경로를 선택해 planner 결과와 userProfile만으로 비교했다. 최우선 기준이 ${PRIMARY_PRIORITY}이고 risk_tolerance가 ${RISK_TOLERANCE}이므로 현재 stub에서는 ${BASE_DECISION}를 추천한다."
       ;;
     standard)
-      DECISION_CONFIDENCE='0.66'
-      CORE_WHY="scenarioA와 scenarioB까지 비교한 결과, 사용자의 우선순위와 더 잘 맞는 흐름을 advisor가 직접 선택했다."
-      REASON_TEXT="router가 standard 경로를 선택해 scenarioA/B까지 비교했다. 최우선 기준이 ${PRIMARY_PRIORITY}이고 risk_tolerance가 ${RISK_TOLERANCE}이므로 현재 stub에서는 ${STUB_RECOMMENDED_OPTION}를 추천한다."
+      BASE_CONFIDENCE='0.66'
+      BASE_CORE_WHY="scenarioA와 scenarioB까지 비교한 결과, 사용자의 우선순위와 더 잘 맞는 흐름을 advisor가 직접 선택했다."
+      BASE_REASON_TEXT="router가 standard 경로를 선택해 scenarioA/B까지 비교했다. 최우선 기준이 ${PRIMARY_PRIORITY}이고 risk_tolerance가 ${RISK_TOLERANCE}이므로 현재 stub에서는 ${BASE_DECISION}를 추천한다."
       ;;
     careful)
-      DECISION_CONFIDENCE='0.70'
-      CORE_WHY="scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다."
-      REASON_TEXT="router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=${RISK_A_LEVEL}, riskB=${RISK_B_LEVEL}이며 최우선 기준이 ${PRIMARY_PRIORITY}이므로 현재 stub에서는 ${STUB_RECOMMENDED_OPTION}를 추천한다."
+      BASE_CONFIDENCE='0.70'
+      BASE_CORE_WHY="scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다."
+      BASE_REASON_TEXT="router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=${RISK_A_LEVEL}, riskB=${RISK_B_LEVEL}이며 최우선 기준이 ${PRIMARY_PRIORITY}이므로 현재 stub에서는 ${BASE_DECISION}를 추천한다."
       ;;
     *)
       echo "Error: reasoning result is required for execution mode '$EXECUTION_MODE'." >&2
       exit 1
+      ;;
+  esac
+fi
+
+STUB_DECISION="$BASE_DECISION"
+STUB_RECOMMENDED_OPTION="$BASE_DECISION"
+SELECTED_REASONING="$BASE_SELECTED_REASONING"
+DECISION_CONFIDENCE="$BASE_CONFIDENCE"
+CORE_WHY="$BASE_CORE_WHY"
+REASON_TEXT="$BASE_REASON_TEXT"
+GUARDRAIL_APPLIED="false"
+
+if [ -n "$GUARDRAIL_RESULT_FILE" ]; then
+  GUARDRAIL_FINAL_MODE="$(jq -r '.final_mode' "$GUARDRAIL_RESULT_FILE")"
+  GUARDRAIL_TRIGGERS="$(jq -r 'if (.triggers | length) > 0 then .triggers | join(", ") else "none" end' "$GUARDRAIL_RESULT_FILE")"
+  GUARDRAIL_STRATEGY="$(jq -r 'if (.strategy | length) > 0 then .strategy | join(", ") else "none" end' "$GUARDRAIL_RESULT_FILE")"
+
+  case "$GUARDRAIL_FINAL_MODE" in
+    cautious)
+      GUARDRAIL_APPLIED="true"
+      DECISION_CONFIDENCE="$(jq -rn --argjson confidence "$BASE_CONFIDENCE" 'if ($confidence - 0.15) < 0.15 then 0.15 else ($confidence - 0.15) end')"
+      REASON_TEXT="guardrail이 cautious 모드로 전환됐기 때문에 결론 강도를 낮춘다. 핵심 trigger는 ${GUARDRAIL_TRIGGERS}이고 대응 strategy는 ${GUARDRAIL_STRATEGY}다. 사용자의 최우선 기준이 ${PRIMARY_PRIORITY}인 점은 유지하되 riskA=${RISK_A_LEVEL}, riskB=${RISK_B_LEVEL}를 더 무겁게 반영해 현재는 ${BASE_DECISION} 쪽을 조심스럽게 권한다."
+      CORE_WHY="guardrail이 위험 신호를 감지했으므로 최종 선택을 뒤집기보다는 confidence를 낮추고 위험 경고를 전면에 두는 것이 적절하다."
+      ;;
+    blocked)
+      GUARDRAIL_APPLIED="true"
+      STUB_DECISION="undecided"
+      STUB_RECOMMENDED_OPTION="undecided"
+      SELECTED_REASONING="undecided"
+      DECISION_CONFIDENCE='0.35'
+      REASON_TEXT="guardrail이 blocked 모드로 전환됐기 때문에 지금은 결론을 내리지 않는다. trigger는 ${GUARDRAIL_TRIGGERS}이고 strategy는 ${GUARDRAIL_STRATEGY}다. 현재 입력만으로는 사용자의 우선순위와 위험 해석 사이의 충돌을 안전하게 정리하기 어려우므로 추가 정보가 필요하다."
+      CORE_WHY="모호성과 reasoning 충돌이 함께 커서 단정 추천보다 추가 정보 요청이 더 안전하다."
       ;;
   esac
 fi
@@ -317,14 +369,20 @@ jq -n \
   }' > "$REQUEST_FILE"
 
 jq -n \
+  --arg decision "$STUB_DECISION" \
   --arg recommended_option "$STUB_RECOMMENDED_OPTION" \
   --arg selected_reasoning "$SELECTED_REASONING" \
   --arg core_why "$CORE_WHY" \
   --arg reason "$REASON_TEXT" \
+  --argjson confidence "$DECISION_CONFIDENCE" \
+  --argjson guardrail_applied "$GUARDRAIL_APPLIED" \
   --argjson decision_confidence "$DECISION_CONFIDENCE" \
   '{
+    decision: $decision,
+    confidence: $confidence,
     recommended_option: $recommended_option,
     reason: $reason,
+    guardrail_applied: $guardrail_applied,
     reasoning_basis: {
       selected_reasoning: $selected_reasoning,
       core_why: $core_why,

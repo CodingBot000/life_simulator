@@ -1,6 +1,6 @@
 {
   "stage": "scenario",
-  "generated_at": "2026-03-26T09:57:23Z",
+  "generated_at": "2026-03-26T18:57:55Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/scenario.md",
   "input_source": "playground/inputs/cases/case-09-overseas-study-vs-work.json",

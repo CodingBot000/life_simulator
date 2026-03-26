@@ -7,6 +7,7 @@ import type {
   AbReasoningResult,
   AdvisorResult,
   DecisionInput,
+  GuardrailResult,
   PlannerResult,
   ReflectionResult,
   RiskResult,
@@ -576,32 +577,45 @@ function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
 }
 
 function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
+  const decisionLabel =
+    advisor.decision === "undecided"
+      ? "Undecided"
+      : `Option ${advisor.decision}`;
+
   return (
     <section className="card-surface-strong rounded-[32px] p-6">
       <p className="section-label">Advisor</p>
       <div className="mt-3 flex items-center justify-between gap-3">
         <h3 className="display-font text-2xl font-semibold text-slate-950">
-          최종 추천
+          최종 판단
         </h3>
         <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
-          Option {advisor.recommended_option}
+          {decisionLabel}
         </span>
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-            Selected Reasoning
+            Decision
           </p>
           <p className="mt-2 text-xl font-semibold text-slate-950">
-            {advisor.reasoning_basis.selected_reasoning}
+            {advisor.decision}
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4 sm:col-span-2">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
             Decision Confidence
           </p>
           <p className="mt-2 text-xl font-semibold text-slate-950">
-            {formatConfidence(advisor.reasoning_basis.decision_confidence)}
+            {formatConfidence(advisor.confidence)}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Guardrail Applied
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {advisor.guardrail_applied ? "yes" : "no"}
           </p>
         </div>
       </div>
@@ -609,6 +623,52 @@ function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
       <p className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
         {advisor.reasoning_basis.core_why}
       </p>
+    </section>
+  );
+}
+
+function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
+  return (
+    <section className="card-surface rounded-[28px] p-6">
+      <p className="section-label">Guardrail</p>
+      <div className="mt-3 flex items-center justify-between gap-3">
+        <h3 className="display-font text-2xl font-semibold text-slate-950">
+          결론 안전장치
+        </h3>
+        <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
+          {guardrail.final_mode}
+        </span>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Triggered
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {guardrail.guardrail_triggered ? "yes" : "no"}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4 sm:col-span-2">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Triggers
+          </p>
+          <p className="mt-2 text-sm leading-7 text-slate-700">
+            {guardrail.triggers.length > 0
+              ? guardrail.triggers.join(", ")
+              : "none"}
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+          Strategy
+        </p>
+        <p className="mt-2 text-sm leading-7 text-slate-700">
+          {guardrail.strategy.length > 0
+            ? guardrail.strategy.join(", ")
+            : "none"}
+        </p>
+      </div>
     </section>
   );
 }
@@ -639,6 +699,9 @@ function ReflectionCard({ reflection }: { reflection: ReflectionResult }) {
         </h3>
       </div>
       <p className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
+        {reflection.evaluation}
+      </p>
+      <p className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
         {reflection.overall_comment}
       </p>
 
@@ -657,6 +720,33 @@ function ReflectionCard({ reflection }: { reflection: ReflectionResult }) {
             </p>
           </div>
         ))}
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Guardrail Needed
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {reflection.guardrail_review.was_needed ? "yes" : "no"}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Guardrail Triggered
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {reflection.guardrail_review.was_triggered ? "yes" : "no"}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Guardrail Review
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {reflection.guardrail_review.correctness}
+          </p>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-5">
@@ -756,8 +846,8 @@ export default function HomePage() {
             <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
               사용자 프로필과 두 가지 선택지를 입력하면 State Loader가 먼저
               사용자 상태를 구조화하고, 이어서 Planner, Scenario, Risk, A/B
-              Reasoning, Advisor, Reflection 단계가 그 상태를 공통으로
-              사용합니다.
+              Reasoning, Guardrail, Advisor, Reflection 단계가 그 상태를
+              공통으로 사용합니다.
             </p>
           </div>
 
@@ -770,8 +860,9 @@ export default function HomePage() {
               "5. Risk A",
               "6. Risk B",
               "7. A/B Reasoning",
-              "8. Advisor",
-              "9. Reflection",
+              "8. Guardrail",
+              "9. Advisor",
+              "10. Reflection",
             ].map((step) => (
               <span
                 key={step}
@@ -942,8 +1033,8 @@ export default function HomePage() {
                 Agent chain 실행 중
               </h2>
               <p className="mt-3">
-                State Loader부터 Planner, A/B Reasoning, Reflection까지
-                순서대로 실행하고 있습니다. 응답이 도착하면 결과 카드가 자동으로
+                State Loader부터 Planner, Guardrail, Reflection까지 순서대로
+                실행하고 있습니다. 응답이 도착하면 결과 카드가 자동으로
                 채워집니다.
               </p>
             </div>
@@ -957,8 +1048,8 @@ export default function HomePage() {
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
                 좌측 폼을 제출하면 state context, Planner, 시나리오, 리스크,
-                A/B reasoning, 최종 추천, reflection 검증 결과가 카드 형태로
-                정리됩니다.
+                A/B reasoning, guardrail, 최종 판단, reflection 검증 결과가
+                카드 형태로 정리됩니다.
               </p>
             </div>
           ) : null}
@@ -972,6 +1063,7 @@ export default function HomePage() {
               <RiskCard title="Risk A" risk={result.riskA} />
               <RiskCard title="Risk B" risk={result.riskB} />
               <ReasoningCard reasoning={result.reasoning} />
+              <GuardrailCard guardrail={result.guardrail} />
               <AdvisorCard advisor={result.advisor} />
               <ReflectionCard reflection={result.reflection} />
             </>

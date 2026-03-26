@@ -81,7 +81,7 @@ execution_mode 정의:
   "light": ["planner", "advisor"],
   "standard": ["planner", "scenario", "advisor"],
   "careful": ["planner", "scenario", "risk", "advisor"],
-  "full": ["planner", "scenario", "risk", "ab_reasoning", "advisor", "reflection"]
+  "full": ["planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"]
 }
 ```
 
@@ -97,9 +97,10 @@ execution_mode 정의:
 행동 규칙:
 - `selected_path`는 반드시 `execution_mode`와 정확히 일치해야 한다.
 - `planner`는 항상 포함되어야 한다.
-- `advisor`는 항상 마지막이어야 한다.
+- `reflection`이 있으면 `advisor` 바로 뒤에 와야 한다.
 - `scenario` 없이 `risk`를 포함하면 안 된다.
-- `ab_reasoning`과 `reflection`은 `full`에서만 포함할 수 있다.
+- `guardrail`은 `ab_reasoning` 뒤, `advisor` 앞에만 올 수 있다.
+- `ab_reasoning`, `guardrail`, `reflection`은 `full`에서만 포함할 수 있다.
 - `stateContext.user_state`에 `unknown`, `none`, 빈 배열이 많으면 ambiguity 판단을 높일 수 있다.
 - `routing_reason`은 왜 이 실행 경로를 골랐는지 한 문장으로 설명하되, 추천이나 결론으로 넘어가면 안 된다.
 - 입력에 없는 사실을 새로 만들어 단정하지 않는다.
@@ -120,6 +121,7 @@ execution_mode 정의:
       "scenario",
       "risk",
       "ab_reasoning",
+      "guardrail",
       "advisor",
       "reflection"
     ],
@@ -240,6 +242,7 @@ execution_mode 정의:
               "scenario",
               "risk",
               "ab_reasoning",
+              "guardrail",
               "advisor",
               "reflection"
             ]

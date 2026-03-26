@@ -77,12 +77,40 @@
 
 - Skipped in execution_mode=standard
 
+## Guardrail
+
+- guardrail_triggered: true
+- triggers: ambiguity_high
+- strategy: ask_more_info
+- final_mode: cautious
+- guardrail correctness: good
+
 ## Advisor
 
+- Decision: B
+- Confidence: 0.51
+- Guardrail applied: true
 - Recommended option: B
-- Reason: router가 standard 경로를 선택해 scenarioA/B까지 비교했다. 최우선 기준이 growth이고 risk_tolerance가 low이므로 현재 stub에서는 B를 추천한다.
-- Reasoning basis: reasoning B / confidence 0.66 / scenarioA와 scenarioB까지 비교한 결과, 사용자의 우선순위와 더 잘 맞는 흐름을 advisor가 직접 선택했다.
+- Reason: guardrail이 cautious 모드로 전환됐기 때문에 결론 강도를 낮춘다. 핵심 trigger는 ambiguity_high이고 대응 strategy는 ask_more_info다. 사용자의 최우선 기준이 growth인 점은 유지하되 riskA=not_run, riskB=not_run를 더 무겁게 반영해 현재는 B 쪽을 조심스럽게 권한다.
+- Reasoning basis: reasoning B / confidence 0.51 / guardrail이 위험 신호를 감지했으므로 최종 선택을 뒤집기보다는 confidence를 낮추고 위험 경고를 전면에 두는 것이 적절하다.
 
 ## Reflection
 
-- Skipped in execution_mode=standard
+- evaluation: guardrail final_mode=cautious 조건에서 advisor가 약한 추천과 낮아진 confidence로 위험 신호를 충분히 반영했는지 다시 점검한다.
+- realism: 4
+- consistency: 4
+- profile_alignment: 4
+- recommendation_clarity: 4
+- guardrail_review: needed=true / triggered=true / correctness=good
+
+### 주요 문제
+
+- [advisor] advisor decision=B, confidence=0.51, guardrail_applied=true 조합이 guardrail final_mode=cautious 및 위험 신호(routing risk=low, ambiguity=medium, riskA=medium, riskB=medium)와 어떻게 연결되는지 문장 수준에서 더 직접적으로 드러나야 한다.
+- [scenario] standard 경로에서는 scenario 비교가 핵심이므로, 각 옵션의 시간축 변화가 최우선 priority와 어떻게 연결되는지 더 직접적으로 드러낼 필요가 있다.
+
+### 개선 방향
+
+- [advisor] advisor reason에 조심스러운 추천임을 직접 밝히고 risk/uncertainty가 confidence를 낮춘 이유를 한 문장으로 덧붙여라.
+- [scenario] scenario A/B의 3개월, 1년, 3년 문장마다 사용자의 최우선 priority 유지 여부를 한 문장씩 명시하라.
+
+- Overall comment: cautious 모드 전환은 적절하며, 위험 신호를 유지한 채 추천 강도를 낮춘 점이 현재 실행 경로와 잘 맞는다.

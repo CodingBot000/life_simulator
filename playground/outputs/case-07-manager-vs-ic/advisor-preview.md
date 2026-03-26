@@ -8,6 +8,7 @@
 - Previous result: `playground/outputs/case-07-manager-vs-ic/planner-result.json`
 - Previous result: `playground/outputs/case-07-manager-vs-ic/scenario-a-result.json`
 - Previous result: `playground/outputs/case-07-manager-vs-ic/scenario-b-result.json`
+- Previous result: `playground/outputs/case-07-manager-vs-ic/guardrail-result.json`
 
 ## Prompt
 
@@ -15,10 +16,11 @@
 너는 의사결정 시뮬레이션 체인의 Advisor Agent다.
 
 목표:
-- executionMode에 따라 제공된 upstream 결과만 사용해 A/B 중 하나를 추천한다.
+- executionMode에 따라 제공된 upstream 결과만 사용해 `A`, `B`, `undecided` 중 하나로 결론을 정리한다.
 - 원본 case input과 state summary를 최우선 기준으로 사용한다.
 - `abReasoning.reasoning.final_selection`이 있으면 이를 기본 출발점으로 삼되, 없으면 planner/scenario/risk를 직접 비교한다.
-- 결론은 분명해야 하며, 양비론이나 회피 답변은 금지한다.
+- `guardrailResult`가 있으면 그 모드에 맞춰 결론 강도를 조절한다.
+- `guardrailResult.final_mode = "blocked"`이면 최종 결론을 내리지 말고 추가 정보 요청으로 전환한다.
 
 입력 데이터 형식:
 ```json
@@ -138,6 +140,12 @@
         "decision_confidence": 0.72
       }
     }
+  },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": ["reasoning_conflict"],
+    "strategy": ["neutralize_decision"],
+    "final_mode": "cautious"
   }
 }
 ```
@@ -147,15 +155,22 @@
 - `scenarioA`, `scenarioB`는 `standard`, `careful`, `full`에서만 존재할 수 있다.
 - `riskA`, `riskB`는 `careful`, `full`에서만 존재할 수 있다.
 - `abReasoning`은 `full`에서만 존재할 수 있다.
+- `guardrailResult`는 `full`에서만 존재할 수 있다.
 - 없는 필드는 추측으로 보완하지 말고, 존재하는 입력만으로 판단한다.
 
 판단 규칙:
-- 반드시 `recommended_option`에 `A` 또는 `B` 중 하나만 넣는다.
+- 출력의 `decision`은 반드시 `A`, `B`, `undecided` 중 하나여야 한다.
+- `recommended_option`은 `decision`과 동일한 값을 넣는다.
 - 추천 사유는 `stateContext.state_summary`, `profile_state.top_priorities`, `situational_state`, `memory_state`에 직접 연결해야 한다.
 - `abReasoning`이 있으면 final_selection을 그대로 복붙하지 말고 state-aware 근거로 재구성한다.
 - `abReasoning`이 없으면 planner/scenario/risk를 직접 종합해 `reasoning_basis.selected_reasoning`에 최종 추천과 가장 가까운 축(`A` 또는 `B`)을 기록한다.
+- `guardrailResult.final_mode == "normal"`이면 기존처럼 추천한다.
+- `guardrailResult.final_mode == "cautious"`이면 추천은 가능하지만 확신을 낮추고 risk를 분명히 강조한다.
+- `guardrailResult.final_mode == "blocked"`이면 `decision = "undecided"`로 두고, 왜 추가 정보가 필요한지 설명한다.
+- `guardrail_applied`는 guardrail이 실제로 행동을 바꿨을 때만 `true`다.
+- `confidence`는 0~1 범위 숫자여야 하며, `reasoning_basis.decision_confidence`와 같은 값을 넣는다.
 - `reasoning_basis`에는 선택된 reasoning 축, 핵심 판단 근거, confidence를 구조적으로 남긴다.
-- 두 선택지를 공정하게 비교하되 결론은 하나로 수렴시킨다.
+- `blocked`가 아니면 두 선택지를 공정하게 비교하되 결론은 하나로 수렴시킨다.
 - 입력에 없는 새로운 사실을 추가하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
@@ -163,10 +178,13 @@
 출력 JSON 형식:
 ```json
 {
-  "recommended_option": "A | B",
+  "decision": "A | B | undecided",
+  "confidence": 0.0,
   "reason": "",
+  "guardrail_applied": true,
+  "recommended_option": "A | B | undecided",
   "reasoning_basis": {
-    "selected_reasoning": "A | B",
+    "selected_reasoning": "A | B | undecided",
     "core_why": "",
     "decision_confidence": 0.0
   }
@@ -258,6 +276,16 @@
     "three_months": "IC 트랙에 남기로 한 직후에는 안도감이 먼저 든다. 팀 운영과 인사 이슈를 맡지 않아도 된다는 점에서 스트레스 관리가 가능하다고 느끼고, 당장 익숙한 역할을 유지한다는 점도 저위험 성향에 맞아 심리적으로 안정적이다. 대신 조직이 커지는 흐름 속에서 매니저 역할 제안을 고사한 만큼, 스스로 성장 경로를 분명히 보여줘야 한다는 압박이 생긴다. 그래서 핵심 시스템 개선, 아키텍처 리뷰, 난도 높은 기술 과제에 더 깊게 관여하려 하고, 기술적 깊이를 유지하는 방향은 분명해진다. 다만 보상 측면에서는 관리직보다 상승 속도가 느릴 수 있다는 현실을 체감하면서, 지금 수준의 보상은 유지되지만 앞으로의 성장성에 대한 작은 불안도 함께 남는다.",
     "one_year": "1년 정도 지나면 IC 트랙 안에서도 자신의 위치가 조금 더 선명해진다. 주요 기술 의사결정에 참여하고, 복잡한 문제를 해결하는 사람으로 신뢰를 얻으면서 성장 경로 적합성에 대한 확신이 커진다. 관리 업무에서 오는 감정 소모는 상대적으로 적어 스트레스는 예측 가능하게 유지되지만, 반대로 여러 팀이 기술 판단을 의존하기 시작하면 조율 부담이 완전히 사라지지는 않는다. 그래도 사람 평가나 갈등 중재의 중심에 서지 않는 만큼, 본인이 걱정했던 종류의 스트레스는 피한 편이다. 보상은 큰 폭의 점프보다는 안정적인 인상이나 전문성 기반 보상으로 이어질 가능성이 높고, 회사가 IC 레벨 체계를 잘 운영한다면 만족감이 생기지만, 그렇지 않다면 매니저 트랙 대비 성장 속도가 아쉽게 느껴질 수 있다. 전반적으로 안정성은 높고 기술적 깊이도 유지되지만, ‘내가 이 조직에서 어디까지 갈 수 있나’라는 질문은 더 구체적으로 떠오른다.",
     "three_years": "3년 후에는 선택의 성격이 더 분명하게 드러난다. IC 트랙에 남은 덕분에 특정 도메인이나 시스템에서 깊은 전문성을 쌓아 조직 내 핵심 개인 기여자로 자리잡을 가능성이 크고, 이는 본인이 원했던 기술적 깊이 유지 욕구와 잘 맞는다. 저위험 성향에 맞게 역할 변화의 불확실성을 크게 늘리지 않았기 때문에 경력의 연속성도 안정적으로 이어진다. 다만 조직이 계속 커질수록 영향력의 방식이 달라져, 직접 관리하지 않더라도 기술 리더십과 설득, 우선순위 조율 책임은 늘어난다. 이 과정에서 스트레스는 초기 예상보다 약간 높아질 수 있지만, 사람 관리 중심 스트레스와는 결이 달라 스스로 통제 가능한 수준으로 느낄 가능성이 높다. 보상은 회사의 IC 보상 체계가 성숙해 있으면 충분히 경쟁력 있게 따라가지만, 그렇지 않으면 매니저 트랙 동료와의 격차를 체감하며 아쉬움을 느낄 수 있다. 결국 이 선택은 극적인 승부수보다는, 성장의 방향을 기술 전문성으로 고정하고 스트레스를 관리 가능한 범위 안에 두는 대신, 보상 성장성과 조직 내 위상은 회사 구조에 따라 천천히 갈리는 시나리오에 가깝다."
+  },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": [
+      "ambiguity_high"
+    ],
+    "strategy": [
+      "ask_more_info"
+    ],
+    "final_mode": "cautious"
   }
 }
 ```
@@ -269,15 +297,32 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "decision": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "undecided"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "reason": {
+      "type": "string"
+    },
+    "guardrail_applied": {
+      "type": "boolean"
+    },
     "recommended_option": {
       "type": "string",
       "enum": [
         "A",
-        "B"
+        "B",
+        "undecided"
       ]
-    },
-    "reason": {
-      "type": "string"
     },
     "reasoning_basis": {
       "type": "object",
@@ -287,7 +332,8 @@
           "type": "string",
           "enum": [
             "A",
-            "B"
+            "B",
+            "undecided"
           ]
         },
         "core_why": {
@@ -307,8 +353,11 @@
     }
   },
   "required": [
-    "recommended_option",
+    "decision",
+    "confidence",
     "reason",
+    "guardrail_applied",
+    "recommended_option",
     "reasoning_basis"
   ]
 }

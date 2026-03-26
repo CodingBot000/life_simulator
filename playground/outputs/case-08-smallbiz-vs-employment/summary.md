@@ -45,7 +45,7 @@
 - risk_level: medium
 - ambiguity: medium
 - execution_mode: full
-- selected_path: planner -> scenario -> risk -> ab_reasoning -> advisor -> reflection
+- selected_path: planner -> scenario -> risk -> ab_reasoning -> guardrail -> advisor -> reflection
 - reason: 복잡도와 불확실성이 함께 높아 planner 이후 심화 검토가 모두 필요하다.
 
 ## Planner
@@ -109,29 +109,42 @@
 - why selected: 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 B reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
 - decision confidence: 0.68
 
+## Guardrail
+
+- guardrail_triggered: true
+- triggers: reasoning_conflict
+- strategy: neutralize_decision
+- final_mode: cautious
+- guardrail correctness: good
+
 ## Advisor
 
+- Decision: B
+- Confidence: 0.53
+- Guardrail applied: true
 - Recommended option: B
-- Reason: 사용자의 risk_tolerance가 high이고 최우선 기준이 independence이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 B를 추천한다.
-- Reasoning basis: reasoning B / confidence 0.68 / 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 B reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
+- Reason: guardrail이 cautious 모드로 전환됐기 때문에 결론 강도를 낮춘다. 핵심 trigger는 reasoning_conflict이고 대응 strategy는 neutralize_decision다. 사용자의 최우선 기준이 independence인 점은 유지하되 riskA=medium, riskB=medium를 더 무겁게 반영해 현재는 B 쪽을 조심스럽게 권한다.
+- Reasoning basis: reasoning B / confidence 0.53 / guardrail이 위험 신호를 감지했으므로 최종 선택을 뒤집기보다는 confidence를 낮추고 위험 경고를 전면에 두는 것이 적절하다.
 
 ## Reflection
 
+- evaluation: guardrail final_mode=cautious 조건에서 advisor decision=B와 reasoning 선택이 얼마나 안전하게 연결됐는지 다시 평가한다.
 - realism: 4
 - consistency: 4
 - profile_alignment: 3
 - recommendation_clarity: 4
+- guardrail_review: needed=true / triggered=true / correctness=good
 
 ### 주요 문제
 
 - [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 independence을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
 - [reasoning] reasoning의 최종 선택은 reasoning B, option B, confidence 0.68로 정리됐지만 A/B 관점 차이가 실제로 충분히 벌어졌는지와 comparison 충돌 정리가 더 선명하게 드러날 필요가 있다.
-- [advisor] advisor가 B를 추천하지만 riskA=medium, riskB=medium와 reasoning final_selection을 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.
+- [advisor] advisor가 B를 제시하지만 riskA=medium, riskB=medium, guardrail final_mode=cautious를 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.
 
 ### 개선 방향
 
 - [scenario] 각 시간 축 문장에서 independence 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
 - [reasoning] A는 안정성 손실 회피, B는 성장 기대값 확대라는 관점 차이가 문장 수준에서 분명히 보이도록 comparison의 agreement와 conflict를 더 날카롭게 정리하라.
-- [advisor] 최종 추천 사유를 priority, risk, reasoning, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
+- [advisor] 최종 추천 사유를 priority, risk, reasoning, guardrail, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
 
 - Overall comment: 전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.

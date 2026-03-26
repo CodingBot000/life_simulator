@@ -11,6 +11,7 @@
 - A/B reasoning이 실제로 다른 관점을 형성했는지 확인한다.
 - comparison이 형식적 요약이 아니라 의미 있는 충돌 정리를 했는지 확인한다.
 - final_selection이 앞선 reasoning 내용과 일관적인지 확인한다.
+- guardrail이 실제로 필요했는지와 발동 수준이 적절했는지 평가한다.
 - advisor가 reasoning 결과와 state summary를 실제 추천 논리로 흡수했는지 확인한다.
 - 최종 추천이 충분히 명확한지 검증한다.
 - 문제를 구체적으로 지적하고, 다음 개선 방향을 구조적으로 제시한다.
@@ -130,13 +131,22 @@
     }
   },
   "advisorResult": {
-    "recommended_option": "A",
+    "decision": "A",
+    "confidence": 0.72,
     "reason": "",
+    "guardrail_applied": true,
+    "recommended_option": "A",
     "reasoning_basis": {
       "selected_reasoning": "A",
       "core_why": "",
       "decision_confidence": 0.72
     }
+  },
+  "guardrailResult": {
+    "guardrail_triggered": true,
+    "triggers": ["reasoning_conflict"],
+    "strategy": ["neutralize_decision"],
+    "final_mode": "cautious"
   }
 }
 ```
@@ -156,6 +166,9 @@
 - `improvement_suggestions`에는 반드시 1개 이상의 실행 가능한 개선 방향을 적는다.
 - `improvement_suggestions[].target`은 반드시 `planner`, `scenario`, `risk`, `reasoning`, `advisor` 중 하나만 사용한다.
 - 개선 방향은 "더 잘 써라" 같은 모호한 문장이 아니라, 무엇을 어떻게 보강해야 하는지 적는다.
+- `guardrail_review.was_needed`는 실제로 guardrail이 필요한 상황이었는지 평가한다.
+- `guardrail_review.was_triggered`는 입력된 guardrail 결과 기준으로 발동 여부를 적는다.
+- `guardrail_review.correctness`는 `good`, `over`, `missing` 중 하나만 사용한다.
 - 입력에 없는 사실을 새로 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
@@ -163,6 +176,7 @@
 출력 JSON 형식:
 ```json
 {
+  "evaluation": "",
   "scores": {
     "realism": 1,
     "consistency": 1,
@@ -181,6 +195,11 @@
       "suggestion": ""
     }
   ],
-  "overall_comment": ""
+  "overall_comment": "",
+  "guardrail_review": {
+    "was_needed": true,
+    "was_triggered": true,
+    "correctness": "good"
+  }
 }
 ```

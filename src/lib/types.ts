@@ -85,6 +85,18 @@ export interface RiskResult {
 }
 
 export type DecisionOptionLabel = "A" | "B";
+export type AdvisorDecision = DecisionOptionLabel | "undecided";
+export type GuardrailTrigger =
+  | "ambiguity_high"
+  | "reasoning_conflict"
+  | "low_confidence"
+  | "high_risk";
+export type GuardrailStrategy =
+  | "ask_more_info"
+  | "neutralize_decision"
+  | "soft_recommendation"
+  | "risk_warning";
+export type GuardrailMode = "normal" | "cautious" | "blocked";
 
 export interface ReasoningPerspective {
   stance: string;
@@ -125,11 +137,21 @@ export interface AbReasoningResult {
   };
 }
 
+export interface GuardrailResult {
+  guardrail_triggered: boolean;
+  triggers: GuardrailTrigger[];
+  strategy: GuardrailStrategy[];
+  final_mode: GuardrailMode;
+}
+
 export interface AdvisorResult {
-  recommended_option: DecisionOptionLabel;
+  decision: AdvisorDecision;
+  confidence: number;
   reason: string;
+  guardrail_applied: boolean;
+  recommended_option: AdvisorDecision;
   reasoning_basis: {
-    selected_reasoning: DecisionOptionLabel;
+    selected_reasoning: AdvisorDecision;
     core_why: string;
     decision_confidence: number;
   };
@@ -154,11 +176,19 @@ export interface ReflectionImprovementSuggestion {
   suggestion: string;
 }
 
+export interface ReflectionGuardrailReview {
+  was_needed: boolean;
+  was_triggered: boolean;
+  correctness: "good" | "over" | "missing";
+}
+
 export interface ReflectionResult {
+  evaluation: string;
   scores: ReflectionScores;
   issues: ReflectionIssue[];
   improvement_suggestions: ReflectionImprovementSuggestion[];
   overall_comment: string;
+  guardrail_review: ReflectionGuardrailReview;
 }
 
 export interface SimulationResponse {
@@ -169,6 +199,7 @@ export interface SimulationResponse {
   riskA: RiskResult;
   riskB: RiskResult;
   reasoning: AbReasoningResult;
+  guardrail: GuardrailResult;
   advisor: AdvisorResult;
   reflection: ReflectionResult;
 }

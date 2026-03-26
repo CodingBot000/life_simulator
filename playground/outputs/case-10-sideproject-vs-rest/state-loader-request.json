@@ -1,6 +1,6 @@
 {
   "stage": "state_loader",
-  "generated_at": "2026-03-26T09:57:24Z",
+  "generated_at": "2026-03-26T18:57:56Z",
   "description": "Prepared request payload for state-context generation.",
   "prompt_file": "prompts/state_loader.md",
   "input_source": "playground/inputs/cases/case-10-sideproject-vs-rest.json",

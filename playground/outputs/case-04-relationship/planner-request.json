@@ -1,6 +1,6 @@
 {
   "stage": "planner",
-  "generated_at": "2026-03-26T09:57:13Z",
+  "generated_at": "2026-03-26T18:57:45Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/planner.md",
   "input_source": "playground/inputs/cases/case-04-relationship.json",
