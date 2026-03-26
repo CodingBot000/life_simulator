@@ -1,17 +1,17 @@
 {
   "stage": "advisor",
-  "generated_at": "2026-03-24T19:24:08Z",
+  "generated_at": "2026-03-26T09:57:19Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/advisor.md",
   "input_source": "playground/inputs/cases/case-07-manager-vs-ic.json",
   "previous_stage_result_files": [
+    "playground/outputs/case-07-manager-vs-ic/state-context.json",
+    "playground/outputs/case-07-manager-vs-ic/routing-result.json",
     "playground/outputs/case-07-manager-vs-ic/planner-result.json",
     "playground/outputs/case-07-manager-vs-ic/scenario-a-result.json",
-    "playground/outputs/case-07-manager-vs-ic/scenario-b-result.json",
-    "playground/outputs/case-07-manager-vs-ic/risk-a-result.json",
-    "playground/outputs/case-07-manager-vs-ic/risk-b-result.json"
+    "playground/outputs/case-07-manager-vs-ic/scenario-b-result.json"
   ],
-  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Advisor Agent다.\n\n목표:\n- scenarioA, scenarioB, riskA, riskB를 비교해 A/B 중 하나만 추천한다.\n- 사용자의 `risk_tolerance`와 `priority`를 최우선 판단 기준으로 사용한다.\n- 결론은 분명해야 하며, 양비론이나 회피 답변은 금지한다.\n\n입력 데이터 형식:\n```json\n{\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"decision\": {\n    \"optionA\": \"현재 회사에 남는다\",\n    \"optionB\": \"스타트업으로 이직한다\",\n    \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n  },\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenarioA\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"scenarioB\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"riskA\": {\n    \"risk_level\": \"low\",\n    \"reasons\": []\n  },\n  \"riskB\": {\n    \"risk_level\": \"high\",\n    \"reasons\": []\n  }\n}\n```\n\n판단 규칙:\n- 반드시 `recommended_option`에 `A` 또는 `B` 중 하나만 넣는다.\n- 추천 사유는 사용자의 우선순위와 리스크 허용도에 직접 연결해야 한다.\n- 두 선택지를 공정하게 비교하되 결론은 하나로 수렴시킨다.\n- 입력에 없는 새로운 사실을 추가하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"recommended_option\": \"A | B\",\n  \"reason\": \"\"\n}\n```",
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Advisor Agent다.\n\n목표:\n- executionMode에 따라 제공된 upstream 결과만 사용해 A/B 중 하나를 추천한다.\n- 원본 case input과 state summary를 최우선 기준으로 사용한다.\n- `abReasoning.reasoning.final_selection`이 있으면 이를 기본 출발점으로 삼되, 없으면 planner/scenario/risk를 직접 비교한다.\n- 결론은 분명해야 하며, 양비론이나 회피 답변은 금지한다.\n\n입력 데이터 형식:\n```json\n{\n  \"executionMode\": \"light | standard | careful | full\",\n  \"routing\": {\n    \"execution_mode\": \"light\",\n    \"selected_path\": [\"planner\", \"advisor\"]\n  },\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-001\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain stability-growth tradeoffs explicitly\"\n    }\n  },\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenarioA\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"scenarioB\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  },\n  \"riskA\": {\n    \"risk_level\": \"low\",\n    \"reasons\": []\n  },\n  \"riskB\": {\n    \"risk_level\": \"high\",\n    \"reasons\": []\n  },\n  \"abReasoning\": {\n    \"case_id\": \"case-001\",\n    \"input_summary\": {\n      \"user_profile\": {\n        \"age\": 32,\n        \"job\": \"developer\",\n        \"risk_tolerance\": \"low\",\n        \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"decision_options\": {\n        \"optionA\": \"현재 회사에 남는다\",\n        \"optionB\": \"스타트업으로 이직한다\",\n        \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n      },\n      \"planner_goal\": \"안정성과 성장성 중 사용자에게 더 맞는 선택을 판별한다\"\n    },\n    \"reasoning\": {\n      \"a_reasoning\": {\n        \"stance\": \"conservative\",\n        \"summary\": \"\",\n        \"key_assumptions\": [],\n        \"pros\": [],\n        \"cons\": [],\n        \"recommended_option\": \"A\",\n        \"confidence\": 0.74\n      },\n      \"b_reasoning\": {\n        \"stance\": \"opportunity_seeking\",\n        \"summary\": \"\",\n        \"key_assumptions\": [],\n        \"pros\": [],\n        \"cons\": [],\n        \"recommended_option\": \"B\",\n        \"confidence\": 0.61\n      },\n      \"comparison\": {\n        \"agreements\": [],\n        \"conflicts\": [],\n        \"which_fits_user_better\": \"A\",\n        \"reason\": \"\"\n      },\n      \"final_selection\": {\n        \"selected_reasoning\": \"A\",\n        \"selected_option\": \"A\",\n        \"why_selected\": \"\",\n        \"decision_confidence\": 0.72\n      }\n    }\n  }\n}\n```\n\n주의:\n- `plannerResult`는 항상 존재한다.\n- `scenarioA`, `scenarioB`는 `standard`, `careful`, `full`에서만 존재할 수 있다.\n- `riskA`, `riskB`는 `careful`, `full`에서만 존재할 수 있다.\n- `abReasoning`은 `full`에서만 존재할 수 있다.\n- 없는 필드는 추측으로 보완하지 말고, 존재하는 입력만으로 판단한다.\n\n판단 규칙:\n- 반드시 `recommended_option`에 `A` 또는 `B` 중 하나만 넣는다.\n- 추천 사유는 `stateContext.state_summary`, `profile_state.top_priorities`, `situational_state`, `memory_state`에 직접 연결해야 한다.\n- `abReasoning`이 있으면 final_selection을 그대로 복붙하지 말고 state-aware 근거로 재구성한다.\n- `abReasoning`이 없으면 planner/scenario/risk를 직접 종합해 `reasoning_basis.selected_reasoning`에 최종 추천과 가장 가까운 축(`A` 또는 `B`)을 기록한다.\n- `reasoning_basis`에는 선택된 reasoning 축, 핵심 판단 근거, confidence를 구조적으로 남긴다.\n- 두 선택지를 공정하게 비교하되 결론은 하나로 수렴시킨다.\n- 입력에 없는 새로운 사실을 추가하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"recommended_option\": \"A | B\",\n  \"reason\": \"\",\n  \"reasoning_basis\": {\n    \"selected_reasoning\": \"A | B\",\n    \"core_why\": \"\",\n    \"decision_confidence\": 0.0\n  }\n}\n```",
   "expected_output_schema": {
     "type": "object",
     "additionalProperties": false,
@@ -25,28 +25,101 @@
       },
       "reason": {
         "type": "string"
+      },
+      "reasoning_basis": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "selected_reasoning": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B"
+            ]
+          },
+          "core_why": {
+            "type": "string"
+          },
+          "decision_confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "selected_reasoning",
+          "core_why",
+          "decision_confidence"
+        ]
       }
     },
     "required": [
       "recommended_option",
-      "reason"
+      "reason",
+      "reasoning_basis"
     ]
   },
   "input_data": {
-    "userProfile": {
-      "age": 37,
-      "job": "senior developer",
-      "risk_tolerance": "low",
-      "priority": [
-        "growth",
-        "stress_management",
-        "compensation"
-      ]
+    "caseId": "case-07-manager-vs-ic",
+    "executionMode": "standard",
+    "caseInput": {
+      "userProfile": {
+        "age": 37,
+        "job": "senior developer",
+        "risk_tolerance": "low",
+        "priority": [
+          "growth",
+          "stress_management",
+          "compensation"
+        ]
+      },
+      "decision": {
+        "optionA": "매니저 트랙으로 전환한다",
+        "optionB": "IC 트랙에 남는다",
+        "context": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다."
+      }
     },
-    "decision": {
-      "optionA": "매니저 트랙으로 전환한다",
-      "optionB": "IC 트랙에 남는다",
-      "context": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다."
+    "stateContext": {
+      "case_id": "case-07-manager-vs-ic",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "low",
+          "decision_style": "deliberate",
+          "top_priorities": [
+            "growth",
+            "stress_management",
+            "compensation"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "unknown"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "leans conservative under uncertainty",
+        "current_constraint": "none",
+        "agent_guidance": "tie the recommendation directly to growth, stress_management, compensation and make the tradeoff explicit"
+      }
+    },
+    "routing": {
+      "complexity": "medium",
+      "risk_level": "low",
+      "ambiguity": "medium",
+      "execution_mode": "standard",
+      "selected_path": [
+        "planner",
+        "scenario",
+        "advisor"
+      ],
+      "routing_reason": "중간 수준의 변수는 있으나 주된 검토는 시나리오 비교로 구조화 가능해 standard 경로를 선택한다."
     },
     "plannerResult": {
       "decision_type": "career_change",
@@ -67,27 +140,9 @@
       "three_months": "IC 트랙에 남기로 한 직후에는 안도감이 먼저 든다. 팀 운영과 인사 이슈를 맡지 않아도 된다는 점에서 스트레스 관리가 가능하다고 느끼고, 당장 익숙한 역할을 유지한다는 점도 저위험 성향에 맞아 심리적으로 안정적이다. 대신 조직이 커지는 흐름 속에서 매니저 역할 제안을 고사한 만큼, 스스로 성장 경로를 분명히 보여줘야 한다는 압박이 생긴다. 그래서 핵심 시스템 개선, 아키텍처 리뷰, 난도 높은 기술 과제에 더 깊게 관여하려 하고, 기술적 깊이를 유지하는 방향은 분명해진다. 다만 보상 측면에서는 관리직보다 상승 속도가 느릴 수 있다는 현실을 체감하면서, 지금 수준의 보상은 유지되지만 앞으로의 성장성에 대한 작은 불안도 함께 남는다.",
       "one_year": "1년 정도 지나면 IC 트랙 안에서도 자신의 위치가 조금 더 선명해진다. 주요 기술 의사결정에 참여하고, 복잡한 문제를 해결하는 사람으로 신뢰를 얻으면서 성장 경로 적합성에 대한 확신이 커진다. 관리 업무에서 오는 감정 소모는 상대적으로 적어 스트레스는 예측 가능하게 유지되지만, 반대로 여러 팀이 기술 판단을 의존하기 시작하면 조율 부담이 완전히 사라지지는 않는다. 그래도 사람 평가나 갈등 중재의 중심에 서지 않는 만큼, 본인이 걱정했던 종류의 스트레스는 피한 편이다. 보상은 큰 폭의 점프보다는 안정적인 인상이나 전문성 기반 보상으로 이어질 가능성이 높고, 회사가 IC 레벨 체계를 잘 운영한다면 만족감이 생기지만, 그렇지 않다면 매니저 트랙 대비 성장 속도가 아쉽게 느껴질 수 있다. 전반적으로 안정성은 높고 기술적 깊이도 유지되지만, ‘내가 이 조직에서 어디까지 갈 수 있나’라는 질문은 더 구체적으로 떠오른다.",
       "three_years": "3년 후에는 선택의 성격이 더 분명하게 드러난다. IC 트랙에 남은 덕분에 특정 도메인이나 시스템에서 깊은 전문성을 쌓아 조직 내 핵심 개인 기여자로 자리잡을 가능성이 크고, 이는 본인이 원했던 기술적 깊이 유지 욕구와 잘 맞는다. 저위험 성향에 맞게 역할 변화의 불확실성을 크게 늘리지 않았기 때문에 경력의 연속성도 안정적으로 이어진다. 다만 조직이 계속 커질수록 영향력의 방식이 달라져, 직접 관리하지 않더라도 기술 리더십과 설득, 우선순위 조율 책임은 늘어난다. 이 과정에서 스트레스는 초기 예상보다 약간 높아질 수 있지만, 사람 관리 중심 스트레스와는 결이 달라 스스로 통제 가능한 수준으로 느낄 가능성이 높다. 보상은 회사의 IC 보상 체계가 성숙해 있으면 충분히 경쟁력 있게 따라가지만, 그렇지 않으면 매니저 트랙 동료와의 격차를 체감하며 아쉬움을 느낄 수 있다. 결국 이 선택은 극적인 승부수보다는, 성장의 방향을 기술 전문성으로 고정하고 스트레스를 관리 가능한 범위 안에 두는 대신, 보상 성장성과 조직 내 위상은 회사 구조에 따라 천천히 갈리는 시나리오에 가깝다."
-    },
-    "riskA": {
-      "risk_level": "medium",
-      "reasons": [
-        "초기 3개월에 1:1 면담, 일정 조율, 채용, 대인 커뮤니케이션이 급증해 스트레스가 예상보다 크게 느껴지는 점은 낮은 위험 선호 성향과 직접 충돌한다.",
-        "1년 이후에는 관리 업무에 적응하며 스트레스가 어느 정도 통제 가능해지고, 회사도 적응 기간을 주는 설정이라 역할 전환의 불확실성이 아주 크지는 않다.",
-        "보상은 단기에는 큰 폭이 아니지만 1년~3년 구간에서 개선 가능성이 높아 보여, 우선순위인 compensation 측면의 하방 위험은 상대적으로 제한적이다.",
-        "가장 큰 중기 리스크는 기술적 깊이 유지다. 본인이 기술 몰입 욕구가 강한데, 이를 의식적으로 지키지 않으면 3년 시점에 만족도가 떨어질 수 있어 growth의 방향성이 흔들릴 수 있다."
-      ]
-    },
-    "riskB": {
-      "risk_level": "medium",
-      "reasons": [
-        "단기적으로는 사람 관리와 인사 이슈를 맡지 않아도 되어, 사용자가 특히 걱정한 스트레스 유형을 크게 줄일 수 있다는 점에서 위험이 낮다.",
-        "1년 이후에는 기술 의사결정과 복잡한 문제 해결에서 성장 경로가 선명해지지만, 조직 내에서 IC 레벨 체계가 얼마나 잘 운영되는지에 따라 성장의 체감 속도가 달라질 수 있다.",
-        "3년 시점에는 기술적 깊이와 경력의 연속성은 확보되기 쉽지만, 보상 성장성이 매니저 트랙보다 느리거나 격차가 벌어질 수 있어 우선순위인 보상 측면에서는 불확실성이 남는다.",
-        "시간이 갈수록 사람 관리는 피하더라도 기술 리더십, 설득, 우선순위 조율 부담은 늘어날 수 있어 스트레스가 완전히 사라지는 선택은 아니다."
-      ]
     }
   },
-  "input_json": "{\n  \"userProfile\": {\n    \"age\": 37,\n    \"job\": \"senior developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\n      \"growth\",\n      \"stress_management\",\n      \"compensation\"\n    ]\n  },\n  \"decision\": {\n    \"optionA\": \"매니저 트랙으로 전환한다\",\n    \"optionB\": \"IC 트랙에 남는다\",\n    \"context\": \"조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다.\"\n  },\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"성장 경로 적합성\",\n      \"스트레스 관리 가능성\",\n      \"보상 수준과 보상 성장성\",\n      \"역할 변화의 안정성과 불확실성\",\n      \"기술적 깊이 유지 가능성\"\n    ]\n  },\n  \"scenarioA\": {\n    \"three_months\": \"매니저 트랙으로 전환한 직후 3개월은 기대와 불안이 같이 간다. 겉으로는 역할이 명확해져 안정적으로 보이지만, 실제로는 1:1 면담, 일정 조율, 채용 참여, 다른 팀과의 커뮤니케이션이 갑자기 늘면서 하루가 잘게 끊겨 스트레스가 예상보다 크게 느껴진다. 특히 직접 코드를 오래 붙잡는 시간이 줄어들어 기술적 깊이가 느슨해지는 것 같아 아쉬움도 든다. 다만 senior developer로 쌓은 신뢰가 있어 팀원들은 비교적 협조적이고, 회사도 갑작스러운 평가 부담보다는 적응 기간을 주기 때문에 역할 변화의 불확실성은 아주 크지 않다. 보상은 소폭 인상되거나 다음 평가에서 반영될 가능성이 보여 현실적인 동기부여는 되지만, 당장 큰 차이는 아니다. 본인도 리스크를 크게 지고 싶어 하지 않기 때문에 완전히 관리 중심으로 달리기보다, 기술 리뷰나 아키텍처 논의는 계속 붙잡으려는 식으로 균형점을 찾으려 한다.\",\n    \"one_year\": \"1년쯤 지나면 이 선택이 자신에게 어느 정도 맞는지 더 분명해진다. 사람 관리 자체는 여전히 에너지를 쓰게 만들지만, 갈등을 초기에 정리하고 우선순위를 조율하는 방식에 익숙해지면서 스트레스는 처음보다 관리 가능한 수준으로 내려온다. 성장 경로 측면에서는 개인 기여자 시절과 다른 종류의 성취감이 생긴다. 팀원의 성과를 끌어올리거나 조직 내 의사결정을 정리하는 역할에서 영향력이 커지기 때문이다. 대신 기술적 깊이는 의식적으로 시간을 확보하지 않으면 확실히 얕아진다. 그래서 주간 기술 리뷰를 직접 주도하거나 중요한 설계 이슈에는 계속 참여하는 식으로 연결고리를 유지하게 된다. 보상은 관리 역할이 반영되며 이전보다 나아질 가능성이 높고, 향후 상승 폭도 개인 기여자 트랙과 비교해 나쁘지 않다는 점이 확인된다. 다만 성취의 내용이 ‘내가 잘 만드는 것’에서 ‘팀이 잘 움직이게 만드는 것’으로 바뀌기 때문에, 그 전환을 받아들이는 정도에 따라 만족감이 갈린다.\",\n    \"three_years\": \"3년 후에는 매니저 트랙이 일시적 실험이 아니라 경력의 한 축으로 자리잡았을 가능성이 크다. 낮은 위험 선호 성향 덕분에 무리하게 조직을 키우거나 과도한 책임을 떠안기보다, 감당 가능한 범위 안에서 팀 운영과 성과 관리를 안정적으로 해내는 스타일이 굳어진다. 그 결과 역할 자체의 안정성은 높아지고, 보상도 누적적으로 개선되어 생활 측면의 만족은 전반적으로 올라갈 수 있다. 반면 기술적 깊이 유지 가능성은 가장 큰 과제로 남는다. 꾸준히 설계 검토와 기술 방향성에 관여했다면 ‘기술을 이해하는 매니저’로 강점이 생기지만, 그렇지 못했다면 예전처럼 깊게 구현을 파고드는 감각은 분명 줄어든다. 감정적으로는 초반의 불안은 많이 사라지지만, 때때로 ‘나는 관리자로 성장하고 있는가, 아니면 원래 좋아하던 기술에서 멀어지고 있는가’라는 질문이 다시 올라온다. 결국 이 선택은 극적인 성공이나 실패라기보다, 보상과 조직 영향력은 커지는 대신 기술 몰입의 비중은 줄어드는 방향으로 서서히 굳어지는 현실적인 경로가 된다.\"\n  },\n  \"scenarioB\": {\n    \"three_months\": \"IC 트랙에 남기로 한 직후에는 안도감이 먼저 든다. 팀 운영과 인사 이슈를 맡지 않아도 된다는 점에서 스트레스 관리가 가능하다고 느끼고, 당장 익숙한 역할을 유지한다는 점도 저위험 성향에 맞아 심리적으로 안정적이다. 대신 조직이 커지는 흐름 속에서 매니저 역할 제안을 고사한 만큼, 스스로 성장 경로를 분명히 보여줘야 한다는 압박이 생긴다. 그래서 핵심 시스템 개선, 아키텍처 리뷰, 난도 높은 기술 과제에 더 깊게 관여하려 하고, 기술적 깊이를 유지하는 방향은 분명해진다. 다만 보상 측면에서는 관리직보다 상승 속도가 느릴 수 있다는 현실을 체감하면서, 지금 수준의 보상은 유지되지만 앞으로의 성장성에 대한 작은 불안도 함께 남는다.\",\n    \"one_year\": \"1년 정도 지나면 IC 트랙 안에서도 자신의 위치가 조금 더 선명해진다. 주요 기술 의사결정에 참여하고, 복잡한 문제를 해결하는 사람으로 신뢰를 얻으면서 성장 경로 적합성에 대한 확신이 커진다. 관리 업무에서 오는 감정 소모는 상대적으로 적어 스트레스는 예측 가능하게 유지되지만, 반대로 여러 팀이 기술 판단을 의존하기 시작하면 조율 부담이 완전히 사라지지는 않는다. 그래도 사람 평가나 갈등 중재의 중심에 서지 않는 만큼, 본인이 걱정했던 종류의 스트레스는 피한 편이다. 보상은 큰 폭의 점프보다는 안정적인 인상이나 전문성 기반 보상으로 이어질 가능성이 높고, 회사가 IC 레벨 체계를 잘 운영한다면 만족감이 생기지만, 그렇지 않다면 매니저 트랙 대비 성장 속도가 아쉽게 느껴질 수 있다. 전반적으로 안정성은 높고 기술적 깊이도 유지되지만, ‘내가 이 조직에서 어디까지 갈 수 있나’라는 질문은 더 구체적으로 떠오른다.\",\n    \"three_years\": \"3년 후에는 선택의 성격이 더 분명하게 드러난다. IC 트랙에 남은 덕분에 특정 도메인이나 시스템에서 깊은 전문성을 쌓아 조직 내 핵심 개인 기여자로 자리잡을 가능성이 크고, 이는 본인이 원했던 기술적 깊이 유지 욕구와 잘 맞는다. 저위험 성향에 맞게 역할 변화의 불확실성을 크게 늘리지 않았기 때문에 경력의 연속성도 안정적으로 이어진다. 다만 조직이 계속 커질수록 영향력의 방식이 달라져, 직접 관리하지 않더라도 기술 리더십과 설득, 우선순위 조율 책임은 늘어난다. 이 과정에서 스트레스는 초기 예상보다 약간 높아질 수 있지만, 사람 관리 중심 스트레스와는 결이 달라 스스로 통제 가능한 수준으로 느낄 가능성이 높다. 보상은 회사의 IC 보상 체계가 성숙해 있으면 충분히 경쟁력 있게 따라가지만, 그렇지 않으면 매니저 트랙 동료와의 격차를 체감하며 아쉬움을 느낄 수 있다. 결국 이 선택은 극적인 승부수보다는, 성장의 방향을 기술 전문성으로 고정하고 스트레스를 관리 가능한 범위 안에 두는 대신, 보상 성장성과 조직 내 위상은 회사 구조에 따라 천천히 갈리는 시나리오에 가깝다.\"\n  },\n  \"riskA\": {\n    \"risk_level\": \"medium\",\n    \"reasons\": [\n      \"초기 3개월에 1:1 면담, 일정 조율, 채용, 대인 커뮤니케이션이 급증해 스트레스가 예상보다 크게 느껴지는 점은 낮은 위험 선호 성향과 직접 충돌한다.\",\n      \"1년 이후에는 관리 업무에 적응하며 스트레스가 어느 정도 통제 가능해지고, 회사도 적응 기간을 주는 설정이라 역할 전환의 불확실성이 아주 크지는 않다.\",\n      \"보상은 단기에는 큰 폭이 아니지만 1년~3년 구간에서 개선 가능성이 높아 보여, 우선순위인 compensation 측면의 하방 위험은 상대적으로 제한적이다.\",\n      \"가장 큰 중기 리스크는 기술적 깊이 유지다. 본인이 기술 몰입 욕구가 강한데, 이를 의식적으로 지키지 않으면 3년 시점에 만족도가 떨어질 수 있어 growth의 방향성이 흔들릴 수 있다.\"\n    ]\n  },\n  \"riskB\": {\n    \"risk_level\": \"medium\",\n    \"reasons\": [\n      \"단기적으로는 사람 관리와 인사 이슈를 맡지 않아도 되어, 사용자가 특히 걱정한 스트레스 유형을 크게 줄일 수 있다는 점에서 위험이 낮다.\",\n      \"1년 이후에는 기술 의사결정과 복잡한 문제 해결에서 성장 경로가 선명해지지만, 조직 내에서 IC 레벨 체계가 얼마나 잘 운영되는지에 따라 성장의 체감 속도가 달라질 수 있다.\",\n      \"3년 시점에는 기술적 깊이와 경력의 연속성은 확보되기 쉽지만, 보상 성장성이 매니저 트랙보다 느리거나 격차가 벌어질 수 있어 우선순위인 보상 측면에서는 불확실성이 남는다.\",\n      \"시간이 갈수록 사람 관리는 피하더라도 기술 리더십, 설득, 우선순위 조율 부담은 늘어날 수 있어 스트레스가 완전히 사라지는 선택은 아니다.\"\n    ]\n  }\n}",
+  "input_json": "{\n  \"caseId\": \"case-07-manager-vs-ic\",\n  \"executionMode\": \"standard\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 37,\n      \"job\": \"senior developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\n        \"growth\",\n        \"stress_management\",\n        \"compensation\"\n      ]\n    },\n    \"decision\": {\n      \"optionA\": \"매니저 트랙으로 전환한다\",\n      \"optionB\": \"IC 트랙에 남는다\",\n      \"context\": \"조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다.\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-07-manager-vs-ic\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\n          \"growth\",\n          \"stress_management\",\n          \"compensation\"\n        ]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"unknown\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"unknown\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"none\",\n      \"agent_guidance\": \"tie the recommendation directly to growth, stress_management, compensation and make the tradeoff explicit\"\n    }\n  },\n  \"routing\": {\n    \"complexity\": \"medium\",\n    \"risk_level\": \"low\",\n    \"ambiguity\": \"medium\",\n    \"execution_mode\": \"standard\",\n    \"selected_path\": [\n      \"planner\",\n      \"scenario\",\n      \"advisor\"\n    ],\n    \"routing_reason\": \"중간 수준의 변수는 있으나 주된 검토는 시나리오 비교로 구조화 가능해 standard 경로를 선택한다.\"\n  },\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\n      \"성장 경로 적합성\",\n      \"스트레스 관리 가능성\",\n      \"보상 수준과 보상 성장성\",\n      \"역할 변화의 안정성과 불확실성\",\n      \"기술적 깊이 유지 가능성\"\n    ]\n  },\n  \"scenarioA\": {\n    \"three_months\": \"매니저 트랙으로 전환한 직후 3개월은 기대와 불안이 같이 간다. 겉으로는 역할이 명확해져 안정적으로 보이지만, 실제로는 1:1 면담, 일정 조율, 채용 참여, 다른 팀과의 커뮤니케이션이 갑자기 늘면서 하루가 잘게 끊겨 스트레스가 예상보다 크게 느껴진다. 특히 직접 코드를 오래 붙잡는 시간이 줄어들어 기술적 깊이가 느슨해지는 것 같아 아쉬움도 든다. 다만 senior developer로 쌓은 신뢰가 있어 팀원들은 비교적 협조적이고, 회사도 갑작스러운 평가 부담보다는 적응 기간을 주기 때문에 역할 변화의 불확실성은 아주 크지 않다. 보상은 소폭 인상되거나 다음 평가에서 반영될 가능성이 보여 현실적인 동기부여는 되지만, 당장 큰 차이는 아니다. 본인도 리스크를 크게 지고 싶어 하지 않기 때문에 완전히 관리 중심으로 달리기보다, 기술 리뷰나 아키텍처 논의는 계속 붙잡으려는 식으로 균형점을 찾으려 한다.\",\n    \"one_year\": \"1년쯤 지나면 이 선택이 자신에게 어느 정도 맞는지 더 분명해진다. 사람 관리 자체는 여전히 에너지를 쓰게 만들지만, 갈등을 초기에 정리하고 우선순위를 조율하는 방식에 익숙해지면서 스트레스는 처음보다 관리 가능한 수준으로 내려온다. 성장 경로 측면에서는 개인 기여자 시절과 다른 종류의 성취감이 생긴다. 팀원의 성과를 끌어올리거나 조직 내 의사결정을 정리하는 역할에서 영향력이 커지기 때문이다. 대신 기술적 깊이는 의식적으로 시간을 확보하지 않으면 확실히 얕아진다. 그래서 주간 기술 리뷰를 직접 주도하거나 중요한 설계 이슈에는 계속 참여하는 식으로 연결고리를 유지하게 된다. 보상은 관리 역할이 반영되며 이전보다 나아질 가능성이 높고, 향후 상승 폭도 개인 기여자 트랙과 비교해 나쁘지 않다는 점이 확인된다. 다만 성취의 내용이 ‘내가 잘 만드는 것’에서 ‘팀이 잘 움직이게 만드는 것’으로 바뀌기 때문에, 그 전환을 받아들이는 정도에 따라 만족감이 갈린다.\",\n    \"three_years\": \"3년 후에는 매니저 트랙이 일시적 실험이 아니라 경력의 한 축으로 자리잡았을 가능성이 크다. 낮은 위험 선호 성향 덕분에 무리하게 조직을 키우거나 과도한 책임을 떠안기보다, 감당 가능한 범위 안에서 팀 운영과 성과 관리를 안정적으로 해내는 스타일이 굳어진다. 그 결과 역할 자체의 안정성은 높아지고, 보상도 누적적으로 개선되어 생활 측면의 만족은 전반적으로 올라갈 수 있다. 반면 기술적 깊이 유지 가능성은 가장 큰 과제로 남는다. 꾸준히 설계 검토와 기술 방향성에 관여했다면 ‘기술을 이해하는 매니저’로 강점이 생기지만, 그렇지 못했다면 예전처럼 깊게 구현을 파고드는 감각은 분명 줄어든다. 감정적으로는 초반의 불안은 많이 사라지지만, 때때로 ‘나는 관리자로 성장하고 있는가, 아니면 원래 좋아하던 기술에서 멀어지고 있는가’라는 질문이 다시 올라온다. 결국 이 선택은 극적인 성공이나 실패라기보다, 보상과 조직 영향력은 커지는 대신 기술 몰입의 비중은 줄어드는 방향으로 서서히 굳어지는 현실적인 경로가 된다.\"\n  },\n  \"scenarioB\": {\n    \"three_months\": \"IC 트랙에 남기로 한 직후에는 안도감이 먼저 든다. 팀 운영과 인사 이슈를 맡지 않아도 된다는 점에서 스트레스 관리가 가능하다고 느끼고, 당장 익숙한 역할을 유지한다는 점도 저위험 성향에 맞아 심리적으로 안정적이다. 대신 조직이 커지는 흐름 속에서 매니저 역할 제안을 고사한 만큼, 스스로 성장 경로를 분명히 보여줘야 한다는 압박이 생긴다. 그래서 핵심 시스템 개선, 아키텍처 리뷰, 난도 높은 기술 과제에 더 깊게 관여하려 하고, 기술적 깊이를 유지하는 방향은 분명해진다. 다만 보상 측면에서는 관리직보다 상승 속도가 느릴 수 있다는 현실을 체감하면서, 지금 수준의 보상은 유지되지만 앞으로의 성장성에 대한 작은 불안도 함께 남는다.\",\n    \"one_year\": \"1년 정도 지나면 IC 트랙 안에서도 자신의 위치가 조금 더 선명해진다. 주요 기술 의사결정에 참여하고, 복잡한 문제를 해결하는 사람으로 신뢰를 얻으면서 성장 경로 적합성에 대한 확신이 커진다. 관리 업무에서 오는 감정 소모는 상대적으로 적어 스트레스는 예측 가능하게 유지되지만, 반대로 여러 팀이 기술 판단을 의존하기 시작하면 조율 부담이 완전히 사라지지는 않는다. 그래도 사람 평가나 갈등 중재의 중심에 서지 않는 만큼, 본인이 걱정했던 종류의 스트레스는 피한 편이다. 보상은 큰 폭의 점프보다는 안정적인 인상이나 전문성 기반 보상으로 이어질 가능성이 높고, 회사가 IC 레벨 체계를 잘 운영한다면 만족감이 생기지만, 그렇지 않다면 매니저 트랙 대비 성장 속도가 아쉽게 느껴질 수 있다. 전반적으로 안정성은 높고 기술적 깊이도 유지되지만, ‘내가 이 조직에서 어디까지 갈 수 있나’라는 질문은 더 구체적으로 떠오른다.\",\n    \"three_years\": \"3년 후에는 선택의 성격이 더 분명하게 드러난다. IC 트랙에 남은 덕분에 특정 도메인이나 시스템에서 깊은 전문성을 쌓아 조직 내 핵심 개인 기여자로 자리잡을 가능성이 크고, 이는 본인이 원했던 기술적 깊이 유지 욕구와 잘 맞는다. 저위험 성향에 맞게 역할 변화의 불확실성을 크게 늘리지 않았기 때문에 경력의 연속성도 안정적으로 이어진다. 다만 조직이 계속 커질수록 영향력의 방식이 달라져, 직접 관리하지 않더라도 기술 리더십과 설득, 우선순위 조율 책임은 늘어난다. 이 과정에서 스트레스는 초기 예상보다 약간 높아질 수 있지만, 사람 관리 중심 스트레스와는 결이 달라 스스로 통제 가능한 수준으로 느낄 가능성이 높다. 보상은 회사의 IC 보상 체계가 성숙해 있으면 충분히 경쟁력 있게 따라가지만, 그렇지 않으면 매니저 트랙 동료와의 격차를 체감하며 아쉬움을 느낄 수 있다. 결국 이 선택은 극적인 승부수보다는, 성장의 방향을 기술 전문성으로 고정하고 스트레스를 관리 가능한 범위 안에 두는 대신, 보상 성장성과 조직 내 위상은 회사 구조에 따라 천천히 갈리는 시나리오에 가깝다.\"\n  }\n}",
   "provider_payload": {
     "runner": "codex exec",
     "call_status": "ready",

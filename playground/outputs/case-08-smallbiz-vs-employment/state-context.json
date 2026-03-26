@@ -1,0 +1,30 @@
+{
+  "case_id": "case-08-smallbiz-vs-employment",
+  "user_state": {
+    "profile_state": {
+      "risk_preference": "high",
+      "decision_style": "deliberate",
+      "top_priorities": [
+        "independence",
+        "income",
+        "stability"
+      ]
+    },
+    "situational_state": {
+      "career_stage": "mid",
+      "financial_pressure": "medium",
+      "time_pressure": "unknown",
+      "emotional_state": "uncertain"
+    },
+    "memory_state": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    }
+  },
+  "state_summary": {
+    "decision_bias": "accepts volatility for upside",
+    "current_constraint": "financial pressure is medium; emotional state is uncertain",
+    "agent_guidance": "explain tradeoffs around independence, income, stability while respecting financial pressure is medium; emotional state is uncertain"
+  }
+}

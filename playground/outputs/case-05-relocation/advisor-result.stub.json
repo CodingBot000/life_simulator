@@ -1,4 +1,9 @@
 {
-  "recommended_option": "B",
-  "reason": "사용자의 risk_tolerance가 medium이고 최우선 기준이 stability이므로, 현재 stub 비교에서는 위험도 차이를 더 낮게 만드는 선택을 우선 추천한다. riskA=medium, riskB=medium이며 이 문장은 compose-only 검증용 임시 추천 사유다."
+  "recommended_option": "A",
+  "reason": "사용자의 risk_tolerance가 medium이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 A를 추천한다.",
+  "reasoning_basis": {
+    "selected_reasoning": "A",
+    "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
+    "decision_confidence": 0.70
+  }
 }

@@ -1,0 +1,15 @@
+{
+  "case_id": "case-06-freelance-vs-fulltime",
+  "routing": {
+    "complexity": "medium",
+    "risk_level": "low",
+    "ambiguity": "medium",
+    "execution_mode": "standard",
+    "selected_path": [
+      "planner",
+      "scenario",
+      "advisor"
+    ],
+    "routing_reason": "중간 수준의 변수는 있으나 주된 검토는 시나리오 비교로 구조화 가능해 standard 경로를 선택한다."
+  }
+}

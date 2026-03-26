@@ -12,6 +12,42 @@
 - Option B: IC 트랙에 남는다
 - Context: 조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: low
+- decision_style: deliberate
+- top_priorities: growth, stress_management, compensation
+
+### Situational State
+
+- career_stage: mid
+- financial_pressure: unknown
+- time_pressure: unknown
+- emotional_state: unknown
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: leans conservative under uncertainty
+- current_constraint: none
+- agent_guidance: tie the recommendation directly to growth, stress_management, compensation and make the tradeoff explicit
+
+## Routing
+
+- complexity: medium
+- risk_level: low
+- ambiguity: medium
+- execution_mode: standard
+- selected_path: planner -> scenario -> advisor
+- reason: 중간 수준의 변수는 있으나 주된 검토는 시나리오 비교로 구조화 가능해 standard 경로를 선택한다.
+
 ## Planner
 
 - Decision type: career_change
@@ -31,40 +67,22 @@
 
 ## Risk A
 
-- Level: medium
-- 초기 3개월에 1:1 면담, 일정 조율, 채용, 대인 커뮤니케이션이 급증해 스트레스가 예상보다 크게 느껴지는 점은 낮은 위험 선호 성향과 직접 충돌한다.
-- 1년 이후에는 관리 업무에 적응하며 스트레스가 어느 정도 통제 가능해지고, 회사도 적응 기간을 주는 설정이라 역할 전환의 불확실성이 아주 크지는 않다.
-- 보상은 단기에는 큰 폭이 아니지만 1년~3년 구간에서 개선 가능성이 높아 보여, 우선순위인 compensation 측면의 하방 위험은 상대적으로 제한적이다.
-- 가장 큰 중기 리스크는 기술적 깊이 유지다. 본인이 기술 몰입 욕구가 강한데, 이를 의식적으로 지키지 않으면 3년 시점에 만족도가 떨어질 수 있어 growth의 방향성이 흔들릴 수 있다.
+- Skipped in execution_mode=standard
 
 ## Risk B
 
-- Level: medium
-- 단기적으로는 사람 관리와 인사 이슈를 맡지 않아도 되어, 사용자가 특히 걱정한 스트레스 유형을 크게 줄일 수 있다는 점에서 위험이 낮다.
-- 1년 이후에는 기술 의사결정과 복잡한 문제 해결에서 성장 경로가 선명해지지만, 조직 내에서 IC 레벨 체계가 얼마나 잘 운영되는지에 따라 성장의 체감 속도가 달라질 수 있다.
-- 3년 시점에는 기술적 깊이와 경력의 연속성은 확보되기 쉽지만, 보상 성장성이 매니저 트랙보다 느리거나 격차가 벌어질 수 있어 우선순위인 보상 측면에서는 불확실성이 남는다.
-- 시간이 갈수록 사람 관리는 피하더라도 기술 리더십, 설득, 우선순위 조율 부담은 늘어날 수 있어 스트레스가 완전히 사라지는 선택은 아니다.
+- Skipped in execution_mode=standard
+
+## A/B Reasoning
+
+- Skipped in execution_mode=standard
 
 ## Advisor
 
 - Recommended option: B
-- Reason: 낮은 risk_tolerance와 우선순위인 growth, stress_management, compensation를 함께 보면 B가 더 적합하다. B는 사람 관리와 인사·조율에서 오는 스트레스를 크게 늘리지 않아 사용자가 특히 걱정한 부담을 피하면서도, 기술적 깊이를 유지하는 방향으로 성장 경로를 분명하게 가져갈 수 있다. 반면 A는 보상 성장성 측면에서는 더 유리할 수 있지만, 초기 스트레스 증가와 기술 몰입 저하 가능성이 커서 낮은 위험 선호와 스트레스 관리 우선순위에 직접적으로 어긋난다. compensation만 단독으로 보면 A의 장점이 있으나, 전체 우선순위와 리스크 성향을 기준으로 하면 B가 더 일관되고 적합한 선택이다.
+- Reason: router가 standard 경로를 선택해 scenarioA/B까지 비교했다. 최우선 기준이 growth이고 risk_tolerance가 low이므로 현재 stub에서는 B를 추천한다.
+- Reasoning basis: reasoning B / confidence 0.66 / scenarioA와 scenarioB까지 비교한 결과, 사용자의 우선순위와 더 잘 맞는 흐름을 advisor가 직접 선택했다.
 
 ## Reflection
 
-- realism: 4
-- consistency: 4
-- profile_alignment: 3
-- recommendation_clarity: 4
-
-### 주요 문제
-
-- [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 growth을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
-- [advisor] advisor가 B를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
-
-### 개선 방향
-
-- [scenario] 각 시간 축 문장에서 growth 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
-- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
-
-- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
+- Skipped in execution_mode=standard

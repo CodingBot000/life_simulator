@@ -1,0 +1,77 @@
+{
+  "case_id": "case-03-startup-vs-job",
+  "input_summary": {
+    "user_profile": {
+      "age": 34,
+      "job": "product manager",
+      "risk_tolerance": "medium",
+      "priority": [
+        "independence",
+        "growth",
+        "income"
+      ]
+    },
+    "decision_options": {
+      "optionA": "작은 SaaS를 창업한다",
+      "optionB": "안정적인 IT 회사에 취업한다",
+      "context": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다."
+    },
+    "planner_goal": "career_change decision에서 수입 안정성, 성장 가능성, 업무 자율성과 독립성, 생활비 및 대출 상환 부담 대응 가능성, 중간 수준의 리스크 감내도와의 적합성 기준으로 사용자에게 더 맞는 선택을 판별한다."
+  },
+  "reasoning": {
+    "a_reasoning": {
+      "stance": "conservative",
+      "summary": "보수적 reasoning은 사용자의 risk_tolerance가 medium이고 최우선 priority가 independence라는 점을 기준으로, 위험 수준이 더 낮고 생활 변동성이 작은 선택을 우선 본다. 현재 비교에서는 A가 더 안정적으로 해석된다.",
+      "key_assumptions": [
+        "사용자는 independence 기준의 손실을 성장 기회보다 더 크게 체감한다.",
+        "riskA=medium, riskB=medium 차이는 실제 선택 만족도에 직접 영향을 준다."
+      ],
+      "pros": [
+        "선택지 A(작은 SaaS를 창업한다)는 안정성, 예측 가능성, 회복 비용 측면에서 방어력이 높다.",
+        "현재 시나리오 흐름에서는 급격한 생활 리듬 훼손 가능성이 상대적으로 낮다."
+      ],
+      "cons": [
+        "성장 속도나 기회 폭이 제한될 수 있다.",
+        "장기적으로는 기회비용을 더 크게 느낄 수 있다."
+      ],
+      "recommended_option": "A",
+      "confidence": 0.76
+    },
+    "b_reasoning": {
+      "stance": "opportunity_seeking",
+      "summary": "기회 추구 reasoning은 decision context와 planner factors를 보면 변화의 보상이 분명할 수 있다고 본다. 위험을 감수하더라도 역할 변화와 성장폭을 원한다면 B를 검토할 가치가 있다.",
+      "key_assumptions": [
+        "사용자가 단기 불확실성을 감당할 수 있다면 장기 성장 체감은 더 커질 수 있다.",
+        "decision context인 그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.에서 정체 해소가 중요한 만족 요인이 될 수 있다."
+      ],
+      "pros": [
+        "선택지 B(안정적인 IT 회사에 취업한다)는 역할 변화와 성장 기회를 더 크게 열 수 있다.",
+        "장기적으로는 기술 경험과 선택지 확장에 유리할 수 있다."
+      ],
+      "cons": [
+        "riskB=medium라면 사용자의 현재 성향과 직접 충돌할 수 있다.",
+        "초기 적응 비용과 생활 변동성을 더 크게 감수해야 할 수 있다."
+      ],
+      "recommended_option": "B",
+      "confidence": 0.64
+    },
+    "comparison": {
+      "agreements": [
+        "두 reasoning 모두 사용자 우선순위와 리스크 허용도를 핵심 판단 축으로 본다.",
+        "두 reasoning 모두 시나리오와 risk 결과를 근거로 사용한다."
+      ],
+      "conflicts": [
+        "A reasoning은 손실 회피와 안정 기반을 우선하지만, B reasoning은 성장 기회의 기대값을 더 크게 본다.",
+        "A reasoning은 현재 성향과의 정합성을 중시하고, B reasoning은 미래 옵션 확장을 더 높게 평가한다."
+      ],
+      "which_fits_user_better": "A",
+      "reason": "현재 입력에서는 risk_tolerance=medium, primary_priority=independence, riskA=medium, riskB=medium 조합 때문에 A 쪽이 사용자 성향과 더 직접적으로 맞는다."
+    },
+    "final_selection": {
+      "selected_reasoning": "A",
+      "selected_option": "A",
+      "why_selected": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
+      "decision_confidence": 0.70
+    }
+  }
+}

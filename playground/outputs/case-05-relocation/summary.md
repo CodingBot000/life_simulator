@@ -12,6 +12,42 @@
 - Option B: 일본으로 이주해 새 직장을 찾는다
 - Context: 해외 생활 경험과 장기적인 커리어 확장을 원하지만, 언어와 비자 문제 때문에 초기 적응 실패 가능성도 현실적으로 크다. 현재 한국에서는 무난한 팀과 안정적인 연봉을 유지하고 있다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: medium
+- decision_style: exploratory
+- top_priorities: stability, experience, future_opportunity
+
+### Situational State
+
+- career_stage: mid
+- financial_pressure: medium
+- time_pressure: unknown
+- emotional_state: cautiously_optimistic
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: balances stability and upside
+- current_constraint: financial pressure is medium; emotional state is cautiously_optimistic
+- agent_guidance: explain tradeoffs around stability, experience, future_opportunity while respecting financial pressure is medium; emotional state is cautiously_optimistic
+
+## Routing
+
+- complexity: high
+- risk_level: medium
+- ambiguity: high
+- execution_mode: full
+- selected_path: planner -> scenario -> risk -> ab_reasoning -> advisor -> reflection
+- reason: 정보 해석 여지가 크고 불확실성이 높아 전체 경로 실행이 필요하다.
+
 ## Planner
 
 - Decision type: career_change
@@ -45,10 +81,39 @@
 - 다만 1년 시점부터는 현지 적응과 고용 안정이 점차 회복되고, 3년 시점에는 해외 실무 경험과 다국적 환경 적응력이 미래 기회 확대에 실제 자산으로 작용해 위험이 장기적으로 완화된다.
 - 사용자는 위험 감수 성향이 중간 수준이고 우선순위에 새로운 경험과 미래 기회가 포함되어 있어, 이 선택의 부담은 분명하지만 성향과 목표에 비해 과도하게 높은 위험으로 보기는 어렵다.
 
+## A/B Reasoning
+
+### A Reasoning
+
+- stance: conservative
+- recommended option: A
+- summary: 보수적 reasoning은 사용자의 risk_tolerance가 medium이고 최우선 priority가 stability라는 점을 기준으로, 위험 수준이 더 낮고 생활 변동성이 작은 선택을 우선 본다. 현재 비교에서는 A가 더 안정적으로 해석된다.
+
+### B Reasoning
+
+- stance: opportunity_seeking
+- recommended option: B
+- summary: 기회 추구 reasoning은 decision context와 planner factors를 보면 변화의 보상이 분명할 수 있다고 본다. 위험을 감수하더라도 역할 변화와 성장폭을 원한다면 B를 검토할 가치가 있다.
+
+### Comparison
+
+- agreements: 두 reasoning 모두 사용자 우선순위와 리스크 허용도를 핵심 판단 축으로 본다.; 두 reasoning 모두 시나리오와 risk 결과를 근거로 사용한다.
+- conflicts: A reasoning은 손실 회피와 안정 기반을 우선하지만, B reasoning은 성장 기회의 기대값을 더 크게 본다.; A reasoning은 현재 성향과의 정합성을 중시하고, B reasoning은 미래 옵션 확장을 더 높게 평가한다.
+- which fits user better: A
+- reason: 현재 입력에서는 risk_tolerance=medium, primary_priority=stability, riskA=medium, riskB=medium 조합 때문에 A 쪽이 사용자 성향과 더 직접적으로 맞는다.
+
+### Final Selection
+
+- selected reasoning: A
+- selected option: A
+- why selected: 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
+- decision confidence: 0.70
+
 ## Advisor
 
-- Recommended option: B
-- Reason: 사용자의 위험 감수 성향이 low가 아니라 medium이고, 우선순위가 stability만이 아니라 experience와 future_opportunity까지 포함되어 있다는 점을 기준으로 보면 B가 더 적합하다. A는 현재의 안정성과 커리어 연속성은 가장 잘 지키지만, 경험과 장기 기회 측면에서는 아쉬움이 누적될 가능성이 크다. 반면 B는 초기에 언어·비자·수입 안정성 부담이 분명하지만 risk_level이 medium 수준에 머물고, 1년 이후 적응이 진행되며 3년 시점에는 해외 실무 경험과 더 넓은 커리어 선택지가 실제 자산이 된다. 즉 안정성을 일부 감수하더라도 새로운 경험과 미래 기회 확대를 함께 얻으려는 현재 우선순위에는 B가 더 잘 맞는다.
+- Recommended option: A
+- Reason: 사용자의 risk_tolerance가 medium이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 A를 추천한다.
+- Reasoning basis: reasoning A / confidence 0.70 / 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
 
 ## Reflection
 
@@ -60,11 +125,13 @@
 ### 주요 문제
 
 - [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 stability을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
-- [advisor] advisor가 B를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
+- [reasoning] reasoning의 최종 선택은 reasoning A, option A, confidence 0.70로 정리됐지만 A/B 관점 차이가 실제로 충분히 벌어졌는지와 comparison 충돌 정리가 더 선명하게 드러날 필요가 있다.
+- [advisor] advisor가 A를 추천하지만 riskA=medium, riskB=medium와 reasoning final_selection을 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.
 
 ### 개선 방향
 
 - [scenario] 각 시간 축 문장에서 stability 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
-- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
+- [reasoning] A는 안정성 손실 회피, B는 성장 기대값 확대라는 관점 차이가 문장 수준에서 분명히 보이도록 comparison의 agreement와 conflict를 더 날카롭게 정리하라.
+- [advisor] 최종 추천 사유를 priority, risk, reasoning, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
 
-- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
+- Overall comment: 전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.

@@ -3,6 +3,7 @@
 - Request file: `playground/outputs/case-03-startup-vs-job/risk-b-request.json`
 - Prompt file: `prompts/risk.md`
 - Input source: `playground/inputs/cases/case-03-startup-vs-job.json`
+- Previous result: `playground/outputs/case-03-startup-vs-job/state-context.json`
 - Previous result: `playground/outputs/case-03-startup-vs-job/planner-result.json`
 - Previous result: `playground/outputs/case-03-startup-vs-job/scenario-b-result.json`
 
@@ -13,19 +14,52 @@
 
 목표:
 - 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.
-- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.
+- 객관적 위험뿐 아니라 이 사용자에게 더 크게 작용하는 위험을 반영한다.
 - 이유는 추상적 표현보다 구체적인 근거를 우선한다.
 
 입력 데이터 형식:
 ```json
 {
-  "optionLabel": "A",
-  "userProfile": {
-    "age": 32,
-    "job": "developer",
-    "risk_tolerance": "low",
-    "priority": ["stability", "income", "work_life_balance"]
+  "caseId": "case-001",
+  "caseInput": {
+    "userProfile": {
+      "age": 32,
+      "job": "developer",
+      "risk_tolerance": "low",
+      "priority": ["stability", "income", "work_life_balance"]
+    },
+    "decision": {
+      "optionA": "현재 회사에 남는다",
+      "optionB": "스타트업으로 이직한다",
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+    }
   },
+  "stateContext": {
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "low",
+        "decision_style": "deliberate",
+        "top_priorities": ["stability", "income", "work_life_balance"]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "medium",
+        "time_pressure": "unknown",
+        "emotional_state": "uncertain"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "leans conservative under uncertainty",
+      "current_constraint": "financial pressure is medium",
+      "agent_guidance": "explain stability-growth tradeoffs explicitly"
+    }
+  },
+  "optionLabel": "A",
   "selectedOption": "현재 회사에 남는다",
   "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
   "factors": ["stability", "income", "growth", "work_life_balance"],
@@ -44,7 +78,9 @@
 판단 규칙:
 - `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.
 - `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.
-- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.
+- `scenario`의 시간 축 전개와 `stateContext.user_state`, `state_summary`를 함께 고려한다.
+- `profile_state.top_priorities`, `risk_preference`, `situational_state` 때문에 더 커지는 위험이 있으면 명시한다.
+- `memory_state.repeated_patterns`가 현재 선택에서 다시 반복될 가능성이 있으면 반영한다.
 - 막연한 공포 조장은 금지한다.
 - 입력에 없는 사실을 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
@@ -63,17 +99,55 @@
 
 ```json
 {
-  "optionLabel": "B",
-  "userProfile": {
-    "age": 34,
-    "job": "product manager",
-    "risk_tolerance": "medium",
-    "priority": [
-      "independence",
-      "growth",
-      "income"
-    ]
+  "caseId": "case-03-startup-vs-job",
+  "caseInput": {
+    "userProfile": {
+      "age": 34,
+      "job": "product manager",
+      "risk_tolerance": "medium",
+      "priority": [
+        "independence",
+        "growth",
+        "income"
+      ]
+    },
+    "decision": {
+      "optionA": "작은 SaaS를 창업한다",
+      "optionB": "안정적인 IT 회사에 취업한다",
+      "context": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다."
+    }
   },
+  "stateContext": {
+    "case_id": "case-03-startup-vs-job",
+    "user_state": {
+      "profile_state": {
+        "risk_preference": "medium",
+        "decision_style": "deliberate",
+        "top_priorities": [
+          "independence",
+          "growth",
+          "income"
+        ]
+      },
+      "situational_state": {
+        "career_stage": "mid",
+        "financial_pressure": "high",
+        "time_pressure": "unknown",
+        "emotional_state": "uncertain"
+      },
+      "memory_state": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      }
+    },
+    "state_summary": {
+      "decision_bias": "balances stability and upside",
+      "current_constraint": "financial pressure is high; emotional state is uncertain",
+      "agent_guidance": "explain tradeoffs around independence, growth, income while respecting financial pressure is high; emotional state is uncertain"
+    }
+  },
+  "optionLabel": "B",
   "selectedOption": "안정적인 IT 회사에 취업한다",
   "decisionContext": "그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.",
   "factors": [

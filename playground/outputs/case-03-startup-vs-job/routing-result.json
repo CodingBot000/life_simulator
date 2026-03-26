@@ -1,0 +1,18 @@
+{
+  "case_id": "case-03-startup-vs-job",
+  "routing": {
+    "complexity": "high",
+    "risk_level": "high",
+    "ambiguity": "medium",
+    "execution_mode": "full",
+    "selected_path": [
+      "planner",
+      "scenario",
+      "risk",
+      "ab_reasoning",
+      "advisor",
+      "reflection"
+    ],
+    "routing_reason": "잘못 판단했을 때 손실 규모가 커 고위험 케이스로 보고 전체 경로 실행이 필요하다."
+  }
+}

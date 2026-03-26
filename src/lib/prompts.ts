@@ -7,12 +7,132 @@ function loadPrompt(fileName: string): string {
   return readFileSync(join(process.cwd(), "prompts", fileName), "utf8").trim();
 }
 
+export const stateLoaderPrompt = loadPrompt("state_loader.md");
 export const plannerPrompt = loadPrompt("planner.md");
 export const scenarioPrompt = loadPrompt("scenario.md");
 export const riskPrompt = loadPrompt("risk.md");
 export const abReasoningPrompt = loadPrompt("ab_reasoning.md");
 export const advisorPrompt = loadPrompt("advisor.md");
 export const reflectionPrompt = loadPrompt("reflection.md");
+
+export const stateLoaderSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    case_id: {
+      type: "string",
+    },
+    user_state: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        profile_state: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            risk_preference: {
+              type: "string",
+            },
+            decision_style: {
+              type: "string",
+            },
+            top_priorities: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+            },
+          },
+          required: ["risk_preference", "decision_style", "top_priorities"],
+        },
+        situational_state: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            career_stage: {
+              type: "string",
+            },
+            financial_pressure: {
+              type: "string",
+            },
+            time_pressure: {
+              type: "string",
+            },
+            emotional_state: {
+              type: "string",
+            },
+          },
+          required: [
+            "career_stage",
+            "financial_pressure",
+            "time_pressure",
+            "emotional_state",
+          ],
+        },
+        memory_state: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            recent_similar_decisions: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: false,
+                properties: {
+                  topic: {
+                    type: "string",
+                  },
+                  selected_option: {
+                    type: "string",
+                  },
+                  outcome_note: {
+                    type: "string",
+                  },
+                },
+                required: ["topic", "selected_option", "outcome_note"],
+              },
+            },
+            repeated_patterns: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+            },
+            consistency_notes: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+            },
+          },
+          required: [
+            "recent_similar_decisions",
+            "repeated_patterns",
+            "consistency_notes",
+          ],
+        },
+      },
+      required: ["profile_state", "situational_state", "memory_state"],
+    },
+    state_summary: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        decision_bias: {
+          type: "string",
+        },
+        current_constraint: {
+          type: "string",
+        },
+        agent_guidance: {
+          type: "string",
+        },
+      },
+      required: ["decision_bias", "current_constraint", "agent_guidance"],
+    },
+  },
+  required: ["case_id", "user_state", "state_summary"],
+} as const;
 
 export const plannerSchema = {
   type: "object",

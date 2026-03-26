@@ -1,14 +1,15 @@
 {
   "stage": "risk",
-  "generated_at": "2026-03-24T19:24:09Z",
+  "generated_at": "2026-03-26T09:57:23Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/risk.md",
   "input_source": "playground/inputs/cases/case-09-overseas-study-vs-work.json",
   "previous_stage_result_files": [
+    "playground/outputs/case-09-overseas-study-vs-work/state-context.json",
     "playground/outputs/case-09-overseas-study-vs-work/planner-result.json",
     "playground/outputs/case-09-overseas-study-vs-work/scenario-b-result.json"
   ],
-  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 위험 수준은 사용자 성향과 우선순위에 비추어 해석한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"optionLabel\": \"A\",\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `userProfile.priority`를 함께 고려한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Risk Analyst다.\n\n목표:\n- 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.\n- 객관적 위험뿐 아니라 이 사용자에게 더 크게 작용하는 위험을 반영한다.\n- 이유는 추상적 표현보다 구체적인 근거를 우선한다.\n\n입력 데이터 형식:\n```json\n{\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    }\n  },\n  \"stateContext\": {\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain stability-growth tradeoffs explicitly\"\n    }\n  },\n  \"optionLabel\": \"A\",\n  \"selectedOption\": \"현재 회사에 남는다\",\n  \"decisionContext\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\",\n  \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"],\n  \"plannerResult\": {\n    \"decision_type\": \"career_change\",\n    \"factors\": [\"stability\", \"income\", \"growth\", \"work_life_balance\"]\n  },\n  \"scenario\": {\n    \"three_months\": \"\",\n    \"one_year\": \"\",\n    \"three_years\": \"\"\n  }\n}\n```\n\n판단 규칙:\n- `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.\n- `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.\n- `scenario`의 시간 축 전개와 `stateContext.user_state`, `state_summary`를 함께 고려한다.\n- `profile_state.top_priorities`, `risk_preference`, `situational_state` 때문에 더 커지는 위험이 있으면 명시한다.\n- `memory_state.repeated_patterns`가 현재 선택에서 다시 반복될 가능성이 있으면 반영한다.\n- 막연한 공포 조장은 금지한다.\n- 입력에 없는 사실을 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"risk_level\": \"low | medium | high\",\n  \"reasons\": []\n}\n```",
   "expected_output_schema": {
     "type": "object",
     "additionalProperties": false,
@@ -35,17 +36,55 @@
     ]
   },
   "input_data": {
-    "optionLabel": "B",
-    "userProfile": {
-      "age": 28,
-      "job": "research assistant",
-      "risk_tolerance": "medium",
-      "priority": [
-        "long_term_growth",
-        "short_term_income",
-        "expertise"
-      ]
+    "caseId": "case-09-overseas-study-vs-work",
+    "caseInput": {
+      "userProfile": {
+        "age": 28,
+        "job": "research assistant",
+        "risk_tolerance": "medium",
+        "priority": [
+          "long_term_growth",
+          "short_term_income",
+          "expertise"
+        ]
+      },
+      "decision": {
+        "optionA": "해외 대학원에 진학한다",
+        "optionB": "바로 실무 취업한다",
+        "context": "장기적으로는 특정 분야 전문성을 갖춘 커리어를 만들고 싶지만, 학비와 생활비 부담 때문에 단기 수입도 무시하기 어렵다. 현장 경험을 먼저 쌓는 편이 나을지 계속 고민 중이다."
+      }
     },
+    "stateContext": {
+      "case_id": "case-09-overseas-study-vs-work",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "deliberate",
+          "top_priorities": [
+            "long_term_growth",
+            "short_term_income",
+            "expertise"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "early",
+          "financial_pressure": "high",
+          "time_pressure": "medium",
+          "emotional_state": "uncertain"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "balances stability and upside",
+        "current_constraint": "financial pressure is high; time pressure is medium; emotional state is uncertain",
+        "agent_guidance": "explain tradeoffs around long_term_growth, short_term_income, expertise while respecting financial pressure is high; time pressure is medium; emotional state is uncertain"
+      }
+    },
+    "optionLabel": "B",
     "selectedOption": "바로 실무 취업한다",
     "decisionContext": "장기적으로는 특정 분야 전문성을 갖춘 커리어를 만들고 싶지만, 학비와 생활비 부담 때문에 단기 수입도 무시하기 어렵다. 현장 경험을 먼저 쌓는 편이 나을지 계속 고민 중이다.",
     "factors": [
@@ -73,7 +112,7 @@
       "three_years": "3년이 지나면 실무 적응 단계는 넘어섰고, 현장 경험 축적 속도가 빨랐던 선택의 장점이 분명해진다. 재정적으로는 학비 부담을 피한 덕분에 생활 기반이 더 안정적일 가능성이 크고, 경력 연차에 맞는 보상 상승도 기대할 수 있다. 다만 장기 커리어 성장과 특정 분야 전문성은 초기에 어떤 프로젝트를 맡았고, 그 후에 얼마나 의도적으로 분야를 좁혀 갔는지에 따라 차이가 난다. 원하는 전문 분야와 연결된 경험을 꾸준히 쌓았다면 '실무형 전문가'로 자리 잡으며 다음 이직이나 승진에서 경쟁력이 생기지만, 그렇지 않으면 수입과 안정성은 확보했어도 전문성의 선명도가 약해져 방향 전환을 다시 고민할 수 있다. 즉, 이 선택은 단기 수입과 안정성에는 비교적 유리하지만, 장기 전문성은 시간이 해결해 주기보다 스스로 설계해야 하는 경로로 굳어진다."
     }
   },
-  "input_json": "{\n  \"optionLabel\": \"B\",\n  \"userProfile\": {\n    \"age\": 28,\n    \"job\": \"research assistant\",\n    \"risk_tolerance\": \"medium\",\n    \"priority\": [\n      \"long_term_growth\",\n      \"short_term_income\",\n      \"expertise\"\n    ]\n  },\n  \"selectedOption\": \"바로 실무 취업한다\",\n  \"decisionContext\": \"장기적으로는 특정 분야 전문성을 갖춘 커리어를 만들고 싶지만, 학비와 생활비 부담 때문에 단기 수입도 무시하기 어렵다. 현장 경험을 먼저 쌓는 편이 나을지 계속 고민 중이다.\",\n  \"factors\": [\n    \"장기 커리어 성장 가능성\",\n    \"단기 수입 확보 가능성\",\n    \"특정 분야 전문성 강화 정도\",\n    \"학비·생활비에 따른 재정 부담\",\n    \"현장 실무 경험 축적 속도\",\n    \"선택지별 불확실성과 안정성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"education\",\n    \"factors\": [\n      \"장기 커리어 성장 가능성\",\n      \"단기 수입 확보 가능성\",\n      \"특정 분야 전문성 강화 정도\",\n      \"학비·생활비에 따른 재정 부담\",\n      \"현장 실무 경험 축적 속도\",\n      \"선택지별 불확실성과 안정성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"실무 취업을 선택한 직후에는 월급이 들어오기 시작하면서 학비와 생활비 부담이 눈에 띄게 줄어들어 안도감이 커진다. 연구실에서 하던 일과 달리 업무 속도와 협업 방식에 적응하느라 피로감도 있지만, 현장에서 바로 결과를 만드는 경험을 빠르게 쌓으면서 \\\"지금 당장 수입을 확보한 선택은 현실적으로 맞았다\\\"는 느낌을 받는다. 다만 맡는 일이 원하는 특정 분야의 핵심 전문성과 완전히 일치하지 않을 수 있어, 장기 커리어 성장과 전문성 강화가 자동으로 따라오지는 않는다는 약한 불안도 함께 생긴다.\",\n    \"one_year\": \"1년쯤 지나면 수입이 비교적 안정되면서 재정 압박은 크게 완화되고, 경력 공백 없이 실무 경험이 쌓였다는 점에서 심리적 안정도 생긴다. 업무 성과와 프로젝트 경험이 이력서에 쌓이면서 이직이나 사내 이동 가능성도 조금씩 보이지만, 동시에 현장 실무 경험이 빠르게 늘어난 만큼 특정 분야의 깊이 있는 전문성은 의식적으로 보완해야 한다는 현실도 분명해진다. 그래서 퇴근 후 강의, 자격 준비, 관련 프로젝트 참여처럼 추가 학습을 병행할 가능성이 높고, 이 과정에서 단기 수입은 유지되지만 시간 여유는 다소 줄어든다. 불확실성은 진학보다 낮지만, 어떤 업무를 계속 맡느냐에 따라 장기 성장 방향이 달라질 수 있다는 점은 계속 체감한다.\",\n    \"three_years\": \"3년이 지나면 실무 적응 단계는 넘어섰고, 현장 경험 축적 속도가 빨랐던 선택의 장점이 분명해진다. 재정적으로는 학비 부담을 피한 덕분에 생활 기반이 더 안정적일 가능성이 크고, 경력 연차에 맞는 보상 상승도 기대할 수 있다. 다만 장기 커리어 성장과 특정 분야 전문성은 초기에 어떤 프로젝트를 맡았고, 그 후에 얼마나 의도적으로 분야를 좁혀 갔는지에 따라 차이가 난다. 원하는 전문 분야와 연결된 경험을 꾸준히 쌓았다면 '실무형 전문가'로 자리 잡으며 다음 이직이나 승진에서 경쟁력이 생기지만, 그렇지 않으면 수입과 안정성은 확보했어도 전문성의 선명도가 약해져 방향 전환을 다시 고민할 수 있다. 즉, 이 선택은 단기 수입과 안정성에는 비교적 유리하지만, 장기 전문성은 시간이 해결해 주기보다 스스로 설계해야 하는 경로로 굳어진다.\"\n  }\n}",
+  "input_json": "{\n  \"caseId\": \"case-09-overseas-study-vs-work\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 28,\n      \"job\": \"research assistant\",\n      \"risk_tolerance\": \"medium\",\n      \"priority\": [\n        \"long_term_growth\",\n        \"short_term_income\",\n        \"expertise\"\n      ]\n    },\n    \"decision\": {\n      \"optionA\": \"해외 대학원에 진학한다\",\n      \"optionB\": \"바로 실무 취업한다\",\n      \"context\": \"장기적으로는 특정 분야 전문성을 갖춘 커리어를 만들고 싶지만, 학비와 생활비 부담 때문에 단기 수입도 무시하기 어렵다. 현장 경험을 먼저 쌓는 편이 나을지 계속 고민 중이다.\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-09-overseas-study-vs-work\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"medium\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\n          \"long_term_growth\",\n          \"short_term_income\",\n          \"expertise\"\n        ]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"early\",\n        \"financial_pressure\": \"high\",\n        \"time_pressure\": \"medium\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"balances stability and upside\",\n      \"current_constraint\": \"financial pressure is high; time pressure is medium; emotional state is uncertain\",\n      \"agent_guidance\": \"explain tradeoffs around long_term_growth, short_term_income, expertise while respecting financial pressure is high; time pressure is medium; emotional state is uncertain\"\n    }\n  },\n  \"optionLabel\": \"B\",\n  \"selectedOption\": \"바로 실무 취업한다\",\n  \"decisionContext\": \"장기적으로는 특정 분야 전문성을 갖춘 커리어를 만들고 싶지만, 학비와 생활비 부담 때문에 단기 수입도 무시하기 어렵다. 현장 경험을 먼저 쌓는 편이 나을지 계속 고민 중이다.\",\n  \"factors\": [\n    \"장기 커리어 성장 가능성\",\n    \"단기 수입 확보 가능성\",\n    \"특정 분야 전문성 강화 정도\",\n    \"학비·생활비에 따른 재정 부담\",\n    \"현장 실무 경험 축적 속도\",\n    \"선택지별 불확실성과 안정성\"\n  ],\n  \"plannerResult\": {\n    \"decision_type\": \"education\",\n    \"factors\": [\n      \"장기 커리어 성장 가능성\",\n      \"단기 수입 확보 가능성\",\n      \"특정 분야 전문성 강화 정도\",\n      \"학비·생활비에 따른 재정 부담\",\n      \"현장 실무 경험 축적 속도\",\n      \"선택지별 불확실성과 안정성\"\n    ]\n  },\n  \"scenario\": {\n    \"three_months\": \"실무 취업을 선택한 직후에는 월급이 들어오기 시작하면서 학비와 생활비 부담이 눈에 띄게 줄어들어 안도감이 커진다. 연구실에서 하던 일과 달리 업무 속도와 협업 방식에 적응하느라 피로감도 있지만, 현장에서 바로 결과를 만드는 경험을 빠르게 쌓으면서 \\\"지금 당장 수입을 확보한 선택은 현실적으로 맞았다\\\"는 느낌을 받는다. 다만 맡는 일이 원하는 특정 분야의 핵심 전문성과 완전히 일치하지 않을 수 있어, 장기 커리어 성장과 전문성 강화가 자동으로 따라오지는 않는다는 약한 불안도 함께 생긴다.\",\n    \"one_year\": \"1년쯤 지나면 수입이 비교적 안정되면서 재정 압박은 크게 완화되고, 경력 공백 없이 실무 경험이 쌓였다는 점에서 심리적 안정도 생긴다. 업무 성과와 프로젝트 경험이 이력서에 쌓이면서 이직이나 사내 이동 가능성도 조금씩 보이지만, 동시에 현장 실무 경험이 빠르게 늘어난 만큼 특정 분야의 깊이 있는 전문성은 의식적으로 보완해야 한다는 현실도 분명해진다. 그래서 퇴근 후 강의, 자격 준비, 관련 프로젝트 참여처럼 추가 학습을 병행할 가능성이 높고, 이 과정에서 단기 수입은 유지되지만 시간 여유는 다소 줄어든다. 불확실성은 진학보다 낮지만, 어떤 업무를 계속 맡느냐에 따라 장기 성장 방향이 달라질 수 있다는 점은 계속 체감한다.\",\n    \"three_years\": \"3년이 지나면 실무 적응 단계는 넘어섰고, 현장 경험 축적 속도가 빨랐던 선택의 장점이 분명해진다. 재정적으로는 학비 부담을 피한 덕분에 생활 기반이 더 안정적일 가능성이 크고, 경력 연차에 맞는 보상 상승도 기대할 수 있다. 다만 장기 커리어 성장과 특정 분야 전문성은 초기에 어떤 프로젝트를 맡았고, 그 후에 얼마나 의도적으로 분야를 좁혀 갔는지에 따라 차이가 난다. 원하는 전문 분야와 연결된 경험을 꾸준히 쌓았다면 '실무형 전문가'로 자리 잡으며 다음 이직이나 승진에서 경쟁력이 생기지만, 그렇지 않으면 수입과 안정성은 확보했어도 전문성의 선명도가 약해져 방향 전환을 다시 고민할 수 있다. 즉, 이 선택은 단기 수입과 안정성에는 비교적 유리하지만, 장기 전문성은 시간이 해결해 주기보다 스스로 설계해야 하는 경로로 굳어진다.\"\n  }\n}",
   "provider_payload": {
     "runner": "codex exec",
     "call_status": "ready",

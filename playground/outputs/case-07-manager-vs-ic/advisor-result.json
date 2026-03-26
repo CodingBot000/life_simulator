@@ -1,1 +1,9 @@
-{"recommended_option":"B","reason":"낮은 risk_tolerance와 우선순위인 growth, stress_management, compensation를 함께 보면 B가 더 적합하다. B는 사람 관리와 인사·조율에서 오는 스트레스를 크게 늘리지 않아 사용자가 특히 걱정한 부담을 피하면서도, 기술적 깊이를 유지하는 방향으로 성장 경로를 분명하게 가져갈 수 있다. 반면 A는 보상 성장성 측면에서는 더 유리할 수 있지만, 초기 스트레스 증가와 기술 몰입 저하 가능성이 커서 낮은 위험 선호와 스트레스 관리 우선순위에 직접적으로 어긋난다. compensation만 단독으로 보면 A의 장점이 있으나, 전체 우선순위와 리스크 성향을 기준으로 하면 B가 더 일관되고 적합한 선택이다."}
+{
+  "recommended_option": "B",
+  "reason": "router가 standard 경로를 선택해 scenarioA/B까지 비교했다. 최우선 기준이 growth이고 risk_tolerance가 low이므로 현재 stub에서는 B를 추천한다.",
+  "reasoning_basis": {
+    "selected_reasoning": "B",
+    "core_why": "scenarioA와 scenarioB까지 비교한 결과, 사용자의 우선순위와 더 잘 맞는 흐름을 advisor가 직접 선택했다.",
+    "decision_confidence": 0.66
+  }
+}

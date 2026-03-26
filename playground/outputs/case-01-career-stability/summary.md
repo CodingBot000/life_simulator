@@ -12,6 +12,42 @@
 - Option B: 스타트업으로 이직한다
 - Context: 현재 회사는 연봉과 복지가 안정적이지만 최근 2년 동안 역할 변화가 거의 없었다. 새로운 기술을 더 가까이에서 다루고 싶지만 생활 안정성을 해칠까 걱정하고 있다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: low
+- decision_style: deliberate
+- top_priorities: stability, income, work_life_balance
+
+### Situational State
+
+- career_stage: mid
+- financial_pressure: medium
+- time_pressure: unknown
+- emotional_state: unknown
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: leans conservative under uncertainty
+- current_constraint: financial pressure is medium
+- agent_guidance: explain tradeoffs around stability, income, work_life_balance while respecting financial pressure is medium
+
+## Routing
+
+- complexity: medium
+- risk_level: high
+- ambiguity: low
+- execution_mode: full
+- selected_path: planner -> scenario -> risk -> ab_reasoning -> advisor -> reflection
+- reason: 잘못 판단했을 때 손실 규모가 커 고위험 케이스로 보고 전체 경로 실행이 필요하다.
+
 ## Planner
 
 - Decision type: career_change
@@ -76,7 +112,7 @@
 ## Advisor
 
 - Recommended option: A
-- Reason: 사용자의 risk_tolerance가 low이고 최우선 기준이 stability이므로, reasoning의 최종 선택을 기본값으로 채택한다. riskA=low, riskB=high이며, 불확실성이 높아질수록 조건부 재검토가 필요하지만 현재 stub에서는 A를 추천한다.
+- Reason: 사용자의 risk_tolerance가 low이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=low, riskB=high 조합을 함께 고려했을 때 현재는 A를 추천한다.
 - Reasoning basis: reasoning A / confidence 0.77 / 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
 
 ## Reflection
