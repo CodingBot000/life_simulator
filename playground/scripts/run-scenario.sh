@@ -33,7 +33,11 @@ OUTPUTS_DIR="$(resolve_output_dir "$INPUT_FILE" "${3:-}")"
 ensure_output_dir
 copy_input_snapshot "$INPUT_FILE"
 
+CASE_ID="$(case_id_from_output_dir "$OUTPUTS_DIR")"
 BASE_INPUT_COMPACT="$(read_json_compact "$INPUT_FILE")"
+STATE_CONTEXT_FILE="$(state_context_path)"
+STATE_CONTEXT_COMPACT="$(read_json_compact "$STATE_CONTEXT_FILE")"
+STATE_CONTEXT_REL="$(relative_to_root "$STATE_CONTEXT_FILE")"
 PLANNER_RESULT_FILE="$(resolve_stage_result_file "planner")"
 PLANNER_RESULT_COMPACT="$(read_json_compact "$PLANNER_RESULT_FILE")"
 PLANNER_RESULT_REL="$(relative_to_root "$PLANNER_RESULT_FILE")"
@@ -55,13 +59,17 @@ for OPTION_LABEL in A B; do
   fi
 
   INPUT_DATA_COMPACT="$(jq -cn \
+    --arg case_id "$CASE_ID" \
     --argjson base_input "$BASE_INPUT_COMPACT" \
+    --argjson state_context "$STATE_CONTEXT_COMPACT" \
     --argjson planner_result "$PLANNER_RESULT_COMPACT" \
     --arg option_label "$OPTION_LABEL" \
     --arg selected_option "$SELECTED_OPTION" \
     '{
+      caseId: $case_id,
+      caseInput: $base_input,
+      stateContext: $state_context,
       optionLabel: $option_label,
-      userProfile: $base_input.userProfile,
       selectedOption: $selected_option,
       decisionContext: $base_input.decision.context,
       factors: ($planner_result.factors // []),
@@ -84,7 +92,7 @@ for OPTION_LABEL in A B; do
     --arg input_json "$INPUT_JSON" \
     --argjson input_data "$INPUT_DATA_COMPACT" \
     --argjson expected_output_schema "$SCHEMA_JSON" \
-    --argjson previous_stage_result_files "[\"$PLANNER_RESULT_REL\"]" \
+    --argjson previous_stage_result_files "[\"$STATE_CONTEXT_REL\", \"$PLANNER_RESULT_REL\"]" \
     '{
       stage: $stage,
       generated_at: $generated_at,

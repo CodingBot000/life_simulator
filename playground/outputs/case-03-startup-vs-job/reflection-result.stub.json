@@ -11,8 +11,12 @@
       "description": "planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 independence을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다."
     },
     {
+      "type": "reasoning",
+      "description": "reasoning의 최종 선택은 reasoning A, option A, confidence 0.70로 정리됐지만 A/B 관점 차이가 실제로 충분히 벌어졌는지와 comparison 충돌 정리가 더 선명하게 드러날 필요가 있다."
+    },
+    {
       "type": "advisor",
-      "description": "advisor가 A를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다."
+      "description": "advisor가 A를 추천하지만 riskA=medium, riskB=medium와 reasoning final_selection을 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다."
     }
   ],
   "improvement_suggestions": [
@@ -21,9 +25,13 @@
       "suggestion": "각 시간 축 문장에서 independence 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라."
     },
     {
+      "target": "reasoning",
+      "suggestion": "A는 안정성 손실 회피, B는 성장 기대값 확대라는 관점 차이가 문장 수준에서 분명히 보이도록 comparison의 agreement와 conflict를 더 날카롭게 정리하라."
+    },
+    {
       "target": "advisor",
-      "suggestion": "최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라."
+      "suggestion": "최종 추천 사유를 priority, risk, reasoning, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라."
     }
   ],
-  "overall_comment": "전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다."
+  "overall_comment": "전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다."
 }

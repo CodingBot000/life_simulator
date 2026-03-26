@@ -1,0 +1,30 @@
+{
+  "case_id": "case-04-relationship",
+  "user_state": {
+    "profile_state": {
+      "risk_preference": "low",
+      "decision_style": "deliberate",
+      "top_priorities": [
+        "emotional_stability",
+        "trust",
+        "long_term_compatibility"
+      ]
+    },
+    "situational_state": {
+      "career_stage": "mid",
+      "financial_pressure": "unknown",
+      "time_pressure": "high",
+      "emotional_state": "uncertain"
+    },
+    "memory_state": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    }
+  },
+  "state_summary": {
+    "decision_bias": "leans conservative under uncertainty",
+    "current_constraint": "time pressure is high; emotional state is uncertain",
+    "agent_guidance": "explain tradeoffs around emotional_stability, trust, long_term_compatibility while respecting time pressure is high; emotional state is uncertain"
+  }
+}

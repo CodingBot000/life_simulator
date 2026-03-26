@@ -1,0 +1,145 @@
+{
+  "stage": "router",
+  "generated_at": "2026-03-26T09:57:17Z",
+  "description": "Prepared request payload for Codex CLI live execution.",
+  "prompt_file": "prompts/router.md",
+  "input_source": "playground/inputs/cases/case-06-freelance-vs-fulltime.json",
+  "previous_stage_result_files": [
+    "playground/outputs/case-06-freelance-vs-fulltime/state-context.json"
+  ],
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Router Agent다.\n\n역할:\n- 입력 케이스와 state context를 분석해 실행 경로만 결정한다.\n- 조언, 결론, 추천은 절대 하지 않는다.\n- complexity, risk_level, ambiguity를 평가한 뒤 execution_mode와 selected_path를 정한다.\n\n입력 데이터 형식:\n```json\n{\n  \"caseId\": \"case-03-startup-vs-job\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 34,\n      \"job\": \"product manager\",\n      \"risk_tolerance\": \"medium\",\n      \"priority\": [\"independence\", \"growth\", \"income\"]\n    },\n    \"decision\": {\n      \"optionA\": \"작은 SaaS를 창업한다\",\n      \"optionB\": \"안정적인 IT 회사에 취업한다\",\n      \"context\": \"그동안 사이드프로젝트를 여러 번 해보며 직접 제품을 만들고 싶다는 생각이 커졌다. 다만 대출 상환과 생활비 부담도 있어 당장 수입이 끊기는 상황은 부담스럽다.\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-03-startup-vs-job\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"medium\",\n        \"decision_style\": \"balanced\",\n        \"top_priorities\": [\"independence\", \"growth\", \"income\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"high\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"balances stability and upside\",\n      \"current_constraint\": \"financial pressure is high; emotional state is uncertain\",\n      \"agent_guidance\": \"explain tradeoffs around independence, growth, income while respecting financial pressure\"\n    }\n  }\n}\n```\n\n판정 기준:\n- `complexity`\n  - `low`: 단순 선택, 변수 적음\n  - `medium`: 변수 몇 개 존재, 구조화 가능\n  - `high`: 변수 많고 다단계 판단 필요\n- `risk_level`\n  - `low`: 잘못 판단해도 영향 작음\n  - `medium`: 일부 손실/후회 가능\n  - `high`: 비용, 시간, 커리어, 건강, 관계 등 큰 손실 가능\n- `ambiguity`\n  - `low`: 정보 충분, state도 충분\n  - `medium`: 일부 정보 부족 또는 state 공백 존재\n  - `high`: 정보 부족이 크고 state 공백 때문에 해석이 크게 갈림\n\nexecution_mode 정의:\n```json\n{\n  \"light\": [\"planner\", \"advisor\"],\n  \"standard\": [\"planner\", \"scenario\", \"advisor\"],\n  \"careful\": [\"planner\", \"scenario\", \"risk\", \"advisor\"],\n  \"full\": [\"planner\", \"scenario\", \"risk\", \"ab_reasoning\", \"advisor\", \"reflection\"]\n}\n```\n\n라우팅 규칙:\n- `risk_level = high` 이면 무조건 `full`\n- `ambiguity = high` 이면 `full`을 우선한다\n- `complexity = high` 이고 `ambiguity >= medium` 이면 `full`\n- 모두 `low`이면 `light`\n- `medium`이 섞인 경우에는 `standard` 또는 `careful`\n- `risk_level = medium` 이 포함되면 `careful`\n- 그 외의 중간 혼합은 `standard`\n\n행동 규칙:\n- `selected_path`는 반드시 `execution_mode`와 정확히 일치해야 한다.\n- `planner`는 항상 포함되어야 한다.\n- `advisor`는 항상 마지막이어야 한다.\n- `scenario` 없이 `risk`를 포함하면 안 된다.\n- `ab_reasoning`과 `reflection`은 `full`에서만 포함할 수 있다.\n- `stateContext.user_state`에 `unknown`, `none`, 빈 배열이 많으면 ambiguity 판단을 높일 수 있다.\n- `routing_reason`은 왜 이 실행 경로를 골랐는지 한 문장으로 설명하되, 추천이나 결론으로 넘어가면 안 된다.\n- 입력에 없는 사실을 새로 만들어 단정하지 않는다.\n- 응답은 반드시 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"case_id\": \"case-03-startup-vs-job\",\n  \"routing\": {\n    \"complexity\": \"medium\",\n    \"risk_level\": \"high\",\n    \"ambiguity\": \"medium\",\n    \"execution_mode\": \"full\",\n    \"selected_path\": [\n      \"planner\",\n      \"scenario\",\n      \"risk\",\n      \"ab_reasoning\",\n      \"advisor\",\n      \"reflection\"\n    ],\n    \"routing_reason\": \"고위험이며 변수와 불확실성이 함께 있어 전체 경로 실행이 필요하다.\"\n  }\n}\n```",
+  "expected_output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "case_id": {
+        "type": "string"
+      },
+      "routing": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "complexity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "ambiguity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "execution_mode": {
+            "type": "string",
+            "enum": [
+              "light",
+              "standard",
+              "careful",
+              "full"
+            ]
+          },
+          "selected_path": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "planner",
+                "scenario",
+                "risk",
+                "ab_reasoning",
+                "advisor",
+                "reflection"
+              ]
+            },
+            "minItems": 2
+          },
+          "routing_reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "complexity",
+          "risk_level",
+          "ambiguity",
+          "execution_mode",
+          "selected_path",
+          "routing_reason"
+        ]
+      }
+    },
+    "required": [
+      "case_id",
+      "routing"
+    ]
+  },
+  "input_data": {
+    "caseId": "case-06-freelance-vs-fulltime",
+    "caseInput": {
+      "userProfile": {
+        "age": 33,
+        "job": "product designer",
+        "risk_tolerance": "medium",
+        "priority": [
+          "freedom",
+          "income",
+          "stability"
+        ]
+      },
+      "decision": {
+        "optionA": "프리랜서로 전환한다",
+        "optionB": "정규직을 유지한다",
+        "context": "최근 외부 프로젝트 제안을 몇 번 받으면서 독립적으로 일할 수 있다는 자신감이 생겼다. 하지만 고정 수입과 팀 동료가 주는 안정감도 쉽게 포기하기 어렵다."
+      }
+    },
+    "stateContext": {
+      "case_id": "case-06-freelance-vs-fulltime",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "exploratory",
+          "top_priorities": [
+            "freedom",
+            "income",
+            "stability"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "high",
+          "time_pressure": "medium",
+          "emotional_state": "cautiously_optimistic"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "balances stability and upside",
+        "current_constraint": "financial pressure is high; time pressure is medium; emotional state is cautiously_optimistic",
+        "agent_guidance": "explain tradeoffs around freedom, income, stability while respecting financial pressure is high; time pressure is medium; emotional state is cautiously_optimistic"
+      }
+    }
+  },
+  "input_json": "{\n  \"caseId\": \"case-06-freelance-vs-fulltime\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 33,\n      \"job\": \"product designer\",\n      \"risk_tolerance\": \"medium\",\n      \"priority\": [\n        \"freedom\",\n        \"income\",\n        \"stability\"\n      ]\n    },\n    \"decision\": {\n      \"optionA\": \"프리랜서로 전환한다\",\n      \"optionB\": \"정규직을 유지한다\",\n      \"context\": \"최근 외부 프로젝트 제안을 몇 번 받으면서 독립적으로 일할 수 있다는 자신감이 생겼다. 하지만 고정 수입과 팀 동료가 주는 안정감도 쉽게 포기하기 어렵다.\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-06-freelance-vs-fulltime\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"medium\",\n        \"decision_style\": \"exploratory\",\n        \"top_priorities\": [\n          \"freedom\",\n          \"income\",\n          \"stability\"\n        ]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"high\",\n        \"time_pressure\": \"medium\",\n        \"emotional_state\": \"cautiously_optimistic\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"balances stability and upside\",\n      \"current_constraint\": \"financial pressure is high; time pressure is medium; emotional state is cautiously_optimistic\",\n      \"agent_guidance\": \"explain tradeoffs around freedom, income, stability while respecting financial pressure is high; time pressure is medium; emotional state is cautiously_optimistic\"\n    }\n  }\n}",
+  "provider_payload": {
+    "runner": "codex exec",
+    "call_status": "ready",
+    "output_file": "playground/outputs/case-06-freelance-vs-fulltime/routing-result.json"
+  }
+}

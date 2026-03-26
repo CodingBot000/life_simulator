@@ -12,6 +12,8 @@ copy_input_snapshot "$INPUT_FILE"
 
 BASE_INPUT_COMPACT="$(read_json_compact "$INPUT_FILE")"
 CASE_ID="$(case_id_from_output_dir "$OUTPUTS_DIR")"
+STATE_CONTEXT_FILE="$(state_context_path)"
+STATE_CONTEXT_COMPACT="$(read_json_compact "$STATE_CONTEXT_FILE")"
 PLANNER_RESULT_FILE="$(resolve_stage_result_file "planner")"
 SCENARIO_A_RESULT_FILE="$(resolve_stage_result_file "scenario-a")"
 SCENARIO_B_RESULT_FILE="$(resolve_stage_result_file "scenario-b")"
@@ -60,6 +62,7 @@ fi
 INPUT_DATA_COMPACT="$(jq -cn \
   --arg case_id "$CASE_ID" \
   --argjson base_input "$BASE_INPUT_COMPACT" \
+  --argjson state_context "$STATE_CONTEXT_COMPACT" \
   --argjson planner_result "$PLANNER_RESULT_COMPACT" \
   --argjson scenario_a "$SCENARIO_A_RESULT_COMPACT" \
   --argjson scenario_b "$SCENARIO_B_RESULT_COMPACT" \
@@ -67,8 +70,8 @@ INPUT_DATA_COMPACT="$(jq -cn \
   --argjson risk_b "$RISK_B_RESULT_COMPACT" \
   '{
     caseId: $case_id,
-    userProfile: $base_input.userProfile,
-    decision: $base_input.decision,
+    caseInput: $base_input,
+    stateContext: $state_context,
     plannerResult: $planner_result,
     scenarioA: $scenario_a,
     scenarioB: $scenario_b,
@@ -88,7 +91,7 @@ jq -n \
   --arg input_json "$INPUT_JSON" \
   --argjson input_data "$INPUT_DATA_COMPACT" \
   --argjson expected_output_schema "$SCHEMA_JSON" \
-  --argjson previous_stage_result_files "[\"$(relative_to_root "$PLANNER_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_A_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_B_RESULT_FILE")\", \"$(relative_to_root "$RISK_A_RESULT_FILE")\", \"$(relative_to_root "$RISK_B_RESULT_FILE")\"]" \
+  --argjson previous_stage_result_files "[\"$(relative_to_root "$STATE_CONTEXT_FILE")\", \"$(relative_to_root "$PLANNER_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_A_RESULT_FILE")\", \"$(relative_to_root "$SCENARIO_B_RESULT_FILE")\", \"$(relative_to_root "$RISK_A_RESULT_FILE")\", \"$(relative_to_root "$RISK_B_RESULT_FILE")\"]" \
   '{
     stage: $stage,
     generated_at: $generated_at,

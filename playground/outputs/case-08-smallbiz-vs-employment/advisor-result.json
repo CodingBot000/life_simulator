@@ -1,1 +1,9 @@
-{"recommended_option":"A","reason":"사용자는 위험 감수 성향이 높고, 우선순위에서도 `independence`를 가장 먼저 두고 있다. 이 기준으로 보면 A는 초기 시행착오와 수입 변동성이 있지만, 3개월부터 독립적으로 결정하고 운영하는 만족이 크고 1년·3년 시점에도 자율성과 오랜 창업 희망 실현의 성취가 계속 유지된다. 반면 B는 수입과 안정성에서는 유리하지만, 가장 중요한 독립성에서 초반부터 답답함과 장기적 아쉬움이 반복되어 사용자 성향과 우선순위에 덜 맞는다. 따라서 income·stability의 부담을 감안해도, 전체적으로는 A가 더 적합하다."}
+{
+  "recommended_option": "B",
+  "reason": "사용자의 risk_tolerance가 high이고 최우선 기준이 independence이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 B를 추천한다.",
+  "reasoning_basis": {
+    "selected_reasoning": "B",
+    "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 B reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
+    "decision_confidence": 0.68
+  }
+}

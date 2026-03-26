@@ -1,0 +1,16 @@
+{
+  "case_id": "case-09-overseas-study-vs-work",
+  "routing": {
+    "complexity": "medium",
+    "risk_level": "medium",
+    "ambiguity": "medium",
+    "execution_mode": "careful",
+    "selected_path": [
+      "planner",
+      "scenario",
+      "risk",
+      "advisor"
+    ],
+    "routing_reason": "리스크 점검은 필요하지만 전체 반성 단계까지 갈 수준은 아니어서 careful 경로를 선택한다."
+  }
+}

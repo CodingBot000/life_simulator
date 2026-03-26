@@ -13,9 +13,59 @@ export interface DecisionInput {
   context: string;
 }
 
+export interface MemoryDecisionRecord {
+  topic: string;
+  selected_option: string;
+  outcome_note: string;
+}
+
+export interface ProfileState {
+  risk_preference: string;
+  decision_style: string;
+  top_priorities: string[];
+}
+
+export interface SituationalState {
+  career_stage: string;
+  financial_pressure: string;
+  time_pressure: string;
+  emotional_state: string;
+}
+
+export interface MemoryState {
+  recent_similar_decisions: MemoryDecisionRecord[];
+  repeated_patterns: string[];
+  consistency_notes: string[];
+}
+
+export interface UserState {
+  profile_state: ProfileState;
+  situational_state: SituationalState;
+  memory_state: MemoryState;
+}
+
+export interface StateSummary {
+  decision_bias: string;
+  current_constraint: string;
+  agent_guidance: string;
+}
+
+export interface StateContext {
+  case_id: string;
+  user_state: UserState;
+  state_summary: StateSummary;
+}
+
+export interface StateHints {
+  profile_state?: Partial<ProfileState>;
+  situational_state?: Partial<SituationalState>;
+}
+
 export interface SimulationRequest {
   userProfile: UserProfile;
   decision: DecisionInput;
+  prior_memory?: Partial<MemoryState>;
+  state_hints?: StateHints;
 }
 
 export interface PlannerResult {
@@ -112,6 +162,7 @@ export interface ReflectionResult {
 }
 
 export interface SimulationResponse {
+  stateContext: StateContext;
   planner: PlannerResult;
   scenarioA: ScenarioResult;
   scenarioB: ScenarioResult;

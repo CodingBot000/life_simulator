@@ -1,0 +1,30 @@
+{
+  "case_id": "case-05-relocation",
+  "user_state": {
+    "profile_state": {
+      "risk_preference": "medium",
+      "decision_style": "exploratory",
+      "top_priorities": [
+        "stability",
+        "experience",
+        "future_opportunity"
+      ]
+    },
+    "situational_state": {
+      "career_stage": "mid",
+      "financial_pressure": "medium",
+      "time_pressure": "unknown",
+      "emotional_state": "cautiously_optimistic"
+    },
+    "memory_state": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    }
+  },
+  "state_summary": {
+    "decision_bias": "balances stability and upside",
+    "current_constraint": "financial pressure is medium; emotional state is cautiously_optimistic",
+    "agent_guidance": "explain tradeoffs around stability, experience, future_opportunity while respecting financial pressure is medium; emotional state is cautiously_optimistic"
+  }
+}

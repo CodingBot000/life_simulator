@@ -1,1 +1,9 @@
-{"recommended_option":"A","reason":"사용자의 최우선 기준이 장기 커리어 성장 가능성과 특정 분야 전문성 강화이고, 위험 감수 성향도 medium이므로 두 위험도가 모두 중간 수준인 상황에서는 이 두 기준을 더 강하게 충족하는 A가 더 적합하다. 시나리오 A는 1년~3년 시점에 연구 경험, 네트워크, 학위 성과가 쌓이며 전문성과 장기 선택지가 뚜렷하게 커지는 반면, B는 단기 수입과 안정성에는 유리하지만 장기 성장과 전문성은 스스로 추가 설계해야 해 우선순위 1순위와 3순위에 덜 직접적으로 맞는다. 단기 수입은 A의 약점이지만, 사용자의 위험 허용도가 낮지 않고 B 역시 장기 방향이 흐려질 수 있는 중간 수준의 위험이 있어, 전체적으로는 A가 사용자의 우선순위에 더 일관되게 부합한다."}
+{
+  "recommended_option": "B",
+  "reason": "router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=medium, riskB=medium이며 최우선 기준이 long_term_growth이므로 현재 stub에서는 B를 추천한다.",
+  "reasoning_basis": {
+    "selected_reasoning": "B",
+    "core_why": "scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.",
+    "decision_confidence": 0.70
+  }
+}

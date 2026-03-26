@@ -1,0 +1,18 @@
+{
+  "case_id": "case-08-smallbiz-vs-employment",
+  "routing": {
+    "complexity": "high",
+    "risk_level": "medium",
+    "ambiguity": "medium",
+    "execution_mode": "full",
+    "selected_path": [
+      "planner",
+      "scenario",
+      "risk",
+      "ab_reasoning",
+      "advisor",
+      "reflection"
+    ],
+    "routing_reason": "복잡도와 불확실성이 함께 높아 planner 이후 심화 검토가 모두 필요하다."
+  }
+}

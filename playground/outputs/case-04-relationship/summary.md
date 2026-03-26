@@ -12,6 +12,42 @@
 - Option B: 관계를 정리한다
 - Context: 상대와 애정은 있지만 장거리와 반복되는 갈등으로 미래 계획이 자주 흔들린다. 혼자가 되는 불안도 있지만, 계속 버티는 것이 더 건강한지 확신이 서지 않는다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: low
+- decision_style: deliberate
+- top_priorities: emotional_stability, trust, long_term_compatibility
+
+### Situational State
+
+- career_stage: mid
+- financial_pressure: unknown
+- time_pressure: high
+- emotional_state: uncertain
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: leans conservative under uncertainty
+- current_constraint: time pressure is high; emotional state is uncertain
+- agent_guidance: explain tradeoffs around emotional_stability, trust, long_term_compatibility while respecting time pressure is high; emotional state is uncertain
+
+## Routing
+
+- complexity: medium
+- risk_level: medium
+- ambiguity: medium
+- execution_mode: careful
+- selected_path: planner -> scenario -> risk -> advisor
+- reason: 리스크 점검은 필요하지만 전체 반성 단계까지 갈 수준은 아니어서 careful 경로를 선택한다.
+
 ## Planner
 
 - Decision type: relationship
@@ -45,29 +81,16 @@
 - 1년~3년 시나리오에서는 장거리와 반복 갈등 속에서 미래 계획을 안정적으로 맞추기 어려웠다는 판단이 선명해지고, 신뢰와 장기적 궁합 기준이 더 분명해져 장기 리스크는 낮아진다.
 - 즉 위험의 중심은 관계를 정리한 선택 자체보다 초기 상실감과 외로움의 충격에 있으며, 장기적으로는 불안정한 관계를 계속 유지하는 경우보다 우선순위와의 충돌이 적다.
 
+## A/B Reasoning
+
+- Skipped in execution_mode=careful
+
 ## Advisor
 
 - Recommended option: B
-- Reason: 사용자의 위험 감수 성향이 낮고 우선순위가 정서적 안정, 신뢰, 장기적 궁합인 점을 기준으로 보면 B가 더 적합합니다. A는 애정과 익숙함 덕분에 단기 불안은 줄일 수 있지만, 장거리와 반복 갈등이 계속되고 신뢰 회복도 느려 높은 리스크로 제시되어 있어 우선순위와 자주 충돌합니다. 반면 B는 초기에 외로움과 상실감이 크다는 부담이 있지만, 갈등의 직접적 자극과 신뢰 점검 피로가 줄고 시간이 갈수록 정서적 안정과 장기적 궁합 판단이 더 분명해집니다. 따라서 단기 불안보다 장기적 안정과 신뢰 가능성을 더 중시해야 하는 이 경우에는 관계를 정리하는 쪽이 더 일관된 선택입니다.
+- Reason: router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=high, riskB=medium이며 최우선 기준이 emotional_stability이므로 현재 stub에서는 B를 추천한다.
+- Reasoning basis: reasoning B / confidence 0.70 / scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.
 
 ## Reflection
 
-- realism: 4
-- consistency: 4
-- profile_alignment: 5
-- recommendation_clarity: 4
-
-### 주요 문제
-
-- [scenario] `scenarioB.three_years`는 이별 이후의 해석이 결국 '필요했던 정리'로 굳어질 가능성이 크다고 서술하는데, 회복 속도 차이·미련의 지속·새 관계 여부 같은 변수에 따른 분기가 없다. 장기 결과를 한 방향으로 수렴시켜 현실적인 불확실성을 충분히 반영하지 못한다.
-- [risk] `riskB`는 초반 상실감과 불안이 크고 장기적으로는 안정성이 높아진다고 설명하지만, 최종 표기는 `medium` 하나뿐이다. 이 구조는 단기 충격과 장기 안정이라는 서로 다른 성격의 리스크를 압축해 버려, 낮은 위험 감수 성향 사용자에게 무엇이 더 큰 부담인지 비교를 어렵게 만든다.
-- [advisor] `advisorResult.reason`는 왜 B가 더 맞는지 설명하지만, A를 다시 고려할 수 있는 최소 조건이 제시되지 않는다. 시나리오 A 안에는 신뢰 회복 행동과 거리 문제의 실제 조정이 핵심 변수로 이미 드러나 있는데, 이를 의사결정 기준으로 명시하지 않아 추천이 실행 가능한 판단 규칙으로 완성되지 않았다.
-
-### 개선 방향
-
-- [scenario] 장기 시나리오는 단정형 결론 대신 조건 분기형으로 재작성하라. 예를 들어 신뢰 회복 행동이 지속되는 경우와 미래 계획이 계속 실행되지 않는 경우를 나눠, 1년과 3년 결과가 어떻게 달라지는지 명확히 제시하라.
-- [risk] 각 선택지의 리스크를 단기·중기·장기로 분리하고, 각 기간별 강도와 사용자 우선순위(정서적 안정, 신뢰, 장기적 궁합)와의 충돌 정도를 따로 표시하라. 단일 `risk_level`만 두지 말고 시간축 기준의 평가를 추가하라.
-- [advisor] 최종 추천에 예외 조건을 붙여라. B를 기본 추천하더라도, A는 신뢰를 보여주는 일관된 행동이 일정 기간 반복 확인되고 장거리 완화 계획이 실제로 실행될 때만 재검토 가능하다는 식으로 판단 기준을 명문화하라.
-- [planner] 현재 factor를 유지하되, '단기 외로움의 충격'과 '장기 안정의 확보 가능성'을 별도 항목으로 분리해 이후 scenario·risk·advisor가 동일한 시간축 기준으로 평가하도록 구조를 보강하라.
-
-- Overall comment: 프로필 반영과 추천 방향의 논리 연결은 강하지만, 장기 시나리오가 다소 단정적이고 B의 리스크가 시간축별로 분해되지 않아 평가의 정밀도가 충분히 높지 않다. 현재 결과는 방향성은 선명하지만, 조건 분기와 의사결정 기준을 더 구조화해야 실제 선택에 바로 쓰기 좋은 수준이 된다.
+- Skipped in execution_mode=careful

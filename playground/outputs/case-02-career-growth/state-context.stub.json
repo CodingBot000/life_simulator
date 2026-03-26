@@ -1,0 +1,30 @@
+{
+  "case_id": "case-02-career-growth",
+  "user_state": {
+    "profile_state": {
+      "risk_preference": "high",
+      "decision_style": "exploratory",
+      "top_priorities": [
+        "growth",
+        "ownership",
+        "learning"
+      ]
+    },
+    "situational_state": {
+      "career_stage": "early",
+      "financial_pressure": "unknown",
+      "time_pressure": "unknown",
+      "emotional_state": "cautiously_optimistic"
+    },
+    "memory_state": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    }
+  },
+  "state_summary": {
+    "decision_bias": "accepts volatility for upside",
+    "current_constraint": "emotional state is cautiously_optimistic",
+    "agent_guidance": "explain tradeoffs around growth, ownership, learning while respecting emotional state is cautiously_optimistic"
+  }
+}

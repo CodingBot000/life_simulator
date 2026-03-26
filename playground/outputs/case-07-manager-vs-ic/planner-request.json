@@ -1,11 +1,13 @@
 {
   "stage": "planner",
-  "generated_at": "2026-03-24T19:24:08Z",
+  "generated_at": "2026-03-26T09:57:18Z",
   "description": "Prepared request payload for Codex CLI live execution.",
   "prompt_file": "prompts/planner.md",
   "input_source": "playground/inputs/cases/case-07-manager-vs-ic.json",
-  "previous_stage_result_files": [],
-  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Planner Agent다.\n\n목표:\n- 사용자 프로필과 decision 입력을 읽고 의사결정 유형을 한 줄로 분류한다.\n- 이후 단계에서 재사용할 핵심 비교 요소 factors를 3~6개 도출한다.\n- factors는 실제로 A/B 선택지를 비교할 때 의미가 있는 항목만 남긴다.\n\n입력 데이터 형식:\n```json\n{\n  \"userProfile\": {\n    \"age\": 32,\n    \"job\": \"developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n  },\n  \"decision\": {\n    \"optionA\": \"현재 회사에 남는다\",\n    \"optionB\": \"스타트업으로 이직한다\",\n    \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n  }\n}\n```\n\n판단 규칙:\n- `decision_type`은 `career_change`, `relationship`, `financial`, `living`, `education`처럼 짧고 재사용 가능한 범주형 문자열로 작성한다.\n- `factors`는 실제 비교 기준이 되는 문자열 배열이어야 한다.\n- `priority`, `risk_tolerance`, `decision.context`를 반드시 반영한다.\n- 입력에 없는 사실을 추가로 만들지 않는다.\n- 응답은 반드시 한국어 기반의 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"decision_type\": \"\",\n  \"factors\": []\n}\n```",
+  "previous_stage_result_files": [
+    "playground/outputs/case-07-manager-vs-ic/state-context.json"
+  ],
+  "prompt_text": "너는 의사결정 시뮬레이션 체인의 Planner Agent다.\n\n목표:\n- 원본 case input과 state context를 읽고 의사결정 유형을 분류한다.\n- 이후 단계에서 재사용할 핵심 비교 요소 factors를 3~6개 도출한다.\n- factors는 profile_state, situational_state를 반영한 실제 비교 기준이어야 한다.\n\n입력 데이터 형식:\n```json\n{\n  \"caseId\": \"case-001\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 32,\n      \"job\": \"developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\"stability\", \"income\", \"work_life_balance\"]\n    },\n    \"decision\": {\n      \"optionA\": \"현재 회사에 남는다\",\n      \"optionB\": \"스타트업으로 이직한다\",\n      \"context\": \"현재 연봉은 안정적이지만 성장 정체를 느낌\"\n    }\n  },\n  \"stateContext\": {\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\"stability\", \"income\", \"work_life_balance\"]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"medium\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"uncertain\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"financial pressure is medium\",\n      \"agent_guidance\": \"explain stability-growth tradeoffs explicitly\"\n    }\n  }\n}\n```\n\n판단 규칙:\n- `decision_type`은 `career_change`, `relationship`, `financial`, `living`, `education`처럼 짧고 재사용 가능한 범주형 문자열로 작성한다.\n- `factors`는 실제 비교 기준이 되는 문자열 배열이어야 한다.\n- `caseInput.userProfile.priority`, `risk_tolerance`, `decision.context`를 반드시 반영한다.\n- `stateContext.user_state.profile_state`, `stateContext.user_state.situational_state`를 반드시 반영한다.\n- `memory_state.consistency_notes`가 있으면 factors 또는 decision_type 해석에 반영한다.\n- 입력에 없는 사실을 추가로 만들지 않는다.\n- 응답은 반드시 한국어 기반의 유효한 JSON만 반환한다.\n- 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.\n\n출력 JSON 형식:\n```json\n{\n  \"decision_type\": \"\",\n  \"factors\": []\n}\n```",
   "expected_output_schema": {
     "type": "object",
     "additionalProperties": false,
@@ -27,23 +29,56 @@
     ]
   },
   "input_data": {
-    "userProfile": {
-      "age": 37,
-      "job": "senior developer",
-      "risk_tolerance": "low",
-      "priority": [
-        "growth",
-        "stress_management",
-        "compensation"
-      ]
+    "caseId": "case-07-manager-vs-ic",
+    "caseInput": {
+      "userProfile": {
+        "age": 37,
+        "job": "senior developer",
+        "risk_tolerance": "low",
+        "priority": [
+          "growth",
+          "stress_management",
+          "compensation"
+        ]
+      },
+      "decision": {
+        "optionA": "매니저 트랙으로 전환한다",
+        "optionB": "IC 트랙에 남는다",
+        "context": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다."
+      }
     },
-    "decision": {
-      "optionA": "매니저 트랙으로 전환한다",
-      "optionB": "IC 트랙에 남는다",
-      "context": "조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다."
+    "stateContext": {
+      "case_id": "case-07-manager-vs-ic",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "low",
+          "decision_style": "deliberate",
+          "top_priorities": [
+            "growth",
+            "stress_management",
+            "compensation"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "unknown"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "leans conservative under uncertainty",
+        "current_constraint": "none",
+        "agent_guidance": "tie the recommendation directly to growth, stress_management, compensation and make the tradeoff explicit"
+      }
     }
   },
-  "input_json": "{\n  \"userProfile\": {\n    \"age\": 37,\n    \"job\": \"senior developer\",\n    \"risk_tolerance\": \"low\",\n    \"priority\": [\n      \"growth\",\n      \"stress_management\",\n      \"compensation\"\n    ]\n  },\n  \"decision\": {\n    \"optionA\": \"매니저 트랙으로 전환한다\",\n    \"optionB\": \"IC 트랙에 남는다\",\n    \"context\": \"조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다.\"\n  }\n}",
+  "input_json": "{\n  \"caseId\": \"case-07-manager-vs-ic\",\n  \"caseInput\": {\n    \"userProfile\": {\n      \"age\": 37,\n      \"job\": \"senior developer\",\n      \"risk_tolerance\": \"low\",\n      \"priority\": [\n        \"growth\",\n        \"stress_management\",\n        \"compensation\"\n      ]\n    },\n    \"decision\": {\n      \"optionA\": \"매니저 트랙으로 전환한다\",\n      \"optionB\": \"IC 트랙에 남는다\",\n      \"context\": \"조직이 커지면서 팀을 맡아 달라는 제안을 받았지만, 사람 관리와 조율에서 오는 스트레스를 걱정하고 있다. 반대로 기술적인 깊이를 더 쌓고 싶은 욕구도 여전히 강하다.\"\n    }\n  },\n  \"stateContext\": {\n    \"case_id\": \"case-07-manager-vs-ic\",\n    \"user_state\": {\n      \"profile_state\": {\n        \"risk_preference\": \"low\",\n        \"decision_style\": \"deliberate\",\n        \"top_priorities\": [\n          \"growth\",\n          \"stress_management\",\n          \"compensation\"\n        ]\n      },\n      \"situational_state\": {\n        \"career_stage\": \"mid\",\n        \"financial_pressure\": \"unknown\",\n        \"time_pressure\": \"unknown\",\n        \"emotional_state\": \"unknown\"\n      },\n      \"memory_state\": {\n        \"recent_similar_decisions\": [],\n        \"repeated_patterns\": [],\n        \"consistency_notes\": []\n      }\n    },\n    \"state_summary\": {\n      \"decision_bias\": \"leans conservative under uncertainty\",\n      \"current_constraint\": \"none\",\n      \"agent_guidance\": \"tie the recommendation directly to growth, stress_management, compensation and make the tradeoff explicit\"\n    }\n  }\n}",
   "provider_payload": {
     "runner": "codex exec",
     "call_status": "ready",

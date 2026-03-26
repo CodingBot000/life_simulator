@@ -12,6 +12,42 @@
 - Option B: 바로 실무 취업한다
 - Context: 장기적으로는 특정 분야 전문성을 갖춘 커리어를 만들고 싶지만, 학비와 생활비 부담 때문에 단기 수입도 무시하기 어렵다. 현장 경험을 먼저 쌓는 편이 나을지 계속 고민 중이다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: medium
+- decision_style: deliberate
+- top_priorities: long_term_growth, short_term_income, expertise
+
+### Situational State
+
+- career_stage: early
+- financial_pressure: high
+- time_pressure: medium
+- emotional_state: uncertain
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: balances stability and upside
+- current_constraint: financial pressure is high; time pressure is medium; emotional state is uncertain
+- agent_guidance: explain tradeoffs around long_term_growth, short_term_income, expertise while respecting financial pressure is high; time pressure is medium; emotional state is uncertain
+
+## Routing
+
+- complexity: medium
+- risk_level: medium
+- ambiguity: medium
+- execution_mode: careful
+- selected_path: planner -> scenario -> risk -> advisor
+- reason: 리스크 점검은 필요하지만 전체 반성 단계까지 갈 수준은 아니어서 careful 경로를 선택한다.
+
 ## Planner
 
 - Decision type: education
@@ -45,26 +81,16 @@
 - 1년 이후에는 퇴근 후 강의·자격 준비·관련 프로젝트를 병행해야 할 가능성이 높아 보여, 수입은 유지되더라도 시간과 에너지를 추가로 써야 원하는 전문성을 따라잡을 수 있다.
 - 3년 시점에도 어떤 프로젝트를 맡았는지에 따라 전문성의 선명도가 크게 갈리므로, 안정성과 수입은 확보해도 장기 커리어 방향이 흐려질 가능성이 있어 전체 위험도는 중간 수준이다.
 
+## A/B Reasoning
+
+- Skipped in execution_mode=careful
+
 ## Advisor
 
-- Recommended option: A
-- Reason: 사용자의 최우선 기준이 장기 커리어 성장 가능성과 특정 분야 전문성 강화이고, 위험 감수 성향도 medium이므로 두 위험도가 모두 중간 수준인 상황에서는 이 두 기준을 더 강하게 충족하는 A가 더 적합하다. 시나리오 A는 1년~3년 시점에 연구 경험, 네트워크, 학위 성과가 쌓이며 전문성과 장기 선택지가 뚜렷하게 커지는 반면, B는 단기 수입과 안정성에는 유리하지만 장기 성장과 전문성은 스스로 추가 설계해야 해 우선순위 1순위와 3순위에 덜 직접적으로 맞는다. 단기 수입은 A의 약점이지만, 사용자의 위험 허용도가 낮지 않고 B 역시 장기 방향이 흐려질 수 있는 중간 수준의 위험이 있어, 전체적으로는 A가 사용자의 우선순위에 더 일관되게 부합한다.
+- Recommended option: B
+- Reason: router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=medium, riskB=medium이며 최우선 기준이 long_term_growth이므로 현재 stub에서는 B를 추천한다.
+- Reasoning basis: reasoning B / confidence 0.70 / scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.
 
 ## Reflection
 
-- realism: 4
-- consistency: 4
-- profile_alignment: 3
-- recommendation_clarity: 4
-
-### 주요 문제
-
-- [profile] planner가 education로 의사결정을 분류했지만, 최우선 priority인 long_term_growth을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
-- [advisor] advisor가 A를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
-
-### 개선 방향
-
-- [scenario] 각 시간 축 문장에서 long_term_growth 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
-- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
-
-- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
+- Skipped in execution_mode=careful

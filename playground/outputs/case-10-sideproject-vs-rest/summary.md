@@ -12,6 +12,42 @@
 - Option B: 휴식과 회복에 집중한다
 - Context: 본업이 바쁜데도 개인 프로젝트를 6개월째 이어오고 있어 포트폴리오와 가능성은 커지고 있다. 하지만 최근 수면과 집중력이 급격히 떨어져 번아웃 직전이라는 느낌도 강하다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: low
+- decision_style: deliberate
+- top_priorities: health, sustainability, future_optionality
+
+### Situational State
+
+- career_stage: mid
+- financial_pressure: unknown
+- time_pressure: high
+- emotional_state: strained
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: leans conservative under uncertainty
+- current_constraint: time pressure is high; emotional state is strained
+- agent_guidance: explain tradeoffs around health, sustainability, future_optionality while respecting time pressure is high; emotional state is strained
+
+## Routing
+
+- complexity: high
+- risk_level: medium
+- ambiguity: high
+- execution_mode: full
+- selected_path: planner -> scenario -> risk -> ab_reasoning -> advisor -> reflection
+- reason: 정보 해석 여지가 크고 불확실성이 높아 전체 경로 실행이 필요하다.
+
 ## Planner
 
 - Decision type: work_life_balance
@@ -45,10 +81,39 @@
 - 1년 이후에는 개인 프로젝트를 완전히 포기하지 않고 무리 없는 주기로 유지해 미래 선택지를 잃기보다 관리하는 흐름이 확인된다.
 - 3년 시점에도 포트폴리오의 성장 속도는 느리지만, 회복된 컨디션과 정리된 기록 덕분에 이직·사이드 전환 여부를 더 현실적으로 판단할 수 있어 장기 옵션 훼손 위험이 크지 않다.
 
+## A/B Reasoning
+
+### A Reasoning
+
+- stance: conservative
+- recommended option: A
+- summary: 보수적 reasoning은 사용자의 risk_tolerance가 low이고 최우선 priority가 health라는 점을 기준으로, 위험 수준이 더 낮고 생활 변동성이 작은 선택을 우선 본다. 현재 비교에서는 A가 더 안정적으로 해석된다.
+
+### B Reasoning
+
+- stance: opportunity_seeking
+- recommended option: B
+- summary: 기회 추구 reasoning은 decision context와 planner factors를 보면 변화의 보상이 분명할 수 있다고 본다. 위험을 감수하더라도 역할 변화와 성장폭을 원한다면 B를 검토할 가치가 있다.
+
+### Comparison
+
+- agreements: 두 reasoning 모두 사용자 우선순위와 리스크 허용도를 핵심 판단 축으로 본다.; 두 reasoning 모두 시나리오와 risk 결과를 근거로 사용한다.
+- conflicts: A reasoning은 손실 회피와 안정 기반을 우선하지만, B reasoning은 성장 기회의 기대값을 더 크게 본다.; A reasoning은 현재 성향과의 정합성을 중시하고, B reasoning은 미래 옵션 확장을 더 높게 평가한다.
+- which fits user better: B
+- reason: 현재 입력에서는 risk_tolerance=low, primary_priority=health, riskA=high, riskB=low 조합 때문에 B 쪽이 사용자 성향과 더 직접적으로 맞는다.
+
+### Final Selection
+
+- selected reasoning: B
+- selected option: B
+- why selected: 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 B reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
+- decision confidence: 0.71
+
 ## Advisor
 
 - Recommended option: B
-- Reason: 사용자의 위험 허용도는 낮고, 우선순위도 건강·지속 가능성·미래 선택지 순이므로 B가 더 적합합니다. A는 포트폴리오와 미래 선택지 확대에는 도움이 될 수 있지만 현재 이미 수면 저하와 번아웃 직전 상태에서 위험 수준이 높아 건강과 지속 가능성을 직접 해칠 가능성이 큽니다. 반면 B는 단기적으로 수면과 집중력 회복, 본업 안정성 유지에 유리하고, 장기적으로도 개인 프로젝트를 무리 없는 방식으로 관리해 미래 선택지를 잃지 않는 흐름이어서 사용자의 기준에 가장 일관되게 부합합니다.
+- Reason: 사용자의 risk_tolerance가 low이고 최우선 기준이 health이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=high, riskB=low 조합을 함께 고려했을 때 현재는 B를 추천한다.
+- Reasoning basis: reasoning B / confidence 0.71 / 최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 B reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.
 
 ## Reflection
 
@@ -60,11 +125,13 @@
 ### 주요 문제
 
 - [profile] planner가 work_life_balance로 의사결정을 분류했지만, 최우선 priority인 health을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
-- [advisor] advisor가 B를 추천하지만 riskA=high, riskB=low 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
+- [reasoning] reasoning의 최종 선택은 reasoning B, option B, confidence 0.71로 정리됐지만 A/B 관점 차이가 실제로 충분히 벌어졌는지와 comparison 충돌 정리가 더 선명하게 드러날 필요가 있다.
+- [advisor] advisor가 B를 추천하지만 riskA=high, riskB=low와 reasoning final_selection을 어떻게 함께 해석했는지 연결 설명이 더 구조화될 필요가 있다.
 
 ### 개선 방향
 
 - [scenario] 각 시간 축 문장에서 health 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
-- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
+- [reasoning] A는 안정성 손실 회피, B는 성장 기대값 확대라는 관점 차이가 문장 수준에서 분명히 보이도록 comparison의 agreement와 conflict를 더 날카롭게 정리하라.
+- [advisor] 최종 추천 사유를 priority, risk, reasoning, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
 
-- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
+- Overall comment: 전반적 흐름은 설득력 있지만, reasoning의 관점 분리와 advisor의 반영 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.

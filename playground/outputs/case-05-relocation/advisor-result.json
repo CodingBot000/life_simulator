@@ -1,1 +1,9 @@
-{"recommended_option":"B","reason":"사용자의 위험 감수 성향이 low가 아니라 medium이고, 우선순위가 stability만이 아니라 experience와 future_opportunity까지 포함되어 있다는 점을 기준으로 보면 B가 더 적합하다. A는 현재의 안정성과 커리어 연속성은 가장 잘 지키지만, 경험과 장기 기회 측면에서는 아쉬움이 누적될 가능성이 크다. 반면 B는 초기에 언어·비자·수입 안정성 부담이 분명하지만 risk_level이 medium 수준에 머물고, 1년 이후 적응이 진행되며 3년 시점에는 해외 실무 경험과 더 넓은 커리어 선택지가 실제 자산이 된다. 즉 안정성을 일부 감수하더라도 새로운 경험과 미래 기회 확대를 함께 얻으려는 현재 우선순위에는 B가 더 잘 맞는다."}
+{
+  "recommended_option": "A",
+  "reason": "사용자의 risk_tolerance가 medium이고 최우선 기준이 stability이므로, full 경로에서 생성된 A/B reasoning의 최종 선택을 기본값으로 채택한다. 실행 모드는 full이며 riskA=medium, riskB=medium 조합을 함께 고려했을 때 현재는 A를 추천한다.",
+  "reasoning_basis": {
+    "selected_reasoning": "A",
+    "core_why": "최종 선택은 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 reasoning을 택한 결과다. 현재 비교에서는 A reasoning이 손실 회피와 기대 보상의 균형을 더 설득력 있게 설명한다.",
+    "decision_confidence": 0.70
+  }
+}

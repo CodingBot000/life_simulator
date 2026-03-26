@@ -12,6 +12,42 @@
 - Option B: AI 스타트업으로 이직한다
 - Context: 현재 회사는 시스템과 프로세스가 잘 잡혀 있지만 개인이 내리는 제품 영향력은 작다. 생성형 AI 제품을 빠르게 만들 수 있는 환경에 끌리지만 실패 가능성도 알고 있다.
 
+## State Context
+
+### Profile State
+
+- risk_preference: high
+- decision_style: exploratory
+- top_priorities: growth, ownership, learning
+
+### Situational State
+
+- career_stage: early
+- financial_pressure: unknown
+- time_pressure: unknown
+- emotional_state: cautiously_optimistic
+
+### Memory State
+
+- recent_similar_decisions: none
+- repeated_patterns: none
+- consistency_notes: none
+
+### State Summary
+
+- decision_bias: accepts volatility for upside
+- current_constraint: emotional state is cautiously_optimistic
+- agent_guidance: explain tradeoffs around growth, ownership, learning while respecting emotional state is cautiously_optimistic
+
+## Routing
+
+- complexity: medium
+- risk_level: medium
+- ambiguity: medium
+- execution_mode: careful
+- selected_path: planner -> scenario -> risk -> advisor
+- reason: 리스크 점검은 필요하지만 전체 반성 단계까지 갈 수준은 아니어서 careful 경로를 선택한다.
+
 ## Planner
 
 - Decision type: career_change
@@ -45,26 +81,16 @@
 - 3년 관점에서 생성형 AI 실전 경험과 오너십은 커리어 자산이 되지만, 합병·전략 수정·팀 재편 같은 조직 불확실성이 끝까지 남는다.
 - 다만 사용자는 성장·오너십·학습을 최우선으로 두고 위험 감수 성향도 높아, 같은 불확실성이라도 체감 위험은 완화되는 편이다.
 
+## A/B Reasoning
+
+- Skipped in execution_mode=careful
+
 ## Advisor
 
 - Recommended option: B
-- Reason: 사용자의 위험 감수 성향이 높고 우선순위가 성장, 오너십, 학습인 만큼 B가 더 적합합니다. B는 초기 혼선과 조직 불확실성이 있지만, 제품 영향력, 생성형 AI 실전 경험, 빠른 학습 밀도 측면에서 사용자의 최우선 기준과 직접 맞닿아 있습니다. 반면 A는 안정성과 체계라는 장점이 분명하지만, 성장 속도와 오너십이 제한되고 생성형 AI 경험도 부분적일 가능성이 커서 사용자의 핵심 우선순위와 덜 맞습니다. 따라서 이 결정에서는 안정성보다 성장·오너십·학습의 적합도가 더 중요한 기준이므로 B를 추천합니다.
+- Reason: router가 careful 경로를 선택해 scenario와 risk를 함께 비교했다. riskA=medium, riskB=medium이며 최우선 기준이 growth이므로 현재 stub에서는 B를 추천한다.
+- Reasoning basis: reasoning B / confidence 0.70 / scenario와 risk를 함께 비교한 결과, 사용자의 우선순위와 위험 허용도에 더 직접적으로 맞는 선택을 advisor가 직접 선택했다.
 
 ## Reflection
 
-- realism: 4
-- consistency: 4
-- profile_alignment: 3
-- recommendation_clarity: 4
-
-### 주요 문제
-
-- [profile] planner가 career_change로 의사결정을 분류했지만, 최우선 priority인 growth을 scenario 전개 문장마다 직접 연결한 근거는 충분히 선명하지 않다.
-- [advisor] advisor가 B를 추천하지만 riskA=medium, riskB=medium 차이가 실제 scenario 문장과 어떻게 이어지는지 비교 설명이 더 구조화될 필요가 있다.
-
-### 개선 방향
-
-- [scenario] 각 시간 축 문장에서 growth 기준이 어떻게 유지되거나 훼손되는지 한 문장씩 직접 드러내라.
-- [advisor] 최종 추천 사유를 priority, risk, scenario 증거 순서로 다시 정리해 선택 근거를 추적 가능하게 만들어라.
-
-- Overall comment: 전반적 흐름은 설득력 있지만, profile 반영 근거와 advisor의 비교 연결을 더 명시하면 자동 평가 신뢰도가 높아진다.
+- Skipped in execution_mode=careful
