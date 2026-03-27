@@ -453,12 +453,68 @@ export const guardrailSchema = {
       },
       uniqueItems: true,
     },
+    risk_score: {
+      type: "number",
+      minimum: 0,
+      maximum: 1,
+    },
+    confidence_score: {
+      type: "number",
+      minimum: 0,
+      maximum: 1,
+    },
+    uncertainty_score: {
+      type: "number",
+      minimum: 0,
+      maximum: 1,
+    },
+    reasoning_signals: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        conflicting_signals: {
+          type: "boolean",
+        },
+        missing_context: {
+          type: "boolean",
+        },
+        weak_evidence: {
+          type: "boolean",
+        },
+        ambiguous_wording: {
+          type: "boolean",
+        },
+        strong_consensus: {
+          type: "boolean",
+        },
+        repeated_evidence: {
+          type: "boolean",
+        },
+      },
+      required: [
+        "conflicting_signals",
+        "missing_context",
+        "weak_evidence",
+        "ambiguous_wording",
+        "strong_consensus",
+        "repeated_evidence",
+      ],
+    },
     final_mode: {
       type: "string",
       enum: ["normal", "cautious", "blocked"],
     },
   },
-  required: ["guardrail_triggered", "triggers", "strategy", "final_mode"],
+  required: [
+    "guardrail_triggered",
+    "triggers",
+    "strategy",
+    "risk_score",
+    "confidence_score",
+    "uncertainty_score",
+    "reasoning_signals",
+    "final_mode",
+  ],
 } as const;
 
 export const advisorSchema = {

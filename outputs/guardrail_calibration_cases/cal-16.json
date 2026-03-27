@@ -1,0 +1,48 @@
+{
+  "input": {
+    "user_input": "지방 근무 제안을 받을지 고민 중이야.",
+    "context": "state_unknown_count=3; note=가족 합의와 생활 계획이 부족하다",
+    "scenario": "final_confidence=0.77; a_confidence=0.76; b_confidence=0.75; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=0; note=맥락 공백이 크다",
+    "risk": "risk_a=low; risk_b=low; note=직접 손실은 크지 않다"
+  },
+  "expected": {
+    "risk_level": "low",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "careful"
+    ],
+    "expected_confidence_band": "medium",
+    "expected_uncertainty_band": "high"
+  },
+  "actual": {
+    "risk_level": "low",
+    "risk_score": 0.22,
+    "confidence_score": 0.4527,
+    "confidence_band": "medium",
+    "uncertainty_score": 0.5,
+    "uncertainty_band": "medium",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "detected_triggers": [
+      "ambiguity_high"
+    ],
+    "reason": "risk=low, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": false,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "lower_than_expected"
+  }
+}

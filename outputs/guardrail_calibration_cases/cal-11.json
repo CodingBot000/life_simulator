@@ -1,0 +1,49 @@
+{
+  "input": {
+    "user_input": "이미 검토를 여러 번 마친 재정 정리 방안을 실행할지 고민 중이야.",
+    "context": "state_unknown_count=0; note=맥락은 충분하다",
+    "scenario": "final_confidence=0.88; a_confidence=0.86; b_confidence=0.85; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=2; note=반복 검토가 있었다",
+    "risk": "risk_a=high; risk_b=medium; note=손실 가능성이 있다"
+  },
+  "expected": {
+    "risk_level": "high",
+    "preferred_mode": "block",
+    "acceptable_modes": [
+      "careful",
+      "block"
+    ],
+    "expected_confidence_band": "high",
+    "expected_uncertainty_band": "low"
+  },
+  "actual": {
+    "risk_level": "high",
+    "risk_score": 0.88,
+    "confidence_score": 0.8773,
+    "confidence_band": "high",
+    "uncertainty_score": 0,
+    "uncertainty_band": "low",
+    "mode": "block",
+    "raw_mode": "blocked",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": true
+    },
+    "detected_triggers": [
+      "high_risk"
+    ],
+    "reason": "risk=high, confidence=high, uncertainty=low 조합으로 block이 필요하다. 핵심 신호는 high_risk다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "match"
+  }
+}

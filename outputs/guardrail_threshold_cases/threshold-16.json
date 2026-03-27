@@ -8,10 +8,9 @@
   "expected": {
     "preferred_mode": "careful",
     "acceptable_modes": [
-      "careful",
-      "block"
+      "careful"
     ],
-    "reason": "high risk와 conflict가 있어도 ambiguity가 약하면 careful이 우선이다."
+    "reason": "baseline 기준 risk=high, confidence=low, uncertainty=high라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "high",
@@ -20,10 +19,23 @@
     "threshold_set": "baseline",
     "threshold_score": 4,
     "threshold_score_ratio": 0.5714,
+    "risk_score": 0.92,
+    "confidence_score": 0.2192,
+    "uncertainty_score": 0.66,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
     "detected_triggers": [
       "reasoning_conflict",
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "reasoning_conflict": 2,
       "high_risk": 2
@@ -43,6 +55,17 @@
         "neutralize_decision",
         "risk_warning"
       ],
+      "risk_score": 0.92,
+      "confidence_score": 0.2192,
+      "uncertainty_score": 0.66,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -54,22 +77,40 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "high",
-      "risk_b": "high"
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "보증금을 써서 가게를 열지 재직을 유지할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=일정 정보 하나만 비어 있다",
+      "scenario_text": "final_confidence=0.78; a_confidence=0.76; b_confidence=0.75; a_recommendation=A; b_recommendation=B; conflict_count=2; note=high risk + conflict",
+      "risk_text": "risk_a=high; risk_b=high; note=고위험 재무 결정이다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, high_risk다."
   },
   "conservative": {
     "risk_level": "high",
-    "guardrail_mode": "block",
-    "raw_guardrail_mode": "blocked",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "conservative",
     "threshold_score": 6,
     "threshold_score_ratio": 0.8571,
+    "risk_score": 0.92,
+    "confidence_score": 0.2192,
+    "uncertainty_score": 0.66,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
     "detected_triggers": [
       "ambiguity_high",
       "reasoning_conflict",
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2,
       "reasoning_conflict": 2,
@@ -92,47 +133,17 @@
         "neutralize_decision",
         "risk_warning"
       ],
-      "final_mode": "blocked"
-    },
-    "signals": {
-      "state_unknown_count": 1,
-      "final_confidence": 0.78,
-      "a_confidence": 0.76,
-      "b_confidence": 0.75,
-      "a_recommendation": "A",
-      "b_recommendation": "B",
-      "conflict_count": 2,
-      "risk_a": "high",
-      "risk_b": "high"
-    },
-    "reason": "ambiguity_high와 reasoning_conflict가 동시에 발생해 결론을 막고 추가 정보가 필요하다."
-  },
-  "aggressive": {
-    "risk_level": "high",
-    "guardrail_mode": "careful",
-    "raw_guardrail_mode": "cautious",
-    "threshold_set": "aggressive",
-    "threshold_score": 2,
-    "threshold_score_ratio": 0.3333,
-    "detected_triggers": [
-      "high_risk"
-    ],
-    "score_breakdown": {
-      "high_risk": 2
-    },
-    "effective_thresholds": {
-      "carefulMin": 2,
-      "blockMin": 5,
-      "maxScore": 6
-    },
-    "guardrail_result": {
-      "guardrail_triggered": true,
-      "triggers": [
-        "high_risk"
-      ],
-      "strategy": [
-        "risk_warning"
-      ],
+      "risk_score": 0.92,
+      "confidence_score": 0.2192,
+      "uncertainty_score": 0.66,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -144,13 +155,93 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "high",
-      "risk_b": "high"
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "보증금을 써서 가게를 열지 재직을 유지할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=일정 정보 하나만 비어 있다",
+      "scenario_text": "final_confidence=0.78; a_confidence=0.76; b_confidence=0.75; a_recommendation=A; b_recommendation=B; conflict_count=2; note=high risk + conflict",
+      "risk_text": "risk_a=high; risk_b=high; note=고위험 재무 결정이다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+  },
+  "aggressive": {
+    "risk_level": "high",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "aggressive",
+    "threshold_score": 4,
+    "threshold_score_ratio": 0.6667,
+    "risk_score": 0.92,
+    "confidence_score": 0.2192,
+    "uncertainty_score": 0.66,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "reasoning_conflict",
+      "high_risk"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "reasoning_conflict": 2,
+      "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 2,
+      "blockMin": 5,
+      "maxScore": 6
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "reasoning_conflict",
+        "high_risk"
+      ],
+      "strategy": [
+        "neutralize_decision",
+        "risk_warning"
+      ],
+      "risk_score": 0.92,
+      "confidence_score": 0.2192,
+      "uncertainty_score": 0.66,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 1,
+      "final_confidence": 0.78,
+      "a_confidence": 0.76,
+      "b_confidence": 0.75,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "high",
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "보증금을 써서 가게를 열지 재직을 유지할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=일정 정보 하나만 비어 있다",
+      "scenario_text": "final_confidence=0.78; a_confidence=0.76; b_confidence=0.75; a_recommendation=A; b_recommendation=B; conflict_count=2; note=high risk + conflict",
+      "risk_text": "risk_a=high; risk_b=high; note=고위험 재무 결정이다"
+    },
+    "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, high_risk다."
   },
   "diff_summary": {
     "preferred_matches": [
       "baseline",
+      "conservative",
       "aggressive"
     ],
     "acceptable_matches": [

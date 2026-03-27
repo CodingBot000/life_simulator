@@ -8,10 +8,9 @@
   "expected": {
     "preferred_mode": "careful",
     "acceptable_modes": [
-      "careful",
-      "block"
+      "careful"
     ],
-    "reason": "high risk라 careful이 선호되지만 추가 보수성도 허용 가능하다."
+    "reason": "baseline 기준 risk=high, confidence=medium, uncertainty=low라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "high",
@@ -20,9 +19,22 @@
     "threshold_set": "baseline",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.88,
+    "confidence_score": 0.5868,
+    "uncertainty_score": 0.18,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "high_risk": 2
     },
@@ -39,6 +51,17 @@
       "strategy": [
         "risk_warning"
       ],
+      "risk_score": 0.88,
+      "confidence_score": 0.5868,
+      "uncertainty_score": 0.18,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -50,9 +73,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "가족 돌봄과 병행하며 해외 근무를 수락할지 고민 중이야.",
+      "context_text": "state_unknown_count=0; note=맥락은 충분하다",
+      "scenario_text": "final_confidence=0.73; a_confidence=0.70; b_confidence=0.69; a_recommendation=A; b_recommendation=A; conflict_count=0; note=confidence는 중간",
+      "risk_text": "risk_a=high; risk_b=medium; note=고위험 생활 변화다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 high_risk다."
   },
   "conservative": {
     "risk_level": "high",
@@ -61,9 +89,22 @@
     "threshold_set": "conservative",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.88,
+    "confidence_score": 0.5868,
+    "uncertainty_score": 0.18,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "high_risk": 2
     },
@@ -80,6 +121,17 @@
       "strategy": [
         "risk_warning"
       ],
+      "risk_score": 0.88,
+      "confidence_score": 0.5868,
+      "uncertainty_score": 0.18,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -91,9 +143,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "가족 돌봄과 병행하며 해외 근무를 수락할지 고민 중이야.",
+      "context_text": "state_unknown_count=0; note=맥락은 충분하다",
+      "scenario_text": "final_confidence=0.73; a_confidence=0.70; b_confidence=0.69; a_recommendation=A; b_recommendation=A; conflict_count=0; note=confidence는 중간",
+      "risk_text": "risk_a=high; risk_b=medium; note=고위험 생활 변화다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 high_risk다."
   },
   "aggressive": {
     "risk_level": "high",
@@ -102,9 +159,22 @@
     "threshold_set": "aggressive",
     "threshold_score": 2,
     "threshold_score_ratio": 0.3333,
+    "risk_score": 0.88,
+    "confidence_score": 0.5868,
+    "uncertainty_score": 0.18,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "high_risk": 2
     },
@@ -121,6 +191,17 @@
       "strategy": [
         "risk_warning"
       ],
+      "risk_score": 0.88,
+      "confidence_score": 0.5868,
+      "uncertainty_score": 0.18,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -132,9 +213,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "가족 돌봄과 병행하며 해외 근무를 수락할지 고민 중이야.",
+      "context_text": "state_unknown_count=0; note=맥락은 충분하다",
+      "scenario_text": "final_confidence=0.73; a_confidence=0.70; b_confidence=0.69; a_recommendation=A; b_recommendation=A; conflict_count=0; note=confidence는 중간",
+      "risk_text": "risk_a=high; risk_b=medium; note=고위험 생활 변화다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 high_risk다."
   },
   "diff_summary": {
     "preferred_matches": [

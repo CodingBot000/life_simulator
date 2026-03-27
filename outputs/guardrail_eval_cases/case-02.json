@@ -6,29 +6,65 @@
     "risk": "risk_a=medium; risk_b=low; note=비용과 시간 손실이 제한적이다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "추천은 갈리지만 final_confidence가 높아 reasoning_conflict 조건을 넘지 않으므로 normal이 맞다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
   },
   "actual": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "raw_guardrail_mode": "normal",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
-    "threshold_score": 0,
-    "threshold_score_ratio": 0,
-    "detected_triggers": [],
-    "score_breakdown": {},
+    "threshold_score": 4,
+    "threshold_score_ratio": 0.5714,
+    "risk_score": 0.56,
+    "confidence_score": 0.2208,
+    "uncertainty_score": 0.74,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2
+    },
     "effective_thresholds": {
       "carefulMin": 1,
       "blockMin": 4,
       "maxScore": 7
     },
     "guardrail_result": {
-      "guardrail_triggered": false,
-      "triggers": [],
-      "strategy": [],
-      "final_mode": "normal"
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision"
+      ],
+      "risk_score": 0.56,
+      "confidence_score": 0.2208,
+      "uncertainty_score": 0.74,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 1,
@@ -39,9 +75,14 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "medium",
-      "risk_b": "low"
+      "risk_b": "low",
+      "evidence_repeat_count": 0,
+      "user_input": "이번 달 운동 클래스를 아침반으로 바꿀지 저녁반으로 바꿀지 고민돼.",
+      "context_text": "state_unknown_count=1; note=일정 한 칸만 불확실하다",
+      "scenario_text": "final_confidence=0.84; a_confidence=0.82; b_confidence=0.79; a_recommendation=A; b_recommendation=B; conflict_count=2; note=의견은 갈리지만 최종 확신은 높다",
+      "risk_text": "risk_a=medium; risk_b=low; note=비용과 시간 손실이 제한적이다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
   },
   "diff": {
     "risk_level_match": true,

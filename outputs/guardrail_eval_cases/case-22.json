@@ -8,19 +8,34 @@
   "expected": {
     "risk_level": "high",
     "guardrail_mode": "careful",
-    "reason": "risk_b가 high라 high_risk trigger가 생기고 high 수준으로 봐야 한다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, high_risk다."
   },
   "actual": {
     "risk_level": "high",
     "guardrail_mode": "careful",
     "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
-    "threshold_score": 2,
-    "threshold_score_ratio": 0.2857,
+    "threshold_score": 4,
+    "threshold_score_ratio": 0.5714,
+    "risk_score": 0.88,
+    "confidence_score": 0.6348,
+    "uncertainty_score": 0.24,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
+      "ambiguity_high",
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": true,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
+      "ambiguity_high": 2,
       "high_risk": 2
     },
     "effective_thresholds": {
@@ -31,11 +46,24 @@
     "guardrail_result": {
       "guardrail_triggered": true,
       "triggers": [
+        "ambiguity_high",
         "high_risk"
       ],
       "strategy": [
+        "ask_more_info",
         "risk_warning"
       ],
+      "risk_score": 0.88,
+      "confidence_score": 0.6348,
+      "uncertainty_score": 0.24,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": true,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -47,9 +75,14 @@
       "b_recommendation": "B",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "high"
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "가족 부양 책임이 있는 상태에서 해외 이주를 할지 국내에 남을지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=일부 생활 변수만 불확실하다",
+      "scenario_text": "final_confidence=0.83; a_confidence=0.79; b_confidence=0.78; a_recommendation=B; b_recommendation=B; conflict_count=0; note=추천은 안정적이다",
+      "risk_text": "risk_a=medium; risk_b=high; note=거주와 생계 리스크가 크다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, high_risk다."
   },
   "diff": {
     "risk_level_match": true,

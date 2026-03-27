@@ -1,25 +1,31 @@
-export type DatasetRiskLevel = "low" | "medium" | "high";
-export type DatasetGuardrailMode = "normal" | "careful" | "block";
-export type RawGuardrailMode = "normal" | "cautious" | "blocked";
-export type GuardrailTrigger =
-  | "ambiguity_high"
-  | "reasoning_conflict"
-  | "low_confidence"
-  | "high_risk";
-export type GuardrailStrategy =
-  | "ask_more_info"
-  | "neutralize_decision"
-  | "soft_recommendation"
-  | "risk_warning";
-
 import {
-  DEFAULT_GUARDRAIL_THRESHOLD_SET,
-  getGuardrailMaxScore,
-  getGuardrailThresholdSet,
-  resolveGuardrailThresholdCutoff,
-  type GuardrailThresholdConfig,
-  type GuardrailThresholdSetName,
-} from "../config/guardrail-thresholds.ts";
+  compareGuardrailModes,
+  evaluateGuardrailArtifacts,
+  evaluateGuardrailSignals as evaluateGuardrailSignalSet,
+  normalizeGuardrailMode,
+  normalizeRiskLevel,
+  type DatasetGuardrailMode,
+  type DatasetRiskLevel,
+  type GuardrailCalibrationBand,
+  type GuardrailEvaluationActual,
+  type GuardrailEvaluationOptions,
+  type GuardrailSignals,
+  type GuardrailStrategy,
+  type GuardrailTrigger,
+  type RawGuardrailMode,
+} from "../guardrail/guardrail-evaluator.ts";
+
+export type {
+  DatasetGuardrailMode,
+  DatasetRiskLevel,
+  GuardrailCalibrationBand,
+  GuardrailEvaluationActual,
+  GuardrailEvaluationOptions,
+  GuardrailSignals,
+  GuardrailStrategy,
+  GuardrailTrigger,
+  RawGuardrailMode,
+};
 
 export interface GuardrailDatasetInput {
   user_input: string;
@@ -40,58 +46,10 @@ export interface GuardrailDatasetCase {
   expected: GuardrailDatasetExpected;
 }
 
-export interface GuardrailSignals {
-  state_unknown_count: number;
-  final_confidence: number;
-  a_confidence: number;
-  b_confidence: number;
-  a_recommendation: "A" | "B";
-  b_recommendation: "A" | "B";
-  conflict_count: number;
-  risk_a: DatasetRiskLevel;
-  risk_b: DatasetRiskLevel;
-}
-
-export interface GuardrailEvaluationActual {
-  risk_level: DatasetRiskLevel;
-  guardrail_mode: DatasetGuardrailMode;
-  raw_guardrail_mode: RawGuardrailMode;
-  threshold_set: GuardrailThresholdSetName | "custom";
-  threshold_score: number;
-  threshold_score_ratio: number;
-  detected_triggers: GuardrailTrigger[];
-  score_breakdown: Partial<Record<GuardrailTrigger, number>>;
-  effective_thresholds: {
-    carefulMin: number;
-    blockMin: number;
-    maxScore: number;
-  };
-  guardrail_result: {
-    guardrail_triggered: boolean;
-    triggers: GuardrailTrigger[];
-    strategy: GuardrailStrategy[];
-    final_mode: RawGuardrailMode;
-  };
-  signals: GuardrailSignals;
-  reason: string;
-}
-
-export interface GuardrailEvaluationOptions {
-  thresholdSetName?: GuardrailThresholdSetName;
-  thresholds?: GuardrailThresholdConfig;
-}
-
 export const GUARDRAIL_MODE_ORDER: Record<DatasetGuardrailMode, number> = {
   normal: 0,
   careful: 1,
   block: 2,
-};
-
-const TRIGGER_TO_STRATEGY: Record<GuardrailTrigger, GuardrailStrategy> = {
-  ambiguity_high: "ask_more_info",
-  reasoning_conflict: "neutralize_decision",
-  low_confidence: "soft_recommendation",
-  high_risk: "risk_warning",
 };
 
 function escapeRegExp(value: string): string {
@@ -132,6 +90,52 @@ function readInteger(source: string, key: string): number {
   return value;
 }
 
+function readOptionalField(source: string, key: string): string | undefined {
+  const pattern = new RegExp(
+    String.raw`(?:^|[;\n])\s*${escapeRegExp(key)}\s*=\s*([^;\n]+)`,
+    "i",
+  );
+  const match = source.match(pattern);
+
+  return match?.[1]?.trim();
+}
+
+function readOptionalInteger(source: string, key: string): number | undefined {
+  const value = readOptionalField(source, key);
+
+  if (typeof value === "undefined") {
+    return undefined;
+  }
+
+  const parsed = Number.parseInt(value, 10);
+
+  if (Number.isNaN(parsed)) {
+    throw new Error(`Field "${key}" must be an integer when provided.`);
+  }
+
+  return parsed;
+}
+
+function readOptionalBoolean(source: string, key: string): boolean | undefined {
+  const value = readOptionalField(source, key);
+
+  if (typeof value === "undefined") {
+    return undefined;
+  }
+
+  const normalized = value.toLowerCase();
+
+  if (normalized === "true" || normalized === "1" || normalized === "yes") {
+    return true;
+  }
+
+  if (normalized === "false" || normalized === "0" || normalized === "no") {
+    return false;
+  }
+
+  throw new Error(`Field "${key}" must be boolean when provided.`);
+}
+
 function readRiskLevel(source: string, key: string): DatasetRiskLevel {
   const value = readField(source, key).toLowerCase();
 
@@ -152,36 +156,6 @@ function readRecommendation(source: string, key: string): "A" | "B" {
   throw new Error(`Field "${key}" must be A or B.`);
 }
 
-export function normalizeGuardrailMode(
-  mode: string,
-): DatasetGuardrailMode {
-  const normalized = mode.trim().toLowerCase();
-
-  if (normalized === "normal") {
-    return "normal";
-  }
-
-  if (normalized === "careful" || normalized === "cautious") {
-    return "careful";
-  }
-
-  if (normalized === "block" || normalized === "blocked") {
-    return "block";
-  }
-
-  throw new Error(`Unsupported guardrail mode: ${mode}`);
-}
-
-export function normalizeRiskLevel(value: string): DatasetRiskLevel {
-  const normalized = value.trim().toLowerCase();
-
-  if (normalized === "low" || normalized === "medium" || normalized === "high") {
-    return normalized;
-  }
-
-  throw new Error(`Unsupported risk level: ${value}`);
-}
-
 export function parseGuardrailSignals(
   input: GuardrailDatasetInput,
 ): GuardrailSignals {
@@ -197,184 +171,20 @@ export function parseGuardrailSignals(
     conflict_count: readInteger(source, "conflict_count"),
     risk_a: readRiskLevel(source, "risk_a"),
     risk_b: readRiskLevel(source, "risk_b"),
+    ambiguous_wording: readOptionalBoolean(source, "ambiguous_wording"),
+    evidence_repeat_count: readOptionalInteger(source, "evidence_repeat_count") ?? 0,
+    user_input: input.user_input,
+    context_text: input.context,
+    scenario_text: input.scenario,
+    risk_text: input.risk,
   };
-}
-
-function buildActualReason(
-  activeTriggers: GuardrailTrigger[],
-  detectedTriggers: GuardrailTrigger[],
-  rawMode: RawGuardrailMode,
-): string {
-  if (rawMode === "blocked") {
-    return "ambiguity_high와 reasoning_conflict가 동시에 발생해 결론을 막고 추가 정보가 필요하다.";
-  }
-
-  if (activeTriggers.includes("high_risk")) {
-    return "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다.";
-  }
-
-  if (activeTriggers.length > 0) {
-    return `${activeTriggers.join(", ")} 신호가 있어 normal 대신 careful 모드로 완화해야 한다.`;
-  }
-
-  if (detectedTriggers.length > 0) {
-    return `${detectedTriggers.join(", ")} 신호가 있었지만 현재 threshold set에서는 normal로 유지된다.`;
-  }
-
-  return "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다.";
-}
-
-function shouldBlock(
-  detectedTriggers: GuardrailTrigger[],
-  thresholdScore: number,
-  thresholds: GuardrailThresholdConfig,
-  blockCutoff: number,
-): boolean {
-  const hasAmbiguity = detectedTriggers.includes("ambiguity_high");
-  const hasConflict = detectedTriggers.includes("reasoning_conflict");
-  const hasHighRisk = detectedTriggers.includes("high_risk");
-
-  if (thresholdScore < blockCutoff) {
-    return false;
-  }
-
-  if (hasAmbiguity && hasConflict) {
-    return true;
-  }
-
-  if (
-    thresholds.blockOnHighRiskCombo &&
-    hasHighRisk &&
-    (hasAmbiguity || hasConflict)
-  ) {
-    return true;
-  }
-
-  return false;
-}
-
-function buildScoreBreakdown(
-  detectedTriggers: GuardrailTrigger[],
-  thresholds: GuardrailThresholdConfig,
-): Partial<Record<GuardrailTrigger, number>> {
-  const breakdown: Partial<Record<GuardrailTrigger, number>> = {};
-
-  for (const trigger of detectedTriggers) {
-    if (trigger === "ambiguity_high") {
-      breakdown[trigger] = thresholds.uncertaintyWeight;
-    } else if (trigger === "reasoning_conflict") {
-      breakdown[trigger] = thresholds.escalationWeight;
-    } else if (trigger === "low_confidence") {
-      breakdown[trigger] = thresholds.confidenceWeight;
-    } else if (trigger === "high_risk") {
-      breakdown[trigger] = thresholds.riskWeight;
-    }
-  }
-
-  return breakdown;
 }
 
 export function evaluateGuardrailSignals(
   signals: GuardrailSignals,
   options: GuardrailEvaluationOptions = {},
 ): GuardrailEvaluationActual {
-  const thresholdSetName =
-    options.thresholds || options.thresholdSetName
-      ? (options.thresholdSetName ?? "custom")
-      : DEFAULT_GUARDRAIL_THRESHOLD_SET;
-  const thresholds =
-    options.thresholds ??
-    getGuardrailThresholdSet(
-      options.thresholdSetName ?? DEFAULT_GUARDRAIL_THRESHOLD_SET,
-    );
-  const detectedTriggers: GuardrailTrigger[] = [];
-
-  if (
-    signals.state_unknown_count >= thresholds.ambiguityUnknownMin ||
-    signals.final_confidence < thresholds.ambiguityConfidenceMax
-  ) {
-    detectedTriggers.push("ambiguity_high");
-  }
-
-  if (
-    signals.a_recommendation !== signals.b_recommendation &&
-    signals.conflict_count >= thresholds.conflictCountMin &&
-    signals.final_confidence < thresholds.conflictConfidenceMax
-  ) {
-    detectedTriggers.push("reasoning_conflict");
-  }
-
-  if (
-    signals.final_confidence < thresholds.lowConfidenceMax ||
-    signals.a_confidence < thresholds.sideConfidenceMax ||
-    signals.b_confidence < thresholds.sideConfidenceMax
-  ) {
-    detectedTriggers.push("low_confidence");
-  }
-
-  if (signals.risk_a === "high" || signals.risk_b === "high") {
-    detectedTriggers.push("high_risk");
-  }
-
-  const scoreBreakdown = buildScoreBreakdown(detectedTriggers, thresholds);
-  const thresholdScore = Object.values(scoreBreakdown).reduce(
-    (sum, weight) => sum + (weight ?? 0),
-    0,
-  );
-  const maxScore = getGuardrailMaxScore(thresholds);
-  const carefulCutoff = resolveGuardrailThresholdCutoff(
-    thresholds.carefulMin,
-    thresholds,
-  );
-  const blockCutoff = resolveGuardrailThresholdCutoff(
-    thresholds.blockMin,
-    thresholds,
-  );
-  const thresholdScoreRatio =
-    maxScore === 0 ? 0 : Number((thresholdScore / maxScore).toFixed(4));
-
-  let rawMode: RawGuardrailMode = "normal";
-  if (shouldBlock(detectedTriggers, thresholdScore, thresholds, blockCutoff)) {
-    rawMode = "blocked";
-  } else if (thresholdScore >= carefulCutoff) {
-    rawMode = "cautious";
-  }
-
-  const activeTriggers = rawMode === "normal" ? [] : detectedTriggers;
-  const strategies = activeTriggers.map((trigger) => TRIGGER_TO_STRATEGY[trigger]);
-  const guardrailTriggered = rawMode !== "normal";
-
-  const guardrailMode = normalizeGuardrailMode(rawMode);
-  const riskLevel: DatasetRiskLevel =
-    rawMode === "blocked" || detectedTriggers.includes("high_risk")
-      ? "high"
-      : guardrailTriggered
-        ? "medium"
-        : "low";
-
-  return {
-    risk_level: riskLevel,
-    guardrail_mode: guardrailMode,
-    raw_guardrail_mode: rawMode,
-    threshold_set: thresholdSetName,
-    threshold_score: thresholdScore,
-    threshold_score_ratio: thresholdScoreRatio,
-    detected_triggers: detectedTriggers,
-    score_breakdown: scoreBreakdown,
-    effective_thresholds: {
-      carefulMin: carefulCutoff,
-      blockMin: blockCutoff,
-      maxScore,
-    },
-    guardrail_result: {
-      guardrail_triggered: guardrailTriggered,
-      triggers: activeTriggers,
-      strategy: strategies,
-      final_mode: rawMode,
-    },
-    signals,
-    reason: buildActualReason(activeTriggers, detectedTriggers, rawMode),
-  };
+  return evaluateGuardrailSignalSet(signals, options);
 }
 
 export function evaluateGuardrailInput(
@@ -385,9 +195,4 @@ export function evaluateGuardrailInput(
   return evaluateGuardrailSignals(signals, options);
 }
 
-export function compareGuardrailModes(
-  left: DatasetGuardrailMode,
-  right: DatasetGuardrailMode,
-): number {
-  return GUARDRAIL_MODE_ORDER[left] - GUARDRAIL_MODE_ORDER[right];
-}
+export { compareGuardrailModes, evaluateGuardrailArtifacts, normalizeGuardrailMode, normalizeRiskLevel };

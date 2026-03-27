@@ -6,29 +6,61 @@
     "risk": "risk_a=medium; risk_b=low; note=정서적 부담이 크지 않다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "b_confidence가 0.62이면 low_confidence 조건에 걸리지 않아 normal로 남는다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 low_confidence다."
   },
   "actual": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "raw_guardrail_mode": "normal",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
-    "threshold_score": 0,
-    "threshold_score_ratio": 0,
-    "detected_triggers": [],
-    "score_breakdown": {},
+    "threshold_score": 1,
+    "threshold_score_ratio": 0.1429,
+    "risk_score": 0.56,
+    "confidence_score": 0.5485,
+    "uncertainty_score": 0.36,
+    "confidence_band": "medium",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "low_confidence": 1
+    },
     "effective_thresholds": {
       "carefulMin": 1,
       "blockMin": 4,
       "maxScore": 7
     },
     "guardrail_result": {
-      "guardrail_triggered": false,
-      "triggers": [],
-      "strategy": [],
-      "final_mode": "normal"
+      "guardrail_triggered": true,
+      "triggers": [
+        "low_confidence"
+      ],
+      "strategy": [
+        "soft_recommendation"
+      ],
+      "risk_score": 0.56,
+      "confidence_score": 0.5485,
+      "uncertainty_score": 0.36,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": false,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 0,
@@ -39,9 +71,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "low"
+      "risk_b": "low",
+      "evidence_repeat_count": 0,
+      "user_input": "주말에 친구를 만날지 혼자 쉴지 결정하려고 해.",
+      "context_text": "state_unknown_count=0; note=상황 정보 충분",
+      "scenario_text": "final_confidence=0.88; a_confidence=0.80; b_confidence=0.62; a_recommendation=A; b_recommendation=A; conflict_count=0; note=b confidence 경계값",
+      "risk_text": "risk_a=medium; risk_b=low; note=정서적 부담이 크지 않다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 low_confidence다."
   },
   "diff": {
     "risk_level_match": true,

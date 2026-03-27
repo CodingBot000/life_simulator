@@ -386,6 +386,10 @@ function formatConfidence(value: number) {
   return `${Math.round(value * 100)}%`;
 }
 
+function formatReasoningSignal(label: string) {
+  return label.replaceAll("_", " ");
+}
+
 function ReasoningLensCard({
   title,
   accentClass,
@@ -628,6 +632,10 @@ function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
 }
 
 function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
+  const activeReasoningSignals = Object.entries(guardrail.reasoning_signals)
+    .filter(([, enabled]) => enabled)
+    .map(([label]) => formatReasoningSignal(label));
+
   return (
     <section className="card-surface rounded-[28px] p-6">
       <p className="section-label">Guardrail</p>
@@ -639,7 +647,7 @@ function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
           {guardrail.final_mode}
         </span>
       </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+      <div className="mt-4 grid gap-3 sm:grid-cols-4">
         <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
             Triggered
@@ -648,7 +656,33 @@ function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
             {guardrail.guardrail_triggered ? "yes" : "no"}
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4 sm:col-span-2">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Risk Score
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {formatConfidence(guardrail.risk_score)}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Confidence
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {formatConfidence(guardrail.confidence_score)}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Uncertainty
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {formatConfidence(guardrail.uncertainty_score)}
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
             Triggers
           </p>
@@ -658,14 +692,24 @@ function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
               : "none"}
           </p>
         </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Strategy
+          </p>
+          <p className="mt-2 text-sm leading-7 text-slate-700">
+            {guardrail.strategy.length > 0
+              ? guardrail.strategy.join(", ")
+              : "none"}
+          </p>
+        </div>
       </div>
       <div className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-          Strategy
+          Reasoning Signals
         </p>
         <p className="mt-2 text-sm leading-7 text-slate-700">
-          {guardrail.strategy.length > 0
-            ? guardrail.strategy.join(", ")
+          {activeReasoningSignals.length > 0
+            ? activeReasoningSignals.join(", ")
             : "none"}
         </p>
       </div>

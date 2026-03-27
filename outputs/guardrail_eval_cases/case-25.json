@@ -6,22 +6,35 @@
     "risk": "risk_a=medium; risk_b=medium; note=직접 high는 아니다"
   },
   "expected": {
-    "risk_level": "high",
-    "guardrail_mode": "block",
-    "reason": "final_confidence가 0.65 미만이라 ambiguity_high가 켜지고 reasoning_conflict도 있어 block이 필요하다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
   },
   "actual": {
-    "risk_level": "high",
-    "guardrail_mode": "block",
-    "raw_guardrail_mode": "blocked",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
     "threshold_score": 5,
     "threshold_score_ratio": 0.7143,
+    "risk_score": 0.6,
+    "confidence_score": 0.018,
+    "uncertainty_score": 0.8596,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
     "detected_triggers": [
       "ambiguity_high",
       "reasoning_conflict",
       "low_confidence"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2,
       "reasoning_conflict": 2,
@@ -44,7 +57,18 @@
         "neutralize_decision",
         "soft_recommendation"
       ],
-      "final_mode": "blocked"
+      "risk_score": 0.6,
+      "confidence_score": 0.018,
+      "uncertainty_score": 0.8596,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 1,
@@ -55,9 +79,14 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "적금 해지를 해서 바로 유학을 갈지 1년 더 준비할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=대부분 정보는 있다",
+      "scenario_text": "final_confidence=0.63; a_confidence=0.70; b_confidence=0.69; a_recommendation=A; b_recommendation=B; conflict_count=2; note=낮은 확신과 충돌이 동시에 존재한다",
+      "risk_text": "risk_a=medium; risk_b=medium; note=직접 high는 아니다"
     },
-    "reason": "ambiguity_high와 reasoning_conflict가 동시에 발생해 결론을 막고 추가 정보가 필요하다."
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
   },
   "diff": {
     "risk_level_match": true,

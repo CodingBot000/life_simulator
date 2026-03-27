@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "high",
     "guardrail_mode": "careful",
-    "reason": "reasoning conflict가 있더라도 ambiguity가 없고 high_risk가 있으므로 high/careful이 맞다."
+    "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 reasoning_conflict, high_risk다."
   },
   "actual": {
     "risk_level": "high",
@@ -17,10 +17,23 @@
     "threshold_set": "baseline",
     "threshold_score": 4,
     "threshold_score_ratio": 0.5714,
+    "risk_score": 0.88,
+    "confidence_score": 0.2725,
+    "uncertainty_score": 0.52,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "reasoning_conflict",
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "reasoning_conflict": 2,
       "high_risk": 2
@@ -40,6 +53,17 @@
         "neutralize_decision",
         "risk_warning"
       ],
+      "risk_score": 0.88,
+      "confidence_score": 0.2725,
+      "uncertainty_score": 0.52,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -51,9 +75,14 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "건강 회복이 덜 된 상태에서 강도 높은 프리랜서 계약을 받을지 쉬면서 회복할지 고민해.",
+      "context_text": "state_unknown_count=0; note=상태 정보는 충분하다",
+      "scenario_text": "final_confidence=0.76; a_confidence=0.73; b_confidence=0.71; a_recommendation=A; b_recommendation=B; conflict_count=2; note=경계성 갈등 사례",
+      "risk_text": "risk_a=high; risk_b=medium; note=건강 악화 가능성이 있다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, high_risk다."
   },
   "diff": {
     "risk_level_match": true,

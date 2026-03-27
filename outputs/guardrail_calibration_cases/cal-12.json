@@ -1,0 +1,46 @@
+{
+  "input": {
+    "user_input": "팀 리더 역할을 맡을지 고민 중이야.",
+    "context": "state_unknown_count=0; note=맥락은 충분하다",
+    "scenario": "final_confidence=0.84; a_confidence=0.82; b_confidence=0.81; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=3; note=일관된 근거가 반복된다",
+    "risk": "risk_a=medium; risk_b=medium; note=부담은 중간 수준이다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "careful"
+    ],
+    "expected_confidence_band": "high",
+    "expected_uncertainty_band": "low"
+  },
+  "actual": {
+    "risk_level": "medium",
+    "risk_score": 0.6,
+    "confidence_score": 0.8732,
+    "confidence_band": "high",
+    "uncertainty_score": 0,
+    "uncertainty_band": "low",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": true
+    },
+    "detected_triggers": [],
+    "reason": "risk=medium, confidence=high, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 no_trigger다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "match"
+  }
+}

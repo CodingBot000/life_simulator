@@ -1,0 +1,48 @@
+{
+  "input": {
+    "user_input": "이 제안은 표현이 조금 애매해서 바로 결정해도 될지 고민이야.",
+    "context": "state_unknown_count=0; ambiguous_wording=true; note=표현이 불명확하다",
+    "scenario": "final_confidence=0.8; a_confidence=0.79; b_confidence=0.78; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=0; note=근거는 꽤 강하다",
+    "risk": "risk_a=medium; risk_b=low; note=리스크는 중간 수준이다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "careful"
+    ],
+    "expected_confidence_band": "high",
+    "expected_uncertainty_band": "low"
+  },
+  "actual": {
+    "risk_level": "medium",
+    "risk_score": 0.56,
+    "confidence_score": 0.6983,
+    "confidence_band": "medium",
+    "uncertainty_score": 0.1,
+    "uncertainty_band": "low",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": true,
+      "repeated_evidence": false
+    },
+    "detected_triggers": [
+      "ambiguity_high"
+    ],
+    "reason": "risk=medium, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": false,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "underconfident",
+    "uncertainty_band_status": "match"
+  }
+}

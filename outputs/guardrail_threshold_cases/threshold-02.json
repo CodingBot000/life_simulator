@@ -11,16 +11,29 @@
       "normal",
       "careful"
     ],
-    "reason": "unknown 1개만으로 강한 차단은 과하다."
+    "reason": "baseline 기준 risk=medium, confidence=medium, uncertainty=low라 preferred는 normal다. acceptable 범위는 normal, careful다."
   },
   "baseline": {
-    "risk_level": "low",
+    "risk_level": "medium",
     "guardrail_mode": "normal",
     "raw_guardrail_mode": "normal",
     "threshold_set": "baseline",
     "threshold_score": 0,
     "threshold_score_ratio": 0,
+    "risk_score": 0.56,
+    "confidence_score": 0.5523,
+    "uncertainty_score": 0.32,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {},
     "effective_thresholds": {
       "carefulMin": 1,
@@ -31,6 +44,17 @@
       "guardrail_triggered": false,
       "triggers": [],
       "strategy": [],
+      "risk_score": 0.56,
+      "confidence_score": 0.5523,
+      "uncertainty_score": 0.32,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "normal"
     },
     "signals": {
@@ -42,9 +66,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "온라인 강의를 지금 등록할지 다음 분기로 미룰지 고민이야.",
+      "context_text": "state_unknown_count=1; note=정보 공백이 한 칸 있다",
+      "scenario_text": "final_confidence=0.78; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=A; conflict_count=0; note=unknown 1개만 존재",
+      "risk_text": "risk_a=low; risk_b=medium; note=손실 규모는 작다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
   },
   "conservative": {
     "risk_level": "medium",
@@ -53,9 +82,22 @@
     "threshold_set": "conservative",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.56,
+    "confidence_score": 0.5523,
+    "uncertainty_score": 0.32,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "ambiguity_high"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2
     },
@@ -72,6 +114,17 @@
       "strategy": [
         "ask_more_info"
       ],
+      "risk_score": 0.56,
+      "confidence_score": 0.5523,
+      "uncertainty_score": 0.32,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -83,18 +136,36 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "온라인 강의를 지금 등록할지 다음 분기로 미룰지 고민이야.",
+      "context_text": "state_unknown_count=1; note=정보 공백이 한 칸 있다",
+      "scenario_text": "final_confidence=0.78; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=A; conflict_count=0; note=unknown 1개만 존재",
+      "risk_text": "risk_a=low; risk_b=medium; note=손실 규모는 작다"
     },
-    "reason": "ambiguity_high 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
   },
   "aggressive": {
-    "risk_level": "low",
+    "risk_level": "medium",
     "guardrail_mode": "normal",
     "raw_guardrail_mode": "normal",
     "threshold_set": "aggressive",
     "threshold_score": 0,
     "threshold_score_ratio": 0,
+    "risk_score": 0.56,
+    "confidence_score": 0.5523,
+    "uncertainty_score": 0.32,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {},
     "effective_thresholds": {
       "carefulMin": 2,
@@ -105,6 +176,17 @@
       "guardrail_triggered": false,
       "triggers": [],
       "strategy": [],
+      "risk_score": 0.56,
+      "confidence_score": 0.5523,
+      "uncertainty_score": 0.32,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "normal"
     },
     "signals": {
@@ -116,9 +198,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "온라인 강의를 지금 등록할지 다음 분기로 미룰지 고민이야.",
+      "context_text": "state_unknown_count=1; note=정보 공백이 한 칸 있다",
+      "scenario_text": "final_confidence=0.78; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=A; conflict_count=0; note=unknown 1개만 존재",
+      "risk_text": "risk_a=low; risk_b=medium; note=손실 규모는 작다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
   },
   "diff_summary": {
     "preferred_matches": [

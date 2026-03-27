@@ -1,0 +1,49 @@
+{
+  "input": {
+    "user_input": "해외 근무를 받을지 고민 중이야.",
+    "context": "state_unknown_count=0; note=핵심 정보는 있다",
+    "scenario": "final_confidence=0.66; a_confidence=0.65; b_confidence=0.64; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=2; note=반복 근거는 있지만 확신은 낮다",
+    "risk": "risk_a=high; risk_b=medium; note=고위험 생활 변화다"
+  },
+  "expected": {
+    "risk_level": "high",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "careful"
+    ],
+    "expected_confidence_band": "medium",
+    "expected_uncertainty_band": "medium"
+  },
+  "actual": {
+    "risk_level": "high",
+    "risk_score": 0.88,
+    "confidence_score": 0.5341,
+    "confidence_band": "medium",
+    "uncertainty_score": 0.2912,
+    "uncertainty_band": "low",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": true
+    },
+    "detected_triggers": [
+      "low_confidence",
+      "high_risk"
+    ],
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 low_confidence, high_risk다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": false,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "lower_than_expected"
+  }
+}

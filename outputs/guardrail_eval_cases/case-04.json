@@ -6,18 +6,31 @@
     "risk": "risk_a=low; risk_b=medium; note=선택 비용이 작다"
   },
   "expected": {
-    "risk_level": "low",
+    "risk_level": "medium",
     "guardrail_mode": "normal",
-    "reason": "trigger 임계값을 넘는 항목이 없어 그대로 normal로 진행 가능하다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low이며 강한 guardrail 신호가 없어 normal 유지가 맞다."
   },
   "actual": {
-    "risk_level": "low",
+    "risk_level": "medium",
     "guardrail_mode": "normal",
     "raw_guardrail_mode": "normal",
     "threshold_set": "baseline",
     "threshold_score": 0,
     "threshold_score_ratio": 0,
+    "risk_score": 0.56,
+    "confidence_score": 0.5415,
+    "uncertainty_score": 0.32,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {},
     "effective_thresholds": {
       "carefulMin": 1,
@@ -28,6 +41,17 @@
       "guardrail_triggered": false,
       "triggers": [],
       "strategy": [],
+      "risk_score": 0.56,
+      "confidence_score": 0.5415,
+      "uncertainty_score": 0.32,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "normal"
     },
     "signals": {
@@ -39,9 +63,14 @@
       "b_recommendation": "B",
       "conflict_count": 0,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "집 근처 카페에서 일할지 도서관에서 일할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=감정 상태만 미확정이다",
+      "scenario_text": "final_confidence=0.78; a_confidence=0.73; b_confidence=0.71; a_recommendation=B; b_recommendation=B; conflict_count=0; note=추천 일치",
+      "risk_text": "risk_a=low; risk_b=medium; note=선택 비용이 작다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
   },
   "diff": {
     "risk_level_match": true,

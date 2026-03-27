@@ -1,0 +1,48 @@
+{
+  "input": {
+    "user_input": "새 프로젝트를 바로 받을지 고민 중이야.",
+    "context": "state_unknown_count=0; note=기본 정보는 충분하다",
+    "scenario": "final_confidence=0.85; a_confidence=0.84; b_confidence=0.83; a_recommendation=A; b_recommendation=B; conflict_count=1; evidence_repeat_count=0; note=conflict가 있지만 근거는 강하다",
+    "risk": "risk_a=medium; risk_b=medium; note=중간 리스크다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "careful"
+    ],
+    "expected_confidence_band": "medium",
+    "expected_uncertainty_band": "medium"
+  },
+  "actual": {
+    "risk_level": "medium",
+    "risk_score": 0.6,
+    "confidence_score": 0.4868,
+    "confidence_band": "medium",
+    "uncertainty_score": 0.38,
+    "uncertainty_band": "medium",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "match"
+  }
+}

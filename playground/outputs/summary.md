@@ -37,11 +37,11 @@
 
 ## Guardrail Threshold Tuning
 
-- baseline 성능: preferred 0.73, acceptable 1, overblocking 0, underblocking 0
-- conservative 성능: preferred 0.55, acceptable 0.95, overblocking 1, underblocking 0
-- aggressive 성능: preferred 0.5, acceptable 0.68, overblocking 0, underblocking 7
+- baseline 성능: preferred 1, acceptable 1, overblocking 0, underblocking 0
+- conservative 성능: preferred 0.95, acceptable 1, overblocking 0, underblocking 0
+- aggressive 성능: preferred 0.68, acceptable 0.73, overblocking 0, underblocking 6
 - 추천 threshold set: baseline
-- 발견된 과잉 차단 / 과소 차단 패턴: overblocking baseline: 없음 / conservative: ambiguity_high+reasoning_conflict (1건) / aggressive: 없음; underblocking baseline: 없음 / conservative: 없음 / aggressive: no_trigger (5건), ambiguity_high+high_risk (1건)
+- 발견된 과잉 차단 / 과소 차단 패턴: overblocking baseline: 없음 / conservative: 없음 / aggressive: 없음; underblocking baseline: 없음 / conservative: 없음 / aggressive: low_confidence (3건), no_trigger (3건)
 
 ## Guardrail Auto Optimization
 
@@ -49,3 +49,21 @@
 - 기존 baseline vs optimized 비교: baseline score 54, optimized score 54, preferred 0.73 -> 0.73, acceptable 1 -> 1
 - 개선 여부: same
 - 과잉/과소 차단 패턴: overblocking 없음; underblocking 없음
+
+## Guardrail Confidence Calibration
+
+- mode accuracy: 1
+- acceptable match rate: 1
+- confidence band accuracy: 0.8
+- uncertainty band accuracy: 0.85
+- overconfident 패턴: cal-13
+- underconfident 패턴: cal-09, cal-15, cal-20
+- 새로 발견된 borderline 특징: ambiguity_high / risk=low / conf=medium / unc=low (1건), ambiguity_high / risk=low / conf=medium / unc=medium (1건), ambiguity_high / risk=medium / conf=medium / unc=low (1건)
+
+## Guardrail Dataset Relabeling
+
+- legacy backup: data/guardrail_dataset_legacy_20260328.jsonl, data/guardrail_threshold_dataset_legacy_20260328.jsonl
+- guardrail_dataset 변경: 15건, risk 변경 12건, mode 변경 13건
+- threshold_dataset 변경: 18건, preferred mode 변경 9건
+- mode 변경 케이스: case-02, case-03, case-04, case-05, case-06, case-07, case-08, case-09, case-10, case-16, case-21, case-25
+- 변경 이유 패턴: 새 confidence / uncertainty 의미론에 맞춰 expected를 정렬 (10건), block 기준이 좁아져 low-confidence 고불확실 사례가 block -> careful로 완화 (8건), weak evidence / low confidence 반영으로 normal -> careful로 상향 (6건), conflicting signals가 confidence를 깎아 normal -> careful로 상향 (4건), high risk + high confidence 조합이 분리되어 careful -> block으로 강화 (2건)
