@@ -1,0 +1,52 @@
+{
+  "input": {
+    "user_input": "올해 컨퍼런스를 갈지 온라인 기록만 볼지 고민이야.",
+    "context": "state_unknown_count=0; note=맥락은 충분하다",
+    "scenario": "final_confidence=0.74; a_confidence=0.61; b_confidence=0.70; a_recommendation=A; b_recommendation=A; conflict_count=0; note=a confidence가 낮다",
+    "risk": "risk_a=medium; risk_b=medium; note=금전 영향은 제한적이다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "a_confidence가 0.62 미만이라 low_confidence가 발생해 careful이 맞다."
+  },
+  "actual": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "baseline",
+    "threshold_score": 1,
+    "detected_triggers": [
+      "low_confidence"
+    ],
+    "score_breakdown": {
+      "low_confidence": 1
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "low_confidence"
+      ],
+      "strategy": [
+        "soft_recommendation"
+      ],
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 0,
+      "final_confidence": 0.74,
+      "a_confidence": 0.61,
+      "b_confidence": 0.7,
+      "a_recommendation": "A",
+      "b_recommendation": "A",
+      "conflict_count": 0,
+      "risk_a": "medium",
+      "risk_b": "medium"
+    },
+    "reason": "low_confidence 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}

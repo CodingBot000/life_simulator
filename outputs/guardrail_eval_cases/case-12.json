@@ -1,0 +1,52 @@
+{
+  "input": {
+    "user_input": "이직 준비를 지금 시작할지 3개월 뒤에 시작할지 고민 중이야.",
+    "context": "state_unknown_count=2; note=시간 압박과 감정 상태가 비어 있다",
+    "scenario": "final_confidence=0.82; a_confidence=0.80; b_confidence=0.78; a_recommendation=A; b_recommendation=A; conflict_count=0; note=추천은 안정적이다",
+    "risk": "risk_a=low; risk_b=medium; note=고위험 선택은 아니다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "unknown count가 2 이상이라 ambiguity_high가 켜지고 careful로 완화해야 한다."
+  },
+  "actual": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "baseline",
+    "threshold_score": 2,
+    "detected_triggers": [
+      "ambiguity_high"
+    ],
+    "score_breakdown": {
+      "ambiguity_high": 2
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high"
+      ],
+      "strategy": [
+        "ask_more_info"
+      ],
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 2,
+      "final_confidence": 0.82,
+      "a_confidence": 0.8,
+      "b_confidence": 0.78,
+      "a_recommendation": "A",
+      "b_recommendation": "A",
+      "conflict_count": 0,
+      "risk_a": "low",
+      "risk_b": "medium"
+    },
+    "reason": "ambiguity_high 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}

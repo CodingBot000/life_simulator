@@ -1,0 +1,52 @@
+{
+  "input": {
+    "user_input": "이번 달 세미나를 온라인으로 들을지 오프라인으로 갈지 고민이야.",
+    "context": "state_unknown_count=0; note=상태 정보는 충분하다",
+    "scenario": "final_confidence=0.67; a_confidence=0.70; b_confidence=0.72; a_recommendation=A; b_recommendation=A; conflict_count=0; note=final confidence만 낮다",
+    "risk": "risk_a=medium; risk_b=low; note=고위험은 아니다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "final_confidence가 0.68 미만이라 low_confidence가 발생해 careful이 필요하다."
+  },
+  "actual": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "baseline",
+    "threshold_score": 1,
+    "detected_triggers": [
+      "low_confidence"
+    ],
+    "score_breakdown": {
+      "low_confidence": 1
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "low_confidence"
+      ],
+      "strategy": [
+        "soft_recommendation"
+      ],
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 0,
+      "final_confidence": 0.67,
+      "a_confidence": 0.7,
+      "b_confidence": 0.72,
+      "a_recommendation": "A",
+      "b_recommendation": "A",
+      "conflict_count": 0,
+      "risk_a": "medium",
+      "risk_b": "low"
+    },
+    "reason": "low_confidence 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}

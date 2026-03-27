@@ -1,0 +1,56 @@
+{
+  "input": {
+    "user_input": "아이 교육을 위해 이사를 갈지 현재 환경을 유지할지 고민하고 있어.",
+    "context": "state_unknown_count=2; note=학교 정보와 배우자 선호가 비어 있다",
+    "scenario": "final_confidence=0.78; a_confidence=0.74; b_confidence=0.75; a_recommendation=B; b_recommendation=A; conflict_count=3; note=정보 공백과 충돌이 공존한다",
+    "risk": "risk_a=medium; risk_b=low; note=직접 high는 아니다"
+  },
+  "expected": {
+    "risk_level": "high",
+    "guardrail_mode": "block",
+    "reason": "unknown count가 높고 추천 충돌도 있어 ambiguity_high + reasoning_conflict 조합으로 block이 맞다."
+  },
+  "actual": {
+    "risk_level": "high",
+    "guardrail_mode": "block",
+    "raw_guardrail_mode": "blocked",
+    "threshold_set": "baseline",
+    "threshold_score": 4,
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision"
+      ],
+      "final_mode": "blocked"
+    },
+    "signals": {
+      "state_unknown_count": 2,
+      "final_confidence": 0.78,
+      "a_confidence": 0.74,
+      "b_confidence": 0.75,
+      "a_recommendation": "B",
+      "b_recommendation": "A",
+      "conflict_count": 3,
+      "risk_a": "medium",
+      "risk_b": "low"
+    },
+    "reason": "ambiguity_high와 reasoning_conflict가 동시에 발생해 결론을 막고 추가 정보가 필요하다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}

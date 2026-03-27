@@ -28,3 +28,17 @@
 ### Failure Cases
 
 - none
+
+## Guardrail Evaluation
+
+- risk accuracy: 1.00
+- mode accuracy: 1.00
+- 주요 실패 패턴: 없음
+
+## Guardrail Threshold Tuning
+
+- baseline 성능: preferred 0.73, acceptable 1, overblocking 0, underblocking 0
+- conservative 성능: preferred 0.55, acceptable 0.95, overblocking 1, underblocking 0
+- aggressive 성능: preferred 0.5, acceptable 0.68, overblocking 0, underblocking 7
+- 추천 threshold set: baseline
+- 발견된 과잉 차단 / 과소 차단 패턴: overblocking baseline: 없음 / conservative: ambiguity_high+reasoning_conflict (1건) / aggressive: 없음; underblocking baseline: 없음 / conservative: 없음 / aggressive: no_trigger (5건), ambiguity_high+high_risk (1건)

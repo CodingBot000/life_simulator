@@ -1,0 +1,52 @@
+{
+  "input": {
+    "user_input": "새로운 부업을 시작할지 기존 루틴을 유지할지 고민하고 있어.",
+    "context": "state_unknown_count=1; note=핵심 정보는 있다",
+    "scenario": "final_confidence=0.77; a_confidence=0.71; b_confidence=0.69; a_recommendation=A; b_recommendation=B; conflict_count=1; note=추천 충돌이 있다",
+    "risk": "risk_a=low; risk_b=medium; note=손실 규모는 제한적이다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "high_risk는 없지만 reasoning_conflict가 있어 결론 강도를 낮춰야 한다."
+  },
+  "actual": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "baseline",
+    "threshold_score": 2,
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "score_breakdown": {
+      "reasoning_conflict": 2
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "neutralize_decision"
+      ],
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 1,
+      "final_confidence": 0.77,
+      "a_confidence": 0.71,
+      "b_confidence": 0.69,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 1,
+      "risk_a": "low",
+      "risk_b": "medium"
+    },
+    "reason": "reasoning_conflict 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}
