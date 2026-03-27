@@ -20,9 +20,22 @@
     "threshold_set": "baseline",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.88,
+    "confidence_score": 0.4802,
+    "uncertainty_score": 0.32,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "high_risk": 2
     },
@@ -39,6 +52,17 @@
       "strategy": [
         "risk_warning"
       ],
+      "risk_score": 0.88,
+      "confidence_score": 0.4802,
+      "uncertainty_score": 0.32,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -50,22 +74,40 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "대출이 남아 있는 상태에서 창업 휴직을 할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=일부 운영 정보가 비어 있다",
+      "scenario_text": "final_confidence=0.70; a_confidence=0.66; b_confidence=0.65; a_recommendation=A; b_recommendation=A; conflict_count=0; note=고위험 + 낮은 confidence 경계",
+      "risk_text": "risk_a=high; risk_b=medium; note=재무 리스크가 크다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 high_risk다."
   },
   "conservative": {
     "risk_level": "high",
-    "guardrail_mode": "block",
-    "raw_guardrail_mode": "blocked",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "conservative",
     "threshold_score": 5,
     "threshold_score_ratio": 0.7143,
+    "risk_score": 0.88,
+    "confidence_score": 0.4802,
+    "uncertainty_score": 0.32,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "ambiguity_high",
       "low_confidence",
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2,
       "low_confidence": 1,
@@ -88,7 +130,18 @@
         "soft_recommendation",
         "risk_warning"
       ],
-      "final_mode": "blocked"
+      "risk_score": 0.88,
+      "confidence_score": 0.4802,
+      "uncertainty_score": 0.32,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 1,
@@ -99,9 +152,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "대출이 남아 있는 상태에서 창업 휴직을 할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=일부 운영 정보가 비어 있다",
+      "scenario_text": "final_confidence=0.70; a_confidence=0.66; b_confidence=0.65; a_recommendation=A; b_recommendation=A; conflict_count=0; note=고위험 + 낮은 confidence 경계",
+      "risk_text": "risk_a=high; risk_b=medium; note=재무 리스크가 크다"
     },
-    "reason": "ambiguity_high와 reasoning_conflict가 동시에 발생해 결론을 막고 추가 정보가 필요하다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence, high_risk다."
   },
   "aggressive": {
     "risk_level": "high",
@@ -110,9 +168,22 @@
     "threshold_set": "aggressive",
     "threshold_score": 2,
     "threshold_score_ratio": 0.3333,
+    "risk_score": 0.88,
+    "confidence_score": 0.4802,
+    "uncertainty_score": 0.32,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "high_risk": 2
     },
@@ -129,6 +200,17 @@
       "strategy": [
         "risk_warning"
       ],
+      "risk_score": 0.88,
+      "confidence_score": 0.4802,
+      "uncertainty_score": 0.32,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -140,13 +222,19 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "대출이 남아 있는 상태에서 창업 휴직을 할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=일부 운영 정보가 비어 있다",
+      "scenario_text": "final_confidence=0.70; a_confidence=0.66; b_confidence=0.65; a_recommendation=A; b_recommendation=A; conflict_count=0; note=고위험 + 낮은 confidence 경계",
+      "risk_text": "risk_a=high; risk_b=medium; note=재무 리스크가 크다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 high_risk다."
   },
   "diff_summary": {
     "preferred_matches": [
       "baseline",
+      "conservative",
       "aggressive"
     ],
     "acceptable_matches": [

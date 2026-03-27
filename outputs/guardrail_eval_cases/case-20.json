@@ -17,9 +17,22 @@
     "threshold_set": "baseline",
     "threshold_score": 1,
     "threshold_score_ratio": 0.1429,
+    "risk_score": 0.56,
+    "confidence_score": 0.505,
+    "uncertainty_score": 0.36,
+    "confidence_band": "medium",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "low_confidence"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "low_confidence": 1
     },
@@ -36,6 +49,17 @@
       "strategy": [
         "soft_recommendation"
       ],
+      "risk_score": 0.56,
+      "confidence_score": 0.505,
+      "uncertainty_score": 0.36,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": false,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -47,9 +71,14 @@
       "b_recommendation": "B",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "low"
+      "risk_b": "low",
+      "evidence_repeat_count": 0,
+      "user_input": "다음 프로젝트에서 리드 역할을 맡을지 지원 역할을 맡을지 고민하고 있어.",
+      "context_text": "state_unknown_count=0; note=상황은 분명하다",
+      "scenario_text": "final_confidence=0.79; a_confidence=0.82; b_confidence=0.60; a_recommendation=B; b_recommendation=B; conflict_count=0; note=b confidence가 낮다",
+      "risk_text": "risk_a=medium; risk_b=low; note=고위험은 아니다"
     },
-    "reason": "low_confidence 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 low_confidence다."
   },
   "diff": {
     "risk_level_match": true,

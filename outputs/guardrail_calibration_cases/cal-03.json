@@ -1,0 +1,48 @@
+{
+  "input": {
+    "user_input": "대출이 남은 상태에서 창업 휴직을 할지 고민 중이야.",
+    "context": "state_unknown_count=0; note=재무 맥락은 충분하다",
+    "scenario": "final_confidence=0.9; a_confidence=0.88; b_confidence=0.87; a_recommendation=B; b_recommendation=B; conflict_count=0; evidence_repeat_count=3; note=고위험이지만 근거는 강하다",
+    "risk": "risk_a=high; risk_b=medium; note=손실 규모가 크다"
+  },
+  "expected": {
+    "risk_level": "high",
+    "preferred_mode": "block",
+    "acceptable_modes": [
+      "block"
+    ],
+    "expected_confidence_band": "high",
+    "expected_uncertainty_band": "low"
+  },
+  "actual": {
+    "risk_level": "high",
+    "risk_score": 0.88,
+    "confidence_score": 0.9243,
+    "confidence_band": "high",
+    "uncertainty_score": 0,
+    "uncertainty_band": "low",
+    "mode": "block",
+    "raw_mode": "blocked",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": true
+    },
+    "detected_triggers": [
+      "high_risk"
+    ],
+    "reason": "risk=high, confidence=high, uncertainty=low 조합으로 block이 필요하다. 핵심 신호는 high_risk다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "match"
+  }
+}

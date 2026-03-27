@@ -1,0 +1,35 @@
+{
+  "total": 20,
+  "mode_accuracy": 1,
+  "acceptable_match_rate": 1,
+  "confidence_band_match_rate": 0.8,
+  "uncertainty_band_match_rate": 0.85,
+  "overconfident_cases": [
+    {
+      "id": "cal-13",
+      "expected_confidence_band": "low",
+      "actual_confidence_band": "medium",
+      "actual_mode": "careful"
+    }
+  ],
+  "underconfident_cases": [
+    {
+      "id": "cal-09",
+      "expected_confidence_band": "medium",
+      "actual_confidence_band": "low",
+      "actual_mode": "careful"
+    },
+    {
+      "id": "cal-15",
+      "expected_confidence_band": "high",
+      "actual_confidence_band": "medium",
+      "actual_mode": "careful"
+    },
+    {
+      "id": "cal-20",
+      "expected_confidence_band": "medium",
+      "actual_confidence_band": "low",
+      "actual_mode": "careful"
+    }
+  ]
+}

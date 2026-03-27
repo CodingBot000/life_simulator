@@ -11,24 +11,56 @@
     "reason": "높은 confidence가 갈등 신호를 상쇄해 guardrail 없이 진행 가능한 케이스다."
   },
   "actual": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "raw_guardrail_mode": "normal",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
-    "threshold_score": 0,
-    "threshold_score_ratio": 0,
-    "detected_triggers": [],
-    "score_breakdown": {},
+    "threshold_score": 2,
+    "threshold_score_ratio": 0.2857,
+    "risk_score": 0.56,
+    "confidence_score": 0.3798,
+    "uncertainty_score": 0.52,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "reasoning_conflict": 2
+    },
     "effective_thresholds": {
       "carefulMin": 1,
       "blockMin": 4,
       "maxScore": 7
     },
     "guardrail_result": {
-      "guardrail_triggered": false,
-      "triggers": [],
-      "strategy": [],
-      "final_mode": "normal"
+      "guardrail_triggered": true,
+      "triggers": [
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "neutralize_decision"
+      ],
+      "risk_score": 0.56,
+      "confidence_score": 0.3798,
+      "uncertainty_score": 0.52,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 0,
@@ -39,12 +71,17 @@
       "b_recommendation": "B",
       "conflict_count": 3,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "이번 분기 개인 목표를 기술 학습에 둘지 글쓰기에 둘지 고민해.",
+      "context_text": "state_unknown_count=0; note=맥락과 우선순위가 분명하다",
+      "scenario_text": "final_confidence=0.95; a_confidence=0.93; b_confidence=0.88; a_recommendation=A; b_recommendation=B; conflict_count=3; note=갈등은 있지만 매우 높은 확신",
+      "risk_text": "risk_a=low; risk_b=medium; note=회복 가능한 비용이다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "diff": {
-    "risk_level_match": true,
-    "guardrail_mode_match": true
+    "risk_level_match": false,
+    "guardrail_mode_match": false
   }
 }

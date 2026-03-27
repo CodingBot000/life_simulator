@@ -1,0 +1,48 @@
+{
+  "input": {
+    "user_input": "새로운 취미 모임에 바로 가입할지 고민 중이야.",
+    "context": "state_unknown_count=2; note=시간 여유와 우선순위가 비어 있다",
+    "scenario": "final_confidence=0.81; a_confidence=0.8; b_confidence=0.79; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=0; note=근거는 일관된다",
+    "risk": "risk_a=low; risk_b=low; note=고위험은 아니다"
+  },
+  "expected": {
+    "risk_level": "low",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "careful"
+    ],
+    "expected_confidence_band": "medium",
+    "expected_uncertainty_band": "medium"
+  },
+  "actual": {
+    "risk_level": "low",
+    "risk_score": 0.22,
+    "confidence_score": 0.5968,
+    "confidence_band": "medium",
+    "uncertainty_score": 0.3,
+    "uncertainty_band": "low",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": false
+    },
+    "detected_triggers": [
+      "ambiguity_high"
+    ],
+    "reason": "risk=low, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": false,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "lower_than_expected"
+  }
+}

@@ -20,9 +20,22 @@
     "threshold_set": "baseline",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.56,
+    "confidence_score": 0.2833,
+    "uncertainty_score": 0.52,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "reasoning_conflict"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "reasoning_conflict": 2
     },
@@ -39,6 +52,17 @@
       "strategy": [
         "neutralize_decision"
       ],
+      "risk_score": 0.56,
+      "confidence_score": 0.2833,
+      "uncertainty_score": 0.52,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -50,9 +74,14 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "새로운 부업을 시작할지 지금 루틴을 지킬지 고민 중이야.",
+      "context_text": "state_unknown_count=0; note=정보는 충분하다",
+      "scenario_text": "final_confidence=0.76; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=B; conflict_count=2; note=conflict가 있지만 confidence는 높다",
+      "risk_text": "risk_a=low; risk_b=medium; note=경계 사례"
     },
-    "reason": "reasoning_conflict 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "conservative": {
     "risk_level": "medium",
@@ -61,9 +90,22 @@
     "threshold_set": "conservative",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.56,
+    "confidence_score": 0.2833,
+    "uncertainty_score": 0.52,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "reasoning_conflict"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "reasoning_conflict": 2
     },
@@ -80,6 +122,17 @@
       "strategy": [
         "neutralize_decision"
       ],
+      "risk_score": 0.56,
+      "confidence_score": 0.2833,
+      "uncertainty_score": 0.52,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -91,29 +144,66 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "새로운 부업을 시작할지 지금 루틴을 지킬지 고민 중이야.",
+      "context_text": "state_unknown_count=0; note=정보는 충분하다",
+      "scenario_text": "final_confidence=0.76; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=B; conflict_count=2; note=conflict가 있지만 confidence는 높다",
+      "risk_text": "risk_a=low; risk_b=medium; note=경계 사례"
     },
-    "reason": "reasoning_conflict 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "aggressive": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "raw_guardrail_mode": "normal",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "aggressive",
-    "threshold_score": 0,
-    "threshold_score_ratio": 0,
-    "detected_triggers": [],
-    "score_breakdown": {},
+    "threshold_score": 2,
+    "threshold_score_ratio": 0.3333,
+    "risk_score": 0.56,
+    "confidence_score": 0.2833,
+    "uncertainty_score": 0.52,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "reasoning_conflict": 2
+    },
     "effective_thresholds": {
       "carefulMin": 2,
       "blockMin": 5,
       "maxScore": 6
     },
     "guardrail_result": {
-      "guardrail_triggered": false,
-      "triggers": [],
-      "strategy": [],
-      "final_mode": "normal"
+      "guardrail_triggered": true,
+      "triggers": [
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "neutralize_decision"
+      ],
+      "risk_score": 0.56,
+      "confidence_score": 0.2833,
+      "uncertainty_score": 0.52,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 0,
@@ -124,14 +214,20 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "low",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "새로운 부업을 시작할지 지금 루틴을 지킬지 고민 중이야.",
+      "context_text": "state_unknown_count=0; note=정보는 충분하다",
+      "scenario_text": "final_confidence=0.76; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=B; conflict_count=2; note=conflict가 있지만 confidence는 높다",
+      "risk_text": "risk_a=low; risk_b=medium; note=경계 사례"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "diff_summary": {
     "preferred_matches": [
       "baseline",
-      "conservative"
+      "conservative",
+      "aggressive"
     ],
     "acceptable_matches": [
       "baseline",

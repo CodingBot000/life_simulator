@@ -3,6 +3,7 @@
 역할:
 - upstream 결과를 다시 읽고 지금 결론을 바로 내려도 되는지 판단한다.
 - 위험 신호가 있으면 trigger와 대응 strategy를 구조적으로 반환한다.
+- risk / confidence / uncertainty를 분리해서 계산한다.
 - 추천 자체를 하지 말고, Advisor가 어떻게 행동을 바꿔야 하는지만 정리한다.
 
 입력 데이터 형식:
@@ -125,12 +126,31 @@
 판단해야 할 trigger:
 - `ambiguity_high`
   - 정보 부족, `unknown`/공백, 또는 state 해석 여지가 커서 추가 정보 없이는 확신하기 어렵다.
+  - ambiguous wording, incomplete context도 여기에 포함할 수 있다.
 - `reasoning_conflict`
   - A/B reasoning의 추천이나 comparison이 강하게 충돌해 결론을 단순 확정하기 어렵다.
 - `low_confidence`
   - reasoning confidence가 낮거나, 근거가 약해 결론을 강하게 말하면 과신이 된다.
 - `high_risk`
   - `riskA` 또는 `riskB` 중 하나라도 `risk_level = "high"`다.
+
+추가 계산 규칙:
+- `risk_score`
+  - 선택지 위험도를 0~1로 정규화한 값이다.
+  - risk와 confidence는 분리한다.
+- `uncertainty_score`
+  - conflicting signals, missing context, weak evidence, ambiguous wording이 높을수록 증가한다.
+  - strong consensus, repeated evidence가 있으면 감소한다.
+- `confidence_score`
+  - evidence가 강하고 일관될수록 증가한다.
+  - uncertainty가 높을수록 감소한다.
+- `reasoning_signals`
+  - `conflicting_signals`
+  - `missing_context`
+  - `weak_evidence`
+  - `ambiguous_wording`
+  - `strong_consensus`
+  - `repeated_evidence`
 
 전략 매핑 규칙:
 - `ambiguity_high` -> `ask_more_info`
@@ -140,9 +160,11 @@
 
 final_mode 규칙:
 - trigger가 하나도 없으면 `normal`
-- `high_risk`가 있으면 최소 `cautious`
-- `ambiguity_high`와 `reasoning_conflict`가 동시에 있으면 `blocked` 가능
-- trigger가 있는데 `blocked`가 아니면 `cautious`
+- `high risk + high confidence`면 `blocked` 가능
+- `high risk + low confidence`면 최소 `cautious`
+- `medium risk + high confidence`면 `cautious`
+- `uncertainty_score`가 매우 높으면 `normal`에서 `cautious`로 승격 가능
+- 정보 부족과 conflict가 함께 강하면 `blocked` 가능
 
 행동 규칙:
 - 하나라도 해당하면 `guardrail_triggered = true`다.
@@ -164,6 +186,17 @@ final_mode 규칙:
     "ask_more_info",
     "neutralize_decision"
   ],
+  "risk_score": 0.78,
+  "confidence_score": 0.46,
+  "uncertainty_score": 0.72,
+  "reasoning_signals": {
+    "conflicting_signals": true,
+    "missing_context": true,
+    "weak_evidence": true,
+    "ambiguous_wording": false,
+    "strong_consensus": false,
+    "repeated_evidence": false
+  },
   "final_mode": "blocked"
 }
 ```

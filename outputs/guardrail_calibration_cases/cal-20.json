@@ -1,0 +1,48 @@
+{
+  "input": {
+    "user_input": "졸업 후 바로 창업할지 취업 후 준비할지 고민 중이야.",
+    "context": "state_unknown_count=1; note=현실 제약 일부가 비어 있다",
+    "scenario": "final_confidence=0.71; a_confidence=0.7; b_confidence=0.69; a_recommendation=A; b_recommendation=B; conflict_count=2; evidence_repeat_count=0; note=충돌이 뚜렷하다",
+    "risk": "risk_a=medium; risk_b=medium; note=경력상 리스크가 있다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "careful"
+    ],
+    "expected_confidence_band": "medium",
+    "expected_uncertainty_band": "high"
+  },
+  "actual": {
+    "risk_level": "medium",
+    "risk_score": 0.6,
+    "confidence_score": 0.1637,
+    "confidence_band": "low",
+    "uncertainty_score": 0.66,
+    "uncertainty_band": "high",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": false,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "underconfident",
+    "uncertainty_band_status": "match"
+  }
+}

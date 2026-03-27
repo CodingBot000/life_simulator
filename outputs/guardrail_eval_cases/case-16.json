@@ -11,16 +11,29 @@
     "reason": "final_confidence가 0.65 미만이라 ambiguity_high와 low_confidence가 함께 켜져 careful이 필요하다."
   },
   "actual": {
-    "risk_level": "medium",
+    "risk_level": "low",
     "guardrail_mode": "careful",
     "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
     "threshold_score": 3,
     "threshold_score_ratio": 0.4286,
+    "risk_score": 0.22,
+    "confidence_score": 0.3675,
+    "uncertainty_score": 0.5168,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "ambiguity_high",
       "low_confidence"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2,
       "low_confidence": 1
@@ -40,6 +53,17 @@
         "ask_more_info",
         "soft_recommendation"
       ],
+      "risk_score": 0.22,
+      "confidence_score": 0.3675,
+      "uncertainty_score": 0.5168,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -51,12 +75,17 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "low",
-      "risk_b": "low"
+      "risk_b": "low",
+      "evidence_repeat_count": 0,
+      "user_input": "새 협업 툴을 바로 도입할지 시범팀만 먼저 쓸지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=대부분 정보는 있다",
+      "scenario_text": "final_confidence=0.64; a_confidence=0.70; b_confidence=0.73; a_recommendation=A; b_recommendation=A; conflict_count=0; note=모호성과 낮은 확신이 함께 있다",
+      "risk_text": "risk_a=low; risk_b=low; note=고위험은 아니다"
     },
-    "reason": "ambiguity_high, low_confidence 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=low, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
   },
   "diff": {
-    "risk_level_match": true,
+    "risk_level_match": false,
     "guardrail_mode_match": true
   }
 }

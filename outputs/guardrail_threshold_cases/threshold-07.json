@@ -19,9 +19,22 @@
     "threshold_set": "baseline",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.6,
+    "confidence_score": 0.5933,
+    "uncertainty_score": 0.3,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "ambiguity_high"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2
     },
@@ -38,6 +51,17 @@
       "strategy": [
         "ask_more_info"
       ],
+      "risk_score": 0.6,
+      "confidence_score": 0.5933,
+      "uncertainty_score": 0.3,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": true,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -49,9 +73,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "현재 회사에 남을지 내부 이동을 요청할지 고민 중이야.",
+      "context_text": "state_unknown_count=2; note=감정 상태와 시간 압박이 비어 있다",
+      "scenario_text": "final_confidence=0.82; a_confidence=0.78; b_confidence=0.77; a_recommendation=A; b_recommendation=A; conflict_count=0; note=ambiguity만 존재",
+      "risk_text": "risk_a=medium; risk_b=medium; note=커리어 영향은 있지만 즉시 고위험은 아니다"
     },
-    "reason": "ambiguity_high 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
   },
   "conservative": {
     "risk_level": "medium",
@@ -60,9 +89,22 @@
     "threshold_set": "conservative",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.6,
+    "confidence_score": 0.5933,
+    "uncertainty_score": 0.3,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "ambiguity_high"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2
     },
@@ -79,6 +121,17 @@
       "strategy": [
         "ask_more_info"
       ],
+      "risk_score": 0.6,
+      "confidence_score": 0.5933,
+      "uncertainty_score": 0.3,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": true,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -90,18 +143,36 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "현재 회사에 남을지 내부 이동을 요청할지 고민 중이야.",
+      "context_text": "state_unknown_count=2; note=감정 상태와 시간 압박이 비어 있다",
+      "scenario_text": "final_confidence=0.82; a_confidence=0.78; b_confidence=0.77; a_recommendation=A; b_recommendation=A; conflict_count=0; note=ambiguity만 존재",
+      "risk_text": "risk_a=medium; risk_b=medium; note=커리어 영향은 있지만 즉시 고위험은 아니다"
     },
-    "reason": "ambiguity_high 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
   },
   "aggressive": {
-    "risk_level": "low",
+    "risk_level": "medium",
     "guardrail_mode": "normal",
     "raw_guardrail_mode": "normal",
     "threshold_set": "aggressive",
     "threshold_score": 0,
     "threshold_score_ratio": 0,
+    "risk_score": 0.6,
+    "confidence_score": 0.5933,
+    "uncertainty_score": 0.3,
+    "confidence_band": "medium",
+    "uncertainty_band": "low",
     "detected_triggers": [],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": false
+    },
     "score_breakdown": {},
     "effective_thresholds": {
       "carefulMin": 2,
@@ -112,6 +183,17 @@
       "guardrail_triggered": false,
       "triggers": [],
       "strategy": [],
+      "risk_score": 0.6,
+      "confidence_score": 0.5933,
+      "uncertainty_score": 0.3,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": true,
+        "repeated_evidence": false
+      },
       "final_mode": "normal"
     },
     "signals": {
@@ -123,9 +205,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "현재 회사에 남을지 내부 이동을 요청할지 고민 중이야.",
+      "context_text": "state_unknown_count=2; note=감정 상태와 시간 압박이 비어 있다",
+      "scenario_text": "final_confidence=0.82; a_confidence=0.78; b_confidence=0.77; a_recommendation=A; b_recommendation=A; conflict_count=0; note=ambiguity만 존재",
+      "risk_text": "risk_a=medium; risk_b=medium; note=커리어 영향은 있지만 즉시 고위험은 아니다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
   },
   "diff_summary": {
     "preferred_matches": [

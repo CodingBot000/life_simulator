@@ -11,24 +11,56 @@
     "reason": "conflict가 있어도 final_confidence가 0.8 이상이면 reasoning_conflict가 아니므로 normal이다."
   },
   "actual": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "raw_guardrail_mode": "normal",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
-    "threshold_score": 0,
-    "threshold_score_ratio": 0,
-    "detected_triggers": [],
-    "score_breakdown": {},
+    "threshold_score": 2,
+    "threshold_score_ratio": 0.2857,
+    "risk_score": 0.6,
+    "confidence_score": 0.4295,
+    "uncertainty_score": 0.38,
+    "confidence_band": "medium",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "reasoning_conflict": 2
+    },
     "effective_thresholds": {
       "carefulMin": 1,
       "blockMin": 4,
       "maxScore": 7
     },
     "guardrail_result": {
-      "guardrail_triggered": false,
-      "triggers": [],
-      "strategy": [],
-      "final_mode": "normal"
+      "guardrail_triggered": true,
+      "triggers": [
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "neutralize_decision"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.4295,
+      "uncertainty_score": 0.38,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 0,
@@ -39,12 +71,17 @@
       "b_recommendation": "B",
       "conflict_count": 1,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "가까운 도시로 짧게 여행 갈지 집에서 쉴지 정하려고 해.",
+      "context_text": "state_unknown_count=0; note=사용자 상태는 충분하다",
+      "scenario_text": "final_confidence=0.80; a_confidence=0.76; b_confidence=0.74; a_recommendation=A; b_recommendation=B; conflict_count=1; note=0.8 경계값 테스트",
+      "risk_text": "risk_a=medium; risk_b=medium; note=큰 손실은 없다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "diff": {
-    "risk_level_match": true,
-    "guardrail_mode_match": true
+    "risk_level_match": false,
+    "guardrail_mode_match": false
   }
 }

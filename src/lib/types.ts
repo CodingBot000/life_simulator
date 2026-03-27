@@ -98,6 +98,15 @@ export type GuardrailStrategy =
   | "risk_warning";
 export type GuardrailMode = "normal" | "cautious" | "blocked";
 
+export interface GuardrailReasoningSignals {
+  conflicting_signals: boolean;
+  missing_context: boolean;
+  weak_evidence: boolean;
+  ambiguous_wording: boolean;
+  strong_consensus: boolean;
+  repeated_evidence: boolean;
+}
+
 export interface ReasoningPerspective {
   stance: string;
   summary: string;
@@ -141,6 +150,10 @@ export interface GuardrailResult {
   guardrail_triggered: boolean;
   triggers: GuardrailTrigger[];
   strategy: GuardrailStrategy[];
+  risk_score: number;
+  confidence_score: number;
+  uncertainty_score: number;
+  reasoning_signals: GuardrailReasoningSignals;
   final_mode: GuardrailMode;
 }
 

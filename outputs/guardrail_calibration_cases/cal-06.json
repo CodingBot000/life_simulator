@@ -1,0 +1,50 @@
+{
+  "input": {
+    "user_input": "이직 준비를 바로 시작할지 조금 더 버틸지 고민 중이야.",
+    "context": "state_unknown_count=0; note=기본 상황은 안다",
+    "scenario": "final_confidence=0.63; a_confidence=0.62; b_confidence=0.64; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=0; note=약한 근거만 있다",
+    "risk": "risk_a=medium; risk_b=medium; note=중간 리스크다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "normal",
+      "careful"
+    ],
+    "expected_confidence_band": "low",
+    "expected_uncertainty_band": "medium"
+  },
+  "actual": {
+    "risk_level": "medium",
+    "risk_score": 0.6,
+    "confidence_score": 0.4052,
+    "confidence_band": "low",
+    "uncertainty_score": 0.3796,
+    "uncertainty_band": "medium",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "detected_triggers": [
+      "ambiguity_high",
+      "low_confidence"
+    ],
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "match"
+  }
+}

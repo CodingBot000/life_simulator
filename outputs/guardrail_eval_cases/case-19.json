@@ -17,9 +17,22 @@
     "threshold_set": "baseline",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.6,
+    "confidence_score": 0.3685,
+    "uncertainty_score": 0.54,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "ambiguity_high"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2
     },
@@ -36,6 +49,17 @@
       "strategy": [
         "ask_more_info"
       ],
+      "risk_score": 0.6,
+      "confidence_score": 0.3685,
+      "uncertainty_score": 0.54,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -47,9 +71,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "올해 휴가를 길게 한 번 쓸지 짧게 여러 번 쓸지 고민 중이야.",
+      "context_text": "state_unknown_count=2; note=상사 일정과 개인 피로도가 불확실하다",
+      "scenario_text": "final_confidence=0.70; a_confidence=0.69; b_confidence=0.67; a_recommendation=A; b_recommendation=A; conflict_count=0; note=추천은 일치한다",
+      "risk_text": "risk_a=medium; risk_b=medium; note=실패 비용이 제한적이다"
     },
-    "reason": "ambiguity_high 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
   },
   "diff": {
     "risk_level_match": true,

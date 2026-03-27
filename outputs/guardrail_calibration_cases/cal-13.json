@@ -1,0 +1,49 @@
+{
+  "input": {
+    "user_input": "이번 달에 작은 모임을 열지 고민 중이야.",
+    "context": "state_unknown_count=0; note=정보는 충분하다",
+    "scenario": "final_confidence=0.69; a_confidence=0.68; b_confidence=0.67; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=0; note=근거는 약한 편이다",
+    "risk": "risk_a=low; risk_b=low; note=저위험 선택이다"
+  },
+  "expected": {
+    "risk_level": "low",
+    "preferred_mode": "careful",
+    "acceptable_modes": [
+      "normal",
+      "careful"
+    ],
+    "expected_confidence_band": "low",
+    "expected_uncertainty_band": "medium"
+  },
+  "actual": {
+    "risk_level": "low",
+    "risk_score": 0.22,
+    "confidence_score": 0.4602,
+    "confidence_band": "medium",
+    "uncertainty_score": 0.3628,
+    "uncertainty_band": "medium",
+    "mode": "careful",
+    "raw_mode": "cautious",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "detected_triggers": [
+      "low_confidence"
+    ],
+    "reason": "risk=low, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 low_confidence다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": false,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "overconfident",
+    "uncertainty_band_status": "match"
+  }
+}

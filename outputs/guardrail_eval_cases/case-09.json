@@ -11,24 +11,60 @@
     "reason": "모든 confidence가 임계값보다 높아 low_confidence 없이 normal이다."
   },
   "actual": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "raw_guardrail_mode": "normal",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
-    "threshold_score": 0,
-    "threshold_score_ratio": 0,
-    "detected_triggers": [],
-    "score_breakdown": {},
+    "threshold_score": 3,
+    "threshold_score_ratio": 0.4286,
+    "risk_score": 0.6,
+    "confidence_score": 0.3245,
+    "uncertainty_score": 0.5828,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "ambiguity_high",
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "low_confidence": 1
+    },
     "effective_thresholds": {
       "carefulMin": 1,
       "blockMin": 4,
       "maxScore": 7
     },
     "guardrail_result": {
-      "guardrail_triggered": false,
-      "triggers": [],
-      "strategy": [],
-      "final_mode": "normal"
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "low_confidence"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.3245,
+      "uncertainty_score": 0.5828,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 1,
@@ -39,12 +75,17 @@
       "b_recommendation": "B",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "집중이 안 돼서 오전에 중요한 일을 할지 오후에 할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=에너지 수준만 약간 불확실하다",
+      "scenario_text": "final_confidence=0.69; a_confidence=0.65; b_confidence=0.63; a_recommendation=B; b_recommendation=B; conflict_count=0; note=low_confidence 바로 위",
+      "risk_text": "risk_a=medium; risk_b=medium; note=단기 생산성 차이만 난다"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
   },
   "diff": {
-    "risk_level_match": true,
-    "guardrail_mode_match": true
+    "risk_level_match": false,
+    "guardrail_mode_match": false
   }
 }

@@ -17,11 +17,24 @@
     "threshold_set": "baseline",
     "threshold_score": 5,
     "threshold_score_ratio": 0.7143,
+    "risk_score": 0.84,
+    "confidence_score": 0.2801,
+    "uncertainty_score": 0.5712,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "reasoning_conflict",
       "low_confidence",
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": false,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "reasoning_conflict": 2,
       "low_confidence": 1,
@@ -44,6 +57,17 @@
         "soft_recommendation",
         "risk_warning"
       ],
+      "risk_score": 0.84,
+      "confidence_score": 0.2801,
+      "uncertainty_score": 0.5712,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -55,9 +79,14 @@
       "b_recommendation": "B",
       "conflict_count": 1,
       "risk_a": "low",
-      "risk_b": "high"
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "임신 계획이 있는 상태에서 야근이 많은 해외 포지션을 받을지 말지 고민 중이야.",
+      "context_text": "state_unknown_count=0; note=정보 공백은 없다",
+      "scenario_text": "final_confidence=0.66; a_confidence=0.80; b_confidence=0.79; a_recommendation=A; b_recommendation=B; conflict_count=1; note=medium와 high 경계 사례",
+      "risk_text": "risk_a=low; risk_b=high; note=장기 생활 리스크가 있다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, low_confidence, high_risk다."
   },
   "diff": {
     "risk_level_match": true,

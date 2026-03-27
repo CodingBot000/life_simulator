@@ -5,8 +5,6 @@ import {
   abReasoningSchema,
   advisorPrompt,
   advisorSchema,
-  guardrailPrompt,
-  guardrailSchema,
   plannerPrompt,
   plannerSchema,
   reflectionPrompt,
@@ -19,6 +17,7 @@ import {
   stateLoaderSchema,
 } from "@/lib/prompts";
 import { generateStructuredOutput } from "@/lib/openai";
+import { evaluateGuardrailArtifacts } from "@/lib/guardrail-eval";
 import type {
   AbReasoningResult,
   AdvisorResult,
@@ -300,22 +299,13 @@ export async function runGuardrail(
   riskB: RiskResult,
   reasoning: AbReasoningResult,
 ): Promise<GuardrailResult> {
-  return generateStructuredOutput<GuardrailResult>({
-    schemaName: "guardrail_result",
-    schema: guardrailSchema,
-    prompt: guardrailPrompt,
-    input: formatPayload({
-      caseId,
-      caseInput,
-      stateContext,
-      plannerResult: planner,
-      scenarioA,
-      scenarioB,
-      riskA,
-      riskB,
-      abReasoning: reasoning,
-    }),
-  });
+  return evaluateGuardrailArtifacts({
+    stateContext,
+    riskA,
+    riskB,
+    reasoning,
+    userInput: caseInput.decision.context,
+  }).guardrail_result;
 }
 
 export async function runReflection(

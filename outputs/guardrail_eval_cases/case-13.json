@@ -17,9 +17,22 @@
     "threshold_set": "baseline",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.6,
+    "confidence_score": 0.2198,
+    "uncertainty_score": 0.66,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
     "detected_triggers": [
       "reasoning_conflict"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "reasoning_conflict": 2
     },
@@ -36,6 +49,17 @@
       "strategy": [
         "neutralize_decision"
       ],
+      "risk_score": 0.6,
+      "confidence_score": 0.2198,
+      "uncertainty_score": 0.66,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -47,9 +71,14 @@
       "b_recommendation": "B",
       "conflict_count": 2,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "대학원에 지원할지 현직에 더 남을지 방향을 고민하고 있어.",
+      "context_text": "state_unknown_count=1; note=재정 정보는 명확하다",
+      "scenario_text": "final_confidence=0.79; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=B; conflict_count=2; note=추천 충돌이 존재한다",
+      "risk_text": "risk_a=medium; risk_b=medium; note=고위험은 아님"
     },
-    "reason": "reasoning_conflict 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "diff": {
     "risk_level_match": true,

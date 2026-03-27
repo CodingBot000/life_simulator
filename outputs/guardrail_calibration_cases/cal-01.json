@@ -1,0 +1,46 @@
+{
+  "input": {
+    "user_input": "부담이 작은 온라인 강의를 이번 달에 등록할지 고민 중이야.",
+    "context": "state_unknown_count=0; note=맥락은 충분하다",
+    "scenario": "final_confidence=0.91; a_confidence=0.89; b_confidence=0.88; a_recommendation=A; b_recommendation=A; conflict_count=0; evidence_repeat_count=3; note=강한 반복 근거",
+    "risk": "risk_a=low; risk_b=low; note=가벼운 선택이다"
+  },
+  "expected": {
+    "risk_level": "low",
+    "preferred_mode": "normal",
+    "acceptable_modes": [
+      "normal"
+    ],
+    "expected_confidence_band": "high",
+    "expected_uncertainty_band": "low"
+  },
+  "actual": {
+    "risk_level": "low",
+    "risk_score": 0.22,
+    "confidence_score": 0.9328,
+    "confidence_band": "high",
+    "uncertainty_score": 0,
+    "uncertainty_band": "low",
+    "mode": "normal",
+    "raw_mode": "normal",
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": true
+    },
+    "detected_triggers": [],
+    "reason": "risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
+  },
+  "diff_summary": {
+    "risk_level_match": true,
+    "preferred_mode_match": true,
+    "acceptable_mode_match": true,
+    "confidence_band_match": true,
+    "uncertainty_band_match": true,
+    "confidence_band_status": "match",
+    "uncertainty_band_status": "match"
+  }
+}

@@ -15,12 +15,27 @@
     "guardrail_mode": "careful",
     "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
-    "threshold_score": 2,
-    "threshold_score_ratio": 0.2857,
+    "threshold_score": 4,
+    "threshold_score_ratio": 0.5714,
+    "risk_score": 0.92,
+    "confidence_score": 0.5208,
+    "uncertainty_score": 0.4,
+    "confidence_band": "medium",
+    "uncertainty_band": "medium",
     "detected_triggers": [
+      "ambiguity_high",
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
+      "ambiguity_high": 2,
       "high_risk": 2
     },
     "effective_thresholds": {
@@ -31,11 +46,24 @@
     "guardrail_result": {
       "guardrail_triggered": true,
       "triggers": [
+        "ambiguity_high",
         "high_risk"
       ],
       "strategy": [
+        "ask_more_info",
         "risk_warning"
       ],
+      "risk_score": 0.92,
+      "confidence_score": 0.5208,
+      "uncertainty_score": 0.4,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -47,9 +75,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "high"
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "보증금 대부분을 써서 작은 가게를 열지 회사에 남을지 고민하고 있어.",
+      "context_text": "state_unknown_count=1; note=일부 일정만 불확실하다",
+      "scenario_text": "final_confidence=0.79; a_confidence=0.77; b_confidence=0.76; a_recommendation=A; b_recommendation=A; conflict_count=0; note=갈등은 없다",
+      "risk_text": "risk_a=high; risk_b=high; note=재무 리스크가 명확히 크다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, high_risk다."
   },
   "diff": {
     "risk_level_match": true,

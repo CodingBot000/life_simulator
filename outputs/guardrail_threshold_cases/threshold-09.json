@@ -20,9 +20,22 @@
     "threshold_set": "baseline",
     "threshold_score": 1,
     "threshold_score_ratio": 0.1429,
+    "risk_score": 0.6,
+    "confidence_score": 0.3871,
+    "uncertainty_score": 0.5084,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "low_confidence"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "low_confidence": 1
     },
@@ -39,6 +52,17 @@
       "strategy": [
         "soft_recommendation"
       ],
+      "risk_score": 0.6,
+      "confidence_score": 0.3871,
+      "uncertainty_score": 0.5084,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -50,9 +74,14 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "이직 준비를 조용히 시작할지 현재 업무에 더 집중할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=정보 공백이 작다",
+      "scenario_text": "final_confidence=0.67; a_confidence=0.72; b_confidence=0.71; a_recommendation=A; b_recommendation=A; conflict_count=0; note=low confidence 단독",
+      "risk_text": "risk_a=medium; risk_b=medium; note=경계 사례"
     },
-    "reason": "low_confidence 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 low_confidence다."
   },
   "conservative": {
     "risk_level": "medium",
@@ -61,10 +90,23 @@
     "threshold_set": "conservative",
     "threshold_score": 3,
     "threshold_score_ratio": 0.4286,
+    "risk_score": 0.6,
+    "confidence_score": 0.3871,
+    "uncertainty_score": 0.5084,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
     "detected_triggers": [
       "ambiguity_high",
       "low_confidence"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "ambiguity_high": 2,
       "low_confidence": 1
@@ -84,6 +126,17 @@
         "ask_more_info",
         "soft_recommendation"
       ],
+      "risk_score": 0.6,
+      "confidence_score": 0.3871,
+      "uncertainty_score": 0.5084,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
       "final_mode": "cautious"
     },
     "signals": {
@@ -95,29 +148,66 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "이직 준비를 조용히 시작할지 현재 업무에 더 집중할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=정보 공백이 작다",
+      "scenario_text": "final_confidence=0.67; a_confidence=0.72; b_confidence=0.71; a_recommendation=A; b_recommendation=A; conflict_count=0; note=low confidence 단독",
+      "risk_text": "risk_a=medium; risk_b=medium; note=경계 사례"
     },
-    "reason": "ambiguity_high, low_confidence 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
   },
   "aggressive": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "raw_guardrail_mode": "normal",
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
     "threshold_set": "aggressive",
-    "threshold_score": 0,
-    "threshold_score_ratio": 0,
-    "detected_triggers": [],
-    "score_breakdown": {},
+    "threshold_score": 1,
+    "threshold_score_ratio": 0.1667,
+    "risk_score": 0.6,
+    "confidence_score": 0.3871,
+    "uncertainty_score": 0.5084,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "low_confidence": 1
+    },
     "effective_thresholds": {
       "carefulMin": 2,
       "blockMin": 5,
       "maxScore": 6
     },
     "guardrail_result": {
-      "guardrail_triggered": false,
-      "triggers": [],
-      "strategy": [],
-      "final_mode": "normal"
+      "guardrail_triggered": true,
+      "triggers": [
+        "low_confidence"
+      ],
+      "strategy": [
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.3871,
+      "uncertainty_score": 0.5084,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
     },
     "signals": {
       "state_unknown_count": 1,
@@ -128,14 +218,20 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "medium",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "이직 준비를 조용히 시작할지 현재 업무에 더 집중할지 고민 중이야.",
+      "context_text": "state_unknown_count=1; note=정보 공백이 작다",
+      "scenario_text": "final_confidence=0.67; a_confidence=0.72; b_confidence=0.71; a_recommendation=A; b_recommendation=A; conflict_count=0; note=low confidence 단독",
+      "risk_text": "risk_a=medium; risk_b=medium; note=경계 사례"
     },
-    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 low_confidence다."
   },
   "diff_summary": {
     "preferred_matches": [
       "baseline",
-      "conservative"
+      "conservative",
+      "aggressive"
     ],
     "acceptable_matches": [
       "baseline",

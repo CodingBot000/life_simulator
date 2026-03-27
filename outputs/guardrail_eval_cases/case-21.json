@@ -12,14 +12,27 @@
   },
   "actual": {
     "risk_level": "high",
-    "guardrail_mode": "careful",
-    "raw_guardrail_mode": "cautious",
+    "guardrail_mode": "block",
+    "raw_guardrail_mode": "blocked",
     "threshold_set": "baseline",
     "threshold_score": 2,
     "threshold_score_ratio": 0.2857,
+    "risk_score": 0.88,
+    "confidence_score": 0.7955,
+    "uncertainty_score": 0.02,
+    "confidence_band": "high",
+    "uncertainty_band": "low",
     "detected_triggers": [
       "high_risk"
     ],
+    "reasoning_signals": {
+      "conflicting_signals": false,
+      "missing_context": false,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": true,
+      "repeated_evidence": false
+    },
     "score_breakdown": {
       "high_risk": 2
     },
@@ -36,7 +49,18 @@
       "strategy": [
         "risk_warning"
       ],
-      "final_mode": "cautious"
+      "risk_score": 0.88,
+      "confidence_score": 0.7955,
+      "uncertainty_score": 0.02,
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": true,
+        "repeated_evidence": false
+      },
+      "final_mode": "blocked"
     },
     "signals": {
       "state_unknown_count": 0,
@@ -47,12 +71,17 @@
       "b_recommendation": "A",
       "conflict_count": 0,
       "risk_a": "high",
-      "risk_b": "medium"
+      "risk_b": "medium",
+      "evidence_repeat_count": 0,
+      "user_input": "대출을 안고 있는 상태에서 무급 창업 휴직을 할지 계속 재직할지 고민이야.",
+      "context_text": "state_unknown_count=0; note=재무 상황은 명확하다",
+      "scenario_text": "final_confidence=0.88; a_confidence=0.84; b_confidence=0.82; a_recommendation=A; b_recommendation=A; conflict_count=0; note=확신은 높다",
+      "risk_text": "risk_a=high; risk_b=medium; note=현금흐름 손실 가능성이 크다"
     },
-    "reason": "high_risk 신호가 있어 결론 강도를 낮추는 careful 판단이 맞다."
+    "reason": "risk=high, confidence=high, uncertainty=low 조합으로 block이 필요하다. 핵심 신호는 high_risk다."
   },
   "diff": {
     "risk_level_match": true,
-    "guardrail_mode_match": true
+    "guardrail_mode_match": false
   }
 }
