@@ -3,24 +3,6 @@ set -euo pipefail
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/_common.sh"
 
-array_to_json() {
-  jq -cn '$ARGS.positional' --args "$@"
-}
-
-has_value() {
-  local needle="$1"
-  shift
-
-  local item
-  for item in "$@"; do
-    if [ "$item" = "$needle" ]; then
-      return 0
-    fi
-  done
-
-  return 1
-}
-
 require_jq
 
 INPUT_FILE="$(resolve_input_file "${1:-}")"
@@ -53,48 +35,6 @@ REQUEST_FILE="$(stage_request_path "guardrail")"
 PREVIEW_FILE="$(stage_preview_path "guardrail")"
 STUB_FILE="$(stage_stub_path "guardrail")"
 RESULT_FILE="$(stage_result_path "guardrail")"
-
-STATE_UNKNOWN_COUNT="$(jq -r '[.user_state.profile_state.risk_preference, .user_state.profile_state.decision_style, .user_state.situational_state.career_stage, .user_state.situational_state.financial_pressure, .user_state.situational_state.time_pressure, .user_state.situational_state.emotional_state] | map(select(. == "unknown" or . == "none")) | length' "$STATE_CONTEXT_FILE")"
-
-TRIGGERS=()
-STRATEGIES=()
-
-if [ "$STATE_UNKNOWN_COUNT" -ge 2 ] || [ "$(jq -r '.reasoning.final_selection.decision_confidence < 0.65' "$REASONING_RESULT_FILE")" = "true" ]; then
-  TRIGGERS+=("ambiguity_high")
-  STRATEGIES+=("ask_more_info")
-fi
-
-if [ "$(jq -r '.reasoning.a_reasoning.recommended_option != .reasoning.b_reasoning.recommended_option and (.reasoning.comparison.conflicts | length) > 0 and .reasoning.final_selection.decision_confidence < 0.8' "$REASONING_RESULT_FILE")" = "true" ]; then
-  TRIGGERS+=("reasoning_conflict")
-  STRATEGIES+=("neutralize_decision")
-fi
-
-if [ "$(jq -r '.reasoning.final_selection.decision_confidence < 0.68 or .reasoning.a_reasoning.confidence < 0.62 or .reasoning.b_reasoning.confidence < 0.62' "$REASONING_RESULT_FILE")" = "true" ]; then
-  TRIGGERS+=("low_confidence")
-  STRATEGIES+=("soft_recommendation")
-fi
-
-if [ "$(jq -r '.risk_level == "high"' "$RISK_A_RESULT_FILE")" = "true" ] || [ "$(jq -r '.risk_level == "high"' "$RISK_B_RESULT_FILE")" = "true" ]; then
-  TRIGGERS+=("high_risk")
-  STRATEGIES+=("risk_warning")
-fi
-
-GUARDRAIL_TRIGGERED="false"
-FINAL_MODE="normal"
-
-if [ "${#TRIGGERS[@]}" -gt 0 ]; then
-  GUARDRAIL_TRIGGERED="true"
-  FINAL_MODE="cautious"
-fi
-
-if has_value "ambiguity_high" "${TRIGGERS[@]}" && has_value "reasoning_conflict" "${TRIGGERS[@]}"; then
-  FINAL_MODE="blocked"
-elif has_value "high_risk" "${TRIGGERS[@]}"; then
-  FINAL_MODE="cautious"
-fi
-
-TRIGGERS_JSON="$(array_to_json "${TRIGGERS[@]}")"
-STRATEGY_JSON="$(array_to_json "${STRATEGIES[@]}")"
 
 INPUT_DATA_COMPACT="$(jq -cn \
   --arg case_id "$CASE_ID" \
@@ -149,17 +89,13 @@ jq -n \
     }
   }' > "$REQUEST_FILE"
 
-jq -n \
-  --argjson guardrail_triggered "$GUARDRAIL_TRIGGERED" \
-  --argjson triggers "$TRIGGERS_JSON" \
-  --argjson strategy "$STRATEGY_JSON" \
-  --arg final_mode "$FINAL_MODE" \
-  '{
-    guardrail_triggered: $guardrail_triggered,
-    triggers: $triggers,
-    strategy: $strategy,
-    final_mode: $final_mode
-  }' > "$STUB_FILE"
+node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types \
+  "$REPO_ROOT/scripts/compute_guardrail_result.ts" \
+  "$STATE_CONTEXT_FILE" \
+  "$RISK_A_RESULT_FILE" \
+  "$RISK_B_RESULT_FILE" \
+  "$REASONING_RESULT_FILE" \
+  baseline > "$STUB_FILE"
 
 write_request_preview "$REQUEST_FILE" "$PREVIEW_FILE" "Guardrail Request Preview"
 

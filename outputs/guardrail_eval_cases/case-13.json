@@ -1,0 +1,52 @@
+{
+  "input": {
+    "user_input": "대학원에 지원할지 현직에 더 남을지 방향을 고민하고 있어.",
+    "context": "state_unknown_count=1; note=재정 정보는 명확하다",
+    "scenario": "final_confidence=0.79; a_confidence=0.75; b_confidence=0.74; a_recommendation=A; b_recommendation=B; conflict_count=2; note=추천 충돌이 존재한다",
+    "risk": "risk_a=medium; risk_b=medium; note=고위험은 아님"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "추천이 갈리고 conflict_count가 있으며 final_confidence가 0.8 미만이라 reasoning_conflict가 발생한다."
+  },
+  "actual": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "baseline",
+    "threshold_score": 2,
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "score_breakdown": {
+      "reasoning_conflict": 2
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "neutralize_decision"
+      ],
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 1,
+      "final_confidence": 0.79,
+      "a_confidence": 0.75,
+      "b_confidence": 0.74,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium"
+    },
+    "reason": "reasoning_conflict 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}

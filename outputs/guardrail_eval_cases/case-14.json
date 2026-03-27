@@ -1,0 +1,52 @@
+{
+  "input": {
+    "user_input": "다음 분기 학습 주제를 프론트엔드로 할지 데이터로 할지 고민이야.",
+    "context": "state_unknown_count=1; note=제약은 적다",
+    "scenario": "final_confidence=0.65; a_confidence=0.66; b_confidence=0.64; a_recommendation=A; b_recommendation=A; conflict_count=0; note=0.65 경계값 테스트",
+    "risk": "risk_a=low; risk_b=medium; note=위험은 제한적이다"
+  },
+  "expected": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "0.65는 ambiguity_high는 아니지만 0.68 미만이라 low_confidence로 careful이 맞다."
+  },
+  "actual": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "baseline",
+    "threshold_score": 1,
+    "detected_triggers": [
+      "low_confidence"
+    ],
+    "score_breakdown": {
+      "low_confidence": 1
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "low_confidence"
+      ],
+      "strategy": [
+        "soft_recommendation"
+      ],
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 1,
+      "final_confidence": 0.65,
+      "a_confidence": 0.66,
+      "b_confidence": 0.64,
+      "a_recommendation": "A",
+      "b_recommendation": "A",
+      "conflict_count": 0,
+      "risk_a": "low",
+      "risk_b": "medium"
+    },
+    "reason": "low_confidence 신호가 있어 normal 대신 careful 모드로 완화해야 한다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}

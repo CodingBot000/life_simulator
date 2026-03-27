@@ -1,0 +1,44 @@
+{
+  "input": {
+    "user_input": "업무 후 영어 스터디를 온라인으로 들을지 오프라인으로 들을지 고민 중이야.",
+    "context": "state_unknown_count=1; note=이동 가능 시간만 불확실하다",
+    "scenario": "final_confidence=0.72; a_confidence=0.66; b_confidence=0.64; a_recommendation=B; b_recommendation=B; conflict_count=0; note=정보는 충분하다",
+    "risk": "risk_a=low; risk_b=medium; note=커리어 전환 같은 큰 리스크는 아니다"
+  },
+  "expected": {
+    "risk_level": "low",
+    "guardrail_mode": "normal",
+    "reason": "unknown이 2 미만이고 confidence도 임계값 위라 guardrail이 필요 없다."
+  },
+  "actual": {
+    "risk_level": "low",
+    "guardrail_mode": "normal",
+    "raw_guardrail_mode": "normal",
+    "threshold_set": "baseline",
+    "threshold_score": 0,
+    "detected_triggers": [],
+    "score_breakdown": {},
+    "guardrail_result": {
+      "guardrail_triggered": false,
+      "triggers": [],
+      "strategy": [],
+      "final_mode": "normal"
+    },
+    "signals": {
+      "state_unknown_count": 1,
+      "final_confidence": 0.72,
+      "a_confidence": 0.66,
+      "b_confidence": 0.64,
+      "a_recommendation": "B",
+      "b_recommendation": "B",
+      "conflict_count": 0,
+      "risk_a": "low",
+      "risk_b": "medium"
+    },
+    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "input": {
+    "user_input": "이번 프로젝트 회고 방식을 문서 중심으로 할지 워크숍으로 할지 고민 중이야.",
+    "context": "state_unknown_count=0; note=업무 맥락이 명확하다",
+    "scenario": "final_confidence=0.83; a_confidence=0.63; b_confidence=0.90; a_recommendation=A; b_recommendation=B; conflict_count=0; note=갈등 수가 0이다",
+    "risk": "risk_a=low; risk_b=low; note=실패 비용이 낮다"
+  },
+  "expected": {
+    "risk_level": "low",
+    "guardrail_mode": "normal",
+    "reason": "추천이 갈려도 conflict_count가 0이라 reasoning_conflict가 발생하지 않는다."
+  },
+  "actual": {
+    "risk_level": "low",
+    "guardrail_mode": "normal",
+    "raw_guardrail_mode": "normal",
+    "threshold_set": "baseline",
+    "threshold_score": 0,
+    "detected_triggers": [],
+    "score_breakdown": {},
+    "guardrail_result": {
+      "guardrail_triggered": false,
+      "triggers": [],
+      "strategy": [],
+      "final_mode": "normal"
+    },
+    "signals": {
+      "state_unknown_count": 0,
+      "final_confidence": 0.83,
+      "a_confidence": 0.63,
+      "b_confidence": 0.9,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 0,
+      "risk_a": "low",
+      "risk_b": "low"
+    },
+    "reason": "명시된 guardrail trigger가 없어 normal 모드로 진행 가능한 저위험 케이스다."
+  },
+  "diff": {
+    "risk_level_match": true,
+    "guardrail_mode_match": true
+  }
+}
