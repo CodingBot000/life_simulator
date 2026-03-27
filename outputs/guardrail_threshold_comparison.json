@@ -1,6 +1,7 @@
 {
   "total": 22,
   "baseline": {
+    "total": 22,
     "preferred_match_count": 16,
     "preferred_match_rate": 0.73,
     "acceptable_match_count": 22,
@@ -9,6 +10,7 @@
     "underblocking": 0
   },
   "conservative": {
+    "total": 22,
     "preferred_match_count": 12,
     "preferred_match_rate": 0.55,
     "acceptable_match_count": 21,
@@ -17,6 +19,7 @@
     "underblocking": 0
   },
   "aggressive": {
+    "total": 22,
     "preferred_match_count": 11,
     "preferred_match_rate": 0.5,
     "acceptable_match_count": 15,

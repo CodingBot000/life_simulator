@@ -42,3 +42,10 @@
 - aggressive 성능: preferred 0.5, acceptable 0.68, overblocking 0, underblocking 7
 - 추천 threshold set: baseline
 - 발견된 과잉 차단 / 과소 차단 패턴: overblocking baseline: 없음 / conservative: ambiguity_high+reasoning_conflict (1건) / aggressive: 없음; underblocking baseline: 없음 / conservative: 없음 / aggressive: no_trigger (5건), ambiguity_high+high_risk (1건)
+
+## Guardrail Auto Optimization
+
+- best threshold: carefulMin=1, blockMin=4
+- 기존 baseline vs optimized 비교: baseline score 54, optimized score 54, preferred 0.73 -> 0.73, acceptable 1 -> 1
+- 개선 여부: same
+- 과잉/과소 차단 패턴: overblocking 없음; underblocking 없음

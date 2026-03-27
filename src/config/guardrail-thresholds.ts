@@ -14,6 +14,15 @@ export interface GuardrailThresholdConfig {
   blockOnHighRiskCombo: boolean;
 }
 
+export const COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES = [
+  "baseline",
+  "conservative",
+  "aggressive",
+] as const;
+
+export type ComparisonGuardrailThresholdSetName =
+  (typeof COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES)[number];
+
 export const guardrailThresholdSets = {
   baseline: {
     ambiguityUnknownMin: 2,
@@ -60,6 +69,21 @@ export const guardrailThresholdSets = {
     confidenceWeight: 1,
     blockOnHighRiskCombo: false,
   },
+  optimized: {
+    ambiguityUnknownMin: 2,
+    ambiguityConfidenceMax: 0.65,
+    conflictConfidenceMax: 0.8,
+    conflictCountMin: 1,
+    lowConfidenceMax: 0.68,
+    sideConfidenceMax: 0.62,
+    carefulMin: 1,
+    blockMin: 4,
+    riskWeight: 2,
+    uncertaintyWeight: 2,
+    escalationWeight: 2,
+    confidenceWeight: 1,
+    blockOnHighRiskCombo: false,
+  },
 } as const satisfies Record<string, GuardrailThresholdConfig>;
 
 export type GuardrailThresholdSetName = keyof typeof guardrailThresholdSets;
@@ -75,4 +99,26 @@ export function getGuardrailThresholdSet(
   name: GuardrailThresholdSetName = DEFAULT_GUARDRAIL_THRESHOLD_SET,
 ): GuardrailThresholdConfig {
   return guardrailThresholdSets[name];
+}
+
+export function getGuardrailMaxScore(
+  thresholds: GuardrailThresholdConfig,
+): number {
+  return (
+    thresholds.riskWeight +
+    thresholds.uncertaintyWeight +
+    thresholds.escalationWeight +
+    thresholds.confidenceWeight
+  );
+}
+
+export function resolveGuardrailThresholdCutoff(
+  value: number,
+  thresholds: GuardrailThresholdConfig,
+): number {
+  if (value < 1) {
+    return Number((value * getGuardrailMaxScore(thresholds)).toFixed(4));
+  }
+
+  return value;
 }

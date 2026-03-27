@@ -16,11 +16,17 @@
     "raw_guardrail_mode": "cautious",
     "threshold_set": "baseline",
     "threshold_score": 1,
+    "threshold_score_ratio": 0.1429,
     "detected_triggers": [
       "low_confidence"
     ],
     "score_breakdown": {
       "low_confidence": 1
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
     },
     "guardrail_result": {
       "guardrail_triggered": true,
