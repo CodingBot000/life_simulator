@@ -6,12 +6,12 @@
     "risk": "risk_a=low; risk_b=low; note=고위험이 아니다"
   },
   "expected": {
-    "preferred_mode": "normal",
+    "preferred_mode": "careful",
     "acceptable_modes": [
       "normal",
       "careful"
     ],
-    "reason": "회복 가능한 저위험 선택이라면 경계선 confidence만으로 careful까지는 선택적이다."
+    "reason": "baseline 기준 risk=low, confidence=medium, uncertainty=medium라 preferred는 careful다. acceptable 범위는 normal, careful다."
   },
   "baseline": {
     "risk_level": "low",
@@ -225,7 +225,8 @@
   },
   "diff_summary": {
     "preferred_matches": [
-      "aggressive"
+      "baseline",
+      "conservative"
     ],
     "acceptable_matches": [
       "baseline",

@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "medium",
     "guardrail_mode": "careful",
-    "reason": "a_confidence가 0.62 미만이라 low_confidence가 발생해 careful이 맞다."
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 low_confidence다."
   },
   "actual": {
     "risk_level": "medium",

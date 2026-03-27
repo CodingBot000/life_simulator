@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "medium",
     "guardrail_mode": "careful",
-    "reason": "high_risk는 없지만 reasoning_conflict가 있어 결론 강도를 낮춰야 한다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 reasoning_conflict다."
   },
   "actual": {
     "risk_level": "medium",

@@ -8,10 +8,9 @@
   "expected": {
     "preferred_mode": "careful",
     "acceptable_modes": [
-      "careful",
-      "block"
+      "careful"
     ],
-    "reason": "high risk라 careful이 선호되지만 추가 보수성도 허용 가능하다."
+    "reason": "baseline 기준 risk=high, confidence=medium, uncertainty=low라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "high",

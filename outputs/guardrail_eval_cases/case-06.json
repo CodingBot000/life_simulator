@@ -6,9 +6,9 @@
     "risk": "risk_a=low; risk_b=medium; note=커리어 전환 같은 큰 리스크는 아니다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "unknown이 2 미만이고 confidence도 임계값 위라 guardrail이 필요 없다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high다."
   },
   "actual": {
     "risk_level": "medium",
@@ -81,7 +81,7 @@
     "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high다."
   },
   "diff": {
-    "risk_level_match": false,
-    "guardrail_mode_match": false
+    "risk_level_match": true,
+    "guardrail_mode_match": true
   }
 }

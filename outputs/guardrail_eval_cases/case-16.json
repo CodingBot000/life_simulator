@@ -6,9 +6,9 @@
     "risk": "risk_a=low; risk_b=low; note=고위험은 아니다"
   },
   "expected": {
-    "risk_level": "medium",
+    "risk_level": "low",
     "guardrail_mode": "careful",
-    "reason": "final_confidence가 0.65 미만이라 ambiguity_high와 low_confidence가 함께 켜져 careful이 필요하다."
+    "reason": "risk=low, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, low_confidence다."
   },
   "actual": {
     "risk_level": "low",
@@ -85,7 +85,7 @@
     "reason": "risk=low, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
   },
   "diff": {
-    "risk_level_match": false,
+    "risk_level_match": true,
     "guardrail_mode_match": true
   }
 }

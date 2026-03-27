@@ -6,9 +6,9 @@
     "risk": "risk_a=low; risk_b=medium; note=회복 가능한 비용이다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "높은 confidence가 갈등 신호를 상쇄해 guardrail 없이 진행 가능한 케이스다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 reasoning_conflict다."
   },
   "actual": {
     "risk_level": "medium",
@@ -81,7 +81,7 @@
     "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "diff": {
-    "risk_level_match": false,
-    "guardrail_mode_match": false
+    "risk_level_match": true,
+    "guardrail_mode_match": true
   }
 }

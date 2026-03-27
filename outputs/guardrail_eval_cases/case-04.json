@@ -6,9 +6,9 @@
     "risk": "risk_a=low; risk_b=medium; note=선택 비용이 작다"
   },
   "expected": {
-    "risk_level": "low",
+    "risk_level": "medium",
     "guardrail_mode": "normal",
-    "reason": "trigger 임계값을 넘는 항목이 없어 그대로 normal로 진행 가능하다."
+    "reason": "risk=medium, confidence=medium, uncertainty=low이며 강한 guardrail 신호가 없어 normal 유지가 맞다."
   },
   "actual": {
     "risk_level": "medium",
@@ -73,7 +73,7 @@
     "reason": "risk=medium, confidence=medium, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
   },
   "diff": {
-    "risk_level_match": false,
+    "risk_level_match": true,
     "guardrail_mode_match": true
   }
 }

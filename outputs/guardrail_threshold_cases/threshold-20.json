@@ -10,7 +10,7 @@
     "acceptable_modes": [
       "careful"
     ],
-    "reason": "unknown이 2개 이상이면 careful이 안정적이다."
+    "reason": "baseline 기준 risk=medium, confidence=medium, uncertainty=medium라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",

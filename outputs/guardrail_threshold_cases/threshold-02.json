@@ -11,7 +11,7 @@
       "normal",
       "careful"
     ],
-    "reason": "unknown 1개만으로 강한 차단은 과하다."
+    "reason": "baseline 기준 risk=medium, confidence=medium, uncertainty=low라 preferred는 normal다. acceptable 범위는 normal, careful다."
   },
   "baseline": {
     "risk_level": "medium",

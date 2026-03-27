@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "medium",
     "guardrail_mode": "careful",
-    "reason": "0.65는 ambiguity_high는 아니지만 0.68 미만이라 low_confidence로 careful이 맞다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 low_confidence다."
   },
   "actual": {
     "risk_level": "medium",

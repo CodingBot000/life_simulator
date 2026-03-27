@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "low",
     "guardrail_mode": "normal",
-    "reason": "위험 신호가 전혀 없어 normal로 처리해도 되는 저위험 케이스다."
+    "reason": "risk=low, confidence=high, uncertainty=low이며 강한 guardrail 신호가 없어 normal 유지가 맞다."
   },
   "actual": {
     "risk_level": "low",

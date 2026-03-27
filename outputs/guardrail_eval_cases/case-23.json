@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "high",
     "guardrail_mode": "careful",
-    "reason": "reasoning conflict가 있더라도 ambiguity가 없고 high_risk가 있으므로 high/careful이 맞다."
+    "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 reasoning_conflict, high_risk다."
   },
   "actual": {
     "risk_level": "high",

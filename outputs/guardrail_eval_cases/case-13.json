@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "medium",
     "guardrail_mode": "careful",
-    "reason": "추천이 갈리고 conflict_count가 있으며 final_confidence가 0.8 미만이라 reasoning_conflict가 발생한다."
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 맞다. 핵심 신호는 reasoning_conflict다."
   },
   "actual": {
     "risk_level": "medium",

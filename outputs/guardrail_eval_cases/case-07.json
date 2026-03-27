@@ -7,8 +7,8 @@
   },
   "expected": {
     "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "추천이 갈려도 conflict_count가 0이라 reasoning_conflict가 발생하지 않는다."
+    "guardrail_mode": "careful",
+    "reason": "risk=low, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 low_confidence다."
   },
   "actual": {
     "risk_level": "low",
@@ -82,6 +82,6 @@
   },
   "diff": {
     "risk_level_match": true,
-    "guardrail_mode_match": false
+    "guardrail_mode_match": true
   }
 }

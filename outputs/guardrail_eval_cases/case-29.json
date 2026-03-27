@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "high",
     "guardrail_mode": "careful",
-    "reason": "final_confidence가 낮아 careful 요인도 있지만 결정적으로 risk_b가 high라 high 수준으로 봐야 한다."
+    "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 reasoning_conflict, low_confidence, high_risk다."
   },
   "actual": {
     "risk_level": "high",

@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "medium",
     "guardrail_mode": "careful",
-    "reason": "unknown count가 2 이상이라 ambiguity_high만으로도 careful 모드가 필요하다."
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high다."
   },
   "actual": {
     "risk_level": "medium",

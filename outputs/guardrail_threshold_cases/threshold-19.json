@@ -8,10 +8,9 @@
   "expected": {
     "preferred_mode": "careful",
     "acceptable_modes": [
-      "normal",
       "careful"
     ],
-    "reason": "conflict 신호가 있어 careful이 선호되지만 높은 confidence라 normal도 허용 가능하다."
+    "reason": "baseline 기준 risk=medium, confidence=low, uncertainty=medium라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",

@@ -6,12 +6,11 @@
     "risk": "risk_a=medium; risk_b=medium; note=고위험은 아니다"
   },
   "expected": {
-    "preferred_mode": "normal",
+    "preferred_mode": "careful",
     "acceptable_modes": [
-      "normal",
       "careful"
     ],
-    "reason": "약한 conflict 단독이면 normal 쪽이 더 납득 가능하다."
+    "reason": "baseline 기준 risk=medium, confidence=medium, uncertainty=medium라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",
@@ -217,14 +216,16 @@
   },
   "diff_summary": {
     "preferred_matches": [
-      "aggressive"
+      "baseline",
+      "conservative"
     ],
     "acceptable_matches": [
       "baseline",
-      "conservative",
-      "aggressive"
+      "conservative"
     ],
     "overblocking": [],
-    "underblocking": []
+    "underblocking": [
+      "aggressive"
+    ]
   }
 }

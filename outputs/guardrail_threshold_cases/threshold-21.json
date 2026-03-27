@@ -6,12 +6,11 @@
     "risk": "risk_a=medium; risk_b=medium; note=경계 사례"
   },
   "expected": {
-    "preferred_mode": "block",
+    "preferred_mode": "careful",
     "acceptable_modes": [
-      "careful",
-      "block"
+      "careful"
     ],
-    "reason": "ambiguity와 conflict 조합이면 block이 선호되지만 careful도 허용 가능하다."
+    "reason": "baseline 기준 risk=medium, confidence=low, uncertainty=high라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",
@@ -232,7 +231,11 @@
     "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "diff_summary": {
-    "preferred_matches": [],
+    "preferred_matches": [
+      "baseline",
+      "conservative",
+      "aggressive"
+    ],
     "acceptable_matches": [
       "baseline",
       "conservative",

@@ -9,6 +9,7 @@
     "eval:guardrail": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/eval_guardrail.ts",
     "eval:guardrail-calibration": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/eval_guardrail_calibration.ts",
     "eval:guardrail-thresholds": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/eval_guardrail_thresholds.ts",
+    "relabel:guardrail-datasets": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/relabel_guardrail_datasets.ts",
     "optimize:guardrail": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/optimize_guardrail_thresholds.ts"
   },
   "dependencies": {

@@ -8,10 +8,9 @@
   "expected": {
     "preferred_mode": "careful",
     "acceptable_modes": [
-      "normal",
       "careful"
     ],
-    "reason": "근거 강도가 약한 축이 있으면 careful이 적절하지만 block까지는 아니다."
+    "reason": "baseline 기준 risk=medium, confidence=medium, uncertainty=medium라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",
@@ -226,10 +225,11 @@
     ],
     "acceptable_matches": [
       "baseline",
-      "conservative",
-      "aggressive"
+      "conservative"
     ],
     "overblocking": [],
-    "underblocking": []
+    "underblocking": [
+      "aggressive"
+    ]
   }
 }

@@ -8,10 +8,9 @@
   "expected": {
     "preferred_mode": "careful",
     "acceptable_modes": [
-      "normal",
       "careful"
     ],
-    "reason": "경계선 confidence 저하는 careful이 적절하지만 normal도 과소 차단으로 보긴 어렵다."
+    "reason": "baseline 기준 risk=medium, confidence=low, uncertainty=medium라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",

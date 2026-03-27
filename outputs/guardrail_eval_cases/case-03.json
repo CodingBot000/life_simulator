@@ -6,9 +6,9 @@
     "risk": "risk_a=medium; risk_b=medium; note=큰 손실은 없다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "conflict가 있어도 final_confidence가 0.8 이상이면 reasoning_conflict가 아니므로 normal이다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 reasoning_conflict다."
   },
   "actual": {
     "risk_level": "medium",
@@ -81,7 +81,7 @@
     "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
   },
   "diff": {
-    "risk_level_match": false,
-    "guardrail_mode_match": false
+    "risk_level_match": true,
+    "guardrail_mode_match": true
   }
 }

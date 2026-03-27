@@ -6,9 +6,9 @@
     "risk": "risk_a=medium; risk_b=low; note=정서적 부담이 크지 않다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "b_confidence가 0.62이면 low_confidence 조건에 걸리지 않아 normal로 남는다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 low_confidence다."
   },
   "actual": {
     "risk_level": "medium",
@@ -81,7 +81,7 @@
     "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 low_confidence다."
   },
   "diff": {
-    "risk_level_match": false,
-    "guardrail_mode_match": false
+    "risk_level_match": true,
+    "guardrail_mode_match": true
   }
 }

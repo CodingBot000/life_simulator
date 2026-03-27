@@ -10,7 +10,7 @@
     "acceptable_modes": [
       "careful"
     ],
-    "reason": "추천 축이 갈리고 conflict가 있으면 careful이 더 자연스럽다."
+    "reason": "baseline 기준 risk=medium, confidence=low, uncertainty=high라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",

@@ -6,9 +6,9 @@
     "risk": "risk_a=medium; risk_b=medium; note=단기 생산성 차이만 난다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "모든 confidence가 임계값보다 높아 low_confidence 없이 normal이다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, low_confidence다."
   },
   "actual": {
     "risk_level": "medium",
@@ -85,7 +85,7 @@
     "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
   },
   "diff": {
-    "risk_level_match": false,
-    "guardrail_mode_match": false
+    "risk_level_match": true,
+    "guardrail_mode_match": true
   }
 }

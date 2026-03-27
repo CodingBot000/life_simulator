@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "high",
     "guardrail_mode": "careful",
-    "reason": "ambiguity도 있지만 핵심은 양쪽 모두 high risk라서 high/careful로 다뤄야 한다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, high_risk다."
   },
   "actual": {
     "risk_level": "high",

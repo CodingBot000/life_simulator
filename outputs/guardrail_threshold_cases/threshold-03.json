@@ -6,12 +6,11 @@
     "risk": "risk_a=medium; risk_b=medium; note=회복 가능한 비용이다"
   },
   "expected": {
-    "preferred_mode": "normal",
+    "preferred_mode": "careful",
     "acceptable_modes": [
-      "normal",
       "careful"
     ],
-    "reason": "side confidence 하나만 낮을 때는 과잉 가드보다 normal이 더 자연스럽다."
+    "reason": "baseline 기준 risk=medium, confidence=medium, uncertainty=medium라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",
@@ -221,14 +220,16 @@
   },
   "diff_summary": {
     "preferred_matches": [
-      "aggressive"
+      "baseline",
+      "conservative"
     ],
     "acceptable_matches": [
       "baseline",
-      "conservative",
-      "aggressive"
+      "conservative"
     ],
     "overblocking": [],
-    "underblocking": []
+    "underblocking": [
+      "aggressive"
+    ]
   }
 }

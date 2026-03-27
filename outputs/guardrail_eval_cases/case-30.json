@@ -6,9 +6,9 @@
     "risk": "risk_a=medium; risk_b=medium; note=직접 high는 아니다"
   },
   "expected": {
-    "risk_level": "high",
-    "guardrail_mode": "block",
-    "reason": "unknown count가 2 이상이고 추천 충돌이 있으며 final_confidence도 0.8 미만이라 block이 맞다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
   },
   "actual": {
     "risk_level": "medium",
@@ -85,7 +85,7 @@
     "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
   },
   "diff": {
-    "risk_level_match": false,
-    "guardrail_mode_match": false
+    "risk_level_match": true,
+    "guardrail_mode_match": true
   }
 }

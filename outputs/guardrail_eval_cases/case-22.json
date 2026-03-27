@@ -8,7 +8,7 @@
   "expected": {
     "risk_level": "high",
     "guardrail_mode": "careful",
-    "reason": "risk_b가 high라 high_risk trigger가 생기고 high 수준으로 봐야 한다."
+    "reason": "risk=high, confidence=medium, uncertainty=low 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, high_risk다."
   },
   "actual": {
     "risk_level": "high",

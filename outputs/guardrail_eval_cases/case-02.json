@@ -6,9 +6,9 @@
     "risk": "risk_a=medium; risk_b=low; note=비용과 시간 손실이 제한적이다"
   },
   "expected": {
-    "risk_level": "low",
-    "guardrail_mode": "normal",
-    "reason": "추천은 갈리지만 final_confidence가 높아 reasoning_conflict 조건을 넘지 않으므로 normal이 맞다."
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 맞다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
   },
   "actual": {
     "risk_level": "medium",
@@ -85,7 +85,7 @@
     "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
   },
   "diff": {
-    "risk_level_match": false,
-    "guardrail_mode_match": false
+    "risk_level_match": true,
+    "guardrail_mode_match": true
   }
 }

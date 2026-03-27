@@ -6,11 +6,11 @@
     "risk": "risk_a=high; risk_b=medium; note=재무적 손실 가능성이 크다"
   },
   "expected": {
-    "preferred_mode": "careful",
+    "preferred_mode": "block",
     "acceptable_modes": [
-      "careful"
+      "block"
     ],
-    "reason": "high risk 단독이면 careful이 맞고 block은 과하다."
+    "reason": "baseline 기준 risk=high, confidence=high, uncertainty=low라 preferred는 block다. acceptable 범위는 block다."
   },
   "baseline": {
     "risk_level": "high",
@@ -223,13 +223,17 @@
     "reason": "risk=high, confidence=high, uncertainty=low 조합으로 block이 필요하다. 핵심 신호는 high_risk다."
   },
   "diff_summary": {
-    "preferred_matches": [],
-    "acceptable_matches": [],
-    "overblocking": [
+    "preferred_matches": [
       "baseline",
       "conservative",
       "aggressive"
     ],
+    "acceptable_matches": [
+      "baseline",
+      "conservative",
+      "aggressive"
+    ],
+    "overblocking": [],
     "underblocking": []
   }
 }

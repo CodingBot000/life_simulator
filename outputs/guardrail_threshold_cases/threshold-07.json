@@ -10,7 +10,7 @@
     "acceptable_modes": [
       "careful"
     ],
-    "reason": "정보 공백이 2개 이상이면 결론 강도를 낮추는 careful이 적절하다."
+    "reason": "baseline 기준 risk=medium, confidence=medium, uncertainty=low라 preferred는 careful다. acceptable 범위는 careful다."
   },
   "baseline": {
     "risk_level": "medium",
