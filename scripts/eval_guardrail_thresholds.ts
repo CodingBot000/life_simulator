@@ -2,41 +2,17 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
-  GUARDRAIL_THRESHOLD_SET_NAMES,
-  type GuardrailThresholdSetName,
+  COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES,
 } from "../src/config/guardrail-thresholds.ts";
 import {
-  compareGuardrailModes,
-  evaluateGuardrailInput,
-  normalizeGuardrailMode,
-  type DatasetGuardrailMode,
-  type GuardrailDatasetInput,
-} from "../src/lib/guardrail-eval.ts";
+  evaluateThresholdDataset,
+  parseThresholdDataset,
+  summarizeTriggerPatterns,
+} from "../src/guardrail/threshold-evaluation.ts";
+import type { ThresholdPerformanceMetrics } from "../src/guardrail/threshold-objective.ts";
 
-type ThresholdDatasetCase = {
-  id: string;
-  input: GuardrailDatasetInput;
-  expected: {
-    preferred_mode: DatasetGuardrailMode | "normal" | "careful" | "block";
-    acceptable_modes: Array<DatasetGuardrailMode | "normal" | "careful" | "block">;
-    reason: string;
-  };
-};
-
-type ThresholdCaseResult = ReturnType<typeof evaluateGuardrailInput>;
-
-type SetMetrics = {
-  preferred_match_count: number;
-  preferred_match_rate: number;
-  acceptable_match_count: number;
-  acceptable_match_rate: number;
-  overblocking: number;
-  underblocking: number;
-};
-
-function formatRate(value: number): number {
-  return Number(value.toFixed(2));
-}
+type ComparisonGuardrailThresholdSetName =
+  (typeof COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES)[number];
 
 function resolveSummaryPath(repoRoot: string): string {
   const envPath = process.env.GUARDRAIL_SUMMARY_PATH?.trim();
@@ -61,36 +37,10 @@ function upsertSummarySection(summaryMarkdown: string, sectionBody: string): str
   return `${summaryMarkdown.trimEnd()}\n\n${section}`;
 }
 
-function isAcceptableMode(
-  actualMode: DatasetGuardrailMode,
-  acceptableModes: DatasetGuardrailMode[],
-): boolean {
-  return acceptableModes.includes(actualMode);
-}
-
-function summarizePattern(cases: Array<{ triggers: string[] }>): string {
-  if (cases.length === 0) {
-    return "없음";
-  }
-
-  const counts = new Map<string, number>();
-
-  for (const item of cases) {
-    const key = item.triggers.length > 0 ? item.triggers.join("+") : "no_trigger";
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
-
-  return [...counts.entries()]
-    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
-    .slice(0, 2)
-    .map(([pattern, count]) => `${pattern} (${count}건)`)
-    .join(", ");
-}
-
 function recommendThresholdSet(
-  metricsBySet: Record<GuardrailThresholdSetName, SetMetrics>,
-): GuardrailThresholdSetName {
-  const sorted = [...GUARDRAIL_THRESHOLD_SET_NAMES].sort((left, right) => {
+  metricsBySet: Record<ComparisonGuardrailThresholdSetName, ThresholdPerformanceMetrics>,
+): ComparisonGuardrailThresholdSetName {
+  const sorted = [...COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES].sort((left, right) => {
     const a = metricsBySet[left];
     const b = metricsBySet[right];
 
@@ -133,65 +83,27 @@ async function main() {
   await mkdir(path.dirname(summaryMarkdownPath), { recursive: true });
 
   const rawDataset = await readFile(datasetPath, "utf8");
-  const datasetCases = rawDataset
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => JSON.parse(line) as ThresholdDatasetCase);
-
-  const seenIds = new Set<string>();
-  const metricsAccumulator = Object.fromEntries(
-    GUARDRAIL_THRESHOLD_SET_NAMES.map((setName) => [
+  const datasetCases = parseThresholdDataset(rawDataset);
+  const evaluationsBySet = Object.fromEntries(
+    COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES.map((setName) => [
       setName,
-      {
-        preferred_match_count: 0,
-        acceptable_match_count: 0,
-        overblocking: 0,
-        underblocking: 0,
-      },
+      evaluateThresholdDataset(datasetCases, {
+        thresholdSetName: setName,
+      }),
     ]),
   ) as Record<
-    GuardrailThresholdSetName,
-    Omit<SetMetrics, "preferred_match_rate" | "acceptable_match_rate">
+    ComparisonGuardrailThresholdSetName,
+    ReturnType<typeof evaluateThresholdDataset>
   >;
-
-  const patternAccumulator = Object.fromEntries(
-    GUARDRAIL_THRESHOLD_SET_NAMES.map((setName) => [
+  const metricsBySet = Object.fromEntries(
+    COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES.map((setName) => [
       setName,
-      {
-        overblocking: [] as Array<{ triggers: string[] }>,
-        underblocking: [] as Array<{ triggers: string[] }>,
-      },
+      evaluationsBySet[setName].metrics,
     ]),
-  ) as Record<
-    GuardrailThresholdSetName,
-    {
-      overblocking: Array<{ triggers: string[] }>;
-      underblocking: Array<{ triggers: string[] }>;
-    }
-  >;
+  ) as Record<ComparisonGuardrailThresholdSetName, ThresholdPerformanceMetrics>;
+  const total = datasetCases.length;
 
-  for (const item of datasetCases) {
-    if (seenIds.has(item.id)) {
-      throw new Error(`Duplicate case id found in threshold dataset: ${item.id}`);
-    }
-
-    seenIds.add(item.id);
-
-    const preferredMode = normalizeGuardrailMode(item.expected.preferred_mode);
-    const acceptableModes = item.expected.acceptable_modes.map((mode) =>
-      normalizeGuardrailMode(mode),
-    );
-
-    const resultsBySet = Object.fromEntries(
-      GUARDRAIL_THRESHOLD_SET_NAMES.map((setName) => [
-        setName,
-        evaluateGuardrailInput(item.input, {
-          thresholdSetName: setName,
-        }),
-      ]),
-    ) as Record<GuardrailThresholdSetName, ThresholdCaseResult>;
-
+  for (const [index, item] of datasetCases.entries()) {
     const diffSummary = {
       preferred_matches: [] as string[],
       acceptable_matches: [] as string[],
@@ -199,87 +111,40 @@ async function main() {
       underblocking: [] as string[],
     };
 
-    for (const setName of GUARDRAIL_THRESHOLD_SET_NAMES) {
-      const result = resultsBySet[setName];
-      const actualMode = result.guardrail_mode;
-      const preferredMatch = actualMode === preferredMode;
-      const acceptableMatch = isAcceptableMode(actualMode, acceptableModes);
+    const caseOutput: Record<string, unknown> = {
+      input: item.input,
+      expected: item.expected,
+    };
 
-      if (preferredMatch) {
-        metricsAccumulator[setName].preferred_match_count += 1;
+    for (const setName of COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES) {
+      const caseEvaluation = evaluationsBySet[setName].case_results[index];
+      caseOutput[setName] = caseEvaluation.actual;
+
+      if (caseEvaluation.diff.preferred_match) {
         diffSummary.preferred_matches.push(setName);
       }
 
-      if (acceptableMatch) {
-        metricsAccumulator[setName].acceptable_match_count += 1;
+      if (caseEvaluation.diff.acceptable_match) {
         diffSummary.acceptable_matches.push(setName);
       }
 
-      const acceptableFloor = acceptableModes.reduce((current, mode) =>
-        compareGuardrailModes(mode, current) < 0 ? mode : current,
-      );
-      const acceptableCeiling = acceptableModes.reduce((current, mode) =>
-        compareGuardrailModes(mode, current) > 0 ? mode : current,
-      );
-
-      if (!acceptableMatch && compareGuardrailModes(actualMode, acceptableCeiling) > 0) {
-        metricsAccumulator[setName].overblocking += 1;
+      if (caseEvaluation.diff.overblocking) {
         diffSummary.overblocking.push(setName);
-        patternAccumulator[setName].overblocking.push({
-          triggers: result.detected_triggers,
-        });
-      } else if (
-        !acceptableMatch &&
-        compareGuardrailModes(actualMode, acceptableFloor) < 0
-      ) {
-        metricsAccumulator[setName].underblocking += 1;
+      }
+
+      if (caseEvaluation.diff.underblocking) {
         diffSummary.underblocking.push(setName);
-        patternAccumulator[setName].underblocking.push({
-          triggers: result.detected_triggers,
-        });
       }
     }
 
+    caseOutput.diff_summary = diffSummary;
+
     await writeFile(
       path.join(casesOutputDir, `${item.id}.json`),
-      `${JSON.stringify(
-        {
-          input: item.input,
-          expected: {
-            preferred_mode: preferredMode,
-            acceptable_modes: acceptableModes,
-            reason: item.expected.reason,
-          },
-          baseline: resultsBySet.baseline,
-          conservative: resultsBySet.conservative,
-          aggressive: resultsBySet.aggressive,
-          diff_summary: diffSummary,
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify(caseOutput, null, 2)}\n`,
       "utf8",
     );
   }
-
-  const total = datasetCases.length;
-  const metricsBySet = Object.fromEntries(
-    GUARDRAIL_THRESHOLD_SET_NAMES.map((setName) => [
-      setName,
-      {
-        preferred_match_count: metricsAccumulator[setName].preferred_match_count,
-        preferred_match_rate: formatRate(
-          metricsAccumulator[setName].preferred_match_count / total,
-        ),
-        acceptable_match_count: metricsAccumulator[setName].acceptable_match_count,
-        acceptable_match_rate: formatRate(
-          metricsAccumulator[setName].acceptable_match_count / total,
-        ),
-        overblocking: metricsAccumulator[setName].overblocking,
-        underblocking: metricsAccumulator[setName].underblocking,
-      },
-    ]),
-  ) as Record<GuardrailThresholdSetName, SetMetrics>;
 
   const recommendedThresholdSet = recommendThresholdSet(metricsBySet);
   const output = {
@@ -299,13 +164,17 @@ async function main() {
     existingSummary = "# Summary\n";
   }
 
-  const overblockingPatterns = GUARDRAIL_THRESHOLD_SET_NAMES.map(
+  const overblockingPatterns = COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES.map(
     (setName) =>
-      `${setName}: ${summarizePattern(patternAccumulator[setName].overblocking)}`,
+      `${setName}: ${summarizeTriggerPatterns(
+        evaluationsBySet[setName].overblocking_cases,
+      )}`,
   ).join(" / ");
-  const underblockingPatterns = GUARDRAIL_THRESHOLD_SET_NAMES.map(
+  const underblockingPatterns = COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES.map(
     (setName) =>
-      `${setName}: ${summarizePattern(patternAccumulator[setName].underblocking)}`,
+      `${setName}: ${summarizeTriggerPatterns(
+        evaluationsBySet[setName].underblocking_cases,
+      )}`,
   ).join(" / ");
 
   const summarySection = [

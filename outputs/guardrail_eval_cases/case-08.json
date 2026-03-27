@@ -16,8 +16,14 @@
     "raw_guardrail_mode": "normal",
     "threshold_set": "baseline",
     "threshold_score": 0,
+    "threshold_score_ratio": 0,
     "detected_triggers": [],
     "score_breakdown": {},
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
     "guardrail_result": {
       "guardrail_triggered": false,
       "triggers": [],

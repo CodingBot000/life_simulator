@@ -1,0 +1,69 @@
+{
+  "search_space": {
+    "carefulMin_candidates": [
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      1
+    ],
+    "blockMin_candidates": [
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      4
+    ],
+    "valid_combinations": 55
+  },
+  "baseline": {
+    "thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4
+    },
+    "score": 54,
+    "metrics": {
+      "total": 22,
+      "preferred_match_count": 16,
+      "preferred_match_rate": 0.73,
+      "acceptable_match_count": 22,
+      "acceptable_match_rate": 1,
+      "overblocking": 0,
+      "underblocking": 0
+    }
+  },
+  "best_threshold": {
+    "carefulMin": 1,
+    "blockMin": 4,
+    "effective_carefulMin": 1,
+    "effective_blockMin": 4
+  },
+  "score": 54,
+  "metrics": {
+    "total": 22,
+    "preferred_match_count": 16,
+    "preferred_match_rate": 0.73,
+    "acceptable_match_count": 22,
+    "acceptable_match_rate": 1,
+    "overblocking": 0,
+    "underblocking": 0
+  },
+  "baseline_vs_optimized": {
+    "objective_score_delta": 0,
+    "preferred_match_rate_delta": 0,
+    "acceptable_match_rate_delta": 0,
+    "overblocking_delta": 0,
+    "underblocking_delta": 0
+  },
+  "improvement": "same"
+}

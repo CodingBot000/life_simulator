@@ -18,6 +18,7 @@
     "raw_guardrail_mode": "blocked",
     "threshold_set": "baseline",
     "threshold_score": 7,
+    "threshold_score_ratio": 1,
     "detected_triggers": [
       "ambiguity_high",
       "reasoning_conflict",
@@ -29,6 +30,11 @@
       "reasoning_conflict": 2,
       "low_confidence": 1,
       "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
     },
     "guardrail_result": {
       "guardrail_triggered": true,
@@ -65,6 +71,7 @@
     "raw_guardrail_mode": "blocked",
     "threshold_set": "conservative",
     "threshold_score": 7,
+    "threshold_score_ratio": 1,
     "detected_triggers": [
       "ambiguity_high",
       "reasoning_conflict",
@@ -76,6 +83,11 @@
       "reasoning_conflict": 2,
       "low_confidence": 1,
       "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
     },
     "guardrail_result": {
       "guardrail_triggered": true,
@@ -112,6 +124,7 @@
     "raw_guardrail_mode": "cautious",
     "threshold_set": "aggressive",
     "threshold_score": 5,
+    "threshold_score_ratio": 0.8333,
     "detected_triggers": [
       "reasoning_conflict",
       "low_confidence",
@@ -121,6 +134,11 @@
       "reasoning_conflict": 2,
       "low_confidence": 1,
       "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 2,
+      "blockMin": 5,
+      "maxScore": 6
     },
     "guardrail_result": {
       "guardrail_triggered": true,

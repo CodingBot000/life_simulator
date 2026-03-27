@@ -14,7 +14,9 @@ export type GuardrailStrategy =
 
 import {
   DEFAULT_GUARDRAIL_THRESHOLD_SET,
+  getGuardrailMaxScore,
   getGuardrailThresholdSet,
+  resolveGuardrailThresholdCutoff,
   type GuardrailThresholdConfig,
   type GuardrailThresholdSetName,
 } from "../config/guardrail-thresholds.ts";
@@ -56,8 +58,14 @@ export interface GuardrailEvaluationActual {
   raw_guardrail_mode: RawGuardrailMode;
   threshold_set: GuardrailThresholdSetName | "custom";
   threshold_score: number;
+  threshold_score_ratio: number;
   detected_triggers: GuardrailTrigger[];
   score_breakdown: Partial<Record<GuardrailTrigger, number>>;
+  effective_thresholds: {
+    carefulMin: number;
+    blockMin: number;
+    maxScore: number;
+  };
   guardrail_result: {
     guardrail_triggered: boolean;
     triggers: GuardrailTrigger[];
@@ -220,12 +228,13 @@ function shouldBlock(
   detectedTriggers: GuardrailTrigger[],
   thresholdScore: number,
   thresholds: GuardrailThresholdConfig,
+  blockCutoff: number,
 ): boolean {
   const hasAmbiguity = detectedTriggers.includes("ambiguity_high");
   const hasConflict = detectedTriggers.includes("reasoning_conflict");
   const hasHighRisk = detectedTriggers.includes("high_risk");
 
-  if (thresholdScore < thresholds.blockMin) {
+  if (thresholdScore < blockCutoff) {
     return false;
   }
 
@@ -312,11 +321,22 @@ export function evaluateGuardrailSignals(
     (sum, weight) => sum + (weight ?? 0),
     0,
   );
+  const maxScore = getGuardrailMaxScore(thresholds);
+  const carefulCutoff = resolveGuardrailThresholdCutoff(
+    thresholds.carefulMin,
+    thresholds,
+  );
+  const blockCutoff = resolveGuardrailThresholdCutoff(
+    thresholds.blockMin,
+    thresholds,
+  );
+  const thresholdScoreRatio =
+    maxScore === 0 ? 0 : Number((thresholdScore / maxScore).toFixed(4));
 
   let rawMode: RawGuardrailMode = "normal";
-  if (shouldBlock(detectedTriggers, thresholdScore, thresholds)) {
+  if (shouldBlock(detectedTriggers, thresholdScore, thresholds, blockCutoff)) {
     rawMode = "blocked";
-  } else if (thresholdScore >= thresholds.carefulMin) {
+  } else if (thresholdScore >= carefulCutoff) {
     rawMode = "cautious";
   }
 
@@ -338,8 +358,14 @@ export function evaluateGuardrailSignals(
     raw_guardrail_mode: rawMode,
     threshold_set: thresholdSetName,
     threshold_score: thresholdScore,
+    threshold_score_ratio: thresholdScoreRatio,
     detected_triggers: detectedTriggers,
     score_breakdown: scoreBreakdown,
+    effective_thresholds: {
+      carefulMin: carefulCutoff,
+      blockMin: blockCutoff,
+      maxScore,
+    },
     guardrail_result: {
       guardrail_triggered: guardrailTriggered,
       triggers: activeTriggers,
