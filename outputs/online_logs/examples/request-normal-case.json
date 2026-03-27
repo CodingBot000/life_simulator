@@ -1,0 +1,280 @@
+{
+  "request_id": "example-normal-001",
+  "timestamp": "2026-03-28T03:40:00.000Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:high/low",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "이직 제안을 받을지 현재 회사를 유지할지 고민 중이다.",
+    "user_context": {
+      "userProfile": {
+        "age": 31,
+        "job": "frontend engineer",
+        "risk_tolerance": "medium",
+        "priority": ["stability", "growth", "income"]
+      },
+      "decision": {
+        "optionA": "현재 회사에 남는다",
+        "optionB": "중견기업 이직 제안을 수락한다",
+        "context": "이직 제안을 받을지 현재 회사를 유지할지 고민 중이다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "example-normal-001",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "balanced",
+          "decision_style": "structured",
+          "top_priorities": ["stability", "growth", "income"]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "stable",
+          "time_pressure": "medium",
+          "emotional_state": "calm"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "신중하지만 기회를 완전히 피하지는 않는다.",
+        "current_constraint": "현재 역할이 안정적이고 생활비 압박이 높지 않다.",
+        "agent_guidance": "안정성과 성장의 균형을 중심으로 비교하라."
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "career_transition",
+      "factors": ["salary", "team_fit", "learning_curve"]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "현재 팀에서 익숙한 업무 흐름을 유지한다.",
+        "one_year": "안정적인 평가와 지속적인 개선 기회를 얻는다.",
+        "three_years": "점진적 성장이 가능하지만 성장 속도는 완만하다."
+      },
+      "optionB": {
+        "three_months": "초기 적응 비용이 있지만 새로운 스택을 접한다.",
+        "one_year": "연봉 상승과 역할 확장을 기대할 수 있다.",
+        "three_years": "성장 폭은 크지만 조직 적응 여부가 변수다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "low",
+        "reasons": ["현재 역할과 환경이 익숙하다."]
+      },
+      "optionB": {
+        "risk_level": "low",
+        "reasons": ["재정 압박이 낮아 적응 기간을 감당할 수 있다."]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "example-normal-001",
+      "input_summary": {
+        "user_profile": {
+          "age": 31,
+          "job": "frontend engineer",
+          "risk_tolerance": "medium",
+          "priority": ["stability", "growth", "income"]
+        },
+        "decision_options": {
+          "optionA": "현재 회사에 남는다",
+          "optionB": "중견기업 이직 제안을 수락한다",
+          "context": "이직 제안을 받을지 현재 회사를 유지할지 고민 중이다."
+        },
+        "planner_goal": "안정성과 성장의 균형 비교"
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "stability",
+          "summary": "현재 회사 유지가 단기 안정성에 유리하다.",
+          "key_assumptions": ["현재 평가 흐름이 유지된다."],
+          "pros": ["불확실성이 낮다."],
+          "cons": ["성장 속도가 느릴 수 있다."],
+          "recommended_option": "A",
+          "confidence": 0.76
+        },
+        "b_reasoning": {
+          "stance": "growth",
+          "summary": "이직은 성장 가능성을 높이지만 적응 변수가 있다.",
+          "key_assumptions": ["새 팀 문화가 맞는다."],
+          "pros": ["보상과 배움의 폭이 넓다."],
+          "cons": ["초기 적응 스트레스가 있다."],
+          "recommended_option": "B",
+          "confidence": 0.74
+        },
+        "comparison": {
+          "agreements": ["두 선택지 모두 장기적으로 커리어에 의미가 있다."],
+          "conflicts": [],
+          "which_fits_user_better": "B",
+          "reason": "현재 재정 압박이 낮아 성장 선택지를 감당할 수 있다."
+        },
+        "final_selection": {
+          "selected_reasoning": "B",
+          "selected_option": "B",
+          "why_selected": "안정성을 크게 해치지 않으면서 성장 이점을 얻을 수 있다.",
+          "decision_confidence": 0.79
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:high/low",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "low",
+      "guardrail_mode": "normal",
+      "raw_guardrail_mode": "normal",
+      "threshold_set": "baseline",
+      "threshold_score": 0,
+      "threshold_score_ratio": 0,
+      "risk_score": 0.22,
+      "confidence_score": 0.81,
+      "uncertainty_score": 0.18,
+      "confidence_band": "high",
+      "uncertainty_band": "low",
+      "detected_triggers": [],
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": true,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {},
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": false,
+        "triggers": [],
+        "strategy": [],
+        "risk_score": 0.22,
+        "confidence_score": 0.81,
+        "uncertainty_score": 0.18,
+        "reasoning_signals": {
+          "conflicting_signals": false,
+          "missing_context": false,
+          "weak_evidence": false,
+          "ambiguous_wording": false,
+          "strong_consensus": true,
+          "repeated_evidence": false
+        },
+        "final_mode": "normal"
+      },
+      "signals": {
+        "state_unknown_count": 0,
+        "final_confidence": 0.79,
+        "a_confidence": 0.76,
+        "b_confidence": 0.74,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 0,
+        "risk_a": "low",
+        "risk_b": "low",
+        "evidence_repeat_count": 0
+      },
+      "reason": "risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
+    },
+    "guardrail_derived": {
+      "risk_level": "low",
+      "confidence": 0.81,
+      "uncertainty": 0.18,
+      "decision": "allow",
+      "output_mode": "normal",
+      "summary": {
+        "raw_guardrail_mode": "normal",
+        "output_mode": "normal",
+        "detected_triggers": [],
+        "trigger_count": 0,
+        "reason": "risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
+      },
+      "reasons": [
+        "risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다.",
+        "현재 역할과 환경이 익숙하다.",
+        "재정 압박이 낮아 적응 기간을 감당할 수 있다."
+      ],
+      "threshold_hit": [],
+      "signals": {
+        "cost_issue": false,
+        "effect_issue": false,
+        "recovery_issue": false,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0,
+        "effect_weight": 0,
+        "recovery_weight": 0,
+        "safety_weight": 0,
+        "total_score": 0
+      },
+      "reasoning_trace": [
+        "input_analysis: 이직 제안을 받을지 현재 회사를 유지할지 고민 중이다.",
+        "signal_extraction: none",
+        "threshold_compare: risk=low, threshold_score=0, confidence=0.81, uncertainty=0.18",
+        "final_decision: allow because risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.81,
+        "calibration_version": "confidence-uncertainty:high/low"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=B; recommended_option=B; confidence=0.79; reason=안정성을 크게 해치지 않으면서 성장 이점을 얻을 수 있다.",
+    "mode": "normal"
+  },
+  "meta": {
+    "latency_ms": 1820,
+    "model": "gpt-5",
+    "tokens": 2412
+  }
+}

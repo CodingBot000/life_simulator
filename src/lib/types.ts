@@ -97,6 +97,13 @@ export type GuardrailStrategy =
   | "soft_recommendation"
   | "risk_warning";
 export type GuardrailMode = "normal" | "cautious" | "blocked";
+export type GuardrailDecision = "allow" | "block" | "review";
+export type OperationalOutputMode = "normal" | "safe" | "blocked";
+export type GuardrailDecisionFlowStep =
+  | "input_analysis"
+  | "signal_extraction"
+  | "threshold_compare"
+  | "final_decision";
 
 export interface GuardrailReasoningSignals {
   conflicting_signals: boolean;
@@ -157,6 +164,151 @@ export interface GuardrailResult {
   final_mode: GuardrailMode;
 }
 
+export interface GuardrailLogSignals {
+  cost_issue?: boolean;
+  effect_issue?: boolean;
+  recovery_issue?: boolean;
+  safety_issue?: boolean;
+}
+
+export interface GuardrailThresholdEval {
+  cost_weight: number;
+  effect_weight: number;
+  recovery_weight: number;
+  safety_weight: number;
+  total_score: number;
+}
+
+export interface GuardrailCalibrationInfo {
+  adjusted_confidence: number;
+  calibration_version: string;
+}
+
+export interface LogVersionInfo {
+  record_version: string;
+  evaluator_version: string;
+  threshold_version: string;
+  calibration_version: string;
+  signal_mapping_version: string;
+  prompt_version?: string;
+}
+
+export interface GuardrailDerivedSummary {
+  raw_guardrail_mode: GuardrailMode;
+  output_mode: OperationalOutputMode;
+  detected_triggers: GuardrailTrigger[];
+  trigger_count: number;
+  reason: string;
+}
+
+export interface AnomalyFlags {
+  underblocking: boolean;
+  overblocking: boolean;
+  low_confidence: boolean;
+  conflict: boolean;
+}
+
+export interface AnomalyEvaluationSet {
+  anomaly_raw_based: AnomalyFlags;
+  anomaly_derived_based: AnomalyFlags;
+}
+
+export type AnomalySource = "anomaly_raw_based" | "anomaly_derived_based";
+export type GuardrailRawLog = Record<string, any>;
+
+export interface GuardrailDerivedLog {
+  risk_level: RiskTolerance;
+  confidence: number;
+  uncertainty: number;
+  decision: GuardrailDecision;
+  output_mode: OperationalOutputMode;
+  summary: GuardrailDerivedSummary;
+  reasons: string[];
+  threshold_hit: string[];
+  signals: GuardrailLogSignals;
+  threshold_eval: GuardrailThresholdEval;
+  reasoning_trace: string[];
+  decision_flow: GuardrailDecisionFlowStep[];
+  calibration: GuardrailCalibrationInfo;
+  mapping_note: string;
+  anomaly: AnomalyEvaluationSet;
+}
+
+export interface GuardrailLogRecord {
+  versions: LogVersionInfo;
+  guardrail_raw: GuardrailRawLog;
+  guardrail_derived: GuardrailDerivedLog;
+}
+
+export interface RequestLog {
+  request_id: string;
+  timestamp: string;
+  versions: LogVersionInfo;
+  input: {
+    user_query: string;
+    user_context: Record<string, any>;
+  };
+  state: {
+    session_id: string;
+    memory_snapshot?: MemoryState;
+    state_context?: StateContext;
+  };
+  intermediate: {
+    planner?: PlannerResult;
+    scenario?: {
+      optionA: ScenarioResult;
+      optionB: ScenarioResult;
+    };
+    risk?: {
+      optionA: RiskResult;
+      optionB: RiskResult;
+    };
+    ab_reasoning?: AbReasoningResult;
+  };
+  guardrail: GuardrailLogRecord;
+  output: {
+    final_answer: string;
+    mode: OperationalOutputMode;
+  };
+  meta: {
+    latency_ms: number;
+    model: string;
+    tokens: number;
+  };
+}
+
+export interface AnomalyQueueEntry {
+  queue_id: string;
+  detected_at: string;
+  versions: LogVersionInfo;
+  source: AnomalySource[];
+  anomaly: AnomalyEvaluationSet;
+  request_log: RequestLog;
+}
+
+export interface ReEvaluationDatasetCandidate {
+  versions: LogVersionInfo;
+  input: RequestLog["input"];
+  expected: {
+    risk_level: RiskTolerance;
+    decision: GuardrailDecision;
+    mode: OperationalOutputMode;
+  };
+  source: "online_anomaly";
+  judge: string;
+}
+
+export interface ReEvaluationResult {
+  request_id: string;
+  reevaluated_at: string;
+  source_log_path: string;
+  versions: LogVersionInfo;
+  source: AnomalySource[];
+  anomaly: AnomalyEvaluationSet;
+  reevaluated_guardrail: GuardrailLogRecord;
+  dataset_candidate: ReEvaluationDatasetCandidate;
+}
+
 export interface AdvisorResult {
   decision: AdvisorDecision;
   confidence: number;
@@ -205,6 +357,7 @@ export interface ReflectionResult {
 }
 
 export interface SimulationResponse {
+  request_id: string;
   stateContext: StateContext;
   planner: PlannerResult;
   scenarioA: ScenarioResult;
