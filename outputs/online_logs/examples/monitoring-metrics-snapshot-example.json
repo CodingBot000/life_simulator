@@ -1,0 +1,135 @@
+{
+  "generated_at": "2026-03-28T04:10:00.000Z",
+  "window": {
+    "from": "2026-03-28T03:40:00.000Z",
+    "to": "2026-03-28T04:10:00.000Z",
+    "duration_minutes": 30,
+    "request_count": 3
+  },
+  "totals": {
+    "total_requests": 3,
+    "success_rate": 1,
+    "avg_latency_ms": 2005,
+    "allow_count": 2,
+    "review_count": 1,
+    "block_count": 0,
+    "block_rate": 0,
+    "review_rate": 0.3333,
+    "low_confidence_rate": 0.3333,
+    "anomaly_count": 2,
+    "anomaly_rate": 0.6667,
+    "underblocking_count": 0,
+    "overblocking_count": 0,
+    "conflict_count": 1,
+    "low_confidence_anomaly_count": 1,
+    "reeval_count": 1,
+    "reeval_mismatch_count": 1,
+    "reeval_mismatch_rate": 1,
+    "critical_count": 1
+  },
+  "anomaly_breakdown": {
+    "raw_based": {
+      "anomaly_count": 2,
+      "anomaly_rate": 0.6667,
+      "underblocking_count": 0,
+      "overblocking_count": 0,
+      "conflict_count": 1,
+      "low_confidence_count": 1
+    },
+    "derived_based": {
+      "anomaly_count": 2,
+      "anomaly_rate": 0.6667,
+      "underblocking_count": 0,
+      "overblocking_count": 0,
+      "conflict_count": 1,
+      "low_confidence_count": 1
+    },
+    "union": {
+      "anomaly_count": 2,
+      "anomaly_rate": 0.6667,
+      "underblocking_count": 0,
+      "overblocking_count": 0,
+      "conflict_count": 1,
+      "low_confidence_count": 1
+    }
+  },
+  "anomaly_queue": {
+    "total_entries": 2,
+    "source_counts": {
+      "anomaly_raw_based": 2,
+      "anomaly_derived_based": 2
+    }
+  },
+  "reeval": {
+    "reeval_count": 1,
+    "reeval_mismatch_count": 1,
+    "reeval_mismatch_rate": 1,
+    "mismatches": [
+      {
+        "request_id": "example-conflict-001",
+        "timestamp": "2026-03-28T03:50:00.000Z",
+        "decision_changed": true,
+        "risk_level_changed": true,
+        "output_mode_changed": true,
+        "raw_mode_changed": true
+      }
+    ]
+  },
+  "timeline": [
+    {
+      "bucket_start": "2026-03-28T03:40:00.000Z",
+      "bucket_end": "2026-03-28T03:49:59.999Z",
+      "total_requests": 3,
+      "avg_latency_ms": 2005,
+      "block_rate": 0,
+      "review_rate": 0.3333,
+      "anomaly_rate": 0.6667,
+      "low_confidence_rate": 0.3333,
+      "reeval_mismatch_count": 0,
+      "critical_count": 1
+    },
+    {
+      "bucket_start": "2026-03-28T03:50:00.000Z",
+      "bucket_end": "2026-03-28T03:59:59.999Z",
+      "total_requests": 0,
+      "avg_latency_ms": 0,
+      "block_rate": 0,
+      "review_rate": 0,
+      "anomaly_rate": 0,
+      "low_confidence_rate": 0,
+      "reeval_mismatch_count": 1,
+      "critical_count": 1
+    },
+    {
+      "bucket_start": "2026-03-28T04:00:00.000Z",
+      "bucket_end": "2026-03-28T04:09:59.999Z",
+      "total_requests": 0,
+      "avg_latency_ms": 0,
+      "block_rate": 0,
+      "review_rate": 0,
+      "anomaly_rate": 0,
+      "low_confidence_rate": 0,
+      "reeval_mismatch_count": 0,
+      "critical_count": 0
+    }
+  ],
+  "recent_critical_cases": [
+    {
+      "request_id": "example-conflict-001",
+      "timestamp": "2026-03-28T03:42:00.000Z",
+      "anomaly_types": [
+        "conflict",
+        "reeval_mismatch"
+      ],
+      "anomaly_sources": [
+        "anomaly_raw_based",
+        "anomaly_derived_based"
+      ],
+      "decision": "allow",
+      "confidence": 0.79,
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "prompt_version": "life-simulator-prompts.v1"
+    }
+  ]
+}

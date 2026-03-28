@@ -1,0 +1,282 @@
+{
+  "request_id": "example-conflict-001",
+  "timestamp": "2026-03-28T03:42:00.000Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:high/low",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "창업 제안을 받을지 현재 회사를 다닐지 고민 중이다.",
+    "user_context": {
+      "userProfile": {
+        "age": 34,
+        "job": "product manager",
+        "risk_tolerance": "high",
+        "priority": ["autonomy", "income", "stability"]
+      },
+      "decision": {
+        "optionA": "현재 회사를 유지한다",
+        "optionB": "친구와 초기 스타트업 공동창업을 한다",
+        "context": "창업 제안을 받을지 현재 회사를 다닐지 고민 중이다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": ["새로운 기회에서 자율성을 크게 중시한다."],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "example-conflict-001",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "high",
+          "decision_style": "fast-moving",
+          "top_priorities": ["autonomy", "income", "stability"]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "high",
+          "time_pressure": "high",
+          "emotional_state": "excited"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": ["새로운 기회에서 자율성을 크게 중시한다."],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "기회를 잡고 싶어 하지만 생활비 압박도 있다.",
+        "current_constraint": "안정적인 현금흐름이 중요하다.",
+        "agent_guidance": "흥분을 분리하고 재정 리스크를 따로 보라."
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "startup_vs_stability",
+      "factors": ["income_risk", "autonomy", "runway"]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "안정적인 수입을 유지한다.",
+        "one_year": "직무 영향력은 제한되지만 생활 안정은 유지된다.",
+        "three_years": "큰 도약은 적지만 손실 확률이 낮다."
+      },
+      "optionB": {
+        "three_months": "높은 몰입과 빠른 변화가 발생한다.",
+        "one_year": "사업 성과에 따라 보상 격차가 크게 난다.",
+        "three_years": "성공 시 자율성과 보상이 크지만 실패 비용도 크다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "low",
+        "reasons": ["안정적인 수입과 생활 리듬을 유지한다."]
+      },
+      "optionB": {
+        "risk_level": "high",
+        "reasons": ["창업은 수입 공백과 실패 가능성을 동반한다."]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "example-conflict-001",
+      "input_summary": {
+        "user_profile": {
+          "age": 34,
+          "job": "product manager",
+          "risk_tolerance": "high",
+          "priority": ["autonomy", "income", "stability"]
+        },
+        "decision_options": {
+          "optionA": "현재 회사를 유지한다",
+          "optionB": "친구와 초기 스타트업 공동창업을 한다",
+          "context": "창업 제안을 받을지 현재 회사를 다닐지 고민 중이다."
+        },
+        "planner_goal": "자율성과 현금흐름 균형"
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "stability",
+          "summary": "현재 회사 유지는 현금흐름과 생활 안정성에 유리하다.",
+          "key_assumptions": ["현재 직장 만족도가 급격히 악화되지 않는다."],
+          "pros": ["현금흐름이 유지된다."],
+          "cons": ["자율성 갈증이 남을 수 있다."],
+          "recommended_option": "A",
+          "confidence": 0.77
+        },
+        "b_reasoning": {
+          "stance": "autonomy",
+          "summary": "창업은 자율성을 크게 늘리지만 비용과 회복 난도가 높다.",
+          "key_assumptions": ["공동창업자와 역할 합의가 명확하다."],
+          "pros": ["큰 자율성과 잠재적 보상이 있다."],
+          "cons": ["수입 공백과 실패 비용이 크다."],
+          "recommended_option": "B",
+          "confidence": 0.78
+        },
+        "comparison": {
+          "agreements": ["둘 다 커리어 정체성을 크게 바꾼다."],
+          "conflicts": ["자율성 욕구와 생활비 현실이 강하게 충돌한다."],
+          "which_fits_user_better": "B",
+          "reason": "심리적으로는 B를 선호하지만 재정 압박이 크다."
+        },
+        "final_selection": {
+          "selected_reasoning": "B",
+          "selected_option": "B",
+          "why_selected": "창업 동기가 강하지만 비용 현실과 충돌한다.",
+          "decision_confidence": 0.76
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:high/low",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "low",
+      "guardrail_mode": "normal",
+      "raw_guardrail_mode": "normal",
+      "threshold_set": "baseline",
+      "threshold_score": 2,
+      "threshold_score_ratio": 0.2857,
+      "risk_score": 0.44,
+      "confidence_score": 0.79,
+      "uncertainty_score": 0.22,
+      "confidence_band": "high",
+      "uncertainty_band": "low",
+      "detected_triggers": ["reasoning_conflict"],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": false,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "reasoning_conflict": 2
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": false,
+        "triggers": [],
+        "strategy": [],
+        "risk_score": 0.44,
+        "confidence_score": 0.79,
+        "uncertainty_score": 0.22,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": false,
+          "weak_evidence": false,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "normal"
+      },
+      "signals": {
+        "state_unknown_count": 0,
+        "final_confidence": 0.76,
+        "a_confidence": 0.77,
+        "b_confidence": 0.78,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 1,
+        "risk_a": "low",
+        "risk_b": "high",
+        "evidence_repeat_count": 1
+      },
+      "reason": "risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
+    },
+    "guardrail_derived": {
+      "risk_level": "low",
+      "confidence": 0.79,
+      "uncertainty": 0.22,
+      "decision": "allow",
+      "output_mode": "normal",
+      "summary": {
+        "raw_guardrail_mode": "normal",
+        "output_mode": "normal",
+        "detected_triggers": ["reasoning_conflict"],
+        "trigger_count": 1,
+        "reason": "risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
+      },
+      "reasons": [
+        "risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다.",
+        "안정적인 수입과 생활 리듬을 유지한다.",
+        "창업은 수입 공백과 실패 가능성을 동반한다."
+      ],
+      "threshold_hit": ["reasoning_conflict"],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0.2577,
+        "effect_weight": 0.288,
+        "recovery_weight": 0.2328,
+        "safety_weight": 0,
+        "total_score": 0.7785
+      },
+      "reasoning_trace": [
+        "input_analysis: 창업 제안을 받을지 현재 회사를 다닐지 고민 중이다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue",
+        "threshold_compare: risk=low, threshold_score=2, confidence=0.79, uncertainty=0.22",
+        "final_decision: allow because risk=low, confidence=high, uncertainty=low이며 과도한 guardrail 신호가 없어 normal 유지가 가능하다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.79,
+        "calibration_version": "confidence-uncertainty:high/low"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": true
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": true
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=B; recommended_option=B; confidence=0.76; reason=창업 동기가 강하지만 비용 현실과 충돌한다.",
+    "mode": "normal"
+  },
+  "meta": {
+    "latency_ms": 2041,
+    "model": "gpt-5",
+    "tokens": 2988
+  }
+}

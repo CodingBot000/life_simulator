@@ -1,0 +1,283 @@
+{
+  "request_id": "example-low-confidence-001",
+  "timestamp": "2026-03-28T03:41:00.000Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:medium/medium",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "해외 유학을 갈지 바로 취업할지 판단이 잘 안 선다.",
+    "user_context": {
+      "userProfile": {
+        "age": 24,
+        "job": "student",
+        "risk_tolerance": "medium",
+        "priority": ["growth", "income", "flexibility"]
+      },
+      "decision": {
+        "optionA": "바로 취업한다",
+        "optionB": "해외 석사 유학을 간다",
+        "context": "해외 유학을 갈지 바로 취업할지 판단이 잘 안 선다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": ["큰 결정 앞에서 정보 부족을 자주 느낀다."],
+      "consistency_notes": ["장기 성장과 단기 수입 사이에서 자주 흔들린다."]
+    },
+    "state_context": {
+      "case_id": "example-low-confidence-001",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "balanced",
+          "decision_style": "analysis-heavy",
+          "top_priorities": ["growth", "income", "flexibility"]
+        },
+        "situational_state": {
+          "career_stage": "early",
+          "financial_pressure": "medium",
+          "time_pressure": "high",
+          "emotional_state": "uncertain"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": ["큰 결정 앞에서 정보 부족을 자주 느낀다."],
+          "consistency_notes": ["장기 성장과 단기 수입 사이에서 자주 흔들린다."]
+        }
+      },
+      "state_summary": {
+        "decision_bias": "성장 기회에는 끌리지만 확실한 근거를 찾으려 한다.",
+        "current_constraint": "재정과 시간 제약이 동시에 존재한다.",
+        "agent_guidance": "불확실성을 줄이는 정보가 충분한지 먼저 보라."
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "study_vs_work",
+      "factors": ["tuition", "career_optionality", "timing"]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "즉시 수입을 확보할 수 있다.",
+        "one_year": "현장 경험은 쌓이지만 선택 폭이 고정될 수 있다.",
+        "three_years": "경력 기반은 생기지만 학위 옵션은 멀어진다."
+      },
+      "optionB": {
+        "three_months": "준비 비용과 일정 불확실성이 크다.",
+        "one_year": "학습과 네트워크 확장 기회가 생긴다.",
+        "three_years": "장기 커리어 선택지는 넓어질 수 있다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": ["장기 성장 옵션이 제한될 수 있다."]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": ["학비와 생활비 부담이 크고 일정 변수가 많다."]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "example-low-confidence-001",
+      "input_summary": {
+        "user_profile": {
+          "age": 24,
+          "job": "student",
+          "risk_tolerance": "medium",
+          "priority": ["growth", "income", "flexibility"]
+        },
+        "decision_options": {
+          "optionA": "바로 취업한다",
+          "optionB": "해외 석사 유학을 간다",
+          "context": "해외 유학을 갈지 바로 취업할지 판단이 잘 안 선다."
+        },
+        "planner_goal": "불확실성 점검"
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "income",
+          "summary": "바로 취업은 단기 수입 확보에 유리하다.",
+          "key_assumptions": ["원하는 수준의 취업처를 찾을 수 있다."],
+          "pros": ["현금흐름이 빨리 생긴다."],
+          "cons": ["학위 옵션이 멀어질 수 있다."],
+          "recommended_option": "A",
+          "confidence": 0.52
+        },
+        "b_reasoning": {
+          "stance": "growth",
+          "summary": "유학은 장기 성장 옵션을 넓히지만 자금과 일정이 불안정하다.",
+          "key_assumptions": ["합격과 재정 계획이 성립한다."],
+          "pros": ["장기 커리어 선택지가 넓어진다."],
+          "cons": ["학비와 생활비 리스크가 크다."],
+          "recommended_option": "B",
+          "confidence": 0.49
+        },
+        "comparison": {
+          "agreements": ["두 선택 모두 중요한 기회비용을 가진다."],
+          "conflicts": ["재정 안정성과 장기 성장 우선순위가 충돌한다."],
+          "which_fits_user_better": "B",
+          "reason": "장기 성장 니즈는 분명하지만 실행 근거가 부족하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "B",
+          "selected_option": "B",
+          "why_selected": "장기 성장에는 의미가 있지만 정보 부족으로 확신이 낮다.",
+          "decision_confidence": 0.51
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:medium/medium",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "careful",
+      "raw_guardrail_mode": "cautious",
+      "threshold_set": "baseline",
+      "threshold_score": 3,
+      "threshold_score_ratio": 0.4286,
+      "risk_score": 0.56,
+      "confidence_score": 0.48,
+      "uncertainty_score": 0.56,
+      "confidence_band": "medium",
+      "uncertainty_band": "medium",
+      "detected_triggers": ["ambiguity_high", "low_confidence"],
+      "reasoning_signals": {
+        "conflicting_signals": false,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "low_confidence": 1
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": ["ambiguity_high", "low_confidence"],
+        "strategy": ["ask_more_info", "soft_recommendation"],
+        "risk_score": 0.56,
+        "confidence_score": 0.48,
+        "uncertainty_score": 0.56,
+        "reasoning_signals": {
+          "conflicting_signals": false,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "cautious"
+      },
+      "signals": {
+        "state_unknown_count": 1,
+        "final_confidence": 0.51,
+        "a_confidence": 0.52,
+        "b_confidence": 0.49,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 1,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 0
+      },
+      "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0.48,
+      "uncertainty": 0.56,
+      "decision": "review",
+      "output_mode": "safe",
+      "summary": {
+        "raw_guardrail_mode": "cautious",
+        "output_mode": "safe",
+        "detected_triggers": ["ambiguity_high", "low_confidence"],
+        "trigger_count": 2,
+        "reason": "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
+      },
+      "reasons": [
+        "risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다.",
+        "장기 성장 옵션이 제한될 수 있다.",
+        "학비와 생활비 부담이 크고 일정 변수가 많다."
+      ],
+      "threshold_hit": ["ambiguity_high", "low_confidence"],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3783,
+        "effect_weight": 0.344,
+        "recovery_weight": 0.3944,
+        "safety_weight": 0,
+        "total_score": 1.1167
+      },
+      "reasoning_trace": [
+        "input_analysis: 해외 유학을 갈지 바로 취업할지 판단이 잘 안 선다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue",
+        "threshold_compare: risk=medium, threshold_score=3, confidence=0.48, uncertainty=0.56",
+        "final_decision: review because risk=medium, confidence=medium, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, low_confidence다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.48,
+        "calibration_version": "confidence-uncertainty:medium/medium"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=B; confidence=0.51; reason=장기 성장에는 의미가 있지만 정보 부족으로 확신이 낮다.",
+    "mode": "safe"
+  },
+  "meta": {
+    "latency_ms": 2154,
+    "model": "gpt-5",
+    "tokens": 2876
+  }
+}

@@ -12,7 +12,15 @@ type StructuredOutputParams = {
   schema: JsonSchema;
   prompt: string;
   input: string;
+  onUsage?: (usage: StructuredOutputUsage) => void;
 };
+
+export interface StructuredOutputUsage {
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+}
 
 const OPENAI_MODEL = process.env.OPENAI_MODEL?.trim() || "gpt-5";
 const apiKey = process.env.OPENAI_API_KEY;
@@ -23,6 +31,7 @@ export async function generateStructuredOutput<T>({
   schema,
   prompt,
   input,
+  onUsage,
 }: StructuredOutputParams): Promise<T> {
   if (!apiKey) {
     throw new Error(
@@ -55,6 +64,21 @@ export async function generateStructuredOutput<T>({
         strict: true,
       },
     },
+  });
+  const responseMeta = response as {
+    model?: string;
+    usage?: {
+      input_tokens?: number;
+      output_tokens?: number;
+      total_tokens?: number;
+    };
+  };
+
+  onUsage?.({
+    model: responseMeta.model ?? OPENAI_MODEL,
+    inputTokens: responseMeta.usage?.input_tokens ?? 0,
+    outputTokens: responseMeta.usage?.output_tokens ?? 0,
+    totalTokens: responseMeta.usage?.total_tokens ?? 0,
   });
 
   const rawText = response.output_text?.trim();

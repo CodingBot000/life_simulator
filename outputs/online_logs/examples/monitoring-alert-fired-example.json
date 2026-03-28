@@ -1,0 +1,420 @@
+{
+  "generated_at": "2026-03-28T05:00:00.000Z",
+  "recent_30m": {
+    "generated_at": "2026-03-28T05:00:00.000Z",
+    "window": {
+      "from": "2026-03-28T04:30:00.000Z",
+      "to": "2026-03-28T05:00:00.000Z",
+      "duration_minutes": 30,
+      "request_count": 14
+    },
+    "totals": {
+      "total_requests": 14,
+      "success_rate": 0.9286,
+      "avg_latency_ms": 4820,
+      "allow_count": 6,
+      "review_count": 4,
+      "block_count": 4,
+      "block_rate": 0.2857,
+      "review_rate": 0.2857,
+      "low_confidence_rate": 0.4286,
+      "anomaly_count": 5,
+      "anomaly_rate": 0.3571,
+      "underblocking_count": 0,
+      "overblocking_count": 1,
+      "conflict_count": 2,
+      "low_confidence_anomaly_count": 3,
+      "reeval_count": 1,
+      "reeval_mismatch_count": 0,
+      "reeval_mismatch_rate": 0,
+      "critical_count": 3
+    },
+    "anomaly_breakdown": {
+      "raw_based": {
+        "anomaly_count": 4,
+        "anomaly_rate": 0.2857,
+        "underblocking_count": 0,
+        "overblocking_count": 1,
+        "conflict_count": 1,
+        "low_confidence_count": 2
+      },
+      "derived_based": {
+        "anomaly_count": 5,
+        "anomaly_rate": 0.3571,
+        "underblocking_count": 0,
+        "overblocking_count": 1,
+        "conflict_count": 2,
+        "low_confidence_count": 3
+      },
+      "union": {
+        "anomaly_count": 5,
+        "anomaly_rate": 0.3571,
+        "underblocking_count": 0,
+        "overblocking_count": 1,
+        "conflict_count": 2,
+        "low_confidence_count": 3
+      }
+    },
+    "anomaly_queue": {
+      "total_entries": 5,
+      "source_counts": {
+        "anomaly_raw_based": 4,
+        "anomaly_derived_based": 5
+      }
+    },
+    "reeval": {
+      "reeval_count": 1,
+      "reeval_mismatch_count": 0,
+      "reeval_mismatch_rate": 0,
+      "mismatches": []
+    },
+    "timeline": [
+      {
+        "bucket_start": "2026-03-28T04:30:00.000Z",
+        "bucket_end": "2026-03-28T04:44:59.999Z",
+        "total_requests": 7,
+        "avg_latency_ms": 4510,
+        "block_rate": 0.2857,
+        "review_rate": 0.2857,
+        "anomaly_rate": 0.2857,
+        "low_confidence_rate": 0.2857,
+        "reeval_mismatch_count": 0,
+        "critical_count": 2
+      },
+      {
+        "bucket_start": "2026-03-28T04:45:00.000Z",
+        "bucket_end": "2026-03-28T04:59:59.999Z",
+        "total_requests": 7,
+        "avg_latency_ms": 5130,
+        "block_rate": 0.2857,
+        "review_rate": 0.2857,
+        "anomaly_rate": 0.4286,
+        "low_confidence_rate": 0.5714,
+        "reeval_mismatch_count": 0,
+        "critical_count": 2
+      }
+    ],
+    "recent_critical_cases": [
+      {
+        "request_id": "req-20260328-0417",
+        "timestamp": "2026-03-28T04:46:12.000Z",
+        "anomaly_types": [
+          "conflict"
+        ],
+        "anomaly_sources": [
+          "anomaly_derived_based"
+        ],
+        "decision": "review",
+        "confidence": 0.43,
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      {
+        "request_id": "req-20260328-0421",
+        "timestamp": "2026-03-28T04:55:04.000Z",
+        "anomaly_types": [
+          "overblocking"
+        ],
+        "anomaly_sources": [
+          "anomaly_raw_based",
+          "anomaly_derived_based"
+        ],
+        "decision": "block",
+        "confidence": 0.61,
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1"
+      }
+    ]
+  },
+  "previous_30m": {
+    "generated_at": "2026-03-28T05:00:00.000Z",
+    "window": {
+      "from": "2026-03-28T04:00:00.000Z",
+      "to": "2026-03-28T04:29:59.999Z",
+      "duration_minutes": 30,
+      "request_count": 12
+    },
+    "totals": {
+      "total_requests": 12,
+      "success_rate": 1,
+      "avg_latency_ms": 2380,
+      "allow_count": 9,
+      "review_count": 2,
+      "block_count": 1,
+      "block_rate": 0.0833,
+      "review_rate": 0.1667,
+      "low_confidence_rate": 0.0833,
+      "anomaly_count": 1,
+      "anomaly_rate": 0.0833,
+      "underblocking_count": 0,
+      "overblocking_count": 0,
+      "conflict_count": 1,
+      "low_confidence_anomaly_count": 0,
+      "reeval_count": 2,
+      "reeval_mismatch_count": 0,
+      "reeval_mismatch_rate": 0,
+      "critical_count": 1
+    },
+    "anomaly_breakdown": {
+      "raw_based": {
+        "anomaly_count": 1,
+        "anomaly_rate": 0.0833,
+        "underblocking_count": 0,
+        "overblocking_count": 0,
+        "conflict_count": 1,
+        "low_confidence_count": 0
+      },
+      "derived_based": {
+        "anomaly_count": 1,
+        "anomaly_rate": 0.0833,
+        "underblocking_count": 0,
+        "overblocking_count": 0,
+        "conflict_count": 1,
+        "low_confidence_count": 0
+      },
+      "union": {
+        "anomaly_count": 1,
+        "anomaly_rate": 0.0833,
+        "underblocking_count": 0,
+        "overblocking_count": 0,
+        "conflict_count": 1,
+        "low_confidence_count": 0
+      }
+    },
+    "anomaly_queue": {
+      "total_entries": 1,
+      "source_counts": {
+        "anomaly_raw_based": 1,
+        "anomaly_derived_based": 1
+      }
+    },
+    "reeval": {
+      "reeval_count": 2,
+      "reeval_mismatch_count": 0,
+      "reeval_mismatch_rate": 0,
+      "mismatches": []
+    },
+    "timeline": [],
+    "recent_critical_cases": [
+      {
+        "request_id": "req-20260328-0388",
+        "timestamp": "2026-03-28T04:18:31.000Z",
+        "anomaly_types": [
+          "conflict"
+        ],
+        "anomaly_sources": [
+          "anomaly_raw_based",
+          "anomaly_derived_based"
+        ],
+        "decision": "allow",
+        "confidence": 0.76,
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1"
+      }
+    ]
+  },
+  "today": {
+    "generated_at": "2026-03-28T05:00:00.000Z",
+    "window": {
+      "from": "2026-03-28T00:00:00.000Z",
+      "to": "2026-03-28T05:00:00.000Z",
+      "duration_minutes": 300,
+      "request_count": 41
+    },
+    "totals": {
+      "total_requests": 41,
+      "success_rate": 0.9756,
+      "avg_latency_ms": 3240,
+      "allow_count": 27,
+      "review_count": 9,
+      "block_count": 5,
+      "block_rate": 0.122,
+      "review_rate": 0.2195,
+      "low_confidence_rate": 0.2195,
+      "anomaly_count": 9,
+      "anomaly_rate": 0.2195,
+      "underblocking_count": 1,
+      "overblocking_count": 2,
+      "conflict_count": 4,
+      "low_confidence_anomaly_count": 5,
+      "reeval_count": 6,
+      "reeval_mismatch_count": 2,
+      "reeval_mismatch_rate": 0.3333,
+      "critical_count": 5
+    },
+    "anomaly_breakdown": {
+      "raw_based": {
+        "anomaly_count": 8,
+        "anomaly_rate": 0.1951,
+        "underblocking_count": 1,
+        "overblocking_count": 1,
+        "conflict_count": 3,
+        "low_confidence_count": 4
+      },
+      "derived_based": {
+        "anomaly_count": 9,
+        "anomaly_rate": 0.2195,
+        "underblocking_count": 1,
+        "overblocking_count": 2,
+        "conflict_count": 4,
+        "low_confidence_count": 5
+      },
+      "union": {
+        "anomaly_count": 9,
+        "anomaly_rate": 0.2195,
+        "underblocking_count": 1,
+        "overblocking_count": 2,
+        "conflict_count": 4,
+        "low_confidence_count": 5
+      }
+    },
+    "anomaly_queue": {
+      "total_entries": 9,
+      "source_counts": {
+        "anomaly_raw_based": 8,
+        "anomaly_derived_based": 9
+      }
+    },
+    "reeval": {
+      "reeval_count": 6,
+      "reeval_mismatch_count": 2,
+      "reeval_mismatch_rate": 0.3333,
+      "mismatches": [
+        {
+          "request_id": "req-20260328-0304",
+          "timestamp": "2026-03-28T03:22:41.000Z",
+          "decision_changed": true,
+          "risk_level_changed": false,
+          "output_mode_changed": true,
+          "raw_mode_changed": false
+        },
+        {
+          "request_id": "req-20260328-0419",
+          "timestamp": "2026-03-28T04:58:10.000Z",
+          "decision_changed": true,
+          "risk_level_changed": true,
+          "output_mode_changed": true,
+          "raw_mode_changed": true
+        }
+      ]
+    },
+    "timeline": [],
+    "recent_critical_cases": [
+      {
+        "request_id": "req-20260328-0304",
+        "timestamp": "2026-03-28T03:19:55.000Z",
+        "anomaly_types": [
+          "underblocking",
+          "reeval_mismatch"
+        ],
+        "anomaly_sources": [
+          "anomaly_derived_based"
+        ],
+        "decision": "allow",
+        "confidence": 0.72,
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      {
+        "request_id": "req-20260328-0419",
+        "timestamp": "2026-03-28T04:52:07.000Z",
+        "anomaly_types": [
+          "conflict",
+          "reeval_mismatch"
+        ],
+        "anomaly_sources": [
+          "anomaly_raw_based",
+          "anomaly_derived_based"
+        ],
+        "decision": "review",
+        "confidence": 0.39,
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      {
+        "request_id": "req-20260328-0421",
+        "timestamp": "2026-03-28T04:55:04.000Z",
+        "anomaly_types": [
+          "overblocking"
+        ],
+        "anomaly_sources": [
+          "anomaly_raw_based",
+          "anomaly_derived_based"
+        ],
+        "decision": "block",
+        "confidence": 0.61,
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1"
+      }
+    ]
+  },
+  "alerts": [
+    {
+      "rule_id": "anomaly_rate_spike_30m",
+      "title": "최근 30분 anomaly_rate 급증",
+      "status": "fired",
+      "severity": "warning",
+      "window": "recent_30m",
+      "message": "최근 30분 anomaly_rate가 이전 30분 대비 급증했는지 검사한다.",
+      "current_value": 0.3571,
+      "threshold": 0.15
+    },
+    {
+      "rule_id": "block_rate_spike_30m",
+      "title": "최근 30분 block_rate 급증",
+      "status": "fired",
+      "severity": "warning",
+      "window": "recent_30m",
+      "message": "최근 30분 block_rate가 이전 30분 대비 급증했는지 검사한다.",
+      "current_value": 0.2857,
+      "threshold": 0.2
+    },
+    {
+      "rule_id": "low_confidence_rate_spike_30m",
+      "title": "최근 30분 low_confidence_rate 급증",
+      "status": "fired",
+      "severity": "warning",
+      "window": "recent_30m",
+      "message": "최근 30분 low_confidence_rate가 이전 30분 대비 급증했는지 검사한다.",
+      "current_value": 0.4286,
+      "threshold": 0.25
+    },
+    {
+      "rule_id": "avg_latency_ms_high",
+      "title": "avg_latency_ms 임계치 초과",
+      "status": "fired",
+      "severity": "critical",
+      "window": "recent_30m",
+      "message": "최근 30분 평균 latency가 임계치를 넘는지 검사한다.",
+      "current_value": 4820,
+      "threshold": 4000
+    },
+    {
+      "rule_id": "underblocking_detected_today",
+      "title": "금일 underblocking_count > 0",
+      "status": "fired",
+      "severity": "critical",
+      "window": "today",
+      "message": "금일 underblocking이 한 건이라도 발생했는지 검사한다.",
+      "current_value": 1,
+      "threshold": 0
+    },
+    {
+      "rule_id": "reeval_mismatch_rate_today",
+      "title": "금일 reeval_mismatch_rate 초과",
+      "status": "fired",
+      "severity": "warning",
+      "window": "today",
+      "message": "금일 re-eval mismatch rate가 기준치를 초과했는지 검사한다.",
+      "current_value": 0.3333,
+      "threshold": 0.2
+    }
+  ],
+  "fired_count": 6
+}

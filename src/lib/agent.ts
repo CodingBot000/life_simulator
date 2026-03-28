@@ -1,5 +1,7 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
+
 import {
   abReasoningPrompt,
   abReasoningSchema,
@@ -16,8 +18,16 @@ import {
   stateLoaderPrompt,
   stateLoaderSchema,
 } from "@/lib/prompts";
-import { generateStructuredOutput } from "@/lib/openai";
-import { evaluateGuardrailArtifacts } from "@/lib/guardrail-eval";
+import { OPENAI_MODEL, generateStructuredOutput } from "@/lib/openai";
+import {
+  evaluateGuardrailArtifacts,
+  type GuardrailEvaluationActual,
+} from "@/lib/guardrail-eval";
+import { buildRequestLog, logRequest } from "@/lib/logger/requestLogger";
+import {
+  hasAnomaly,
+} from "@/lib/monitoring/anomalyDetector";
+import { enqueueAnomaly } from "@/lib/monitoring/anomalyQueue";
 import type {
   AbReasoningResult,
   AdvisorResult,
@@ -28,18 +38,16 @@ import type {
   ReflectionResult,
   RiskResult,
   ScenarioResult,
+  SimulationRequest,
   SimulationResponse,
   StateContext,
   StateHints,
   UserProfile,
 } from "@/lib/types";
+import type { StructuredOutputUsage } from "@/lib/openai";
 
-type CaseInputPayload = {
-  userProfile: UserProfile;
-  decision: DecisionInput;
-  prior_memory?: Partial<MemoryState>;
-  state_hints?: StateHints;
-};
+type CaseInputPayload = SimulationRequest;
+type UsageRecorder = (usage: StructuredOutputUsage) => void;
 
 const FULL_SELECTED_PATH = [
   "planner",
@@ -100,6 +108,7 @@ function buildCaseInput(
 export async function runStateLoader(
   caseId: string,
   caseInput: CaseInputPayload,
+  onUsage?: UsageRecorder,
 ): Promise<StateContext> {
   return generateStructuredOutput<StateContext>({
     schemaName: "state_context",
@@ -109,6 +118,7 @@ export async function runStateLoader(
       caseId,
       caseInput,
     }),
+    onUsage,
   });
 }
 
@@ -116,6 +126,7 @@ export async function runPlanner(
   caseId: string,
   caseInput: CaseInputPayload,
   stateContext: StateContext,
+  onUsage?: UsageRecorder,
 ): Promise<PlannerResult> {
   return generateStructuredOutput<PlannerResult>({
     schemaName: "planner_result",
@@ -126,6 +137,7 @@ export async function runPlanner(
       caseInput,
       stateContext,
     }),
+    onUsage,
   });
 }
 
@@ -134,6 +146,7 @@ export async function runScenarioA(
   caseInput: CaseInputPayload,
   stateContext: StateContext,
   planner: PlannerResult,
+  onUsage?: UsageRecorder,
 ): Promise<ScenarioResult> {
   return generateStructuredOutput<ScenarioResult>({
     schemaName: "scenario_a_result",
@@ -149,6 +162,7 @@ export async function runScenarioA(
       factors: planner.factors,
       plannerResult: planner,
     }),
+    onUsage,
   });
 }
 
@@ -157,6 +171,7 @@ export async function runScenarioB(
   caseInput: CaseInputPayload,
   stateContext: StateContext,
   planner: PlannerResult,
+  onUsage?: UsageRecorder,
 ): Promise<ScenarioResult> {
   return generateStructuredOutput<ScenarioResult>({
     schemaName: "scenario_b_result",
@@ -172,6 +187,7 @@ export async function runScenarioB(
       factors: planner.factors,
       plannerResult: planner,
     }),
+    onUsage,
   });
 }
 
@@ -181,6 +197,7 @@ export async function runRiskA(
   stateContext: StateContext,
   planner: PlannerResult,
   scenarioA: ScenarioResult,
+  onUsage?: UsageRecorder,
 ): Promise<RiskResult> {
   return generateStructuredOutput<RiskResult>({
     schemaName: "risk_a_result",
@@ -197,6 +214,7 @@ export async function runRiskA(
       plannerResult: planner,
       scenario: scenarioA,
     }),
+    onUsage,
   });
 }
 
@@ -206,6 +224,7 @@ export async function runRiskB(
   stateContext: StateContext,
   planner: PlannerResult,
   scenarioB: ScenarioResult,
+  onUsage?: UsageRecorder,
 ): Promise<RiskResult> {
   return generateStructuredOutput<RiskResult>({
     schemaName: "risk_b_result",
@@ -222,6 +241,7 @@ export async function runRiskB(
       plannerResult: planner,
       scenario: scenarioB,
     }),
+    onUsage,
   });
 }
 
@@ -234,6 +254,7 @@ export async function runAbReasoning(
   scenarioB: ScenarioResult,
   riskA: RiskResult,
   riskB: RiskResult,
+  onUsage?: UsageRecorder,
 ): Promise<AbReasoningResult> {
   return generateStructuredOutput<AbReasoningResult>({
     schemaName: "ab_reasoning_result",
@@ -249,6 +270,7 @@ export async function runAbReasoning(
       riskA,
       riskB,
     }),
+    onUsage,
   });
 }
 
@@ -263,6 +285,7 @@ export async function runAdvisor(
   riskB: RiskResult,
   reasoning: AbReasoningResult,
   guardrail: GuardrailResult,
+  onUsage?: UsageRecorder,
 ): Promise<AdvisorResult> {
   return generateStructuredOutput<AdvisorResult>({
     schemaName: "advisor_result",
@@ -285,6 +308,7 @@ export async function runAdvisor(
       abReasoning: reasoning,
       guardrailResult: guardrail,
     }),
+    onUsage,
   });
 }
 
@@ -298,14 +322,14 @@ export async function runGuardrail(
   riskA: RiskResult,
   riskB: RiskResult,
   reasoning: AbReasoningResult,
-): Promise<GuardrailResult> {
+): Promise<GuardrailEvaluationActual> {
   return evaluateGuardrailArtifacts({
     stateContext,
     riskA,
     riskB,
     reasoning,
     userInput: caseInput.decision.context,
-  }).guardrail_result;
+  });
 }
 
 export async function runReflection(
@@ -320,6 +344,7 @@ export async function runReflection(
   reasoning: AbReasoningResult,
   guardrail: GuardrailResult,
   advisor: AdvisorResult,
+  onUsage?: UsageRecorder,
 ): Promise<ReflectionResult> {
   return generateStructuredOutput<ReflectionResult>({
     schemaName: "reflection_result",
@@ -338,6 +363,7 @@ export async function runReflection(
       guardrailResult: guardrail,
       advisorResult: advisor,
     }),
+    onUsage,
   });
 }
 
@@ -347,24 +373,61 @@ export async function runSimulationChain(
   priorMemory?: Partial<MemoryState>,
   stateHints?: StateHints,
 ): Promise<SimulationResponse> {
-  const caseId = "interactive-session";
+  const requestId = randomUUID();
+  const sessionId = "interactive-session";
+  const caseId = requestId;
+  const startedAt = Date.now();
+  const usageTotals = {
+    model: OPENAI_MODEL,
+    tokens: 0,
+  };
+  const recordUsage: UsageRecorder = (usage) => {
+    usageTotals.model = usage.model || usageTotals.model;
+    usageTotals.tokens += usage.totalTokens;
+  };
   const caseInput = buildCaseInput(userProfile, decision, priorMemory, stateHints);
-  const stateContext = await runStateLoader(caseId, caseInput);
+  const stateContext = await runStateLoader(caseId, caseInput, recordUsage);
   logStep("stateContext", stateContext);
 
-  const planner = await runPlanner(caseId, caseInput, stateContext);
+  const planner = await runPlanner(caseId, caseInput, stateContext, recordUsage);
   logStep("planner", planner);
 
-  const scenarioA = await runScenarioA(caseId, caseInput, stateContext, planner);
+  const scenarioA = await runScenarioA(
+    caseId,
+    caseInput,
+    stateContext,
+    planner,
+    recordUsage,
+  );
   logStep("scenarioA", scenarioA);
 
-  const scenarioB = await runScenarioB(caseId, caseInput, stateContext, planner);
+  const scenarioB = await runScenarioB(
+    caseId,
+    caseInput,
+    stateContext,
+    planner,
+    recordUsage,
+  );
   logStep("scenarioB", scenarioB);
 
-  const riskA = await runRiskA(caseId, caseInput, stateContext, planner, scenarioA);
+  const riskA = await runRiskA(
+    caseId,
+    caseInput,
+    stateContext,
+    planner,
+    scenarioA,
+    recordUsage,
+  );
   logStep("riskA", riskA);
 
-  const riskB = await runRiskB(caseId, caseInput, stateContext, planner, scenarioB);
+  const riskB = await runRiskB(
+    caseId,
+    caseInput,
+    stateContext,
+    planner,
+    scenarioB,
+    recordUsage,
+  );
   logStep("riskB", riskB);
 
   const reasoning = await runAbReasoning(
@@ -376,10 +439,11 @@ export async function runSimulationChain(
     scenarioB,
     riskA,
     riskB,
+    recordUsage,
   );
   logStep("reasoning", reasoning);
 
-  const guardrail = await runGuardrail(
+  const guardrailEvaluation = await runGuardrail(
     caseId,
     caseInput,
     stateContext,
@@ -390,6 +454,7 @@ export async function runSimulationChain(
     riskB,
     reasoning,
   );
+  const guardrail = guardrailEvaluation.guardrail_result;
   logStep("guardrail", guardrail);
 
   const advisor = await runAdvisor(
@@ -403,6 +468,7 @@ export async function runSimulationChain(
     riskB,
     reasoning,
     guardrail,
+    recordUsage,
   );
   logStep("advisor", advisor);
 
@@ -418,10 +484,12 @@ export async function runSimulationChain(
     reasoning,
     guardrail,
     advisor,
+    recordUsage,
   );
   logStep("reflection", reflection);
 
-  return {
+  const response: SimulationResponse = {
+    request_id: requestId,
     stateContext,
     planner,
     scenarioA,
@@ -433,4 +501,34 @@ export async function runSimulationChain(
     advisor,
     reflection,
   };
+
+  try {
+    const requestLog = buildRequestLog({
+      requestId,
+      sessionId,
+      input: caseInput,
+      stateContext,
+      planner,
+      scenarioA,
+      scenarioB,
+      riskA,
+      riskB,
+      reasoning,
+      guardrailEvaluation,
+      advisor,
+      latencyMs: Date.now() - startedAt,
+      model: usageTotals.model,
+      tokens: usageTotals.tokens,
+    });
+
+    await logRequest(requestLog);
+
+    if (hasAnomaly(requestLog)) {
+      await enqueueAnomaly(requestLog);
+    }
+  } catch (error) {
+    console.error("[simulate] failed to persist online logs", error);
+  }
+
+  return response;
 }
