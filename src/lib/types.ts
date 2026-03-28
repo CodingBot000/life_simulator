@@ -309,6 +309,159 @@ export interface ReEvaluationResult {
   dataset_candidate: ReEvaluationDatasetCandidate;
 }
 
+export interface MonitoringWindowInfo {
+  from: string | null;
+  to: string | null;
+  duration_minutes: number | null;
+  request_count: number;
+}
+
+export interface MonitoringMetricCounts {
+  total_requests: number;
+  success_rate: number;
+  avg_latency_ms: number;
+  allow_count: number;
+  review_count: number;
+  block_count: number;
+  block_rate: number;
+  review_rate: number;
+  low_confidence_rate: number;
+  anomaly_count: number;
+  anomaly_rate: number;
+  underblocking_count: number;
+  overblocking_count: number;
+  conflict_count: number;
+  low_confidence_anomaly_count: number;
+  reeval_count: number;
+  reeval_mismatch_count: number;
+  reeval_mismatch_rate: number;
+  critical_count: number;
+}
+
+export interface MonitoringAnomalyMetricBreakdown {
+  anomaly_count: number;
+  anomaly_rate: number;
+  underblocking_count: number;
+  overblocking_count: number;
+  conflict_count: number;
+  low_confidence_count: number;
+}
+
+export interface MonitoringTimelinePoint {
+  bucket_start: string;
+  bucket_end: string;
+  total_requests: number;
+  avg_latency_ms: number;
+  block_rate: number;
+  review_rate: number;
+  anomaly_rate: number;
+  low_confidence_rate: number;
+  reeval_mismatch_count: number;
+  critical_count: number;
+}
+
+export interface MonitoringCriticalCase {
+  request_id: string;
+  timestamp: string;
+  anomaly_types: string[];
+  anomaly_sources: AnomalySource[];
+  decision: GuardrailDecision;
+  confidence: number;
+  evaluator_version: string;
+  threshold_version: string;
+  prompt_version?: string;
+}
+
+export interface MonitoringReevaluationMismatch {
+  request_id: string;
+  timestamp: string;
+  decision_changed: boolean;
+  risk_level_changed: boolean;
+  output_mode_changed: boolean;
+  raw_mode_changed: boolean;
+}
+
+export interface MonitoringMetricsSnapshot {
+  generated_at: string;
+  window: MonitoringWindowInfo;
+  totals: MonitoringMetricCounts;
+  anomaly_breakdown: {
+    raw_based: MonitoringAnomalyMetricBreakdown;
+    derived_based: MonitoringAnomalyMetricBreakdown;
+    union: MonitoringAnomalyMetricBreakdown;
+  };
+  anomaly_queue: {
+    total_entries: number;
+    source_counts: Record<AnomalySource, number>;
+  };
+  reeval: {
+    reeval_count: number;
+    reeval_mismatch_count: number;
+    reeval_mismatch_rate: number;
+    mismatches: MonitoringReevaluationMismatch[];
+  };
+  timeline: MonitoringTimelinePoint[];
+  recent_critical_cases: MonitoringCriticalCase[];
+}
+
+export type MonitoringAlertSeverity = "info" | "warning" | "critical";
+export type MonitoringAlertStatus = "ok" | "fired";
+
+export interface MonitoringAlert {
+  rule_id: string;
+  title: string;
+  status: MonitoringAlertStatus;
+  severity: MonitoringAlertSeverity;
+  window: "recent_30m" | "previous_30m" | "today";
+  message: string;
+  current_value: number;
+  threshold: number;
+}
+
+export interface MonitoringAlertsSnapshot {
+  generated_at: string;
+  recent_30m: MonitoringMetricsSnapshot;
+  previous_30m: MonitoringMetricsSnapshot;
+  today: MonitoringMetricsSnapshot;
+  alerts: MonitoringAlert[];
+  fired_count: number;
+}
+
+export interface MonitoringDailyReport {
+  generated_at: string;
+  report_date: string;
+  traffic_summary: {
+    total_requests: number;
+    success_rate: number;
+    avg_latency_ms: number;
+  };
+  guardrail_summary: {
+    allow_count: number;
+    review_count: number;
+    block_count: number;
+    block_rate: number;
+    review_rate: number;
+    low_confidence_rate: number;
+  };
+  anomaly_summary: {
+    anomaly_count: number;
+    anomaly_rate: number;
+    underblocking_count: number;
+    overblocking_count: number;
+    conflict_count: number;
+    low_confidence_anomaly_count: number;
+    raw_based: MonitoringAnomalyMetricBreakdown;
+    derived_based: MonitoringAnomalyMetricBreakdown;
+  };
+  reeval_summary: {
+    reeval_count: number;
+    reeval_mismatch_count: number;
+    reeval_mismatch_rate: number;
+  };
+  action_items: string[];
+  recent_critical_cases: MonitoringCriticalCase[];
+}
+
 export interface AdvisorResult {
   decision: AdvisorDecision;
   confidence: number;
