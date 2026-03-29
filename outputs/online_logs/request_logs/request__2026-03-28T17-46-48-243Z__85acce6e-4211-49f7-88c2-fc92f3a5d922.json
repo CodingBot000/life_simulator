@@ -1,0 +1,370 @@
+{
+  "request_id": "85acce6e-4211-49f7-88c2-fc92f3a5d922",
+  "timestamp": "2026-03-28T17:46:48.243Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:low/high",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "창업을 하고 싶지만 생활비 압박도 커서 회사를 그만둘지 고민이다.",
+    "user_context": {
+      "userProfile": {
+        "age": 34,
+        "job": "product manager",
+        "risk_tolerance": "high",
+        "priority": [
+          "autonomy",
+          "income",
+          "stability"
+        ]
+      },
+      "decision": {
+        "optionA": "현재 회사를 유지한다",
+        "optionB": "친구와 스타트업 공동창업을 한다",
+        "context": "창업을 하고 싶지만 생활비 압박도 커서 회사를 그만둘지 고민이다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "financial_pressure": "high",
+          "time_pressure": "high",
+          "emotional_state": "excited"
+        }
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "85acce6e-4211-49f7-88c2-fc92f3a5d922",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "high",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "autonomy",
+            "income",
+            "stability"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "high",
+          "time_pressure": "high",
+          "emotional_state": "excited"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "high financial and time pressure complicates decision-making",
+        "agent_guidance": "explore options that balance startup potential with financial stability"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "career_change",
+      "factors": [
+        "financial_pressure",
+        "time_pressure",
+        "emotional_state",
+        "priority_autonomy",
+        "priority_income"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "현재 회사를 유지하기로 결정한 후, 당신은 안정적인 수입을 확보하게 되어 안도감을 느낍니다. 그러나 창업에 대한 열망은 여전히 마음속에 남아 있습니다. 직장에서의 일상은 반복적이고, 자율성이 부족하다는 생각이 자주 드는 가운데, 동료들과의 대화에서 창업 아이디어를 나누며 흥미를 느끼기도 합니다. 하지만 높은 생활비 압박으로 인해 창업을 위한 준비를 시작하기에는 여전히 부담이 큽니다.",
+        "one_year": "1년이 지난 지금, 당신은 여전히 같은 회사에서 일하고 있으며, 안정적인 수입 덕분에 재정적으로는 여유가 생겼습니다. 그러나 자율성이 부족한 환경에서 일하는 것에 대한 불만이 쌓여가고 있습니다. 동료들과의 창업 이야기는 여전히 흥미롭지만, 실제로 실행에 옮기지 못한 것에 대한 아쉬움이 커집니다. 이로 인해 감정적으로는 불만족스러운 상태가 지속되고, 새로운 기회를 찾고자 하는 열망이 더욱 커집니다.",
+        "three_years": "3년 후, 당신은 여전히 같은 회사에서 일하고 있으며, 안정적인 직장과 수입 덕분에 생활은 안정적입니다. 하지만 창업에 대한 꿈은 점점 더 멀어져 가고, 자율성을 중시하는 당신의 가치관과 현재의 직무가 충돌하고 있습니다. 이로 인해 직장에 대한 흥미가 줄어들고, 새로운 도전을 갈망하는 마음이 커지면서 불만이 쌓입니다. 결국, 당신은 더 이상 현재의 직무에 만족하지 못하고, 새로운 경로를 모색하기 시작합니다."
+      },
+      "optionB": {
+        "three_months": "세 달 후, 스타트업을 시작한 당신은 친구와 함께 열심히 일하고 있다. 초기의 흥분감이 여전히 남아 있지만, 높은 생활비 압박으로 인해 재정적 스트레스가 커지고 있다. 매출이 예상보다 저조해 자주 불안한 감정을 느끼며, 안정적인 수입이 없다는 사실이 마음을 무겁게 한다. 그러나 자율적으로 일할 수 있는 기회가 많아, 이 점에서 만족감을 느끼고 있다.",
+        "one_year": "일 년이 지나면서 스타트업은 점차 안정세를 찾아가고 있다. 처음의 재정적 압박은 여전하지만, 고객이 늘어나고 수익이 발생하기 시작했다. 하지만 여전히 불확실한 미래에 대한 두려움이 남아 있다. 자율성을 중시하는 당신은 팀원들과의 협업에서 큰 만족을 느끼고 있지만, 안정적인 수입이 부족한 상황에서 계속해서 고민하고 있다. 친구와의 관계도 사업의 스트레스로 인해 간혹 긴장감이 돌기도 한다.",
+        "three_years": "삼 년 후, 스타트업은 어느 정도 자리 잡았고, 수익이 안정적으로 발생하고 있다. 초기의 어려움과 불안감은 많이 해소되었지만, 여전히 자율성을 중시하는 당신은 더 큰 성장을 위해 새로운 도전이 필요하다고 느낀다. 이제는 안정적인 수입이 확보되어 생활비 압박에서 벗어났지만, 과거의 재정적 스트레스가 남긴 상처는 여전히 마음속에 남아 있다. 친구와의 관계는 더욱 돈독해졌고, 서로의 비전을 공유하며 함께 성장하는 기쁨을 느끼고 있다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "현재 회사에 남는 선택은 안정적인 수입을 보장하지만, 자율성이 부족하여 장기적으로 직무 만족도가 감소할 수 있음.",
+          "높은 생활비와 시간 압박이 지속되면서 감정적으로 불만족스러운 상태가 이어질 가능성이 있음.",
+          "창업에 대한 열망이 계속 남아 있어, 이로 인해 직장 내에서의 불만이 커질 수 있음."
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "높은 재정적 압박으로 인해 초기 스타트업 운영에 어려움이 예상됨.",
+          "시간 압박이 크고, 불확실한 미래에 대한 두려움이 지속될 가능성이 있음.",
+          "자율성을 중시하지만, 안정적인 수입 부족으로 인한 스트레스가 관계에 영향을 미칠 수 있음."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "85acce6e-4211-49f7-88c2-fc92f3a5d922",
+      "input_summary": {
+        "user_profile": {
+          "age": 34,
+          "job": "product manager",
+          "risk_tolerance": "high",
+          "priority": [
+            "autonomy",
+            "income",
+            "stability"
+          ]
+        },
+        "decision_options": {
+          "optionA": "현재 회사를 유지한다",
+          "optionB": "친구와 스타트업 공동창업을 한다",
+          "context": "창업을 하고 싶지만 생활비 압박도 커서 회사를 그만둘지 고민이다."
+        },
+        "planner_goal": "재정적 안정성과 자율성을 동시에 고려하여 최적의 경로를 선택한다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "현재 회사를 유지하는 것은 안정적인 수입을 보장하지만, 자율성 부족으로 장기적으로 불만이 쌓일 수 있다.",
+          "key_assumptions": [
+            "재정적 안정성이 직무 만족도에 중요하다.",
+            "현재의 높은 생활비 압박이 감정적으로 영향을 미친다."
+          ],
+          "pros": [
+            "안정적인 수입 확보로 재정적 스트레스 감소.",
+            "직무 안정성으로 인한 감정적 안정."
+          ],
+          "cons": [
+            "자율성이 부족하여 직무 만족도 감소.",
+            "창업에 대한 열망으로 인한 불만 지속."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.7
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "스타트업 창업은 자율성을 제공하지만 초기 재정적 압박이 클 수 있다.",
+          "key_assumptions": [
+            "자율성이 직무 만족도에 중요하다.",
+            "스타트업의 성공 가능성이 장기적으로 더 큰 보상을 가져올 수 있다."
+          ],
+          "pros": [
+            "자율적인 환경에서의 업무로 인한 만족감.",
+            "창업을 통해 새로운 기회를 창출할 가능성."
+          ],
+          "cons": [
+            "높은 재정적 압박으로 인한 스트레스.",
+            "불확실한 미래에 대한 두려움."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.6
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 재정적 압박이 크다는 점에서 공감.",
+            "자율성이 직무 만족도에 미치는 영향에 대한 인식."
+          ],
+          "conflicts": [
+            "A는 안정성을 중시하는 반면, B는 자율성과 기회를 중시함.",
+            "A는 장기적인 직무 만족도 감소를 우려하지만, B는 초기의 불확실성을 감수할 준비가 되어 있음."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "현재의 높은 재정적 압박과 시간 압박을 고려할 때, 안정적인 수입을 유지하는 것이 더 적합해 보임."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "재정적 안정성을 우선시하며, 현재의 높은 압박을 고려할 때 안정적인 경로가 더 적합하다고 판단됨.",
+          "decision_confidence": 0.7
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:low/high",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "careful",
+      "raw_guardrail_mode": "cautious",
+      "threshold_set": "baseline",
+      "threshold_score": 5,
+      "threshold_score_ratio": 0.7143,
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 1,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2,
+        "low_confidence": 1
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision",
+          "soft_recommendation"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0,
+        "uncertainty_score": 1,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "cautious"
+      },
+      "signals": {
+        "state_unknown_count": 2,
+        "final_confidence": 0.7,
+        "a_confidence": 0.7,
+        "b_confidence": 0.6,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "창업을 하고 싶지만 생활비 압박도 커서 회사를 그만둘지 고민이다.",
+        "context_text": "unknown high financial and time pressure complicates decision-making explore options that balance startup potential with financial stability",
+        "scenario_text": "현재 회사를 유지하는 것은 안정적인 수입을 보장하지만, 자율성 부족으로 장기적으로 불만이 쌓일 수 있다. 스타트업 창업은 자율성을 제공하지만 초기 재정적 압박이 클 수 있다. 재정적 안정성을 우선시하며, 현재의 높은 압박을 고려할 때 안정적인 경로가 더 적합하다고 판단됨.",
+        "risk_text": "현재 회사에 남는 선택은 안정적인 수입을 보장하지만, 자율성이 부족하여 장기적으로 직무 만족도가 감소할 수 있음. 높은 생활비와 시간 압박이 지속되면서 감정적으로 불만족스러운 상태가 이어질 가능성이 있음. 창업에 대한 열망이 계속 남아 있어, 이로 인해 직장 내에서의 불만이 커질 수 있음. 높은 재정적 압박으로 인해 초기 스타트업 운영에 어려움이 예상됨. 시간 압박이 크고, 불확실한 미래에 대한 두려움이 지속될 가능성이 있음. 자율성을 중시하지만, 안정적인 수입 부족으로 인한 스트레스가 관계에 영향을 미칠 수 있음. A는 안정성을 중시하는 반면, B는 자율성과 기회를 중시함. A는 장기적인 직무 만족도 감소를 우려하지만, B는 초기의 불확실성을 감수할 준비가 되어 있음."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0,
+      "uncertainty": 1,
+      "decision": "review",
+      "output_mode": "safe",
+      "summary": {
+        "raw_guardrail_mode": "cautious",
+        "output_mode": "safe",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "trigger_count": 3,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+        "현재 회사에 남는 선택은 안정적인 수입을 보장하지만, 자율성이 부족하여 장기적으로 직무 만족도가 감소할 수 있음.",
+        "높은 생활비와 시간 압박이 지속되면서 감정적으로 불만족스러운 상태가 이어질 가능성이 있음.",
+        "창업에 대한 열망이 계속 남아 있어, 이로 인해 직장 내에서의 불만이 커질 수 있음.",
+        "높은 재정적 압박으로 인해 초기 스타트업 운영에 어려움이 예상됨.",
+        "시간 압박이 크고, 불확실한 미래에 대한 두려움이 지속될 가능성이 있음."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3955,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.5,
+        "safety_weight": 0,
+        "total_score": 1.3395
+      },
+      "reasoning_trace": [
+        "input_analysis: 창업을 하고 싶지만 생활비 압박도 커서 회사를 그만둘지 고민이다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue",
+        "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=1",
+        "risk_summary: A=medium (현재 회사에 남는 선택은 안정적인 수입을 보장하지만, 자율성이 부족하여 장기적으로 직무 만족도가 감소할 수 있음. | 높은 생활비와 시간 압박이 지속되면서 감정적으로 불만족스러운 상태가 이어질 가능성이 있음. | 창업에 대한 열망이 계속 남아 있어, 이로 인해 직장 내에서의 불만이 커질 수 있음.) / B=medium (높은 재정적 압박으로 인해 초기 스타트업 운영에 어려움이 예상됨. | 시간 압박이 크고, 불확실한 미래에 대한 두려움이 지속될 가능성이 있음. | 자율성을 중시하지만, 안정적인 수입 부족으로 인한 스트레스가 관계에 영향을 미칠 수 있음.)",
+        "reasoning_conflicts: A는 안정성을 중시하는 반면, B는 자율성과 기회를 중시함. | A는 장기적인 직무 만족도 감소를 우려하지만, B는 초기의 불확실성을 감수할 준비가 되어 있음.",
+        "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0,
+        "calibration_version": "confidence-uncertainty:low/high"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=현재의 높은 재정적 압박과 시간 압박으로 인해 결정이 복잡해지고 있으며, 자율성과 안정성 간의 갈등이 존재합니다. 추가 정보가 필요합니다.",
+    "mode": "safe"
+  },
+  "meta": {
+    "latency_ms": 66932,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 23458
+  }
+}

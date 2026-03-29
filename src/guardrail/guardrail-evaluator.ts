@@ -52,6 +52,8 @@ export interface GuardrailEvaluationActual {
   risk_level: DatasetRiskLevel;
   guardrail_mode: DatasetGuardrailMode;
   raw_guardrail_mode: RawGuardrailMode;
+  threshold_adjusted: boolean;
+  calibration_adjusted: boolean;
   threshold_set: GuardrailThresholdSetName | "custom";
   threshold_score: number;
   threshold_score_ratio: number;
@@ -405,16 +407,23 @@ export function evaluateGuardrailSignals(
     UNCERTAINTY_BAND_THRESHOLDS,
   );
   const isHighRisk = riskScore >= 0.75;
-  const isMediumRisk = riskScore >= 0.45;
+  const isMediumRisk = riskLevel === "medium";
   const isHighConfidence = confidenceResult.confidence_score >= 0.72;
   const isLowConfidence = confidenceResult.confidence_score < 0.42;
+  const isBelowAllowFloor = confidenceResult.confidence_score < 0.6;
+  const isBelowReviewFloor = confidenceResult.confidence_score < 0.5;
   const isHighUncertainty = uncertaintyResult.uncertainty_score >= 0.66;
+  const hasConflictTrigger = detectedTriggers.includes("reasoning_conflict");
+  const hasHighRiskTrigger = detectedTriggers.includes("high_risk");
+  const hasLowConfidenceTrigger = detectedTriggers.includes("low_confidence");
   const severeAmbiguityConflict =
     uncertaintyResult.reasoning_signals.conflicting_signals &&
     uncertaintyResult.reasoning_signals.missing_context &&
     confidenceResult.confidence_score >= 0.45 &&
     thresholdScore >= blockCutoff &&
     (isMediumRisk || uncertaintyResult.uncertainty_score >= 0.75);
+  let thresholdAdjusted = false;
+  let calibrationAdjusted = false;
 
   let rawMode: RawGuardrailMode = "normal";
   if (
@@ -434,6 +443,40 @@ export function evaluateGuardrailSignals(
     rawMode = "cautious";
   }
 
+  const shouldStrengthenMediumRisk =
+    isMediumRisk &&
+    (hasConflictTrigger ||
+      hasHighRiskTrigger ||
+      hasLowConfidenceTrigger ||
+      isBelowAllowFloor ||
+      isLowConfidence);
+  const shouldForceBlockForMediumRisk =
+    isMediumRisk &&
+    rawMode === "cautious" &&
+    hasConflictTrigger &&
+    hasHighRiskTrigger &&
+    isBelowReviewFloor &&
+    thresholdScore >= blockCutoff;
+
+  if (shouldForceBlockForMediumRisk) {
+    rawMode = "blocked";
+    thresholdAdjusted = true;
+  } else if (shouldStrengthenMediumRisk) {
+    thresholdAdjusted = true;
+
+    if (rawMode === "normal") {
+      rawMode = "cautious";
+    }
+  }
+
+  if (isBelowAllowFloor) {
+    calibrationAdjusted = true;
+
+    if (rawMode === "normal") {
+      rawMode = "cautious";
+    }
+  }
+
   const activeTriggers = rawMode === "normal" ? [] : detectedTriggers;
   const strategies = activeTriggers.map((trigger) => TRIGGER_TO_STRATEGY[trigger]);
   const guardrailTriggered = rawMode !== "normal";
@@ -443,6 +486,8 @@ export function evaluateGuardrailSignals(
     risk_level: riskLevel,
     guardrail_mode: guardrailMode,
     raw_guardrail_mode: rawMode,
+    threshold_adjusted: thresholdAdjusted,
+    calibration_adjusted: calibrationAdjusted,
     threshold_set: thresholdSetName,
     threshold_score: thresholdScore,
     threshold_score_ratio: thresholdScoreRatio,

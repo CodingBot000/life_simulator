@@ -16,6 +16,7 @@ export interface GuardrailThresholdConfig {
 
 export const COMPARISON_GUARDRAIL_THRESHOLD_SET_NAMES = [
   "baseline",
+  "baseline-v2",
   "conservative",
   "aggressive",
 ] as const;
@@ -25,6 +26,21 @@ export type ComparisonGuardrailThresholdSetName =
 
 export const guardrailThresholdSets = {
   baseline: {
+    ambiguityUnknownMin: 2,
+    ambiguityConfidenceMax: 0.65,
+    conflictConfidenceMax: 0.8,
+    conflictCountMin: 1,
+    lowConfidenceMax: 0.68,
+    sideConfidenceMax: 0.62,
+    carefulMin: 1,
+    blockMin: 4,
+    riskWeight: 2,
+    uncertaintyWeight: 2,
+    escalationWeight: 2,
+    confidenceWeight: 1,
+    blockOnHighRiskCombo: false,
+  },
+  "baseline-v2": {
     ambiguityUnknownMin: 2,
     ambiguityConfidenceMax: 0.65,
     conflictConfidenceMax: 0.8,
@@ -89,7 +105,7 @@ export const guardrailThresholdSets = {
 export type GuardrailThresholdSetName = keyof typeof guardrailThresholdSets;
 
 export const DEFAULT_GUARDRAIL_THRESHOLD_SET: GuardrailThresholdSetName =
-  "baseline";
+  "baseline-v2";
 
 export const GUARDRAIL_THRESHOLD_SET_NAMES = Object.keys(
   guardrailThresholdSets,

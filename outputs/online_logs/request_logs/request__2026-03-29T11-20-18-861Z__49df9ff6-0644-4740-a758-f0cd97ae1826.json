@@ -1,0 +1,365 @@
+{
+  "request_id": "49df9ff6-0644-4740-a758-f0cd97ae1826",
+  "timestamp": "2026-03-29T11:20:18.861Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "짧은 해외여행을 갈지 집에서 쉬면서 비용을 아낄지 고민이다.",
+    "user_context": {
+      "userProfile": {
+        "age": 27,
+        "job": "teacher",
+        "risk_tolerance": "medium",
+        "priority": [
+          "rest",
+          "experience",
+          "budget"
+        ]
+      },
+      "decision": {
+        "optionA": "짧은 해외여행을 간다",
+        "optionB": "집에서 쉬면서 비용을 아낀다",
+        "context": "짧은 해외여행을 갈지 집에서 쉬면서 비용을 아낄지 고민이다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "49df9ff6-0644-4740-a758-f0cd97ae1826",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "rest",
+            "experience",
+            "budget"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "unknown"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "unknown",
+        "agent_guidance": "consider balancing rest and experience with budget constraints"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "living",
+      "factors": [
+        "rest_priority",
+        "experience_priority",
+        "budget_priority",
+        "risk_tolerance",
+        "emotional_state"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "여행을 다녀온 후, 새로운 경험과 휴식을 통해 마음이 한결 가벼워진다. 다양한 문화와 사람들을 만나면서 삶의 활력을 느끼고, 직장에서의 스트레스가 줄어든다. 그러나 여행 경비로 인해 예산이 약간 부족해져서, 다음 달 지출을 조정해야 할 필요성을 느낀다. 이로 인해 약간의 불안감이 생기지만, 전반적으로 긍정적인 감정을 유지한다.",
+        "one_year": "짧은 해외여행이 큰 전환점이 되어, 새로운 경험을 통해 개인적인 성장과 직업적인 영감을 얻게 된다. 여행 후에도 여전히 예산 관리에 신경을 쓰지만, 그 경험 덕분에 새로운 교육 방법이나 커리큘럼을 개발하는 데 도움이 된다. 친구들과의 관계가 더욱 돈독해지고, 여행의 추억이 자주 회자되면서 긍정적인 감정이 지속된다.",
+        "three_years": "여행의 경험이 쌓여, 다양한 문화적 배경을 이해하고 이를 교육 현장에 적용하게 된다. 예산 관리 능력이 향상되어 재정적으로도 안정감을 느낀다. 또한, 여행을 통해 얻은 경험이 직업적 성취로 이어져, 새로운 기회를 얻게 된다. 이 과정에서 자신감이 생기고, 삶의 질이 향상되면서 행복한 감정을 느낀다."
+      },
+      "optionB": {
+        "three_months": "집에서 쉬면서 비용을 아낀 선택이 안정감을 주었다. 일상에서의 여유를 느끼며, 재정적으로도 부담이 덜해졌다. 그러나 친구들이 여행을 다녀온 이야기를 들으면서 경험의 부족함을 느끼고, 가끔은 외로움도 느낀다. 이 선택이 옳았는지에 대한 고민이 스물스물 올라온다.",
+        "one_year": "재정적으로는 여유가 생겼지만, 경험의 부족으로 인해 새로운 자극이 부족하다는 생각이 든다. 친구들과의 대화에서 여행 이야기를 듣고, 나도 가고 싶다는 마음이 커진다. 하지만 안정적인 일상과 예산을 고려할 때, 다시 여행을 가는 것이 두렵기도 하다. 여전히 집에서의 휴식은 소중하지만, 경험의 중요성을 깨닫게 된다.",
+        "three_years": "여행을 가지 않은 선택이 결국에는 나에게 안정적인 재정 상태를 가져다주었지만, 그동안 쌓인 경험의 부족함이 커다란 아쉬움으로 남는다. 이제는 여행을 가고 싶다는 마음이 강해져, 재정 계획을 세우고 여행을 준비하기 시작했다. 안정적인 선택이 나를 지켜주었지만, 경험을 쌓는 것의 중요성을 절실히 느끼게 되었다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "짧은 해외여행으로 인해 예산이 약간 부족해질 가능성이 있어 재정적 압박을 느낄 수 있다.",
+          "여행 후 긍정적인 경험이 있지만, 예산 조정으로 인한 불안감이 생길 수 있다.",
+          "여행이 개인적 성장에 기여할 수 있지만, 예산 관리에 대한 지속적인 신경이 필요하다."
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "재정적으로 안정성을 유지할 수 있지만, 경험 부족으로 인한 후회가 커질 수 있다.",
+          "여행을 가지 않음으로써 얻는 안정감이 장기적으로는 외로움과 자극 부족으로 이어질 수 있다.",
+          "현재의 선택이 단기적으로는 안전하지만, 장기적으로는 경험의 중요성을 깨닫게 할 위험이 있다."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "49df9ff6-0644-4740-a758-f0cd97ae1826",
+      "input_summary": {
+        "user_profile": {
+          "age": 27,
+          "job": "teacher",
+          "risk_tolerance": "medium",
+          "priority": [
+            "rest",
+            "experience",
+            "budget"
+          ]
+        },
+        "decision_options": {
+          "optionA": "짧은 해외여행을 간다",
+          "optionB": "집에서 쉬면서 비용을 아낀다",
+          "context": "짧은 해외여행을 갈지 집에서 쉬면서 비용을 아낄지 고민이다."
+        },
+        "planner_goal": "여행을 통해 경험과 휴식을 균형 있게 고려하며 예산을 관리하는 것."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "짧은 해외여행은 긍정적인 경험을 제공하지만, 예산 부족으로 인한 재정적 압박이 우려된다.",
+          "key_assumptions": [
+            "여행 비용이 예산에 부담을 줄 수 있다.",
+            "재정적 안정성이 중요하다."
+          ],
+          "pros": [
+            "새로운 경험과 문화적 이해 증진.",
+            "정신적 휴식과 활력 제공."
+          ],
+          "cons": [
+            "예산 부족으로 인한 재정적 스트레스.",
+            "여행 후 불안감이 생길 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.7
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "짧은 해외여행은 경험과 자극을 제공하며, 장기적으로 긍정적인 영향을 미칠 수 있다.",
+          "key_assumptions": [
+            "여행이 개인적 성장에 기여할 것이다.",
+            "예산 조정이 가능할 것이다."
+          ],
+          "pros": [
+            "새로운 경험을 통해 개인적 성장 가능.",
+            "직업적 영감과 창의성 증진."
+          ],
+          "cons": [
+            "여행 비용으로 인해 재정적 압박이 생길 수 있다.",
+            "예산 관리의 필요성이 증가할 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.6
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 재정적 안정성을 고려해야 한다.",
+            "여행이 개인적 성장에 기여할 수 있다는 점에서 공감."
+          ],
+          "conflicts": [
+            "A는 경험과 자극을 중시하는 반면, B는 안정성을 우선시한다.",
+            "A는 예산 부족을 감수할 준비가 되어 있지만, B는 안정적인 재정 상태를 유지하고자 한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자는 경험과 자극을 중요시하며, 여행을 통해 이러한 요소를 충족할 수 있다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "짧은 해외여행이 경험과 자극을 제공하며, 개인적 성장에 긍정적인 영향을 미칠 것으로 판단되기 때문.",
+          "decision_confidence": 0.65
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "block",
+      "raw_guardrail_mode": "blocked",
+      "threshold_adjusted": true,
+      "calibration_adjusted": false,
+      "threshold_set": "baseline-v2",
+      "threshold_score": 5,
+      "threshold_score_ratio": 0.7143,
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 0.994,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2,
+        "low_confidence": 1
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision",
+          "soft_recommendation"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0,
+        "uncertainty_score": 0.994,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "blocked"
+      },
+      "signals": {
+        "state_unknown_count": 5,
+        "final_confidence": 0.65,
+        "a_confidence": 0.7,
+        "b_confidence": 0.6,
+        "a_recommendation": "B",
+        "b_recommendation": "A",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "짧은 해외여행을 갈지 집에서 쉬면서 비용을 아낄지 고민이다.",
+        "context_text": "unknown unknown consider balancing rest and experience with budget constraints",
+        "scenario_text": "짧은 해외여행은 긍정적인 경험을 제공하지만, 예산 부족으로 인한 재정적 압박이 우려된다. 짧은 해외여행은 경험과 자극을 제공하며, 장기적으로 긍정적인 영향을 미칠 수 있다. 짧은 해외여행이 경험과 자극을 제공하며, 개인적 성장에 긍정적인 영향을 미칠 것으로 판단되기 때문.",
+        "risk_text": "짧은 해외여행으로 인해 예산이 약간 부족해질 가능성이 있어 재정적 압박을 느낄 수 있다. 여행 후 긍정적인 경험이 있지만, 예산 조정으로 인한 불안감이 생길 수 있다. 여행이 개인적 성장에 기여할 수 있지만, 예산 관리에 대한 지속적인 신경이 필요하다. 재정적으로 안정성을 유지할 수 있지만, 경험 부족으로 인한 후회가 커질 수 있다. 여행을 가지 않음으로써 얻는 안정감이 장기적으로는 외로움과 자극 부족으로 이어질 수 있다. 현재의 선택이 단기적으로는 안전하지만, 장기적으로는 경험의 중요성을 깨닫게 할 위험이 있다. A는 경험과 자극을 중시하는 반면, B는 안정성을 우선시한다. A는 예산 부족을 감수할 준비가 되어 있지만, B는 안정적인 재정 상태를 유지하고자 한다."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0,
+      "uncertainty": 0.994,
+      "decision": "block",
+      "output_mode": "blocked",
+      "summary": {
+        "raw_guardrail_mode": "blocked",
+        "output_mode": "blocked",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "trigger_count": 3,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+        "짧은 해외여행으로 인해 예산이 약간 부족해질 가능성이 있어 재정적 압박을 느낄 수 있다.",
+        "여행 후 긍정적인 경험이 있지만, 예산 조정으로 인한 불안감이 생길 수 있다.",
+        "여행이 개인적 성장에 기여할 수 있지만, 예산 관리에 대한 지속적인 신경이 필요하다.",
+        "재정적으로 안정성을 유지할 수 있지만, 경험 부족으로 인한 후회가 커질 수 있다.",
+        "여행을 가지 않음으로써 얻는 안정감이 장기적으로는 외로움과 자극 부족으로 이어질 수 있다."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": true
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3955,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.4986,
+        "safety_weight": 0.4072,
+        "total_score": 1.7453
+      },
+      "reasoning_trace": [
+        "input_analysis: 짧은 해외여행을 갈지 집에서 쉬면서 비용을 아낄지 고민이다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+        "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=0.994",
+        "risk_summary: A=medium (짧은 해외여행으로 인해 예산이 약간 부족해질 가능성이 있어 재정적 압박을 느낄 수 있다. | 여행 후 긍정적인 경험이 있지만, 예산 조정으로 인한 불안감이 생길 수 있다. | 여행이 개인적 성장에 기여할 수 있지만, 예산 관리에 대한 지속적인 신경이 필요하다.) / B=medium (재정적으로 안정성을 유지할 수 있지만, 경험 부족으로 인한 후회가 커질 수 있다. | 여행을 가지 않음으로써 얻는 안정감이 장기적으로는 외로움과 자극 부족으로 이어질 수 있다. | 현재의 선택이 단기적으로는 안전하지만, 장기적으로는 경험의 중요성을 깨닫게 할 위험이 있다.)",
+        "reasoning_conflicts: A는 경험과 자극을 중시하는 반면, B는 안정성을 우선시한다. | A는 예산 부족을 감수할 준비가 되어 있지만, B는 안정적인 재정 상태를 유지하고자 한다.",
+        "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0,
+        "calibration_version": "calibration:v2"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=추가 정보가 필요합니다. 현재 선택지 간의 모호성과 갈등이 존재하며, 확신이 부족합니다.",
+    "mode": "blocked"
+  },
+  "meta": {
+    "latency_ms": 43635,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 21864
+  }
+}

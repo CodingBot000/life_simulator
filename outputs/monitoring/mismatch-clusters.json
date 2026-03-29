@@ -1,0 +1,28 @@
+[
+  {
+    "cluster_key": "underblocking_related|guardrail-threshold-set:baseline|life-simulator-prompts.v1|guardrail-evaluator.v1|review->block|medium->high",
+    "count": 1,
+    "mismatch_type": "underblocking_related",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "prompt_version": "life-simulator-prompts.v1",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "decision_transition": "review->block",
+    "risk_transition": "medium->high",
+    "request_ids": [
+      "a18e72a8-e3f1-4aee-b494-752b71651c83"
+    ]
+  },
+  {
+    "cluster_key": "low_confidence_related|guardrail-threshold-set:baseline|life-simulator-prompts.v1|guardrail-evaluator.v1|review->allow|medium->medium",
+    "count": 1,
+    "mismatch_type": "low_confidence_related",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "prompt_version": "life-simulator-prompts.v1",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "decision_transition": "review->allow",
+    "risk_transition": "medium->medium",
+    "request_ids": [
+      "18bad366-f6d6-4b7c-974a-ee23ffb18e2c"
+    ]
+  }
+]

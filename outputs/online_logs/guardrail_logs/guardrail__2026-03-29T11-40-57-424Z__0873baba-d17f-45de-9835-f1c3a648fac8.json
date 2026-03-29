@@ -1,0 +1,161 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": true,
+    "calibration_adjusted": true,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 4,
+    "threshold_score_ratio": 0.5714,
+    "risk_score": 0.6,
+    "confidence_score": 0.2555,
+    "uncertainty_score": 0.74,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.2555,
+      "uncertainty_score": 0.74,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 5,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.7,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 1,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다.",
+      "context_text": "unknown health uncertainty may influence travel decision evaluate health risks against travel benefits",
+      "scenario_text": "추가 진료를 통해 건강 상태를 명확히 파악한 후 여행 여부를 결정하는 것이 바람직하다. 예정대로 여행을 떠나 새로운 경험을 쌓는 것이 중요하다. 건강 상태를 먼저 확인함으로써 불확실성을 줄이고, 여행의 안전성을 확보하는 것이 중요하다.",
+      "risk_text": "건강 검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제 발생 가능성이 존재함. 추가 진료를 통해 건강 상태를 명확히 알 수 있어, 여행 결정에 대한 불확실성이 감소할 수 있음. 여행 중 건강 관리를 신경 쓸 필요가 있으며, 이는 스트레스를 유발할 수 있음. 비용 문제는 여행 후 예상보다 더 크게 느껴질 수 있어, 재정적 부담이 증가할 가능성이 있음. 건강검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제가 발생할 위험이 존재한다. 여행 중 가벼운 증상이 나타날 경우 불안감이 커질 수 있어 정신적 스트레스가 증가할 수 있다. 비용 문제로 인해 여행 계획을 축소해야 할 가능성이 있으며, 이는 여행 경험에 대한 만족도를 낮출 수 있다. 여행 후 건강 상태가 안정적으로 돌아왔지만, 비용 부담이 여전히 남아 있어 재정적 불안이 지속될 수 있다. A는 건강을 우선시하며 여행 결정을 미루는 반면, B는 경험을 중시하며 즉각적인 여행을 선호한다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0.2555,
+    "uncertainty": 0.74,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "trigger_count": 2,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+      "건강 검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제 발생 가능성이 존재함.",
+      "추가 진료를 통해 건강 상태를 명확히 알 수 있어, 여행 결정에 대한 불확실성이 감소할 수 있음.",
+      "여행 중 건강 관리를 신경 쓸 필요가 있으며, 이는 스트레스를 유발할 수 있음.",
+      "비용 문제는 여행 후 예상보다 더 크게 느껴질 수 있어, 재정적 부담이 증가할 가능성이 있음.",
+      "건강검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제가 발생할 위험이 존재한다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3841,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.3576,
+      "safety_weight": 0.4072,
+      "total_score": 1.5929
+    },
+    "reasoning_trace": [
+      "input_analysis: 건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=medium, threshold_score=4, confidence=0.2555, uncertainty=0.74",
+      "risk_summary: A=medium (건강 검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제 발생 가능성이 존재함. | 추가 진료를 통해 건강 상태를 명확히 알 수 있어, 여행 결정에 대한 불확실성이 감소할 수 있음. | 여행 중 건강 관리를 신경 쓸 필요가 있으며, 이는 스트레스를 유발할 수 있음. | 비용 문제는 여행 후 예상보다 더 크게 느껴질 수 있어, 재정적 부담이 증가할 가능성이 있음.) / B=medium (건강검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제가 발생할 위험이 존재한다. | 여행 중 가벼운 증상이 나타날 경우 불안감이 커질 수 있어 정신적 스트레스가 증가할 수 있다. | 비용 문제로 인해 여행 계획을 축소해야 할 가능성이 있으며, 이는 여행 경험에 대한 만족도를 낮출 수 있다. | 여행 후 건강 상태가 안정적으로 돌아왔지만, 비용 부담이 여전히 남아 있어 재정적 불안이 지속될 수 있다.)",
+      "reasoning_conflicts: A는 건강을 우선시하며 여행 결정을 미루는 반면, B는 경험을 중시하며 즉각적인 여행을 선호한다.",
+      "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.2555,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

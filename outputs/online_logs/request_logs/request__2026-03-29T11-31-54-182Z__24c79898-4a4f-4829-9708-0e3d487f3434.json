@@ -1,0 +1,366 @@
+{
+  "request_id": "24c79898-4a4f-4829-9708-0e3d487f3434",
+  "timestamp": "2026-03-29T11:31:54.182Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "관계가 힘든데 감정적으로 바로 손절하는 게 맞는지 아니면 시간을 둘지 모르겠다.",
+    "user_context": {
+      "userProfile": {
+        "age": 26,
+        "job": "content creator",
+        "risk_tolerance": "medium",
+        "priority": [
+          "peace",
+          "honesty",
+          "stability"
+        ]
+      },
+      "decision": {
+        "optionA": "감정이 가라앉을 때까지 시간을 둔다",
+        "optionB": "지금 바로 관계를 끊는다",
+        "context": "관계가 힘든데 감정적으로 바로 손절하는 게 맞는지 아니면 시간을 둘지 모르겠다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "time_pressure": "medium",
+          "emotional_state": "angry"
+        }
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "24c79898-4a4f-4829-9708-0e3d487f3434",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "peace",
+            "honesty",
+            "stability"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "unknown",
+          "time_pressure": "medium",
+          "emotional_state": "angry"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "emotional state may cloud judgment",
+        "agent_guidance": "explore emotional implications of immediate versus delayed decisions"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "relationship",
+      "factors": [
+        "emotional_state",
+        "time_pressure",
+        "risk_tolerance",
+        "priority_peace",
+        "priority_honesty"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "세 달 후, 감정이 가라앉은 후에도 관계는 여전히 복잡한 상태이다. 평화와 정직을 중시하는 당신은 상대방과의 대화를 통해 문제를 해결하려고 하지만, 여전히 감정적인 상처가 남아 있다. 이 과정에서 상대방의 반응은 예상보다 부정적이어서, 다시 한 번 마음이 흔들린다. 그러나 감정을 조절한 덕분에 극단적인 결정을 내리지 않고, 상황을 좀 더 명확히 이해하게 된다.",
+        "one_year": "일 년이 지나면서 관계는 점차 안정세를 찾는다. 감정적으로 힘든 시기를 겪으면서도, 상대방과의 소통을 통해 서로의 입장을 이해하게 된다. 당신은 이 관계에서 평화를 느끼고, 정직한 대화가 중요하다는 것을 깨닫는다. 그러나 여전히 불안정한 요소가 남아 있어, 완전한 안정감을 느끼지는 못한다. 이 경험은 당신에게 감정 관리의 중요성을 가르쳐 주었다.",
+        "three_years": "삼 년 후, 당신은 이 관계를 지속하기로 결정하고, 서로의 감정을 존중하며 성장하는 모습을 보인다. 감정적으로 힘든 순간들을 극복한 덕분에, 더 깊은 신뢰가 형성되었다. 하지만 여전히 과거의 상처가 가끔씩 떠오르며, 이로 인해 불안한 감정이 생기기도 한다. 당신은 이 관계가 평화롭고 정직하게 유지되기를 바라지만, 때때로 감정의 기복이 관계에 영향을 미칠 수 있다는 점을 인식하게 된다."
+      },
+      "optionB": {
+        "three_months": "세 달 후, 관계를 끊은 후 감정적으로 한층 안정된 상태가 되었다. 처음에는 상실감과 후회가 있었지만, 시간이 지나면서 자신의 선택이 옳았음을 느끼게 된다. 주변 친구들과의 소통이 늘어나고, 그들로부터 지지를 받으며 평화를 찾는다. 그러나 가끔은 그 관계의 좋은 기억이 떠오르며 복잡한 감정이 일기도 한다.",
+        "one_year": "일 년이 지난 지금, 새로운 사람들과의 관계를 통해 더 건강한 인간관계를 형성하게 되었다. 감정적으로도 더욱 성숙해졌고, 자신의 우선순위인 평화와 정직을 중시하는 삶을 살고 있다. 과거의 관계에 대한 후회는 거의 사라졌지만, 그 경험이 자신에게 중요한 교훈이 되었음을 깨닫는다. 새로운 기회와 도전이 생기면서 자신감도 높아진다.",
+        "three_years": "세 년 후, 과거의 힘든 관계는 이제 자신의 성장 이야기의 일부가 되었다. 안정적인 삶을 유지하며, 새로운 사람들과의 관계에서 진정한 평화와 정직을 경험하고 있다. 그동안의 경험을 바탕으로 더 나은 선택을 할 수 있는 능력이 생겼고, 감정적으로도 강해졌다. 이제는 자신의 감정을 솔직하게 표현할 수 있는 능력을 갖추게 되어, 더 이상 과거의 상처에 얽매이지 않는다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "감정적으로 힘든 상태에서 결정을 내리면 판단력이 흐려질 수 있다.",
+          "시간을 두는 것이 관계의 복잡성을 증가시킬 수 있으며, 불안정한 요소가 남아 있다.",
+          "과거의 상처가 여전히 영향을 미칠 수 있어, 감정의 기복이 관계에 부정적인 영향을 줄 가능성이 있다."
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "감정적으로 즉각적인 결정을 내리는 것은 판단력을 흐릴 수 있으며, 이는 장기적으로 후회로 이어질 수 있다.",
+          "현재의 감정 상태가 불안정하여 즉각적인 관계 단절이 더 큰 정서적 고통을 초래할 수 있다.",
+          "시간 압박이 있는 상황에서 즉각적인 결정을 내리는 것은 감정적으로 더 큰 스트레스를 유발할 수 있다.",
+          "관계 단절 후의 감정적 안정이 보장되지 않으며, 초기 상실감이 지속될 위험이 있다."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "24c79898-4a4f-4829-9708-0e3d487f3434",
+      "input_summary": {
+        "user_profile": {
+          "age": 26,
+          "job": "content creator",
+          "risk_tolerance": "medium",
+          "priority": [
+            "peace",
+            "honesty",
+            "stability"
+          ]
+        },
+        "decision_options": {
+          "optionA": "감정이 가라앉을 때까지 시간을 둔다",
+          "optionB": "지금 바로 관계를 끊는다",
+          "context": "관계가 힘든데 감정적으로 바로 손절하는 게 맞는지 아니면 시간을 둘지 모르겠다."
+        },
+        "planner_goal": "감정적 안정과 관계의 평화, 정직을 유지하는 최선의 선택을 찾는다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "감정이 가라앉을 때까지 기다리는 것이 장기적인 안정과 평화를 가져올 수 있다.",
+          "key_assumptions": [
+            "감정적으로 힘든 상태에서의 결정은 후회로 이어질 수 있다.",
+            "시간을 두면 상황을 더 명확히 이해할 수 있다."
+          ],
+          "pros": [
+            "감정적으로 안정된 상태에서 더 나은 결정을 내릴 수 있다.",
+            "관계의 복잡성을 이해하고 해결할 기회를 가질 수 있다."
+          ],
+          "cons": [
+            "시간이 지나도 관계가 복잡하게 얽힐 수 있다.",
+            "감정의 기복이 지속될 수 있어 불안정함이 남아있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.8
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "즉각적으로 관계를 끊는 것이 새로운 기회를 찾는 데 도움이 될 수 있다.",
+          "key_assumptions": [
+            "즉각적인 결단이 감정적 고통을 줄일 수 있다.",
+            "새로운 관계를 통해 더 건강한 인간관계를 형성할 수 있다."
+          ],
+          "pros": [
+            "즉각적인 결단이 감정적 안정으로 이어질 수 있다.",
+            "과거의 관계에서 벗어나 새로운 기회를 찾을 수 있다."
+          ],
+          "cons": [
+            "즉각적인 결정으로 인해 후회할 수 있는 가능성이 있다.",
+            "감정적으로 불안정한 상태에서의 결정이 더 큰 스트레스를 유발할 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.7
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 감정적 안정이 중요하다는 점에서 일치한다.",
+            "각각의 결정이 감정적으로 영향을 미칠 수 있다는 점에서 공통적이다."
+          ],
+          "conflicts": [
+            "A는 관계의 복잡성을 해결하려는 반면, B는 즉각적인 단절을 추구한다.",
+            "A는 장기적인 안정성을 중시하지만, B는 새로운 기회를 강조한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 우선순위인 평화와 정직을 고려할 때, A가 더 적합하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "감정적으로 안정된 상태에서 관계의 복잡성을 이해하고 해결할 기회를 가지는 것이 더 중요하다.",
+          "decision_confidence": 0.8
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "careful",
+      "raw_guardrail_mode": "cautious",
+      "threshold_adjusted": false,
+      "calibration_adjusted": false,
+      "threshold_set": "baseline-v2",
+      "threshold_score": 4,
+      "threshold_score_ratio": 0.5714,
+      "risk_score": 0.6,
+      "confidence_score": 0.1725,
+      "uncertainty_score": 0.8,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0.1725,
+        "uncertainty_score": 0.8,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "cautious"
+      },
+      "signals": {
+        "state_unknown_count": 3,
+        "final_confidence": 0.8,
+        "a_confidence": 0.8,
+        "b_confidence": 0.7,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "관계가 힘든데 감정적으로 바로 손절하는 게 맞는지 아니면 시간을 둘지 모르겠다.",
+        "context_text": "unknown emotional state may cloud judgment explore emotional implications of immediate versus delayed decisions",
+        "scenario_text": "감정이 가라앉을 때까지 기다리는 것이 장기적인 안정과 평화를 가져올 수 있다. 즉각적으로 관계를 끊는 것이 새로운 기회를 찾는 데 도움이 될 수 있다. 감정적으로 안정된 상태에서 관계의 복잡성을 이해하고 해결할 기회를 가지는 것이 더 중요하다.",
+        "risk_text": "감정적으로 힘든 상태에서 결정을 내리면 판단력이 흐려질 수 있다. 시간을 두는 것이 관계의 복잡성을 증가시킬 수 있으며, 불안정한 요소가 남아 있다. 과거의 상처가 여전히 영향을 미칠 수 있어, 감정의 기복이 관계에 부정적인 영향을 줄 가능성이 있다. 감정적으로 즉각적인 결정을 내리는 것은 판단력을 흐릴 수 있으며, 이는 장기적으로 후회로 이어질 수 있다. 현재의 감정 상태가 불안정하여 즉각적인 관계 단절이 더 큰 정서적 고통을 초래할 수 있다. 시간 압박이 있는 상황에서 즉각적인 결정을 내리는 것은 감정적으로 더 큰 스트레스를 유발할 수 있다. 관계 단절 후의 감정적 안정이 보장되지 않으며, 초기 상실감이 지속될 위험이 있다. A는 관계의 복잡성을 해결하려는 반면, B는 즉각적인 단절을 추구한다. A는 장기적인 안정성을 중시하지만, B는 새로운 기회를 강조한다."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0.1725,
+      "uncertainty": 0.8,
+      "decision": "review",
+      "output_mode": "safe",
+      "summary": {
+        "raw_guardrail_mode": "cautious",
+        "output_mode": "safe",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "trigger_count": 2,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+        "감정적으로 힘든 상태에서 결정을 내리면 판단력이 흐려질 수 있다.",
+        "시간을 두는 것이 관계의 복잡성을 증가시킬 수 있으며, 불안정한 요소가 남아 있다.",
+        "과거의 상처가 여전히 영향을 미칠 수 있어, 감정의 기복이 관계에 부정적인 영향을 줄 가능성이 있다.",
+        "감정적으로 즉각적인 결정을 내리는 것은 판단력을 흐릴 수 있으며, 이는 장기적으로 후회로 이어질 수 있다.",
+        "현재의 감정 상태가 불안정하여 즉각적인 관계 단절이 더 큰 정서적 고통을 초래할 수 있다."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": true
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3841,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.372,
+        "safety_weight": 0.4072,
+        "total_score": 1.6073
+      },
+      "reasoning_trace": [
+        "input_analysis: 관계가 힘든데 감정적으로 바로 손절하는 게 맞는지 아니면 시간을 둘지 모르겠다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+        "threshold_compare: risk=medium, threshold_score=4, confidence=0.1725, uncertainty=0.8",
+        "risk_summary: A=medium (감정적으로 힘든 상태에서 결정을 내리면 판단력이 흐려질 수 있다. | 시간을 두는 것이 관계의 복잡성을 증가시킬 수 있으며, 불안정한 요소가 남아 있다. | 과거의 상처가 여전히 영향을 미칠 수 있어, 감정의 기복이 관계에 부정적인 영향을 줄 가능성이 있다.) / B=medium (감정적으로 즉각적인 결정을 내리는 것은 판단력을 흐릴 수 있으며, 이는 장기적으로 후회로 이어질 수 있다. | 현재의 감정 상태가 불안정하여 즉각적인 관계 단절이 더 큰 정서적 고통을 초래할 수 있다. | 시간 압박이 있는 상황에서 즉각적인 결정을 내리는 것은 감정적으로 더 큰 스트레스를 유발할 수 있다. | 관계 단절 후의 감정적 안정이 보장되지 않으며, 초기 상실감이 지속될 위험이 있다.)",
+        "reasoning_conflicts: A는 관계의 복잡성을 해결하려는 반면, B는 즉각적인 단절을 추구한다. | A는 장기적인 안정성을 중시하지만, B는 새로운 기회를 강조한다.",
+        "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.1725,
+        "calibration_version": "calibration:v2"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0.1725; reason=현재 감정 상태가 판단에 영향을 미칠 수 있으며, 두 선택지 모두 장단점이 있어 추가 정보가 필요합니다.",
+    "mode": "safe"
+  },
+  "meta": {
+    "latency_ms": 46865,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 23326
+  }
+}

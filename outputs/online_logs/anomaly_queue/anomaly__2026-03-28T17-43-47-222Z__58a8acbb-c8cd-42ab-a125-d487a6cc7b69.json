@@ -1,0 +1,400 @@
+{
+  "queue_id": "58a8acbb-c8cd-42ab-a125-d487a6cc7b69",
+  "detected_at": "2026-03-28T17:43:47.222Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:low/high",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "58a8acbb-c8cd-42ab-a125-d487a6cc7b69",
+    "timestamp": "2026-03-28T17:43:47.220Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:low/high",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+      "user_context": {
+        "userProfile": {
+          "age": 23,
+          "job": "student",
+          "risk_tolerance": "medium",
+          "priority": [
+            "growth",
+            "optionality",
+            "income"
+          ]
+        },
+        "decision": {
+          "optionA": "바로 취업한다",
+          "optionB": "해외 석사 유학을 준비한다",
+          "context": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다."
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "58a8acbb-c8cd-42ab-a125-d487a6cc7b69",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "medium",
+            "decision_style": "unknown",
+            "top_priorities": [
+              "growth",
+              "optionality",
+              "income"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "student",
+            "financial_pressure": "unknown",
+            "time_pressure": "unknown",
+            "emotional_state": "uncertain"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "unknown",
+          "current_constraint": "lack of information on options",
+          "agent_guidance": "explore both options with a focus on long-term growth potential"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "career_change",
+        "factors": [
+          "정보 부족에 따른 불확실성",
+          "장기 성장 가능성",
+          "직업 선택의 유연성",
+          "재정적 압박 여부",
+          "우선순위에 따른 성장 기회"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "바로 취업한 지 3개월이 지나면서, 새로운 직장에서의 일상이 시작된다. 처음에는 동료들과의 관계 형성에 어려움을 겪고, 업무에 대한 불확실성으로 인해 스트레스를 느낀다. 하지만 점차 업무에 적응하면서 성장의 기회를 발견하게 되고, 직무에 대한 흥미가 생긴다. 재정적으로 안정된 상황이지만, 유학을 선택하지 않은 것에 대한 아쉬움이 남아있다. 여전히 장기적인 성장 가능성에 대한 고민이 계속된다.",
+          "one_year": "1년이 지난 지금, 직장에서의 성과가 점차 눈에 띄게 나타난다. 동료들과의 관계가 깊어지고, 프로젝트를 통해 실력을 쌓아가고 있다. 그러나 유학을 선택하지 않은 것에 대한 후회가 가끔씩 떠오르며, 해외에서의 경험이 그리워진다. 재정적으로는 안정적이지만, 더 큰 성장 기회를 위해 다른 직무로의 전환을 고려하기 시작한다. 직업 선택의 유연성을 느끼며, 앞으로의 경로에 대한 고민이 깊어진다.",
+          "three_years": "3년 후, 현재의 직장에서 중간 관리자로 승진하게 된다. 다양한 프로젝트를 통해 많은 경험을 쌓았지만, 여전히 유학을 통해 얻을 수 있었던 국제적 경험에 대한 아쉬움이 남아있다. 현재의 직무에서 안정적인 수입을 얻고 있지만, 더 큰 성장 가능성을 위해 다른 기회를 탐색하고 있다. 직업 선택의 유연성을 통해 다양한 경로를 모색하며, 장기적인 목표를 위해 다시 한번 유학을 고려하게 된다."
+        },
+        "optionB": {
+          "three_months": "해외 석사 유학을 준비하기로 한 후, 학생은 다양한 대학과 프로그램에 대한 정보를 수집하기 시작한다. 그러나 정보 부족으로 인해 선택에 대한 불안감이 커진다. 이 과정에서 여러 대학의 웹사이트를 탐색하고, 유학 경험이 있는 선배들과 상담하며, 자신의 미래에 대한 고민이 깊어진다. 감정적으로는 불확실함과 기대감이 혼재되어 있으며, 친구들과의 대화에서 유학의 장점과 단점에 대한 의견을 나누며 결정을 내리기 위한 준비를 계속한다.",
+          "one_year": "1년이 지나고, 학생은 유학을 위해 필요한 서류를 준비하고, 언어 능력을 향상시키기 위한 학습에 매진한다. 이 과정에서 장기적인 성장 가능성을 느끼며, 다양한 문화와 사람들을 접하는 경험이 자신의 시야를 넓혀준다고 생각한다. 그러나 재정적인 압박이 점점 느껴지기 시작하고, 학비와 생활비에 대한 걱정이 커진다. 그럼에도 불구하고, 학생은 자신의 선택이 직업 선택의 유연성을 높여줄 것이라는 믿음을 가지고 있다.",
+          "three_years": "3년 후, 학생은 해외에서 석사 과정을 마치고 다양한 직업 기회를 탐색하고 있다. 유학을 통해 얻은 경험과 네트워크 덕분에 여러 기업에서 면접 제의를 받는다. 그러나 여전히 재정적인 부담이 남아있고, 과거의 선택에 대한 후회가 가끔씩 떠오르기도 한다. 하지만 장기적으로는 자신의 성장과 경력에 긍정적인 영향을 미쳤다는 것을 깨닫고, 다양한 선택지 중에서 자신에게 맞는 길을 찾기 위해 노력하고 있다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "정보 부족으로 인해 결정의 불확실성이 존재한다.",
+            "장기적인 성장 가능성에 대한 고민이 지속될 수 있다.",
+            "유학을 선택하지 않은 것에 대한 후회가 발생할 수 있다.",
+            "직업 선택의 유연성이 있지만, 안정적인 경로가 아닌 경우 불안정성이 커질 수 있다."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "정보 부족으로 인한 선택의 불확실성이 크다.",
+            "장기적인 성장 가능성이 있지만 재정적 압박이 증가할 수 있다.",
+            "유학 후 직업 선택의 유연성이 높아지지만 초기 투자에 대한 부담이 존재한다."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "58a8acbb-c8cd-42ab-a125-d487a6cc7b69",
+        "input_summary": {
+          "user_profile": {
+            "age": 23,
+            "job": "student",
+            "risk_tolerance": "medium",
+            "priority": [
+              "growth",
+              "optionality",
+              "income"
+            ]
+          },
+          "decision_options": {
+            "optionA": "바로 취업한다",
+            "optionB": "해외 석사 유학을 준비한다",
+            "context": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다."
+          },
+          "planner_goal": "장기 성장 가능성을 고려하여 최선의 진로 결정을 내린다."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "바로 취업하는 것은 안정적인 수입을 보장하며, 직무 경험을 통해 성장할 수 있는 기회를 제공한다.",
+            "key_assumptions": [
+              "현재의 직업 시장이 안정적이다.",
+              "직무 경험이 장기적으로 유리할 것이다.",
+              "유학의 필요성이 낮아질 수 있다."
+            ],
+            "pros": [
+              "즉각적인 수입을 얻을 수 있다.",
+              "직무 경험을 통해 실력을 쌓을 수 있다.",
+              "재정적 안정성을 유지할 수 있다."
+            ],
+            "cons": [
+              "유학을 선택하지 않은 것에 대한 후회가 남을 수 있다.",
+              "장기적인 성장 가능성이 제한될 수 있다.",
+              "직업 선택의 유연성이 줄어들 수 있다."
+            ],
+            "recommended_option": "A",
+            "confidence": 0.7
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "해외 석사 유학은 장기적인 성장 가능성을 높이고, 다양한 기회를 제공할 수 있다.",
+            "key_assumptions": [
+              "유학이 직업 선택의 유연성을 높일 것이다.",
+              "다양한 문화와 경험이 개인의 성장에 기여할 것이다.",
+              "재정적 압박을 감수할 가치가 있다."
+            ],
+            "pros": [
+              "장기적인 성장 가능성이 높아진다.",
+              "다양한 네트워크를 구축할 수 있다.",
+              "직업 선택의 유연성이 증가한다."
+            ],
+            "cons": [
+              "재정적 부담이 커질 수 있다.",
+              "정보 부족으로 인한 불확실성이 존재한다.",
+              "유학 준비 과정에서의 스트레스가 클 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.6
+          },
+          "comparison": {
+            "agreements": [
+              "정보 부족으로 인한 불확실성이 존재한다.",
+              "장기적인 성장 가능성이 모두 고려되고 있다."
+            ],
+            "conflicts": [
+              "A는 안정성을 중시하는 반면, B는 성장 기회를 중시한다.",
+              "A는 즉각적인 수입을 강조하지만, B는 장기적인 투자 가치를 강조한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자의 우선순위가 안정성과 성장 기회를 모두 고려하지만, 현재의 불확실성을 감안할 때 안정적인 경로인 A가 더 적합하다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "즉각적인 수입과 안정성을 제공하며, 현재의 불확실성을 고려할 때 더 나은 선택이다.",
+            "decision_confidence": 0.7
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "calibration_version": "confidence-uncertainty:low/high",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "medium",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_set": "baseline",
+        "threshold_score": 5,
+        "threshold_score_ratio": 0.7143,
+        "risk_score": 0.6,
+        "confidence_score": 0,
+        "uncertainty_score": 1,
+        "confidence_band": "low",
+        "uncertainty_band": "high",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2,
+          "low_confidence": 1
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision",
+            "soft_recommendation"
+          ],
+          "risk_score": 0.6,
+          "confidence_score": 0,
+          "uncertainty_score": 1,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": true,
+            "ambiguous_wording": true,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 3,
+          "final_confidence": 0.7,
+          "a_confidence": 0.7,
+          "b_confidence": 0.6,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "medium",
+          "evidence_repeat_count": 1,
+          "user_input": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+          "context_text": "unknown lack of information on options explore both options with a focus on long-term growth potential",
+          "scenario_text": "바로 취업하는 것은 안정적인 수입을 보장하며, 직무 경험을 통해 성장할 수 있는 기회를 제공한다. 해외 석사 유학은 장기적인 성장 가능성을 높이고, 다양한 기회를 제공할 수 있다. 즉각적인 수입과 안정성을 제공하며, 현재의 불확실성을 고려할 때 더 나은 선택이다.",
+          "risk_text": "정보 부족으로 인해 결정의 불확실성이 존재한다. 장기적인 성장 가능성에 대한 고민이 지속될 수 있다. 유학을 선택하지 않은 것에 대한 후회가 발생할 수 있다. 직업 선택의 유연성이 있지만, 안정적인 경로가 아닌 경우 불안정성이 커질 수 있다. 정보 부족으로 인한 선택의 불확실성이 크다. 장기적인 성장 가능성이 있지만 재정적 압박이 증가할 수 있다. 유학 후 직업 선택의 유연성이 높아지지만 초기 투자에 대한 부담이 존재한다. A는 안정성을 중시하는 반면, B는 성장 기회를 중시한다. A는 즉각적인 수입을 강조하지만, B는 장기적인 투자 가치를 강조한다."
+        },
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      },
+      "guardrail_derived": {
+        "risk_level": "medium",
+        "confidence": 0,
+        "uncertainty": 1,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence"
+          ],
+          "trigger_count": 3,
+          "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+        },
+        "reasons": [
+          "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+          "정보 부족으로 인해 결정의 불확실성이 존재한다.",
+          "장기적인 성장 가능성에 대한 고민이 지속될 수 있다.",
+          "유학을 선택하지 않은 것에 대한 후회가 발생할 수 있다.",
+          "직업 선택의 유연성이 있지만, 안정적인 경로가 아닌 경우 불안정성이 커질 수 있다.",
+          "정보 부족으로 인한 선택의 불확실성이 크다."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": false
+        },
+        "threshold_eval": {
+          "cost_weight": 0.3955,
+          "effect_weight": 0.444,
+          "recovery_weight": 0.5,
+          "safety_weight": 0,
+          "total_score": 1.3395
+        },
+        "reasoning_trace": [
+          "input_analysis: 유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue",
+          "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=1",
+          "risk_summary: A=medium (정보 부족으로 인해 결정의 불확실성이 존재한다. | 장기적인 성장 가능성에 대한 고민이 지속될 수 있다. | 유학을 선택하지 않은 것에 대한 후회가 발생할 수 있다. | 직업 선택의 유연성이 있지만, 안정적인 경로가 아닌 경우 불안정성이 커질 수 있다.) / B=medium (정보 부족으로 인한 선택의 불확실성이 크다. | 장기적인 성장 가능성이 있지만 재정적 압박이 증가할 수 있다. | 유학 후 직업 선택의 유연성이 높아지지만 초기 투자에 대한 부담이 존재한다.)",
+          "reasoning_conflicts: A는 안정성을 중시하는 반면, B는 성장 기회를 중시한다. | A는 즉각적인 수입을 강조하지만, B는 장기적인 투자 가치를 강조한다.",
+          "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0,
+          "calibration_version": "confidence-uncertainty:low/high"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=현재 정보가 부족하고, 두 선택지 간의 불확실성이 높아 추가 정보가 필요합니다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 53080,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23246
+    }
+  }
+}

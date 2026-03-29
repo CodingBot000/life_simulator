@@ -1,0 +1,373 @@
+{
+  "request_id": "00679dc4-0fbe-4367-abe6-59ba8b33a8c2",
+  "timestamp": "2026-03-29T11:21:11.772Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+    "user_context": {
+      "userProfile": {
+        "age": 24,
+        "job": "student",
+        "risk_tolerance": "medium",
+        "priority": [
+          "growth",
+          "freedom",
+          "income"
+        ]
+      },
+      "decision": {
+        "optionA": "지금 바로 취업 준비를 강화한다",
+        "optionB": "일단 대학원 진학 가능성을 알아본다",
+        "context": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "financial_pressure": "medium",
+          "time_pressure": "high",
+          "emotional_state": "uncertain"
+        }
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "00679dc4-0fbe-4367-abe6-59ba8b33a8c2",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "growth",
+            "freedom",
+            "income"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "medium",
+          "time_pressure": "high",
+          "emotional_state": "uncertain"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "high time pressure complicates decision-making",
+        "agent_guidance": "explore options that balance growth and freedom with financial considerations"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "education",
+      "factors": [
+        "growth opportunities",
+        "freedom in career choices",
+        "financial implications of each option",
+        "time pressure to make a decision",
+        "emotional uncertainty regarding future"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "취업 준비를 강화한 지 3개월이 지나면서, 당신은 여러 기업에 지원하고 면접을 준비하는 과정에서 많은 성장을 경험하고 있다. 새로운 기술을 배우고, 네트워킹을 통해 다양한 사람들과의 연결을 구축하게 되면서 자유롭게 선택할 수 있는 직업의 폭이 넓어졌다. 그러나 여전히 재정적 압박과 시간적 압박이 느껴지며, 불확실한 감정이 가끔씩 찾아온다. 이로 인해 스스로의 선택에 대한 의구심이 생기기도 한다.",
+        "one_year": "1년이 지난 지금, 몇 군데의 기업에서 제안을 받았지만, 원하는 직무와 조건이 맞지 않아 고민이 깊어졌다. 취업 준비를 통해 얻은 경험은 분명 성장의 기회였지만, 여전히 안정적인 수입이 부족하다는 점에서 불안함이 지속되고 있다. 이 과정에서 자신이 원하는 방향과 현실 사이의 괴리를 느끼며, 자유롭게 선택할 수 있는 기회가 줄어드는 것 같은 두려움이 커지고 있다.",
+        "three_years": "3년 후, 당신은 결국 원하는 직장에 취업하게 되었고, 그 과정에서 많은 것을 배우고 성장했다. 그러나 초기의 불확실한 감정과 시간적 압박이 남긴 상처는 여전히 존재한다. 이제는 안정적인 수입을 얻고 있지만, 그 과정에서 느꼈던 스트레스와 압박감이 잊히지 않아 가끔씩 회상하게 된다. 직장에서의 자유로운 선택을 통해 성장할 수 있었지만, 그 과정에서의 고통도 함께 기억하고 있다."
+      },
+      "optionB": {
+        "three_months": "대학원 진학 가능성을 알아보며 여러 프로그램을 조사하는 동안, 새로운 지식과 경험에 대한 기대감이 커진다. 그러나 재정적인 부담과 시간 압박이 여전히 마음을 괴롭힌다. 친구들과의 대화에서 자신이 선택한 길에 대한 불안감이 드러나고, 때때로 '이 선택이 맞는지'에 대한 의문이 생긴다. 하지만 성장의 기회를 찾는 과정에서 작은 성취감을 느끼며 긍정적인 감정을 유지하려고 노력한다.",
+        "one_year": "대학원에 진학하게 되면서 새로운 환경과 사람들을 만나게 된다. 학업과 연구에 몰두하며 자유로운 사고를 즐기지만, 동시에 재정적인 부담이 커지면서 스트레스를 느낀다. 시간 관리의 어려움으로 인해 학업과 개인 생활의 균형을 맞추기 힘들어지고, 이로 인해 감정적으로 불안정한 상태가 지속된다. 그러나 새로운 지식과 경험이 쌓이면서 성장에 대한 만족감이 커진다.",
+        "three_years": "대학원 과정을 마치고 취업 시장에 나서게 된다. 학위와 경험 덕분에 좋은 직장을 얻지만, 여전히 재정적인 압박이 남아있다. 직장 생활에서의 자유와 성장 기회를 찾으려 하지만, 과거의 선택이 올바른지에 대한 회의감이 가끔씩 떠오른다. 그러나 학업을 통해 쌓은 네트워크와 경험이 큰 도움이 되어, 자신감을 가지고 새로운 도전에 나설 수 있게 된다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "시간적 압박이 높아 결정 과정이 복잡해질 수 있다.",
+          "재정적 압박이 여전히 존재하여 취업 준비에 대한 스트레스를 증가시킬 수 있다.",
+          "불확실한 감정이 지속되어 선택에 대한 의구심을 초래할 수 있다.",
+          "성장 기회는 있지만, 원하는 직무와 조건이 맞지 않을 경우 불안감이 커질 수 있다."
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "대학원 진학은 장기적으로 성장 기회를 제공하지만, 재정적 부담이 증가할 수 있다.",
+          "시간 압박으로 인해 결정 과정이 복잡해지고, 감정적으로 불안정한 상태가 지속될 위험이 있다.",
+          "새로운 환경에서의 적응이 필요하며, 이는 불확실성을 초래할 수 있다."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "00679dc4-0fbe-4367-abe6-59ba8b33a8c2",
+      "input_summary": {
+        "user_profile": {
+          "age": 24,
+          "job": "student",
+          "risk_tolerance": "medium",
+          "priority": [
+            "growth",
+            "freedom",
+            "income"
+          ]
+        },
+        "decision_options": {
+          "optionA": "지금 바로 취업 준비를 강화한다",
+          "optionB": "일단 대학원 진학 가능성을 알아본다",
+          "context": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다."
+        },
+        "planner_goal": "이 결정은 성장 기회와 자유를 추구하면서 재정적 고려를 균형 있게 반영하는 것이다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "취업 준비를 강화하는 것은 현재의 재정적 압박을 줄이고, 직업 선택의 폭을 넓히는 데 도움이 된다.",
+          "key_assumptions": [
+            "현재의 재정적 압박이 지속된다.",
+            "시간적 압박이 결정 과정에 영향을 미친다.",
+            "취업 준비를 통해 얻는 경험이 중요하다."
+          ],
+          "pros": [
+            "즉각적인 수입을 얻을 가능성이 높아진다.",
+            "직업 선택의 폭이 넓어진다.",
+            "실무 경험을 통해 성장할 수 있다."
+          ],
+          "cons": [
+            "시간적 압박으로 인해 스트레스를 받을 수 있다.",
+            "원하는 직무와 조건이 맞지 않을 수 있다.",
+            "불확실한 감정이 지속될 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.8
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "대학원 진학은 장기적으로 더 큰 성장 기회를 제공하며, 새로운 경험을 통해 자유로운 사고를 할 수 있게 된다.",
+          "key_assumptions": [
+            "대학원 진학이 장기적으로 유리할 것이다.",
+            "재정적 부담이 증가할 수 있지만, 이는 성장의 투자로 볼 수 있다.",
+            "새로운 환경에서의 적응이 필요하다."
+          ],
+          "pros": [
+            "더 깊은 지식과 전문성을 쌓을 수 있다.",
+            "네트워킹 기회가 증가한다.",
+            "자유로운 사고와 창의성을 발휘할 수 있다."
+          ],
+          "cons": [
+            "재정적 부담이 커질 수 있다.",
+            "시간 관리의 어려움으로 스트레스를 받을 수 있다.",
+            "불확실한 감정이 지속될 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.7
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 재정적 압박이 존재한다.",
+            "시간적 압박이 결정 과정에 영향을 미친다."
+          ],
+          "conflicts": [
+            "A는 즉각적인 수입을 중시하는 반면, B는 장기적인 성장 기회를 중시한다.",
+            "A는 안정성을 추구하는 반면, B는 새로운 경험과 자유를 추구한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 우선순위가 성장과 자유이지만, 현재의 재정적 압박과 시간적 압박을 고려할 때 안정적인 선택이 더 적합하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "현재의 재정적 압박과 시간적 압박을 고려할 때, 취업 준비를 강화하는 것이 더 안정적이고 현실적인 선택이다.",
+          "decision_confidence": 0.8
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "block",
+      "raw_guardrail_mode": "blocked",
+      "threshold_adjusted": true,
+      "calibration_adjusted": false,
+      "threshold_set": "baseline-v2",
+      "threshold_score": 4,
+      "threshold_score_ratio": 0.5714,
+      "risk_score": 0.6,
+      "confidence_score": 0.1505,
+      "uncertainty_score": 0.84,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0.1505,
+        "uncertainty_score": 0.84,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "blocked"
+      },
+      "signals": {
+        "state_unknown_count": 2,
+        "final_confidence": 0.8,
+        "a_confidence": 0.8,
+        "b_confidence": 0.7,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+        "context_text": "unknown high time pressure complicates decision-making explore options that balance growth and freedom with financial considerations",
+        "scenario_text": "취업 준비를 강화하는 것은 현재의 재정적 압박을 줄이고, 직업 선택의 폭을 넓히는 데 도움이 된다. 대학원 진학은 장기적으로 더 큰 성장 기회를 제공하며, 새로운 경험을 통해 자유로운 사고를 할 수 있게 된다. 현재의 재정적 압박과 시간적 압박을 고려할 때, 취업 준비를 강화하는 것이 더 안정적이고 현실적인 선택이다.",
+        "risk_text": "시간적 압박이 높아 결정 과정이 복잡해질 수 있다. 재정적 압박이 여전히 존재하여 취업 준비에 대한 스트레스를 증가시킬 수 있다. 불확실한 감정이 지속되어 선택에 대한 의구심을 초래할 수 있다. 성장 기회는 있지만, 원하는 직무와 조건이 맞지 않을 경우 불안감이 커질 수 있다. 대학원 진학은 장기적으로 성장 기회를 제공하지만, 재정적 부담이 증가할 수 있다. 시간 압박으로 인해 결정 과정이 복잡해지고, 감정적으로 불안정한 상태가 지속될 위험이 있다. 새로운 환경에서의 적응이 필요하며, 이는 불확실성을 초래할 수 있다. A는 즉각적인 수입을 중시하는 반면, B는 장기적인 성장 기회를 중시한다. A는 안정성을 추구하는 반면, B는 새로운 경험과 자유를 추구한다."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0.1505,
+      "uncertainty": 0.84,
+      "decision": "block",
+      "output_mode": "blocked",
+      "summary": {
+        "raw_guardrail_mode": "blocked",
+        "output_mode": "blocked",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "trigger_count": 2,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+        "시간적 압박이 높아 결정 과정이 복잡해질 수 있다.",
+        "재정적 압박이 여전히 존재하여 취업 준비에 대한 스트레스를 증가시킬 수 있다.",
+        "불확실한 감정이 지속되어 선택에 대한 의구심을 초래할 수 있다.",
+        "성장 기회는 있지만, 원하는 직무와 조건이 맞지 않을 경우 불안감이 커질 수 있다.",
+        "대학원 진학은 장기적으로 성장 기회를 제공하지만, 재정적 부담이 증가할 수 있다."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": true
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3841,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.3816,
+        "safety_weight": 0.4072,
+        "total_score": 1.6169
+      },
+      "reasoning_trace": [
+        "input_analysis: 뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+        "threshold_compare: risk=medium, threshold_score=4, confidence=0.1505, uncertainty=0.84",
+        "risk_summary: A=medium (시간적 압박이 높아 결정 과정이 복잡해질 수 있다. | 재정적 압박이 여전히 존재하여 취업 준비에 대한 스트레스를 증가시킬 수 있다. | 불확실한 감정이 지속되어 선택에 대한 의구심을 초래할 수 있다. | 성장 기회는 있지만, 원하는 직무와 조건이 맞지 않을 경우 불안감이 커질 수 있다.) / B=medium (대학원 진학은 장기적으로 성장 기회를 제공하지만, 재정적 부담이 증가할 수 있다. | 시간 압박으로 인해 결정 과정이 복잡해지고, 감정적으로 불안정한 상태가 지속될 위험이 있다. | 새로운 환경에서의 적응이 필요하며, 이는 불확실성을 초래할 수 있다.)",
+        "reasoning_conflicts: A는 즉각적인 수입을 중시하는 반면, B는 장기적인 성장 기회를 중시한다. | A는 안정성을 추구하는 반면, B는 새로운 경험과 자유를 추구한다.",
+        "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.1505,
+        "calibration_version": "calibration:v2"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=추가 정보가 필요합니다. 현재의 재정적 압박과 시간적 압박이 높은 상황에서 두 선택지의 장단점이 명확하지 않기 때문에, 더 많은 정보를 요청해야 합니다.",
+    "mode": "blocked"
+  },
+  "meta": {
+    "latency_ms": 52539,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 23679
+  }
+}

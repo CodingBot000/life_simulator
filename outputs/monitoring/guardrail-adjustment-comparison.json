@@ -1,0 +1,58 @@
+{
+  "generated_at": "2026-03-29T11:41:47.517Z",
+  "seed_case_count": 20,
+  "baseline": {
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "matched_seed_count": 19,
+    "missing_seed_ids": [
+      "case-13"
+    ],
+    "allow_count": 0,
+    "review_count": 19,
+    "block_count": 0,
+    "block_rate": 0,
+    "review_rate": 0.95,
+    "underblocking_count": 0,
+    "underblocking_rate": 0,
+    "low_confidence_allow_count": 0,
+    "low_confidence_allow_rate": 0,
+    "low_confidence_anomaly_count": 19,
+    "low_confidence_anomaly_rate": 0.95,
+    "threshold_adjusted_count": 0,
+    "threshold_adjusted_rate": 0,
+    "calibration_adjusted_count": 0,
+    "calibration_adjusted_rate": 0
+  },
+  "baseline_v2": {
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "matched_seed_count": 20,
+    "missing_seed_ids": [],
+    "allow_count": 0,
+    "review_count": 20,
+    "block_count": 0,
+    "block_rate": 0,
+    "review_rate": 1,
+    "underblocking_count": 0,
+    "underblocking_rate": 0,
+    "low_confidence_allow_count": 0,
+    "low_confidence_allow_rate": 0,
+    "low_confidence_anomaly_count": 20,
+    "low_confidence_anomaly_rate": 1,
+    "threshold_adjusted_count": 14,
+    "threshold_adjusted_rate": 0.7,
+    "calibration_adjusted_count": 20,
+    "calibration_adjusted_rate": 1
+  },
+  "comparison": {
+    "underblocking_count_delta": 0,
+    "underblocking_rate_delta": 0,
+    "low_confidence_allow_count_delta": 0,
+    "low_confidence_allow_rate_delta": 0,
+    "block_count_delta": 0,
+    "block_rate_delta": 0,
+    "threshold_adjusted_count_delta": 14,
+    "calibration_adjusted_count_delta": 20,
+    "underblocking_reduced": false,
+    "low_confidence_allow_removed": false
+  }
+}

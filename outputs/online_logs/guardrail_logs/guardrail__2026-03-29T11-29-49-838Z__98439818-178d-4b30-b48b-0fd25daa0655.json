@@ -1,0 +1,167 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": false,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 5,
+    "threshold_score_ratio": 0.7143,
+    "risk_score": 0.6,
+    "confidence_score": 0.035,
+    "uncertainty_score": 1,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.035,
+      "uncertainty_score": 1,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 2,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다.",
+      "context_text": "prefers stability and clear communication uncertainty in relationship dynamics focus on communication strategies and relationship clarity",
+      "scenario_text": "관계를 지속하며 대화를 통해 서로의 감정을 이해하고 안정성을 추구하는 것이 중요하다. 관계를 정리함으로써 새로운 기회를 찾고, 정직한 소통을 통해 더 나은 미래를 준비하는 것이 중요하다. 관계를 이어가며 대화를 통해 감정적 유대감을 강화하고 안정성을 추구하는 것이 사용자에게 더 적합하다.",
+      "risk_text": "상대방과의 대화 부족으로 인한 감정적 불확실성이 여전히 존재함. 관계를 이어가는 과정에서 불안한 감정이 발생할 수 있음. 미래에 대한 불확실성이 관계의 안정성에 영향을 미칠 가능성이 있음. 관계를 정리함으로써 감정적으로 힘든 시간을 겪을 가능성이 높음. 안정성을 중시하는 성향 때문에 새로운 사람을 만나기보다는 혼자 있는 시간이 많아질 수 있음. 미래에 대한 불확실성이 커질 수 있으며, 이는 정서적 스트레스를 유발할 수 있음. A는 관계의 지속을 통해 안정성을 추구하는 반면, B는 관계 정리를 통해 새로운 기회를 찾으려 한다. A는 소통을 통해 감정적 유대감을 강화하려고 하고, B는 과거의 경험을 통해 새로운 관계를 준비하려고 한다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0.035,
+    "uncertainty": 1,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "trigger_count": 3,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+      "상대방과의 대화 부족으로 인한 감정적 불확실성이 여전히 존재함.",
+      "관계를 이어가는 과정에서 불안한 감정이 발생할 수 있음.",
+      "미래에 대한 불확실성이 관계의 안정성에 영향을 미칠 가능성이 있음.",
+      "관계를 정리함으로써 감정적으로 힘든 시간을 겪을 가능성이 높음.",
+      "안정성을 중시하는 성향 때문에 새로운 사람을 만나기보다는 혼자 있는 시간이 많아질 수 있음."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": false
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3955,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.5,
+      "safety_weight": 0,
+      "total_score": 1.3395
+    },
+    "reasoning_trace": [
+      "input_analysis: 지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue",
+      "threshold_compare: risk=medium, threshold_score=5, confidence=0.035, uncertainty=1",
+      "risk_summary: A=medium (상대방과의 대화 부족으로 인한 감정적 불확실성이 여전히 존재함. | 관계를 이어가는 과정에서 불안한 감정이 발생할 수 있음. | 미래에 대한 불확실성이 관계의 안정성에 영향을 미칠 가능성이 있음.) / B=medium (관계를 정리함으로써 감정적으로 힘든 시간을 겪을 가능성이 높음. | 안정성을 중시하는 성향 때문에 새로운 사람을 만나기보다는 혼자 있는 시간이 많아질 수 있음. | 미래에 대한 불확실성이 커질 수 있으며, 이는 정서적 스트레스를 유발할 수 있음.)",
+      "reasoning_conflicts: A는 관계의 지속을 통해 안정성을 추구하는 반면, B는 관계 정리를 통해 새로운 기회를 찾으려 한다. | A는 소통을 통해 감정적 유대감을 강화하려고 하고, B는 과거의 경험을 통해 새로운 관계를 준비하려고 한다.",
+      "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.035,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

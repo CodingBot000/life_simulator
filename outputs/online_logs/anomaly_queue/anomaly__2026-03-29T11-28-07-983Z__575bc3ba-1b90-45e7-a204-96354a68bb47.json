@@ -1,0 +1,386 @@
+{
+  "queue_id": "575bc3ba-1b90-45e7-a204-96354a68bb47",
+  "detected_at": "2026-03-29T11:28:07.983Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "575bc3ba-1b90-45e7-a204-96354a68bb47",
+    "timestamp": "2026-03-29T11:28:07.980Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다.",
+      "user_context": {
+        "userProfile": {
+          "age": 29,
+          "job": "lab engineer",
+          "risk_tolerance": "medium",
+          "priority": [
+            "research",
+            "income",
+            "stability"
+          ]
+        },
+        "decision": {
+          "optionA": "산업체 경력을 더 쌓는다",
+          "optionB": "이번 사이클에 박사 지원을 한다",
+          "context": "박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다."
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "575bc3ba-1b90-45e7-a204-96354a68bb47",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "medium",
+            "decision_style": "deliberate",
+            "top_priorities": [
+              "research",
+              "income",
+              "stability"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "mid",
+            "financial_pressure": "medium",
+            "time_pressure": "unknown",
+            "emotional_state": "uncertain"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "weighs income stability against academic aspirations",
+          "current_constraint": "concern over income gap affects decision-making",
+          "agent_guidance": "explore options balancing research ambitions with financial stability"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "education",
+        "factors": [
+          "research aspirations",
+          "income stability",
+          "financial pressure",
+          "career stage",
+          "risk tolerance"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "산업체에서의 경력을 쌓기 시작한 후, 초기에는 안정적인 수입에 안도감을 느낀다. 그러나 연구에 대한 열망이 점차 커지면서, 동료들이 박사 과정을 밟는 모습을 보며 자신도 그 길을 가고 싶다는 갈망이 생긴다. 하지만 재정적 안정이 우선이라는 생각에 혼란스러운 감정을 느낀다.",
+          "one_year": "1년이 지나면서 산업체에서의 경험이 쌓이고, 직무에 대한 자신감이 생긴다. 그러나 연구에 대한 갈증은 여전히 남아있고, 박사 지원을 고민하는 시간이 길어지면서 불안감이 커진다. 안정적인 수입 덕분에 생활은 편안하지만, 자신의 꿈을 이루지 못하고 있다는 자책감이 가끔씩 찾아온다.",
+          "three_years": "3년 후, 산업체에서의 경력이 상당히 쌓였고, 안정적인 직장 생활을 이어가고 있다. 그러나 연구에 대한 열망은 여전히 마음속에 남아있어, 결국 박사 과정을 지원하기로 결심한다. 그동안의 선택이 안정성을 가져다주었지만, 꿈을 이루기 위한 도전이 늦어진 것에 대한 후회가 함께한다. 이제는 새로운 목표를 향해 나아갈 준비가 되어 있다."
+        },
+        "optionB": {
+          "three_months": "박사 지원서를 제출한 후, 불안한 마음이 가시지 않는다. 연구에 대한 열망이 커지지만, 수입이 없다는 사실이 계속해서 부담으로 작용한다. 동료들과의 대화에서 그들의 경력과 안정성을 비교하며 불안감을 느끼고, 이 선택이 옳았는지 고민하게 된다. 그러나 지원이 완료되면서 작은 성취감을 느끼고, 연구에 대한 열정이 다시 살아난다.",
+          "one_year": "박사 과정에 합격하고, 새로운 연구 환경에 적응하기 위해 노력 중이다. 처음 몇 달은 재정적 압박이 심해 힘든 시간을 보냈지만, 장학금과 연구비 지원 덕분에 조금씩 안정감을 찾는다. 연구에 몰두하면서도 가끔은 안정적인 수입을 포기한 것에 대한 후회가 스쳐 지나가지만, 연구의 성과가 쌓이면서 자신감을 얻는다. 동료들과의 협업을 통해 새로운 아이디어를 발전시키는 기쁨을 느낀다.",
+          "three_years": "박사 과정을 마치고, 연구자로서의 경력을 쌓기 시작한다. 처음에는 불안정한 고용 상태였지만, 점차 연구 성과가 인정받아 안정적인 직장에 취업하게 된다. 연구에 대한 열망이 현실로 이어지면서 만족감을 느끼고, 이전의 재정적 압박이 과거의 일로 느껴진다. 그러나 가끔씩 안정적인 수입을 선택했더라면 어땠을까 하는 생각이 들기도 하지만, 현재의 연구 성과와 직업적 만족이 그 모든 것을 상쇄한다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "산업체 경력을 쌓는 동안 안정적인 수입이 보장되지만, 연구에 대한 갈망이 커질 수 있다.",
+            "재정적 안정이 우선이라는 생각이 결정에 혼란을 줄 수 있으며, 이는 장기적으로 불만족으로 이어질 수 있다.",
+            "박사 지원을 미루는 동안 자신이 꿈을 이루지 못하고 있다는 자책감이 쌓일 수 있다."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "박사 진학에 따른 수입 공백이 재정적 압박을 증가시킬 수 있음",
+            "연구에 대한 열망과 안정적인 수입 간의 갈등으로 인한 심리적 불안정성",
+            "결정 후 초기 몇 달 동안 재정적 어려움이 지속될 가능성",
+            "장기적으로 연구 성과가 안정적인 직장으로 이어질 수 있지만, 초기 불안정성은 여전히 존재"
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "575bc3ba-1b90-45e7-a204-96354a68bb47",
+        "input_summary": {
+          "user_profile": {
+            "age": 29,
+            "job": "lab engineer",
+            "risk_tolerance": "medium",
+            "priority": [
+              "research",
+              "income",
+              "stability"
+            ]
+          },
+          "decision_options": {
+            "optionA": "산업체 경력을 더 쌓는다",
+            "optionB": "이번 사이클에 박사 지원을 한다",
+            "context": "박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다."
+          },
+          "planner_goal": "재정적 안정성과 연구 열망을 균형 있게 고려하여 최적의 경로를 결정한다."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "산업체 경력을 쌓는 것은 안정적인 수입을 보장하며, 장기적으로 연구에 대한 열망을 충족할 수 있는 기회를 제공한다.",
+            "key_assumptions": [
+              "안정적인 수입이 장기적으로 더 큰 만족을 가져올 것이다.",
+              "박사 진학이 반드시 성공적인 경로가 아닐 수 있다."
+            ],
+            "pros": [
+              "안정적인 수입으로 재정적 압박을 줄일 수 있다.",
+              "산업체 경험이 향후 박사 과정이나 연구 직종에 도움이 될 수 있다.",
+              "직무에 대한 자신감을 키울 수 있다."
+            ],
+            "cons": [
+              "연구에 대한 갈망이 커질 수 있으며, 자책감이 생길 수 있다.",
+              "장기적으로 꿈을 이루지 못할 수 있다는 불안감이 존재한다."
+            ],
+            "recommended_option": "A",
+            "confidence": 0.8
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "박사 진학은 연구에 대한 열망을 충족시키고, 장기적으로 더 나은 경력 기회를 제공할 수 있다.",
+            "key_assumptions": [
+              "박사 과정이 성공적인 경력으로 이어질 가능성이 높다.",
+              "재정적 어려움은 단기적인 문제일 뿐이다."
+            ],
+            "pros": [
+              "연구에 몰두할 수 있는 기회를 제공한다.",
+              "장기적으로 더 높은 수입과 직업적 만족을 가져올 수 있다.",
+              "학문적 성취감을 느낄 수 있다."
+            ],
+            "cons": [
+              "초기 몇 달 동안 재정적 압박이 심할 수 있다.",
+              "안정적인 수입을 포기하는 것에 대한 후회가 생길 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.7
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 연구와 수입 간의 균형을 고려하고 있다.",
+              "재정적 압박이 두 옵션 모두에 영향을 미친다."
+            ],
+            "conflicts": [
+              "A는 안정성을 중시하며, B는 기회를 중시한다.",
+              "A는 장기적인 안정성을 강조하지만, B는 단기적인 불안정성을 감수하고 연구에 집중할 것을 제안한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자의 우선순위가 안정성과 수입에 중점을 두고 있기 때문에 A가 더 적합하다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "안정적인 수입을 통해 재정적 압박을 줄이고, 장기적으로 연구에 대한 열망을 충족할 수 있는 기회를 제공하기 때문이다.",
+            "decision_confidence": 0.8
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "medium",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_adjusted": false,
+        "calibration_adjusted": false,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 2,
+        "threshold_score_ratio": 0.2857,
+        "risk_score": 0.6,
+        "confidence_score": 0.2715,
+        "uncertainty_score": 0.62,
+        "confidence_band": "low",
+        "uncertainty_band": "medium",
+        "detected_triggers": [
+          "reasoning_conflict"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "reasoning_conflict": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "reasoning_conflict"
+          ],
+          "strategy": [
+            "neutralize_decision"
+          ],
+          "risk_score": 0.6,
+          "confidence_score": 0.2715,
+          "uncertainty_score": 0.62,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": false,
+            "ambiguous_wording": false,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 1,
+          "final_confidence": 0.8,
+          "a_confidence": 0.8,
+          "b_confidence": 0.7,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "medium",
+          "evidence_repeat_count": 1,
+          "user_input": "박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다.",
+          "context_text": "weighs income stability against academic aspirations concern over income gap affects decision-making explore options balancing research ambitions with financial stability",
+          "scenario_text": "산업체 경력을 쌓는 것은 안정적인 수입을 보장하며, 장기적으로 연구에 대한 열망을 충족할 수 있는 기회를 제공한다. 박사 진학은 연구에 대한 열망을 충족시키고, 장기적으로 더 나은 경력 기회를 제공할 수 있다. 안정적인 수입을 통해 재정적 압박을 줄이고, 장기적으로 연구에 대한 열망을 충족할 수 있는 기회를 제공하기 때문이다.",
+          "risk_text": "산업체 경력을 쌓는 동안 안정적인 수입이 보장되지만, 연구에 대한 갈망이 커질 수 있다. 재정적 안정이 우선이라는 생각이 결정에 혼란을 줄 수 있으며, 이는 장기적으로 불만족으로 이어질 수 있다. 박사 지원을 미루는 동안 자신이 꿈을 이루지 못하고 있다는 자책감이 쌓일 수 있다. 박사 진학에 따른 수입 공백이 재정적 압박을 증가시킬 수 있음 연구에 대한 열망과 안정적인 수입 간의 갈등으로 인한 심리적 불안정성 결정 후 초기 몇 달 동안 재정적 어려움이 지속될 가능성 장기적으로 연구 성과가 안정적인 직장으로 이어질 수 있지만, 초기 불안정성은 여전히 존재 A는 안정성을 중시하며, B는 기회를 중시한다. A는 장기적인 안정성을 강조하지만, B는 단기적인 불안정성을 감수하고 연구에 집중할 것을 제안한다."
+        },
+        "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+      },
+      "guardrail_derived": {
+        "risk_level": "medium",
+        "confidence": 0.2715,
+        "uncertainty": 0.62,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "reasoning_conflict"
+          ],
+          "trigger_count": 1,
+          "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+        },
+        "reasons": [
+          "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다.",
+          "산업체 경력을 쌓는 동안 안정적인 수입이 보장되지만, 연구에 대한 갈망이 커질 수 있다.",
+          "재정적 안정이 우선이라는 생각이 결정에 혼란을 줄 수 있으며, 이는 장기적으로 불만족으로 이어질 수 있다.",
+          "박사 지원을 미루는 동안 자신이 꿈을 이루지 못하고 있다는 자책감이 쌓일 수 있다.",
+          "박사 진학에 따른 수입 공백이 재정적 압박을 증가시킬 수 있음",
+          "연구에 대한 열망과 안정적인 수입 간의 갈등으로 인한 심리적 불안정성"
+        ],
+        "threshold_hit": [
+          "reasoning_conflict"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": false
+        },
+        "threshold_eval": {
+          "cost_weight": 0.3613,
+          "effect_weight": 0.444,
+          "recovery_weight": 0.3288,
+          "safety_weight": 0,
+          "total_score": 1.1341
+        },
+        "reasoning_trace": [
+          "input_analysis: 박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue",
+          "threshold_compare: risk=medium, threshold_score=2, confidence=0.2715, uncertainty=0.62",
+          "risk_summary: A=medium (산업체 경력을 쌓는 동안 안정적인 수입이 보장되지만, 연구에 대한 갈망이 커질 수 있다. | 재정적 안정이 우선이라는 생각이 결정에 혼란을 줄 수 있으며, 이는 장기적으로 불만족으로 이어질 수 있다. | 박사 지원을 미루는 동안 자신이 꿈을 이루지 못하고 있다는 자책감이 쌓일 수 있다.) / B=medium (박사 진학에 따른 수입 공백이 재정적 압박을 증가시킬 수 있음 | 연구에 대한 열망과 안정적인 수입 간의 갈등으로 인한 심리적 불안정성 | 결정 후 초기 몇 달 동안 재정적 어려움이 지속될 가능성 | 장기적으로 연구 성과가 안정적인 직장으로 이어질 수 있지만, 초기 불안정성은 여전히 존재)",
+          "reasoning_conflicts: A는 안정성을 중시하며, B는 기회를 중시한다. | A는 장기적인 안정성을 강조하지만, B는 단기적인 불안정성을 감수하고 연구에 집중할 것을 제안한다.",
+          "final_decision: review because risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0.2715,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=A; recommended_option=A; confidence=0.2715; reason=안정적인 수입을 통해 재정적 압박을 줄이고, 장기적으로 연구에 대한 열망을 충족할 수 있는 기회를 제공하기 때문이다. 그러나 박사 진학에 따른 초기 재정적 어려움과 불안정성을 고려해야 한다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 52296,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23087
+    }
+  }
+}

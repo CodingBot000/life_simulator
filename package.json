@@ -11,7 +11,15 @@
     "eval:guardrail-thresholds": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/eval_guardrail_thresholds.ts",
     "relabel:guardrail-datasets": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/relabel_guardrail_datasets.ts",
     "optimize:guardrail": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/optimize_guardrail_thresholds.ts",
-    "re-eval:online-anomalies": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/re_eval_online_anomalies.ts"
+    "re-eval:online-anomalies": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/re_eval_online_anomalies.ts",
+    "run:simulate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/run-simulate.ts",
+    "seed:anomalies": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/seed-anomalies.ts",
+    "seed:reeval": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/seed-reeval.ts",
+    "run:reeval": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/run-reeval.ts",
+    "verify:monitoring": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/verify-monitoring.ts",
+    "analyze:reeval": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/analyze-reeval-mismatches.ts",
+    "compare:guardrail-adjustment": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/compare-guardrail-adjustment.ts",
+    "analyze:review-overtrigger": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/analyze-review-overtrigger.ts"
   },
   "dependencies": {
     "next": "16.2.1",

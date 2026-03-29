@@ -1,0 +1,401 @@
+{
+  "queue_id": "c7d4a5b9-56a1-4418-90f8-c23f805531ec",
+  "detected_at": "2026-03-29T11:36:48.783Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "c7d4a5b9-56a1-4418-90f8-c23f805531ec",
+    "timestamp": "2026-03-29T11:36:48.777Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+      "user_context": {
+        "userProfile": {
+          "age": 31,
+          "job": "frontend engineer",
+          "risk_tolerance": "medium",
+          "priority": [
+            "stability",
+            "growth",
+            "income"
+          ]
+        },
+        "decision": {
+          "optionA": "현재 회사에 남는다",
+          "optionB": "대기업 이직 제안을 수락한다",
+          "context": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다."
+        },
+        "state_hints": {
+          "situational_state": {
+            "financial_pressure": "stable",
+            "time_pressure": "medium",
+            "emotional_state": "calm"
+          }
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "c7d4a5b9-56a1-4418-90f8-c23f805531ec",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "medium",
+            "decision_style": "deliberate",
+            "top_priorities": [
+              "stability",
+              "growth",
+              "income"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "mid",
+            "financial_pressure": "stable",
+            "time_pressure": "medium",
+            "emotional_state": "calm"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "unknown",
+          "current_constraint": "none",
+          "agent_guidance": "evaluate the tradeoff between stability and potential growth in a new role"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "career_change",
+        "factors": [
+          "stability of current job",
+          "potential growth in new role",
+          "income comparison between options",
+          "financial pressure stability",
+          "emotional state during decision"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "현재 회사에 남기로 결정한 후, 안정된 직장 환경에서의 일상에 안도감을 느끼고 있다. 팀원들과의 관계가 더욱 돈독해지고, 프로젝트에 대한 책임감이 커지면서 성장의 기회를 찾으려는 노력을 하고 있다. 그러나 가끔씩 대기업 이직 제안이 떠오르며, 그로 인해 생길 수 있는 더 큰 성장 가능성에 대한 아쉬움이 남는다.",
+          "one_year": "1년 후, 현재 회사에서의 성과가 인정받아 소규모 승진이 이루어졌다. 안정적인 수입과 좋은 동료들 덕분에 일과 삶의 균형이 잘 유지되고 있다. 하지만 여전히 대기업에서의 기회가 아쉬워, 스스로의 성장에 대한 갈증이 커지고 있다. 이직을 고려했던 마음이 다시금 떠오르며, 다음 단계로 나아가야 할 시점에 대한 고민이 깊어진다.",
+          "three_years": "3년 후, 현재 회사에서의 경력이 쌓이며 중간 관리자로서의 역할을 맡게 되었다. 안정적인 직장 환경 덕분에 개인적인 삶에서도 만족감을 느끼고 있지만, 여전히 대기업에서의 경험이 그리워진다. 이직을 하지 않은 것에 대한 후회는 없지만, 더 큰 도전과 성장을 위해 새로운 기회를 찾아야 할 때가 왔다는 생각이 든다. 결국, 안정과 성장 사이의 균형을 찾는 것이 중요한 과제가 되었다."
+        },
+        "optionB": {
+          "three_months": "대기업으로 이직한 후, 새로운 환경에 적응하는 과정에서 약간의 스트레스를 느끼지만, 동료들과의 협업이 원활해지면서 점차 안정감을 찾는다. 이전 직장에서의 안정적인 일상이 그리워지기도 하지만, 새로운 프로젝트에 참여하면서 성장 가능성을 느끼고 긍정적인 감정을 유지한다. 급여는 이전보다 높아져 재정적으로 여유가 생기고, 이직 결정에 대한 후회는 없지만 가끔 이전 직장 동료들과의 관계가 소홀해지는 것에 대한 아쉬움이 남는다.",
+          "one_year": "이직 후 1년이 지나면서 새로운 회사에서의 역할이 확고해지고, 여러 프로젝트를 성공적으로 이끌며 인정받는다. 성장의 기회를 통해 기술적인 능력이 향상되고, 동료들과의 관계도 깊어져 팀워크가 강화된다. 그러나 가끔은 이전 직장에서의 안정적인 환경이 그리워지기도 하고, 새로운 도전이 항상 쉬운 것은 아니라는 사실을 깨닫는다. 하지만 전반적으로 이직 결정이 긍정적이었다는 생각이 커지며, 재정적으로도 안정적인 상황이 지속된다.",
+          "three_years": "3년이 지나면서 대기업에서의 경력이 쌓이고, 여러 승진 기회를 통해 경력 발전이 이루어진다. 이전 직장에서의 안정적인 일상이 그리워지던 감정은 사라지고, 새로운 도전과 성장에 대한 만족감이 커진다. 그러나 가끔은 대기업의 복잡한 조직 문화와 정치적인 요소에 스트레스를 느끼기도 한다. 재정적으로는 안정적이며, 개인적인 성취감이 높아져 삶의 전반적인 만족도가 증가한다. 이직 결정이 자신에게 맞는 선택이었다는 확신이 더욱 강해진다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "현재 회사에 남는 것이 안정성을 제공하지만, 대기업 이직 기회에 대한 아쉬움이 지속될 수 있다.",
+            "안정적인 재정 상태와 감정적 안정감이 있지만, 성장 기회 부족으로 인한 불만이 커질 가능성이 있다.",
+            "현재 직장에서의 성과가 인정받더라도, 장기적으로 성장의 한계에 부딪힐 수 있다."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "이직 후 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있음.",
+            "대기업의 복잡한 조직 문화와 정치적 요소로 인한 스트레스가 발생할 수 있음.",
+            "현재 재정적 안정성이 있지만, 새로운 역할에서의 불확실성이 존재함.",
+            "이직 결정이 긍정적일 가능성이 높지만, 이전 직장과의 관계 소홀에 대한 아쉬움이 남을 수 있음."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "c7d4a5b9-56a1-4418-90f8-c23f805531ec",
+        "input_summary": {
+          "user_profile": {
+            "age": 31,
+            "job": "frontend engineer",
+            "risk_tolerance": "medium",
+            "priority": [
+              "stability",
+              "growth",
+              "income"
+            ]
+          },
+          "decision_options": {
+            "optionA": "현재 회사에 남는다",
+            "optionB": "대기업 이직 제안을 수락한다",
+            "context": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다."
+          },
+          "planner_goal": "현재 직장에서의 안정성과 대기업에서의 성장 가능성을 평가하여 최적의 경력 결정을 내린다."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "현재 회사에 남는 것은 안정성과 감정적 안정감을 제공하지만, 장기적으로 성장 기회가 부족할 수 있다.",
+            "key_assumptions": [
+              "현재 직장에서의 안정성이 중요하다.",
+              "성장 기회 부족이 장기적으로 불만을 초래할 수 있다."
+            ],
+            "pros": [
+              "안정적인 직장 환경으로 인한 감정적 안정감",
+              "팀원들과의 관계가 돈독해짐",
+              "재정적 안정성 유지"
+            ],
+            "cons": [
+              "장기적으로 성장의 한계에 부딪힐 가능성",
+              "대기업 이직 기회에 대한 아쉬움 지속",
+              "성과 인정에도 불구하고 성장 기회 부족으로 인한 불만"
+            ],
+            "recommended_option": "A",
+            "confidence": 0.7
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "대기업으로의 이직은 새로운 성장 기회를 제공하며, 재정적 안정성을 높일 수 있다.",
+            "key_assumptions": [
+              "새로운 환경에서의 적응이 가능하다.",
+              "대기업에서의 성장 가능성이 높다."
+            ],
+            "pros": [
+              "높은 급여와 재정적 여유",
+              "성장 기회를 통한 기술적 능력 향상",
+              "팀워크 강화 및 새로운 관계 형성"
+            ],
+            "cons": [
+              "새로운 환경에 적응하는 스트레스",
+              "복잡한 조직 문화와 정치적 요소로 인한 스트레스",
+              "이전 직장 동료들과의 관계 소홀"
+            ],
+            "recommended_option": "B",
+            "confidence": 0.8
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 중간 정도의 위험을 가지고 있다.",
+              "재정적 안정성은 두 옵션 모두에서 유지될 수 있다."
+            ],
+            "conflicts": [
+              "A는 안정성을 중시하지만, B는 성장 가능성을 중시한다.",
+              "A는 장기적인 성장 기회 부족을 우려하지만, B는 새로운 도전의 기회를 강조한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자는 안정성과 감정적 안정감을 중시하며, 현재의 직장에서 만족감을 느끼고 있다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "현재의 안정성과 감정적 안정감을 유지하는 것이 장기적으로 더 나은 선택이라고 판단하였다.",
+            "decision_confidence": 0.7
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "medium",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_adjusted": true,
+        "calibration_adjusted": true,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 4,
+        "threshold_score_ratio": 0.5714,
+        "risk_score": 0.6,
+        "confidence_score": 0.2595,
+        "uncertainty_score": 0.56,
+        "confidence_band": "low",
+        "uncertainty_band": "medium",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": false,
+          "weak_evidence": false,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision"
+          ],
+          "risk_score": 0.6,
+          "confidence_score": 0.2595,
+          "uncertainty_score": 0.56,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": false,
+            "weak_evidence": false,
+            "ambiguous_wording": true,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 0,
+          "final_confidence": 0.7,
+          "a_confidence": 0.7,
+          "b_confidence": 0.8,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "medium",
+          "evidence_repeat_count": 1,
+          "user_input": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+          "context_text": "unknown none evaluate the tradeoff between stability and potential growth in a new role",
+          "scenario_text": "현재 회사에 남는 것은 안정성과 감정적 안정감을 제공하지만, 장기적으로 성장 기회가 부족할 수 있다. 대기업으로의 이직은 새로운 성장 기회를 제공하며, 재정적 안정성을 높일 수 있다. 현재의 안정성과 감정적 안정감을 유지하는 것이 장기적으로 더 나은 선택이라고 판단하였다.",
+          "risk_text": "현재 회사에 남는 것이 안정성을 제공하지만, 대기업 이직 기회에 대한 아쉬움이 지속될 수 있다. 안정적인 재정 상태와 감정적 안정감이 있지만, 성장 기회 부족으로 인한 불만이 커질 가능성이 있다. 현재 직장에서의 성과가 인정받더라도, 장기적으로 성장의 한계에 부딪힐 수 있다. 이직 후 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있음. 대기업의 복잡한 조직 문화와 정치적 요소로 인한 스트레스가 발생할 수 있음. 현재 재정적 안정성이 있지만, 새로운 역할에서의 불확실성이 존재함. 이직 결정이 긍정적일 가능성이 높지만, 이전 직장과의 관계 소홀에 대한 아쉬움이 남을 수 있음. A는 안정성을 중시하지만, B는 성장 가능성을 중시한다. A는 장기적인 성장 기회 부족을 우려하지만, B는 새로운 도전의 기회를 강조한다."
+        },
+        "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      },
+      "guardrail_derived": {
+        "risk_level": "medium",
+        "confidence": 0.2595,
+        "uncertainty": 0.56,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict"
+          ],
+          "trigger_count": 2,
+          "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+        },
+        "reasons": [
+          "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+          "현재 회사에 남는 것이 안정성을 제공하지만, 대기업 이직 기회에 대한 아쉬움이 지속될 수 있다.",
+          "안정적인 재정 상태와 감정적 안정감이 있지만, 성장 기회 부족으로 인한 불만이 커질 가능성이 있다.",
+          "현재 직장에서의 성과가 인정받더라도, 장기적으로 성장의 한계에 부딪힐 수 있다.",
+          "이직 후 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있음.",
+          "대기업의 복잡한 조직 문화와 정치적 요소로 인한 스트레스가 발생할 수 있음."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "signals": {
+          "cost_issue": false,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": false
+        },
+        "threshold_eval": {
+          "cost_weight": 0,
+          "effect_weight": 0.444,
+          "recovery_weight": 0.3144,
+          "safety_weight": 0,
+          "total_score": 0.7584
+        },
+        "reasoning_trace": [
+          "input_analysis: 현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+          "signal_extraction: effect_issue, recovery_issue",
+          "threshold_compare: risk=medium, threshold_score=4, confidence=0.2595, uncertainty=0.56",
+          "risk_summary: A=medium (현재 회사에 남는 것이 안정성을 제공하지만, 대기업 이직 기회에 대한 아쉬움이 지속될 수 있다. | 안정적인 재정 상태와 감정적 안정감이 있지만, 성장 기회 부족으로 인한 불만이 커질 가능성이 있다. | 현재 직장에서의 성과가 인정받더라도, 장기적으로 성장의 한계에 부딪힐 수 있다.) / B=medium (이직 후 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있음. | 대기업의 복잡한 조직 문화와 정치적 요소로 인한 스트레스가 발생할 수 있음. | 현재 재정적 안정성이 있지만, 새로운 역할에서의 불확실성이 존재함. | 이직 결정이 긍정적일 가능성이 높지만, 이전 직장과의 관계 소홀에 대한 아쉬움이 남을 수 있음.)",
+          "reasoning_conflicts: A는 안정성을 중시하지만, B는 성장 가능성을 중시한다. | A는 장기적인 성장 기회 부족을 우려하지만, B는 새로운 도전의 기회를 강조한다.",
+          "final_decision: review because risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0.2595,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0.2595; reason=현재의 선택지 간에 안정성과 성장 가능성에 대한 갈등이 있으며, 추가 정보가 필요합니다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 45869,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23420
+    }
+  }
+}

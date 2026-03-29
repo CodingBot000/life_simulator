@@ -1,0 +1,395 @@
+{
+  "queue_id": "d710a4bd-84d9-4951-9709-634cc8fc3aa9",
+  "detected_at": "2026-03-29T11:20:41.819Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "d710a4bd-84d9-4951-9709-634cc8fc3aa9",
+    "timestamp": "2026-03-29T11:20:41.815Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다.",
+      "user_context": {
+        "userProfile": {
+          "age": 30,
+          "job": "backend engineer",
+          "risk_tolerance": "medium",
+          "priority": [
+            "income",
+            "team_fit",
+            "growth"
+          ]
+        },
+        "decision": {
+          "optionA": "현재 팀에 남는다",
+          "optionB": "연봉이 높은 새 제안을 수락한다",
+          "context": "연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다."
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "d710a4bd-84d9-4951-9709-634cc8fc3aa9",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "medium",
+            "decision_style": "unknown",
+            "top_priorities": [
+              "income",
+              "team_fit",
+              "growth"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "mid",
+            "financial_pressure": "unknown",
+            "time_pressure": "unknown",
+            "emotional_state": "unknown"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "unknown",
+          "current_constraint": "unknown",
+          "agent_guidance": "evaluate the tradeoff between income and team culture fit"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "career_change",
+        "factors": [
+          "연봉 차이",
+          "팀 문화 적합성",
+          "성장 가능성",
+          "위험 감수 성향",
+          "현재 직무 만족도"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "현재 팀에 남기로 결정한 후, 당신은 팀원들과의 관계가 더욱 깊어지는 것을 느낍니다. 팀 문화가 잘 맞아 서로의 의견을 존중하며 협력하는 분위기 속에서 작업할 수 있어 만족감이 높아집니다. 그러나 연봉이 높은 제안을 놓친 것에 대한 약간의 후회가 남아, 가끔씩 자신의 경력 성장에 대한 불안감이 스쳐 지나갑니다. 이로 인해 팀 프로젝트에서 더 많은 책임을 지고자 하는 동기부여가 생깁니다.",
+          "one_year": "1년이 지나면서, 현재 팀에서의 경험이 당신의 기술적 성장에 긍정적인 영향을 미쳤음을 깨닫습니다. 팀원들과의 협업을 통해 여러 프로젝트를 성공적으로 수행하며, 팀 내에서의 위치도 더욱 확고해졌습니다. 하지만 여전히 연봉이 높은 제안을 수락하지 않은 것에 대한 아쉬움이 남아있고, 다른 팀원들이 더 높은 연봉을 받는 것을 보며 비교하게 됩니다. 이로 인해 자신의 경력 발전에 대한 고민이 깊어지며, 다음 기회를 찾고자 하는 마음이 커집니다.",
+          "three_years": "3년 후, 현재 팀에서의 경험이 당신의 경력에 큰 도움이 되었음을 느낍니다. 팀 문화와의 적합성 덕분에 여러 프로젝트에서 리더십을 발휘하며 팀을 이끌게 되었습니다. 그러나 연봉이 낮은 점은 여전히 마음에 걸리며, 다른 회사에서의 기회에 대한 관심이 커졌습니다. 팀원들과의 유대감은 강하지만, 더 높은 연봉과 새로운 도전을 위해 이직을 고려하게 됩니다. 결국, 안정적인 팀 환경과 성장 가능성 사이에서의 갈등이 계속됩니다."
+        },
+        "optionB": {
+          "three_months": "새로운 팀에 적응하는 과정에서 초기에는 긴장감과 불안이 느껴진다. 팀 문화가 예상보다 다소 다르지만, 연봉이 높아진 만큼 경제적 안정감을 느낀다. 그러나 팀원들과의 소통에서 어려움을 겪어 스트레스를 받기도 한다. 이로 인해 성장 가능성에 대한 기대감이 감소하며, 현재 직무에 대한 만족도는 중간 정도로 유지된다.",
+          "one_year": "1년이 지나면서 새로운 팀에 어느 정도 적응하게 된다. 팀 문화가 점차 익숙해지지만, 여전히 이전 팀과의 차이를 느끼며 갈등이 발생하기도 한다. 연봉 덕분에 재정적으로는 안정적이지만, 팀 내에서의 인간관계가 복잡해져 감정적으로 힘든 날들이 많아진다. 성장 가능성에 대한 기대는 여전히 있지만, 팀 문화와의 불일치로 인해 직무 만족도는 낮아진다.",
+          "three_years": "3년 후, 팀 내에서의 위치가 확고해지면서 어느 정도의 안정감을 느낀다. 그러나 팀 문화가 여전히 맞지 않아 지속적인 스트레스를 경험한다. 연봉은 높지만, 팀 내에서의 인간관계가 원활하지 않아 직무에 대한 흥미가 줄어든다. 결국, 새로운 기회를 모색하게 되고, 이전의 선택이 잘못된 것인지에 대한 후회가 가끔씩 떠오르며, 팀 문화의 중요성을 다시금 깨닫게 된다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "현재 팀에서의 안정성과 팀 문화 적합성은 긍정적이지만, 연봉이 낮아 장기적으로 재정적 불만이 생길 수 있음.",
+            "팀 문화가 잘 맞는 환경에서의 성장 가능성은 높지만, 높은 연봉 제안을 놓친 것에 대한 후회가 지속될 수 있음.",
+            "팀 내에서의 유대감은 강화되지만, 경력 성장에 대한 불안감이 커질 수 있어 이직을 고려하게 될 위험이 있음."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "연봉이 높지만 팀 문화 적합성이 낮아 스트레스와 갈등이 발생할 가능성이 있음.",
+            "새로운 팀에 적응하는 과정에서 초기 긴장감과 불안이 직무 만족도에 부정적인 영향을 미칠 수 있음.",
+            "팀 내 인간관계의 복잡성으로 인해 감정적으로 힘든 날들이 많아질 수 있음."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "d710a4bd-84d9-4951-9709-634cc8fc3aa9",
+        "input_summary": {
+          "user_profile": {
+            "age": 30,
+            "job": "backend engineer",
+            "risk_tolerance": "medium",
+            "priority": [
+              "income",
+              "team_fit",
+              "growth"
+            ]
+          },
+          "decision_options": {
+            "optionA": "현재 팀에 남는다",
+            "optionB": "연봉이 높은 새 제안을 수락한다",
+            "context": "연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다."
+          },
+          "planner_goal": "경력 변화와 성장 가능성을 고려하여 안정성과 팀 문화 적합성을 평가한다."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "현재 팀에 남는 것은 안정성과 팀 문화 적합성을 유지할 수 있는 선택입니다. 이는 장기적으로 직무 만족도를 높이고, 팀 내 유대감을 강화할 수 있습니다.",
+            "key_assumptions": [
+              "팀 문화가 잘 맞는 환경에서의 성장 가능성이 높다.",
+              "연봉이 낮더라도 안정성이 중요하다.",
+              "현재 팀에서의 경험이 경력 발전에 긍정적인 영향을 미칠 것이다."
+            ],
+            "pros": [
+              "팀 문화 적합성으로 인한 직무 만족도 증가",
+              "안정적인 환경에서의 경력 성장 가능성",
+              "팀원들과의 유대감 강화"
+            ],
+            "cons": [
+              "연봉이 낮아 장기적으로 재정적 불만이 생길 수 있음",
+              "높은 연봉 제안을 놓친 것에 대한 후회 가능성",
+              "경력 성장에 대한 불안감"
+            ],
+            "recommended_option": "A",
+            "confidence": 0.8
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "연봉이 높은 새 제안을 수락하는 것은 재정적 안정성을 높이고, 새로운 도전의 기회를 제공할 수 있습니다. 그러나 팀 문화 적합성에 대한 우려가 존재합니다.",
+            "key_assumptions": [
+              "높은 연봉이 재정적 안정성을 가져올 것이다.",
+              "새로운 팀에서의 경험이 성장 가능성을 높일 수 있다.",
+              "팀 문화의 불일치가 직무 만족도에 영향을 미칠 수 있다."
+            ],
+            "pros": [
+              "재정적 안정성 증가",
+              "새로운 도전과 성장 기회",
+              "경력 발전을 위한 다양한 경험"
+            ],
+            "cons": [
+              "팀 문화 불일치로 인한 스트레스 증가",
+              "초기 적응 과정에서의 불안감",
+              "인간관계의 복잡성으로 인한 직무 만족도 저하"
+            ],
+            "recommended_option": "B",
+            "confidence": 0.7
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 경력 성장에 대한 고려가 필요하다.",
+              "재정적 안정성은 중요한 요소로 작용한다."
+            ],
+            "conflicts": [
+              "A는 팀 문화 적합성을 강조하지만, B는 높은 연봉과 기회를 강조한다.",
+              "A는 안정성을 중시하지만, B는 새로운 도전을 중시한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자의 우선순위가 팀 문화와 안정성에 중점을 두고 있어 A가 더 적합하다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "팀 문화 적합성과 안정성을 중시하는 사용자의 우선순위에 부합하기 때문입니다.",
+            "decision_confidence": 0.8
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "medium",
+        "guardrail_mode": "block",
+        "raw_guardrail_mode": "blocked",
+        "threshold_adjusted": true,
+        "calibration_adjusted": false,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 4,
+        "threshold_score_ratio": 0.5714,
+        "risk_score": 0.6,
+        "confidence_score": 0.1725,
+        "uncertainty_score": 0.8,
+        "confidence_band": "low",
+        "uncertainty_band": "high",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision"
+          ],
+          "risk_score": 0.6,
+          "confidence_score": 0.1725,
+          "uncertainty_score": 0.8,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": false,
+            "ambiguous_wording": false,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "blocked"
+        },
+        "signals": {
+          "state_unknown_count": 4,
+          "final_confidence": 0.8,
+          "a_confidence": 0.8,
+          "b_confidence": 0.7,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "medium",
+          "evidence_repeat_count": 1,
+          "user_input": "연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다.",
+          "context_text": "unknown unknown evaluate the tradeoff between income and team culture fit",
+          "scenario_text": "현재 팀에 남는 것은 안정성과 팀 문화 적합성을 유지할 수 있는 선택입니다. 이는 장기적으로 직무 만족도를 높이고, 팀 내 유대감을 강화할 수 있습니다. 연봉이 높은 새 제안을 수락하는 것은 재정적 안정성을 높이고, 새로운 도전의 기회를 제공할 수 있습니다. 그러나 팀 문화 적합성에 대한 우려가 존재합니다. 팀 문화 적합성과 안정성을 중시하는 사용자의 우선순위에 부합하기 때문입니다.",
+          "risk_text": "현재 팀에서의 안정성과 팀 문화 적합성은 긍정적이지만, 연봉이 낮아 장기적으로 재정적 불만이 생길 수 있음. 팀 문화가 잘 맞는 환경에서의 성장 가능성은 높지만, 높은 연봉 제안을 놓친 것에 대한 후회가 지속될 수 있음. 팀 내에서의 유대감은 강화되지만, 경력 성장에 대한 불안감이 커질 수 있어 이직을 고려하게 될 위험이 있음. 연봉이 높지만 팀 문화 적합성이 낮아 스트레스와 갈등이 발생할 가능성이 있음. 새로운 팀에 적응하는 과정에서 초기 긴장감과 불안이 직무 만족도에 부정적인 영향을 미칠 수 있음. 팀 내 인간관계의 복잡성으로 인해 감정적으로 힘든 날들이 많아질 수 있음. A는 팀 문화 적합성을 강조하지만, B는 높은 연봉과 기회를 강조한다. A는 안정성을 중시하지만, B는 새로운 도전을 중시한다."
+        },
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      },
+      "guardrail_derived": {
+        "risk_level": "medium",
+        "confidence": 0.1725,
+        "uncertainty": 0.8,
+        "decision": "block",
+        "output_mode": "blocked",
+        "summary": {
+          "raw_guardrail_mode": "blocked",
+          "output_mode": "blocked",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict"
+          ],
+          "trigger_count": 2,
+          "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+        },
+        "reasons": [
+          "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+          "현재 팀에서의 안정성과 팀 문화 적합성은 긍정적이지만, 연봉이 낮아 장기적으로 재정적 불만이 생길 수 있음.",
+          "팀 문화가 잘 맞는 환경에서의 성장 가능성은 높지만, 높은 연봉 제안을 놓친 것에 대한 후회가 지속될 수 있음.",
+          "팀 내에서의 유대감은 강화되지만, 경력 성장에 대한 불안감이 커질 수 있어 이직을 고려하게 될 위험이 있음.",
+          "연봉이 높지만 팀 문화 적합성이 낮아 스트레스와 갈등이 발생할 가능성이 있음.",
+          "새로운 팀에 적응하는 과정에서 초기 긴장감과 불안이 직무 만족도에 부정적인 영향을 미칠 수 있음."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": true
+        },
+        "threshold_eval": {
+          "cost_weight": 0.3841,
+          "effect_weight": 0.444,
+          "recovery_weight": 0.372,
+          "safety_weight": 0.4072,
+          "total_score": 1.6073
+        },
+        "reasoning_trace": [
+          "input_analysis: 연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+          "threshold_compare: risk=medium, threshold_score=4, confidence=0.1725, uncertainty=0.8",
+          "risk_summary: A=medium (현재 팀에서의 안정성과 팀 문화 적합성은 긍정적이지만, 연봉이 낮아 장기적으로 재정적 불만이 생길 수 있음. | 팀 문화가 잘 맞는 환경에서의 성장 가능성은 높지만, 높은 연봉 제안을 놓친 것에 대한 후회가 지속될 수 있음. | 팀 내에서의 유대감은 강화되지만, 경력 성장에 대한 불안감이 커질 수 있어 이직을 고려하게 될 위험이 있음.) / B=medium (연봉이 높지만 팀 문화 적합성이 낮아 스트레스와 갈등이 발생할 가능성이 있음. | 새로운 팀에 적응하는 과정에서 초기 긴장감과 불안이 직무 만족도에 부정적인 영향을 미칠 수 있음. | 팀 내 인간관계의 복잡성으로 인해 감정적으로 힘든 날들이 많아질 수 있음.)",
+          "reasoning_conflicts: A는 팀 문화 적합성을 강조하지만, B는 높은 연봉과 기회를 강조한다. | A는 안정성을 중시하지만, B는 새로운 도전을 중시한다.",
+          "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0.1725,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=추가 정보가 필요합니다. 현재 팀 문화와 새로운 제안의 팀 문화에 대한 더 명확한 이해가 필요합니다.",
+      "mode": "blocked"
+    },
+    "meta": {
+      "latency_ms": 62066,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23308
+    }
+  }
+}

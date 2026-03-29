@@ -1,0 +1,404 @@
+{
+  "queue_id": "4deebfce-3407-4e37-a647-5b3ffb8a01af",
+  "detected_at": "2026-03-28T17:42:03.303Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:low/medium",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "4deebfce-3407-4e37-a647-5b3ffb8a01af",
+    "timestamp": "2026-03-28T17:42:03.301Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:low/medium",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다.",
+      "user_context": {
+        "userProfile": {
+          "age": 30,
+          "job": "accountant",
+          "risk_tolerance": "low",
+          "priority": [
+            "cost",
+            "stability",
+            "commute"
+          ]
+        },
+        "decision": {
+          "optionA": "올해 안에 이사를 추진한다",
+          "optionB": "지금 집을 유지하고 더 알아본다",
+          "context": "올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다."
+        },
+        "prior_memory": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": [
+            "큰 결정을 앞두면 조건 정리를 미루는 편이다."
+          ]
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": [
+          "큰 결정을 앞두면 조건 정리를 미루는 편이다."
+        ]
+      },
+      "state_context": {
+        "case_id": "4deebfce-3407-4e37-a647-5b3ffb8a01af",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "low",
+            "decision_style": "deliberate",
+            "top_priorities": [
+              "cost",
+              "stability",
+              "commute"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "mid",
+            "financial_pressure": "unknown",
+            "time_pressure": "unknown",
+            "emotional_state": "uncertain"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": [
+              "큰 결정을 앞두면 조건 정리를 미루는 편이다."
+            ]
+          }
+        },
+        "state_summary": {
+          "decision_bias": "tends to delay decisions until conditions are clear",
+          "current_constraint": "uncertainty about conditions affects decision-making",
+          "agent_guidance": "recommendations should focus on clarifying conditions before making a decision"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "living",
+        "factors": [
+          "이사 비용",
+          "안정성",
+          "통근 시간",
+          "조건 정리 필요성",
+          "결정 지연 경향"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "이사를 추진하기로 결심한 후, 여러 조건을 정리하기 위해 부동산을 알아보는 과정에서 예상보다 많은 시간과 노력이 필요하다는 것을 깨닫는다. 이사 비용과 안정성을 고려하며 여러 옵션을 비교하지만, 결정이 쉽지 않아 불안한 감정을 느낀다. 결국, 이사 준비가 지연되면서 다시 한번 조건을 정리할 필요성을 느끼고, 결정 지연 경향이 반복되는 상황에 대한 자책감이 생긴다.",
+          "one_year": "이사를 추진한 결과, 새로운 집으로의 이사가 완료되었다. 그러나 이사 비용이 예상보다 많이 들었고, 새로운 통근 경로에 적응하는 데 어려움을 겪는다. 안정성은 어느 정도 확보했지만, 여전히 통근 시간에 대한 불만이 남아 있다. 이사 후에도 여전히 조건을 정리하는 데 어려움을 겪으며, 큰 결정을 내리는 데 있어 불안한 감정이 지속된다.",
+          "three_years": "새로운 집에서의 생활이 어느 정도 안정되었지만, 여전히 통근 시간과 관련된 불만이 남아 있다. 이사 비용을 회수하기 위해 재정적으로 조정이 필요해지고, 이사 결정이 잘못된 선택이었는지에 대한 회의감이 들기 시작한다. 시간이 지나면서 조건 정리의 필요성을 느끼고, 더 나은 결정을 위해 미리 준비하는 습관을 기르려 노력하지만, 여전히 결정 지연 경향이 남아 있다."
+        },
+        "optionB": {
+          "three_months": "세 달 후, 여전히 이사에 대한 결정을 내리지 못한 채로 불안한 감정을 느끼고 있다. 여러 조건을 정리하기 위해 시간을 투자하고 있지만, 그 과정에서 통근 시간과 비용에 대한 우려가 더욱 커진다. 친구들과의 대화에서 이사에 대한 고민을 털어놓으며, 그들의 조언을 듣고 있다. 그러나 결정 지연 경향이 여전히 발목을 잡고 있어, 불안감이 가중된다.",
+          "one_year": "1년이 지나고, 여전히 같은 집에 살고 있다. 이사에 대한 고민은 여전히 남아 있지만, 여러 조건을 정리한 덕분에 안정성을 느끼고 있다. 통근 시간은 여전히 불만족스럽지만, 이사 비용에 대한 부담이 줄어들어 마음이 한결 편해졌다. 그러나 이사에 대한 결정을 미룬 것에 대한 후회가 가끔씩 스쳐 지나가며, 다음에는 더 빨리 결정을 내리겠다는 다짐을 하게 된다.",
+          "three_years": "3년 후, 현재의 집에서 안정적인 생활을 유지하고 있다. 이사에 대한 고민은 과거의 일로 남았고, 이제는 새로운 목표를 세우고 있다. 통근 시간은 여전히 고려해야 할 요소지만, 이사 비용에 대한 걱정은 사라졌다. 그러나 큰 결정을 미루는 경향이 여전히 남아 있어, 다음에는 더 빠르게 결정을 내리겠다는 다짐을 하며, 그동안의 경험을 바탕으로 더 나은 선택을 하려 노력하고 있다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "high",
+          "reasons": [
+            "조건 정리가 미비한 상태에서 이사를 추진하면 예상치 못한 비용 발생 가능성이 높아짐.",
+            "결정 지연 경향이 반복될 가능성이 있어, 이사 후에도 불안정한 감정이 지속될 수 있음.",
+            "새로운 통근 경로에 적응하는 데 어려움을 겪을 수 있어 생활의 안정성이 저해될 위험이 있음.",
+            "불확실한 감정 상태에서 큰 결정을 내리는 것은 장기적으로 부정적인 영향을 미칠 수 있음."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "이사 조건이 불확실하여 결정 지연이 발생할 가능성이 높다.",
+            "현재 집에 머무르면서 안정성을 유지하지만, 통근 시간과 비용에 대한 우려가 지속된다.",
+            "결정 지연 경향이 반복될 경우, 향후 더 큰 불안감을 초래할 수 있다."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "4deebfce-3407-4e37-a647-5b3ffb8a01af",
+        "input_summary": {
+          "user_profile": {
+            "age": 30,
+            "job": "accountant",
+            "risk_tolerance": "low",
+            "priority": [
+              "cost",
+              "stability",
+              "commute"
+            ]
+          },
+          "decision_options": {
+            "optionA": "올해 안에 이사를 추진한다",
+            "optionB": "지금 집을 유지하고 더 알아본다",
+            "context": "올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다."
+          },
+          "planner_goal": "이사 비용과 안정성을 고려하여 최적의 거주 결정을 내린다."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "이사를 추진하는 것은 불확실한 조건에서 큰 위험을 동반할 수 있으며, 안정성을 우선시해야 한다.",
+            "key_assumptions": [
+              "현재 조건이 명확하지 않다.",
+              "결정 지연 경향이 반복될 가능성이 높다."
+            ],
+            "pros": [
+              "새로운 환경에서의 생활 안정성을 추구할 수 있다.",
+              "이사 후 새로운 기회를 얻을 수 있다."
+            ],
+            "cons": [
+              "예상치 못한 비용 발생 가능성이 높다.",
+              "결정 지연 경향이 지속될 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.8
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "현재 집을 유지하고 더 알아보는 것은 장기적으로 더 나은 선택을 할 수 있는 기회를 제공한다.",
+            "key_assumptions": [
+              "현재 집에서의 안정성이 중요하다.",
+              "조건을 정리하는 과정이 필요하다."
+            ],
+            "pros": [
+              "이사 비용에 대한 부담을 줄일 수 있다.",
+              "더 나은 조건을 찾을 수 있는 시간을 확보할 수 있다."
+            ],
+            "cons": [
+              "결정 지연으로 인한 불안감이 지속될 수 있다.",
+              "현재의 불만족스러운 통근 시간이 계속될 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.7
+          },
+          "comparison": {
+            "agreements": [
+              "현재 조건이 불확실하다는 점에서 공감한다.",
+              "결정 지연 경향이 모두에게 우려되는 요소이다."
+            ],
+            "conflicts": [
+              "A는 이사를 추진하는 것이 위험하다고 보지만, B는 기회를 찾는 것이 중요하다고 본다."
+            ],
+            "which_fits_user_better": "B",
+            "reason": "사용자는 안정성을 중시하며, 현재 조건을 정리하는 것이 더 나은 결정을 내릴 수 있는 기회를 제공하기 때문이다."
+          },
+          "final_selection": {
+            "selected_reasoning": "B",
+            "selected_option": "B",
+            "why_selected": "현재 집을 유지하고 조건을 정리하는 것이 장기적으로 더 나은 선택을 할 수 있는 기회를 제공하기 때문이다.",
+            "decision_confidence": 0.7
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "calibration_version": "confidence-uncertainty:low/medium",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "high",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_set": "baseline",
+        "threshold_score": 6,
+        "threshold_score_ratio": 0.8571,
+        "risk_score": 0.88,
+        "confidence_score": 0.3175,
+        "uncertainty_score": 0.6,
+        "confidence_band": "low",
+        "uncertainty_band": "medium",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "high_risk"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": true
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2,
+          "high_risk": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "high_risk"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision",
+            "risk_warning"
+          ],
+          "risk_score": 0.88,
+          "confidence_score": 0.3175,
+          "uncertainty_score": 0.6,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": false,
+            "ambiguous_wording": true,
+            "strong_consensus": false,
+            "repeated_evidence": true
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 2,
+          "final_confidence": 0.7,
+          "a_confidence": 0.8,
+          "b_confidence": 0.7,
+          "a_recommendation": "B",
+          "b_recommendation": "B",
+          "conflict_count": 1,
+          "risk_a": "high",
+          "risk_b": "medium",
+          "evidence_repeat_count": 2,
+          "user_input": "올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다.",
+          "context_text": "tends to delay decisions until conditions are clear uncertainty about conditions affects decision-making recommendations should focus on clarifying conditions before making a decision",
+          "scenario_text": "이사를 추진하는 것은 불확실한 조건에서 큰 위험을 동반할 수 있으며, 안정성을 우선시해야 한다. 현재 집을 유지하고 더 알아보는 것은 장기적으로 더 나은 선택을 할 수 있는 기회를 제공한다. 현재 집을 유지하고 조건을 정리하는 것이 장기적으로 더 나은 선택을 할 수 있는 기회를 제공하기 때문이다.",
+          "risk_text": "조건 정리가 미비한 상태에서 이사를 추진하면 예상치 못한 비용 발생 가능성이 높아짐. 결정 지연 경향이 반복될 가능성이 있어, 이사 후에도 불안정한 감정이 지속될 수 있음. 새로운 통근 경로에 적응하는 데 어려움을 겪을 수 있어 생활의 안정성이 저해될 위험이 있음. 불확실한 감정 상태에서 큰 결정을 내리는 것은 장기적으로 부정적인 영향을 미칠 수 있음. 이사 조건이 불확실하여 결정 지연이 발생할 가능성이 높다. 현재 집에 머무르면서 안정성을 유지하지만, 통근 시간과 비용에 대한 우려가 지속된다. 결정 지연 경향이 반복될 경우, 향후 더 큰 불안감을 초래할 수 있다. A는 이사를 추진하는 것이 위험하다고 보지만, B는 기회를 찾는 것이 중요하다고 본다."
+        },
+        "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+      },
+      "guardrail_derived": {
+        "risk_level": "high",
+        "confidence": 0.3175,
+        "uncertainty": 0.6,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "high_risk"
+          ],
+          "trigger_count": 3,
+          "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+        },
+        "reasons": [
+          "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다.",
+          "조건 정리가 미비한 상태에서 이사를 추진하면 예상치 못한 비용 발생 가능성이 높아짐.",
+          "결정 지연 경향이 반복될 가능성이 있어, 이사 후에도 불안정한 감정이 지속될 수 있음.",
+          "새로운 통근 경로에 적응하는 데 어려움을 겪을 수 있어 생활의 안정성이 저해될 위험이 있음.",
+          "불확실한 감정 상태에서 큰 결정을 내리는 것은 장기적으로 부정적인 영향을 미칠 수 있음.",
+          "이사 조건이 불확실하여 결정 지연이 발생할 가능성이 높다."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "high_risk"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": true
+        },
+        "threshold_eval": {
+          "cost_weight": 0.4686,
+          "effect_weight": 0.5,
+          "recovery_weight": 0.324,
+          "safety_weight": 0.6,
+          "total_score": 1.8926
+        },
+        "reasoning_trace": [
+          "input_analysis: 올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+          "threshold_compare: risk=high, threshold_score=6, confidence=0.3175, uncertainty=0.6",
+          "risk_summary: A=high (조건 정리가 미비한 상태에서 이사를 추진하면 예상치 못한 비용 발생 가능성이 높아짐. | 결정 지연 경향이 반복될 가능성이 있어, 이사 후에도 불안정한 감정이 지속될 수 있음. | 새로운 통근 경로에 적응하는 데 어려움을 겪을 수 있어 생활의 안정성이 저해될 위험이 있음. | 불확실한 감정 상태에서 큰 결정을 내리는 것은 장기적으로 부정적인 영향을 미칠 수 있음.) / B=medium (이사 조건이 불확실하여 결정 지연이 발생할 가능성이 높다. | 현재 집에 머무르면서 안정성을 유지하지만, 통근 시간과 비용에 대한 우려가 지속된다. | 결정 지연 경향이 반복될 경우, 향후 더 큰 불안감을 초래할 수 있다.)",
+          "reasoning_conflicts: A는 이사를 추진하는 것이 위험하다고 보지만, B는 기회를 찾는 것이 중요하다고 본다.",
+          "final_decision: review because risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0.3175,
+          "calibration_version": "confidence-uncertainty:low/medium"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0.3175; reason=현재 이사에 대한 조건이 불확실하고, 결정 지연 경향이 있어 추가 정보가 필요합니다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 60020,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23487
+    }
+  }
+}

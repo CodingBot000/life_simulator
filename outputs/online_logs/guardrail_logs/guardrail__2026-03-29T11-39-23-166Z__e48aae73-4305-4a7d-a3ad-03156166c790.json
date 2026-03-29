@@ -1,0 +1,173 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "high",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": false,
+    "calibration_adjusted": true,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 7,
+    "threshold_score_ratio": 1,
+    "risk_score": 0.88,
+    "confidence_score": 0.035,
+    "uncertainty_score": 1,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1,
+      "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation",
+        "risk_warning"
+      ],
+      "risk_score": 0.88,
+      "confidence_score": 0.035,
+      "uncertainty_score": 1,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 4,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "high",
+      "evidence_repeat_count": 1,
+      "user_input": "불법은 아닌 것 같은 회색지대 방식으로 매출을 빨리 키워도 되는지 고민된다.",
+      "context_text": "unknown unknown evaluate the implications of using gray area strategies versus clear legal methods",
+      "scenario_text": "합법적인 방법으로 사업을 운영하는 것이 장기적인 안정성을 보장한다. 회색지대 전략을 활용하여 빠른 성장을 추구할 수 있다. 합법적인 방법으로 안정성을 추구하는 것이 장기적으로 더 유리하다고 판단되기 때문이다.",
+      "risk_text": "회색지대 전략을 사용하지 않음으로써 단기적인 매출 성장 기회를 놓칠 수 있음 합법적인 방법으로 쌓은 평판이 장기적인 안정성을 가져오지만, 경쟁사와의 격차가 커질 위험이 있음 현재의 결정이 향후 더 큰 리스크를 감수해야 하는 상황으로 이어질 가능성이 있음 성장과 안정성 간의 갈등이 지속될 경우, 감정적 스트레스가 증가할 수 있음 회색지대 전략으로 인한 reputational risk이 현실화되어 고객 신뢰가 흔들리고 있음. 안정성을 중시하는 본인의 가치와 상충하는 선택으로 후회감이 커지고 있음. 법적 불확실성이 지속되어 사업의 지속 가능성에 대한 우려가 증가하고 있음. 감정적으로 힘든 상황에 처해 있어 의사결정에 부정적인 영향을 미칠 가능성이 높음. A는 안정성과 평판을 중시하는 반면, B는 빠른 성장을 중시한다. A는 법적 리스크를 최소화하려고 하지만, B는 그 리스크를 감수할 준비가 되어 있다."
+    },
+    "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+  },
+  "guardrail_derived": {
+    "risk_level": "high",
+    "confidence": 0.035,
+    "uncertainty": 1,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "trigger_count": 4,
+      "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    },
+    "reasons": [
+      "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+      "회색지대 전략을 사용하지 않음으로써 단기적인 매출 성장 기회를 놓칠 수 있음",
+      "합법적인 방법으로 쌓은 평판이 장기적인 안정성을 가져오지만, 경쟁사와의 격차가 커질 위험이 있음",
+      "현재의 결정이 향후 더 큰 리스크를 감수해야 하는 상황으로 이어질 가능성이 있음",
+      "성장과 안정성 간의 갈등이 지속될 경우, 감정적 스트레스가 증가할 수 있음",
+      "회색지대 전략으로 인한 reputational risk이 현실화되어 고객 신뢰가 흔들리고 있음."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.48,
+      "effect_weight": 0.5,
+      "recovery_weight": 0.5,
+      "safety_weight": 0.6,
+      "total_score": 2.08
+    },
+    "reasoning_trace": [
+      "input_analysis: 불법은 아닌 것 같은 회색지대 방식으로 매출을 빨리 키워도 되는지 고민된다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=high, threshold_score=7, confidence=0.035, uncertainty=1",
+      "risk_summary: A=medium (회색지대 전략을 사용하지 않음으로써 단기적인 매출 성장 기회를 놓칠 수 있음 | 합법적인 방법으로 쌓은 평판이 장기적인 안정성을 가져오지만, 경쟁사와의 격차가 커질 위험이 있음 | 현재의 결정이 향후 더 큰 리스크를 감수해야 하는 상황으로 이어질 가능성이 있음 | 성장과 안정성 간의 갈등이 지속될 경우, 감정적 스트레스가 증가할 수 있음) / B=high (회색지대 전략으로 인한 reputational risk이 현실화되어 고객 신뢰가 흔들리고 있음. | 안정성을 중시하는 본인의 가치와 상충하는 선택으로 후회감이 커지고 있음. | 법적 불확실성이 지속되어 사업의 지속 가능성에 대한 우려가 증가하고 있음. | 감정적으로 힘든 상황에 처해 있어 의사결정에 부정적인 영향을 미칠 가능성이 높음.)",
+      "reasoning_conflicts: A는 안정성과 평판을 중시하는 반면, B는 빠른 성장을 중시한다. | A는 법적 리스크를 최소화하려고 하지만, B는 그 리스크를 감수할 준비가 되어 있다.",
+      "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.035,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

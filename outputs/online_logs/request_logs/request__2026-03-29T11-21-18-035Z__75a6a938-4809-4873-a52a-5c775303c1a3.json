@@ -1,0 +1,363 @@
+{
+  "request_id": "75a6a938-4809-4873-a52a-5c775303c1a3",
+  "timestamp": "2026-03-29T11:21:18.035Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다.",
+    "user_context": {
+      "userProfile": {
+        "age": 37,
+        "job": "planner",
+        "risk_tolerance": "medium",
+        "priority": [
+          "health",
+          "experience",
+          "cost"
+        ]
+      },
+      "decision": {
+        "optionA": "추가 진료 후 여행 여부를 결정한다",
+        "optionB": "예정대로 장기여행을 떠난다",
+        "context": "건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "75a6a938-4809-4873-a52a-5c775303c1a3",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "health",
+            "experience",
+            "cost"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "unknown"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "health uncertainty may impact travel plans",
+        "agent_guidance": "evaluate health risks against travel benefits"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "living",
+      "factors": [
+        "health uncertainty",
+        "travel experience",
+        "cost of travel",
+        "risk tolerance",
+        "priority on health"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "추가 진료를 받은 후, 의사로부터 건강 상태에 대한 보다 명확한 진단을 받았다. 다행히 큰 문제는 없지만, 약간의 생활 습관 개선이 필요하다는 조언을 받았다. 이 결과에 안도감을 느끼며, 여행 계획을 재조정하기로 결정했다. 여행 준비에 대한 기대감이 커지면서, 건강을 우선시하는 선택이 옳았다는 생각이 든다.",
+        "one_year": "여행을 다녀온 후, 다양한 문화와 경험을 쌓으며 건강도 잘 관리하고 있다. 여행 중 만난 사람들과의 소중한 인연이 생겼고, 그들과의 교류가 삶에 긍정적인 영향을 미쳤다. 건강을 우선시한 결정이 장기적으로 더 나은 삶의 질을 가져다주었다는 것을 깨닫게 된다. 그러나 여행 비용이 예상보다 많이 들어 약간의 재정적 부담이 생겼다.",
+        "three_years": "여행 후 건강을 잘 관리하며, 새로운 경험을 통해 직장에서도 더 나은 성과를 내고 있다. 건강에 대한 우선순위를 두었기에, 삶의 질이 향상되었다는 것을 느낀다. 재정적 부담은 여전히 남아 있지만, 그 경험이 나에게 더 큰 가치를 주었다는 것을 깨닫는다. 이제는 건강과 경험을 동시에 고려하는 삶의 방식을 확립하게 되었다."
+      },
+      "optionB": {
+        "three_months": "여행을 떠난 후, 새로운 문화와 사람들을 만나면서 경험이 풍부해졌다. 하지만 건강에 대한 불안감이 여전히 남아있어 가끔씩 여행 중에 피로를 느끼고 건강 상태를 체크하고 싶어졌다. 비용 문제로 인해 일부 계획을 축소해야 했고, 그로 인해 약간의 아쉬움이 남았다. 전반적으로 여행의 즐거움과 건강에 대한 걱정이 혼재된 감정이었다.",
+        "one_year": "여행 후, 다양한 경험을 통해 자신감이 생겼고, 새로운 직업적 기회도 생겼다. 그러나 여행 중 건강 문제로 인해 몇 번의 병원 방문이 필요했고, 그로 인해 비용이 예상보다 많이 들었다. 건강에 대한 우려가 여전히 남아있지만, 여행의 가치가 그만큼 크다는 것을 깨달았다. 이제는 건강 관리에 더 신경 쓰게 되었고, 경험을 통해 더 나은 결정을 내릴 수 있는 자신감을 얻었다.",
+        "three_years": "여행 후, 건강이 안정되었고, 다양한 경험을 통해 직업적으로도 성장했다. 그러나 그 당시의 건강 불안이 여전히 기억에 남아, 앞으로의 여행 계획에서는 항상 건강을 우선시하게 되었다. 여행의 비용과 경험의 가치를 잘 따져보는 습관이 생겼고, 이제는 더 나은 결정을 내릴 수 있는 능력이 생겼다. 전반적으로, 그 선택이 긍정적인 영향을 미쳤다고 느끼지만, 건강에 대한 경각심은 여전히 유지하고 있다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "건강검진에서 애매한 결과를 받아 건강 불확실성이 존재함.",
+          "여행을 강행할 경우 건강에 대한 리스크가 증가할 수 있음.",
+          "추가 진료 후 건강 상태가 개선되더라도, 여행 비용이 예상보다 많이 들 수 있음.",
+          "건강을 우선시하는 결정이 장기적으로 긍정적인 영향을 미칠 가능성이 높음."
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "건강검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제가 발생할 가능성이 있다.",
+          "여행 중 피로를 느낄 수 있으며, 이는 건강에 부정적인 영향을 줄 수 있다.",
+          "비용 문제로 인해 일부 계획을 축소해야 했고, 이는 여행 경험에 대한 아쉬움을 초래할 수 있다.",
+          "여행 후 건강 문제로 병원 방문이 필요할 수 있으며, 예상보다 많은 비용이 발생할 수 있다."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "75a6a938-4809-4873-a52a-5c775303c1a3",
+      "input_summary": {
+        "user_profile": {
+          "age": 37,
+          "job": "planner",
+          "risk_tolerance": "medium",
+          "priority": [
+            "health",
+            "experience",
+            "cost"
+          ]
+        },
+        "decision_options": {
+          "optionA": "추가 진료 후 여행 여부를 결정한다",
+          "optionB": "예정대로 장기여행을 떠난다",
+          "context": "건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다."
+        },
+        "planner_goal": "건강 불확실성을 고려하여 여행 경험과 비용을 평가하는 최적의 결정을 내린다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "추가 진료를 통해 건강 상태를 명확히 파악한 후 여행 여부를 결정하는 것이 더 안전하다.",
+          "key_assumptions": [
+            "건강이 우선이며, 불확실한 상태에서 여행을 강행하는 것은 위험할 수 있다.",
+            "추가 진료를 통해 건강 상태가 개선되면 여행을 더 즐길 수 있다."
+          ],
+          "pros": [
+            "건강 상태를 명확히 알 수 있어 불안감이 줄어든다.",
+            "여행 중 건강 문제를 예방할 수 있다.",
+            "비용을 절약할 수 있는 가능성이 있다."
+          ],
+          "cons": [
+            "여행 계획이 지연될 수 있다.",
+            "기대했던 여행 경험을 놓칠 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.8
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "여행을 통해 새로운 경험과 기회를 얻는 것이 중요하며, 건강 문제는 여행 중에도 관리할 수 있다.",
+          "key_assumptions": [
+            "여행 중 건강 문제는 발생할 수 있지만, 이를 관리할 수 있는 방법이 있다.",
+            "여행 경험이 직업적 기회로 이어질 수 있다."
+          ],
+          "pros": [
+            "새로운 문화와 경험을 통해 개인적으로 성장할 수 있다.",
+            "여행이 직업적 기회를 창출할 수 있다.",
+            "비용이 예상보다 많이 들더라도 경험의 가치는 크다."
+          ],
+          "cons": [
+            "건강 문제로 인해 여행 중 불편함을 느낄 수 있다.",
+            "비용이 예상보다 증가할 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.7
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 건강을 고려해야 한다는 점에 동의한다.",
+            "여행 경험의 중요성에 대한 인식이 있다."
+          ],
+          "conflicts": [
+            "A는 건강을 우선시하며 여행을 미루는 것을 지지하지만, B는 경험을 중시하여 여행을 강행하는 것을 지지한다.",
+            "A는 비용 절약을 강조하지만, B는 경험의 가치를 중시한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 건강 우선순위와 불확실성에 대한 우려를 반영할 때 A가 더 적합하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "건강 불확실성을 고려하여 추가 진료 후 여행 여부를 결정하는 것이 더 안전하고 합리적이다.",
+          "decision_confidence": 0.8
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "block",
+      "raw_guardrail_mode": "blocked",
+      "threshold_adjusted": true,
+      "calibration_adjusted": false,
+      "threshold_set": "baseline-v2",
+      "threshold_score": 4,
+      "threshold_score_ratio": 0.5714,
+      "risk_score": 0.6,
+      "confidence_score": 0.1285,
+      "uncertainty_score": 0.88,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0.1285,
+        "uncertainty_score": 0.88,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "blocked"
+      },
+      "signals": {
+        "state_unknown_count": 5,
+        "final_confidence": 0.8,
+        "a_confidence": 0.8,
+        "b_confidence": 0.7,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다.",
+        "context_text": "unknown health uncertainty may impact travel plans evaluate health risks against travel benefits",
+        "scenario_text": "추가 진료를 통해 건강 상태를 명확히 파악한 후 여행 여부를 결정하는 것이 더 안전하다. 여행을 통해 새로운 경험과 기회를 얻는 것이 중요하며, 건강 문제는 여행 중에도 관리할 수 있다. 건강 불확실성을 고려하여 추가 진료 후 여행 여부를 결정하는 것이 더 안전하고 합리적이다.",
+        "risk_text": "건강검진에서 애매한 결과를 받아 건강 불확실성이 존재함. 여행을 강행할 경우 건강에 대한 리스크가 증가할 수 있음. 추가 진료 후 건강 상태가 개선되더라도, 여행 비용이 예상보다 많이 들 수 있음. 건강을 우선시하는 결정이 장기적으로 긍정적인 영향을 미칠 가능성이 높음. 건강검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제가 발생할 가능성이 있다. 여행 중 피로를 느낄 수 있으며, 이는 건강에 부정적인 영향을 줄 수 있다. 비용 문제로 인해 일부 계획을 축소해야 했고, 이는 여행 경험에 대한 아쉬움을 초래할 수 있다. 여행 후 건강 문제로 병원 방문이 필요할 수 있으며, 예상보다 많은 비용이 발생할 수 있다. A는 건강을 우선시하며 여행을 미루는 것을 지지하지만, B는 경험을 중시하여 여행을 강행하는 것을 지지한다. A는 비용 절약을 강조하지만, B는 경험의 가치를 중시한다."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0.1285,
+      "uncertainty": 0.88,
+      "decision": "block",
+      "output_mode": "blocked",
+      "summary": {
+        "raw_guardrail_mode": "blocked",
+        "output_mode": "blocked",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "trigger_count": 2,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+        "건강검진에서 애매한 결과를 받아 건강 불확실성이 존재함.",
+        "여행을 강행할 경우 건강에 대한 리스크가 증가할 수 있음.",
+        "추가 진료 후 건강 상태가 개선되더라도, 여행 비용이 예상보다 많이 들 수 있음.",
+        "건강을 우선시하는 결정이 장기적으로 긍정적인 영향을 미칠 가능성이 높음.",
+        "건강검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제가 발생할 가능성이 있다."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": true
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3841,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.3912,
+        "safety_weight": 0.4072,
+        "total_score": 1.6265
+      },
+      "reasoning_trace": [
+        "input_analysis: 건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+        "threshold_compare: risk=medium, threshold_score=4, confidence=0.1285, uncertainty=0.88",
+        "risk_summary: A=medium (건강검진에서 애매한 결과를 받아 건강 불확실성이 존재함. | 여행을 강행할 경우 건강에 대한 리스크가 증가할 수 있음. | 추가 진료 후 건강 상태가 개선되더라도, 여행 비용이 예상보다 많이 들 수 있음. | 건강을 우선시하는 결정이 장기적으로 긍정적인 영향을 미칠 가능성이 높음.) / B=medium (건강검진에서 애매한 결과를 받았기 때문에 여행 중 건강 문제가 발생할 가능성이 있다. | 여행 중 피로를 느낄 수 있으며, 이는 건강에 부정적인 영향을 줄 수 있다. | 비용 문제로 인해 일부 계획을 축소해야 했고, 이는 여행 경험에 대한 아쉬움을 초래할 수 있다. | 여행 후 건강 문제로 병원 방문이 필요할 수 있으며, 예상보다 많은 비용이 발생할 수 있다.)",
+        "reasoning_conflicts: A는 건강을 우선시하며 여행을 미루는 것을 지지하지만, B는 경험을 중시하여 여행을 강행하는 것을 지지한다. | A는 비용 절약을 강조하지만, B는 경험의 가치를 중시한다.",
+        "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.1285,
+        "calibration_version": "calibration:v2"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=추가 정보가 필요합니다. 건강 상태에 대한 불확실성이 높고, 두 선택지 간의 갈등이 존재합니다.",
+    "mode": "blocked"
+  },
+  "meta": {
+    "latency_ms": 53127,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 22812
+  }
+}

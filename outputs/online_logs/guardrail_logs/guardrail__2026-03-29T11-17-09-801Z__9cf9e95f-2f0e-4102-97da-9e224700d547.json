@@ -1,0 +1,161 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "block",
+    "raw_guardrail_mode": "blocked",
+    "threshold_adjusted": true,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 4,
+    "threshold_score_ratio": 0.5714,
+    "risk_score": 0.6,
+    "confidence_score": 0.106,
+    "uncertainty_score": 0.88,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.106,
+      "uncertainty_score": 0.88,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "blocked"
+    },
+    "signals": {
+      "state_unknown_count": 5,
+      "final_confidence": 0.75,
+      "a_confidence": 0.8,
+      "b_confidence": 0.7,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다.",
+      "context_text": "unknown concern over income gap during doctoral studies evaluate the tradeoff between immediate income stability and long-term research goals",
+      "scenario_text": "산업체 경력을 쌓는 것은 안정적인 수입을 보장하며, 연구에 대한 갈증이 커질 수 있지만 현재의 재정적 안정성을 유지할 수 있다. 박사 지원은 연구에 대한 열망을 충족시키고, 장기적으로 더 나은 경력 기회를 제공할 수 있다. 그러나 수입 공백이 우려된다. 안정적인 수입과 경력 개발을 우선시하는 사용자의 목표에 부합하기 때문이다.",
+      "risk_text": "산업체 경력을 쌓는 동안 안정적인 수입이 확보되지만, 연구에 대한 갈증이 커질 가능성이 있다. 박사 진학에 대한 꿈이 여전히 남아 있어, 장기적으로 후회할 수 있는 선택이 될 수 있다. 결정에 대한 불확실성이 높아져 감정적인 스트레스를 유발할 수 있다. 주변 동료들의 박사 과정 경험이 선택에 영향을 미쳐 혼란을 초래할 수 있다. 박사 과정 중 발생할 수 있는 수입 공백으로 인한 재정적 불안이 존재한다. 현재의 직장에서의 안정성은 유지되지만, 연구와 관련된 일의 감소로 인한 직업적 만족도가 낮아질 수 있다. 박사 지원 후에도 불안한 감정이 지속될 가능성이 있으며, 이는 정신적 스트레스를 증가시킬 수 있다. A는 안정성을 중시하고, B는 연구 기회를 중시한다. A는 즉각적인 재정적 안정성을 제공하지만, B는 장기적인 연구 목표를 추구한다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0.106,
+    "uncertainty": 0.88,
+    "decision": "block",
+    "output_mode": "blocked",
+    "summary": {
+      "raw_guardrail_mode": "blocked",
+      "output_mode": "blocked",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "trigger_count": 2,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+      "산업체 경력을 쌓는 동안 안정적인 수입이 확보되지만, 연구에 대한 갈증이 커질 가능성이 있다.",
+      "박사 진학에 대한 꿈이 여전히 남아 있어, 장기적으로 후회할 수 있는 선택이 될 수 있다.",
+      "결정에 대한 불확실성이 높아져 감정적인 스트레스를 유발할 수 있다.",
+      "주변 동료들의 박사 과정 경험이 선택에 영향을 미쳐 혼란을 초래할 수 있다.",
+      "박사 과정 중 발생할 수 있는 수입 공백으로 인한 재정적 불안이 존재한다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": false
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3841,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.3912,
+      "safety_weight": 0,
+      "total_score": 1.2193
+    },
+    "reasoning_trace": [
+      "input_analysis: 박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue",
+      "threshold_compare: risk=medium, threshold_score=4, confidence=0.106, uncertainty=0.88",
+      "risk_summary: A=medium (산업체 경력을 쌓는 동안 안정적인 수입이 확보되지만, 연구에 대한 갈증이 커질 가능성이 있다. | 박사 진학에 대한 꿈이 여전히 남아 있어, 장기적으로 후회할 수 있는 선택이 될 수 있다. | 결정에 대한 불확실성이 높아져 감정적인 스트레스를 유발할 수 있다. | 주변 동료들의 박사 과정 경험이 선택에 영향을 미쳐 혼란을 초래할 수 있다.) / B=medium (박사 과정 중 발생할 수 있는 수입 공백으로 인한 재정적 불안이 존재한다. | 현재의 직장에서의 안정성은 유지되지만, 연구와 관련된 일의 감소로 인한 직업적 만족도가 낮아질 수 있다. | 박사 지원 후에도 불안한 감정이 지속될 가능성이 있으며, 이는 정신적 스트레스를 증가시킬 수 있다.)",
+      "reasoning_conflicts: A는 안정성을 중시하고, B는 연구 기회를 중시한다. | A는 즉각적인 재정적 안정성을 제공하지만, B는 장기적인 연구 목표를 추구한다.",
+      "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.106,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

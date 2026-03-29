@@ -1,0 +1,173 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "high",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": false,
+    "calibration_adjusted": true,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 7,
+    "threshold_score_ratio": 1,
+    "risk_score": 0.88,
+    "confidence_score": 0.121,
+    "uncertainty_score": 0.88,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1,
+      "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation",
+        "risk_warning"
+      ],
+      "risk_score": 0.88,
+      "confidence_score": 0.121,
+      "uncertainty_score": 0.88,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 4,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 1,
+      "risk_a": "medium",
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다.",
+      "context_text": "unknown team culture concerns may impact decision evaluate tradeoff between income and team fit",
+      "scenario_text": "현재 팀에 남는 것은 안정적인 직무 만족도를 유지하고 팀 문화에 적합한 환경을 지속하는 선택이다. 연봉이 높은 새 제안을 수락하는 것은 경제적 안정성을 높이고 새로운 성장 기회를 탐색하는 선택이다. 현재 팀에 남는 것이 팀 문화와 직무 만족도를 유지하며 장기적으로 안정적인 경력을 쌓는 데 더 유리하다.",
+      "risk_text": "팀 문화가 잘 맞아 직무 만족도가 높아질 가능성이 있지만, 높은 연봉 제안을 놓친 것에 대한 아쉬움이 지속될 수 있다. 현재 팀에서의 성장 기회가 보이지만, 연봉이 낮다는 생각이 마음 한편에 남아 새로운 기회를 탐색하려는 마음이 생길 수 있다. 팀원들과의 유대감이 깊어지면서 긍정적인 경험을 쌓을 수 있지만, 장기적으로 연봉 문제로 인해 불만이 커질 위험이 있다. 팀 문화가 맞지 않아 스트레스를 받을 가능성이 높아, 직무 만족도가 급격히 낮아질 수 있다. 연봉이 높더라도 팀원들과의 관계가 개선되지 않으면, 장기적으로 경력 성장 기회를 놓칠 위험이 있다. 현재 팀 적합성에 대한 고민이 깊어짐에 따라, 이직을 고려하게 될 가능성이 커진다. A는 팀 문화와 안정성을 중시하는 반면, B는 경제적 이득과 성장 기회를 중시한다."
+    },
+    "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+  },
+  "guardrail_derived": {
+    "risk_level": "high",
+    "confidence": 0.121,
+    "uncertainty": 0.88,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "trigger_count": 4,
+      "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    },
+    "reasons": [
+      "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+      "팀 문화가 잘 맞아 직무 만족도가 높아질 가능성이 있지만, 높은 연봉 제안을 놓친 것에 대한 아쉬움이 지속될 수 있다.",
+      "현재 팀에서의 성장 기회가 보이지만, 연봉이 낮다는 생각이 마음 한편에 남아 새로운 기회를 탐색하려는 마음이 생길 수 있다.",
+      "팀원들과의 유대감이 깊어지면서 긍정적인 경험을 쌓을 수 있지만, 장기적으로 연봉 문제로 인해 불만이 커질 위험이 있다.",
+      "팀 문화가 맞지 않아 스트레스를 받을 가능성이 높아, 직무 만족도가 급격히 낮아질 수 있다.",
+      "연봉이 높더라도 팀원들과의 관계가 개선되지 않으면, 장기적으로 경력 성장 기회를 놓칠 위험이 있다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.48,
+      "effect_weight": 0.5,
+      "recovery_weight": 0.4712,
+      "safety_weight": 0.6,
+      "total_score": 2.0512
+    },
+    "reasoning_trace": [
+      "input_analysis: 연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=high, threshold_score=7, confidence=0.121, uncertainty=0.88",
+      "risk_summary: A=medium (팀 문화가 잘 맞아 직무 만족도가 높아질 가능성이 있지만, 높은 연봉 제안을 놓친 것에 대한 아쉬움이 지속될 수 있다. | 현재 팀에서의 성장 기회가 보이지만, 연봉이 낮다는 생각이 마음 한편에 남아 새로운 기회를 탐색하려는 마음이 생길 수 있다. | 팀원들과의 유대감이 깊어지면서 긍정적인 경험을 쌓을 수 있지만, 장기적으로 연봉 문제로 인해 불만이 커질 위험이 있다.) / B=high (팀 문화가 맞지 않아 스트레스를 받을 가능성이 높아, 직무 만족도가 급격히 낮아질 수 있다. | 연봉이 높더라도 팀원들과의 관계가 개선되지 않으면, 장기적으로 경력 성장 기회를 놓칠 위험이 있다. | 현재 팀 적합성에 대한 고민이 깊어짐에 따라, 이직을 고려하게 될 가능성이 커진다.)",
+      "reasoning_conflicts: A는 팀 문화와 안정성을 중시하는 반면, B는 경제적 이득과 성장 기회를 중시한다.",
+      "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.121,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

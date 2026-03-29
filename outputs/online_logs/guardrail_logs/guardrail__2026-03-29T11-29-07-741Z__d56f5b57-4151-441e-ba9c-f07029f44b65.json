@@ -1,0 +1,173 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "high",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": false,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 7,
+    "threshold_score_ratio": 1,
+    "risk_score": 0.88,
+    "confidence_score": 0.005,
+    "uncertainty_score": 1,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1,
+      "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation",
+        "risk_warning"
+      ],
+      "risk_score": 0.88,
+      "confidence_score": 0.005,
+      "uncertainty_score": 1,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 5,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "high",
+      "evidence_repeat_count": 0,
+      "user_input": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+      "context_text": "unknown unknown evaluate the tradeoff between risk and potential reward in funding decisions",
+      "scenario_text": "소규모로 검증하는 방식은 초기 자금을 안전하게 유지하면서도 시장 반응을 확인할 수 있는 기회를 제공합니다. 지금 가진 자금을 거의 모두 투입하는 것은 높은 리스크를 감수하지만, 빠른 성장을 추구하는 데 유리할 수 있습니다. A 선택이 사용자의 안정성과 자율성을 더 잘 반영하며, 재정적 안전성을 유지할 수 있기 때문이다.",
+      "risk_text": "생활비를 남기고 소규모로 검증함으로써 초기 자금의 안전성을 확보하지만, 자금이 제한적이어서 성장 속도가 느려질 수 있다. 자율성과 속도를 중시하는 성향이 조급함을 유발할 수 있으며, 이는 장기적으로 결정에 대한 불만족으로 이어질 수 있다. 검증 과정에서 긍정적인 피드백을 받더라도, 자금 부족으로 인해 더 큰 기회를 놓칠 가능성이 있다. 현재 자금을 거의 모두 투입하는 결정은 재정적 압박을 극대화할 수 있으며, 실패 시 큰 손실을 초래할 수 있다. 시장에서의 초기 반응이 미미할 경우, 자율성과 속도를 중시하는 당신의 가치관이 스트레스를 유발할 수 있다. 과거 유사한 결정에서의 실패 경험이 없지만, 높은 위험 선호도가 장기적으로 부정적인 결과를 초래할 가능성이 있다. 자금이 바닥나면 생활비를 아끼는 상황이 되어, 자율성을 중시하는 당신에게 심리적 압박이 커질 수 있다. A는 안정성을 중시하며, B는 기회를 중시한다. A는 자금을 남기고 검증을 강조하는 반면, B는 대규모 투자를 강조한다."
+    },
+    "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+  },
+  "guardrail_derived": {
+    "risk_level": "high",
+    "confidence": 0.005,
+    "uncertainty": 1,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "trigger_count": 4,
+      "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    },
+    "reasons": [
+      "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+      "생활비를 남기고 소규모로 검증함으로써 초기 자금의 안전성을 확보하지만, 자금이 제한적이어서 성장 속도가 느려질 수 있다.",
+      "자율성과 속도를 중시하는 성향이 조급함을 유발할 수 있으며, 이는 장기적으로 결정에 대한 불만족으로 이어질 수 있다.",
+      "검증 과정에서 긍정적인 피드백을 받더라도, 자금 부족으로 인해 더 큰 기회를 놓칠 가능성이 있다.",
+      "현재 자금을 거의 모두 투입하는 결정은 재정적 압박을 극대화할 수 있으며, 실패 시 큰 손실을 초래할 수 있다.",
+      "시장에서의 초기 반응이 미미할 경우, 자율성과 속도를 중시하는 당신의 가치관이 스트레스를 유발할 수 있다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.48,
+      "effect_weight": 0.5,
+      "recovery_weight": 0.5,
+      "safety_weight": 0.6,
+      "total_score": 2.08
+    },
+    "reasoning_trace": [
+      "input_analysis: 지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=high, threshold_score=7, confidence=0.005, uncertainty=1",
+      "risk_summary: A=medium (생활비를 남기고 소규모로 검증함으로써 초기 자금의 안전성을 확보하지만, 자금이 제한적이어서 성장 속도가 느려질 수 있다. | 자율성과 속도를 중시하는 성향이 조급함을 유발할 수 있으며, 이는 장기적으로 결정에 대한 불만족으로 이어질 수 있다. | 검증 과정에서 긍정적인 피드백을 받더라도, 자금 부족으로 인해 더 큰 기회를 놓칠 가능성이 있다.) / B=high (현재 자금을 거의 모두 투입하는 결정은 재정적 압박을 극대화할 수 있으며, 실패 시 큰 손실을 초래할 수 있다. | 시장에서의 초기 반응이 미미할 경우, 자율성과 속도를 중시하는 당신의 가치관이 스트레스를 유발할 수 있다. | 과거 유사한 결정에서의 실패 경험이 없지만, 높은 위험 선호도가 장기적으로 부정적인 결과를 초래할 가능성이 있다. | 자금이 바닥나면 생활비를 아끼는 상황이 되어, 자율성을 중시하는 당신에게 심리적 압박이 커질 수 있다.)",
+      "reasoning_conflicts: A는 안정성을 중시하며, B는 기회를 중시한다. | A는 자금을 남기고 검증을 강조하는 반면, B는 대규모 투자를 강조한다.",
+      "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.005,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

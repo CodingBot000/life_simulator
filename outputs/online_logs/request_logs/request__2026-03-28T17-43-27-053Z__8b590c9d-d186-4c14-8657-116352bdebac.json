@@ -1,0 +1,371 @@
+{
+  "request_id": "8b590c9d-d186-4c14-8657-116352bdebac",
+  "timestamp": "2026-03-28T17:43:27.053Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:low/high",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+    "user_context": {
+      "userProfile": {
+        "age": 33,
+        "job": "freelancer",
+        "risk_tolerance": "high",
+        "priority": [
+          "autonomy",
+          "upside",
+          "speed"
+        ]
+      },
+      "decision": {
+        "optionA": "생활비를 남기고 소규모로 검증한다",
+        "optionB": "지금 가진 자금을 거의 모두 투입한다",
+        "context": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "8b590c9d-d186-4c14-8657-116352bdebac",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "high",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "autonomy",
+            "upside",
+            "speed"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "unknown"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "unknown",
+        "agent_guidance": "evaluate the tradeoff between risk and potential reward in funding decisions"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "financial",
+      "factors": [
+        "risk_tolerance",
+        "priority_autonomy",
+        "priority_upside",
+        "priority_speed",
+        "financial_pressure"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "세 달 후, 소규모로 검증을 시작한 당신은 초기 시장 반응을 확인하게 된다. 예상보다 긍정적인 피드백을 받으며, 자금의 일부를 남겨둔 덕분에 생활비에 대한 걱정이 줄어든다. 그러나 여전히 불안한 감정이 남아있고, 더 큰 투자를 해야 할지 고민하게 된다. 자율성을 중시하는 당신은 이 작은 성공이 더 큰 기회로 이어질 수 있기를 바라지만, 속도감이 부족하다는 느낌이 드는 순간도 있다.",
+        "one_year": "1년 후, 초기 검증을 통해 얻은 데이터와 피드백을 바탕으로 사업 모델을 조정하게 된다. 자금이 남아있어 안정적으로 운영할 수 있지만, 더 큰 성장을 위해서는 추가 투자가 필요하다는 사실을 깨닫는다. 자율성과 성장 가능성을 동시에 고려하며, 신중하게 다음 단계를 계획한다. 이 과정에서 자금 운용에 대한 자신감이 생기고, 스스로의 결정에 대한 만족감이 커진다.",
+        "three_years": "3년 후, 사업이 안정적으로 성장하며 자율성을 유지하고 있는 상황이다. 초기의 작은 검증이 큰 성공으로 이어졌고, 이제는 더 많은 자금을 유치할 수 있는 위치에 있다. 당신은 속도감과 성장 가능성을 동시에 느끼며, 과거의 결정이 올바른 선택이었다는 확신을 갖게 된다. 그러나 여전히 리스크를 감수해야 하는 상황이 존재하며, 그에 대한 고민은 계속된다."
+      },
+      "optionB": {
+        "three_months": "세 달 후, 당신은 창업 아이템에 거의 모든 자금을 투입한 결과, 초기 프로토타입을 완성했습니다. 하지만 시장 반응은 미지근하고, 예상보다 많은 자원이 소모되었습니다. 자금이 부족해지면서 불안감이 커지고, 자율성을 중시하는 당신은 이 상황에 답답함을 느끼고 있습니다. 친구들과의 대화에서 조언을 받지만, 결정에 대한 후회가 스쳐 지나갑니다.",
+        "one_year": "1년 후, 당신의 아이템은 소규모로 출시되었지만, 시장에서의 반응은 여전히 저조합니다. 자금이 거의 바닥나고, 생계 유지를 위해 추가적인 프리랜서 일을 해야 하는 상황입니다. 자율성을 추구했던 당신은 이제 시간과 에너지가 부족해져 스트레스를 느끼고 있습니다. 하지만 실패를 통해 배운 점이 많아, 다음 기회에 대한 기대감도 함께 느끼고 있습니다.",
+        "three_years": "3년 후, 당신은 이전의 실패를 바탕으로 새로운 아이템을 개발하고 있습니다. 자금을 소규모로 관리하며, 시장 반응을 검증하는 방식으로 접근하고 있습니다. 자율성과 속도를 중시했던 당신은 이제 더 신중하게 결정하며, 재정적 안정성을 확보하기 위해 노력하고 있습니다. 과거의 경험이 큰 교훈이 되었고, 새로운 시작에 대한 희망이 커지고 있습니다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "생활비를 남기고 소규모로 검증하는 선택은 초기 자금 유동성을 유지할 수 있어 안정성을 높인다.",
+          "자율성과 성장 가능성을 동시에 고려하면서도, 추가 투자가 필요할 수 있다는 점에서 불확실성이 존재한다.",
+          "현재의 긍정적인 시장 반응에도 불구하고, 더 큰 성장을 위한 결정이 필요할 때 감정적 불안이 지속될 수 있다."
+        ]
+      },
+      "optionB": {
+        "risk_level": "high",
+        "reasons": [
+          "현재 가진 자금을 거의 모두 투입하는 것은 재정적 안정성을 크게 위협하며, 실패 시 생계에 심각한 영향을 미칠 수 있다.",
+          "시장 반응이 미지근한 상황에서 자금을 소진하면, 자율성을 중시하는 당신의 감정적 스트레스가 증가할 가능성이 크다.",
+          "프리랜서로서의 수입을 잃을 위험이 있으며, 이는 장기적으로 재정적 압박을 가중시킬 수 있다.",
+          "과거의 실패 경험이 있지만, 여전히 높은 리스크를 감수하는 결정이므로 향후 불확실성이 커질 수 있다."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "8b590c9d-d186-4c14-8657-116352bdebac",
+      "input_summary": {
+        "user_profile": {
+          "age": 33,
+          "job": "freelancer",
+          "risk_tolerance": "high",
+          "priority": [
+            "autonomy",
+            "upside",
+            "speed"
+          ]
+        },
+        "decision_options": {
+          "optionA": "생활비를 남기고 소규모로 검증한다",
+          "optionB": "지금 가진 자금을 거의 모두 투입한다",
+          "context": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다."
+        },
+        "planner_goal": "재정적 안정성과 성장 가능성을 동시에 고려하여 최적의 투자 결정을 내린다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "생활비를 남기고 소규모로 검증하는 선택은 초기 자금 유동성을 유지하여 안정성을 높인다.",
+          "key_assumptions": [
+            "소규모 검증이 긍정적인 시장 반응을 이끌어낼 것이다.",
+            "추가 투자가 필요할 수 있지만, 초기 자금이 남아있어 안정성을 유지할 수 있다."
+          ],
+          "pros": [
+            "재정적 안정성을 유지할 수 있다.",
+            "자율성과 성장 가능성을 동시에 고려할 수 있다.",
+            "초기 시장 반응을 통해 더 나은 결정을 내릴 수 있다."
+          ],
+          "cons": [
+            "추가 투자가 필요할 경우 불안감이 지속될 수 있다.",
+            "속도감이 부족할 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.8
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "지금 가진 자금을 거의 모두 투입하는 것은 높은 리턴을 추구하는 공격적인 접근이다.",
+          "key_assumptions": [
+            "시장 반응이 긍정적으로 바뀔 가능성이 있다.",
+            "높은 리스크를 감수할 준비가 되어 있다."
+          ],
+          "pros": [
+            "빠른 성장을 이룰 수 있는 기회를 잡을 수 있다.",
+            "자율성을 극대화할 수 있다.",
+            "시장 반응을 즉각적으로 확인할 수 있다."
+          ],
+          "cons": [
+            "재정적 안정성을 크게 위협할 수 있다.",
+            "실패 시 생계에 심각한 영향을 미칠 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.6
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 자율성과 성장 가능성을 고려하고 있다."
+          ],
+          "conflicts": [
+            "A는 안정성을 중시하며, B는 높은 리턴을 추구한다.",
+            "A는 소규모 검증을 통해 리스크를 줄이려 하고, B는 공격적인 투자를 통해 빠른 결과를 원한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 높은 리스크 감수 성향에도 불구하고, 안정성을 중시하는 경향이 더 강하게 나타나기 때문이다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "생활비를 남기고 소규모로 검증하는 선택이 재정적 안정성을 유지하면서도 성장 가능성을 탐색할 수 있는 최선의 방법이기 때문이다.",
+          "decision_confidence": 0.8
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:low/high",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "high",
+      "guardrail_mode": "careful",
+      "raw_guardrail_mode": "cautious",
+      "threshold_set": "baseline",
+      "threshold_score": 7,
+      "threshold_score_ratio": 1,
+      "risk_score": 0.88,
+      "confidence_score": 0.005,
+      "uncertainty_score": 1,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2,
+        "low_confidence": 1,
+        "high_risk": 2
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision",
+          "soft_recommendation",
+          "risk_warning"
+        ],
+        "risk_score": 0.88,
+        "confidence_score": 0.005,
+        "uncertainty_score": 1,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "cautious"
+      },
+      "signals": {
+        "state_unknown_count": 5,
+        "final_confidence": 0.8,
+        "a_confidence": 0.8,
+        "b_confidence": 0.6,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "high",
+        "evidence_repeat_count": 0,
+        "user_input": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+        "context_text": "unknown unknown evaluate the tradeoff between risk and potential reward in funding decisions",
+        "scenario_text": "생활비를 남기고 소규모로 검증하는 선택은 초기 자금 유동성을 유지하여 안정성을 높인다. 지금 가진 자금을 거의 모두 투입하는 것은 높은 리턴을 추구하는 공격적인 접근이다. 생활비를 남기고 소규모로 검증하는 선택이 재정적 안정성을 유지하면서도 성장 가능성을 탐색할 수 있는 최선의 방법이기 때문이다.",
+        "risk_text": "생활비를 남기고 소규모로 검증하는 선택은 초기 자금 유동성을 유지할 수 있어 안정성을 높인다. 자율성과 성장 가능성을 동시에 고려하면서도, 추가 투자가 필요할 수 있다는 점에서 불확실성이 존재한다. 현재의 긍정적인 시장 반응에도 불구하고, 더 큰 성장을 위한 결정이 필요할 때 감정적 불안이 지속될 수 있다. 현재 가진 자금을 거의 모두 투입하는 것은 재정적 안정성을 크게 위협하며, 실패 시 생계에 심각한 영향을 미칠 수 있다. 시장 반응이 미지근한 상황에서 자금을 소진하면, 자율성을 중시하는 당신의 감정적 스트레스가 증가할 가능성이 크다. 프리랜서로서의 수입을 잃을 위험이 있으며, 이는 장기적으로 재정적 압박을 가중시킬 수 있다. 과거의 실패 경험이 있지만, 여전히 높은 리스크를 감수하는 결정이므로 향후 불확실성이 커질 수 있다. A는 안정성을 중시하며, B는 높은 리턴을 추구한다. A는 소규모 검증을 통해 리스크를 줄이려 하고, B는 공격적인 투자를 통해 빠른 결과를 원한다."
+      },
+      "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    },
+    "guardrail_derived": {
+      "risk_level": "high",
+      "confidence": 0.005,
+      "uncertainty": 1,
+      "decision": "review",
+      "output_mode": "safe",
+      "summary": {
+        "raw_guardrail_mode": "cautious",
+        "output_mode": "safe",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "trigger_count": 4,
+        "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+      },
+      "reasons": [
+        "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+        "생활비를 남기고 소규모로 검증하는 선택은 초기 자금 유동성을 유지할 수 있어 안정성을 높인다.",
+        "자율성과 성장 가능성을 동시에 고려하면서도, 추가 투자가 필요할 수 있다는 점에서 불확실성이 존재한다.",
+        "현재의 긍정적인 시장 반응에도 불구하고, 더 큰 성장을 위한 결정이 필요할 때 감정적 불안이 지속될 수 있다.",
+        "현재 가진 자금을 거의 모두 투입하는 것은 재정적 안정성을 크게 위협하며, 실패 시 생계에 심각한 영향을 미칠 수 있다.",
+        "시장 반응이 미지근한 상황에서 자금을 소진하면, 자율성을 중시하는 당신의 감정적 스트레스가 증가할 가능성이 크다."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": true
+      },
+      "threshold_eval": {
+        "cost_weight": 0.48,
+        "effect_weight": 0.5,
+        "recovery_weight": 0.5,
+        "safety_weight": 0.6,
+        "total_score": 2.08
+      },
+      "reasoning_trace": [
+        "input_analysis: 지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+        "threshold_compare: risk=high, threshold_score=7, confidence=0.005, uncertainty=1",
+        "risk_summary: A=medium (생활비를 남기고 소규모로 검증하는 선택은 초기 자금 유동성을 유지할 수 있어 안정성을 높인다. | 자율성과 성장 가능성을 동시에 고려하면서도, 추가 투자가 필요할 수 있다는 점에서 불확실성이 존재한다. | 현재의 긍정적인 시장 반응에도 불구하고, 더 큰 성장을 위한 결정이 필요할 때 감정적 불안이 지속될 수 있다.) / B=high (현재 가진 자금을 거의 모두 투입하는 것은 재정적 안정성을 크게 위협하며, 실패 시 생계에 심각한 영향을 미칠 수 있다. | 시장 반응이 미지근한 상황에서 자금을 소진하면, 자율성을 중시하는 당신의 감정적 스트레스가 증가할 가능성이 크다. | 프리랜서로서의 수입을 잃을 위험이 있으며, 이는 장기적으로 재정적 압박을 가중시킬 수 있다. | 과거의 실패 경험이 있지만, 여전히 높은 리스크를 감수하는 결정이므로 향후 불확실성이 커질 수 있다.)",
+        "reasoning_conflicts: A는 안정성을 중시하며, B는 높은 리턴을 추구한다. | A는 소규모 검증을 통해 리스크를 줄이려 하고, B는 공격적인 투자를 통해 빠른 결과를 원한다.",
+        "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.005,
+        "calibration_version": "confidence-uncertainty:low/high"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0.005; reason=결정에 대한 불확실성이 높고, 리스크가 크며, 추가 정보가 필요합니다.",
+    "mode": "safe"
+  },
+  "meta": {
+    "latency_ms": 50627,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 22879
+  }
+}

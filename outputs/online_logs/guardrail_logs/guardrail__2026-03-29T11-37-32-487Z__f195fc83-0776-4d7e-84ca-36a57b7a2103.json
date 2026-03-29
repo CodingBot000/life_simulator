@@ -1,0 +1,167 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": true,
+    "calibration_adjusted": true,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 5,
+    "threshold_score_ratio": 0.7143,
+    "risk_score": 0.6,
+    "confidence_score": 0,
+    "uncertainty_score": 1,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 1,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 4,
+      "final_confidence": 0.7,
+      "a_confidence": 0.7,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+      "context_text": "unknown unknown evaluate tradeoffs between convenience and tranquility",
+      "scenario_text": "도심으로 이사하면 출퇴근 시간이 단축되어 생활의 질이 향상되지만, 소음과 혼잡함이 스트레스를 유발할 수 있다. 조용한 동네로 이사하면 창의적인 작업에 집중할 수 있는 환경을 제공하지만, 출퇴근 시간이 늘어날 수 있다. 도심으로의 이사가 통근 편의성을 높여주고, 사용자 우선순위에 부합하기 때문이다.",
+      "risk_text": "도심으로의 이사가 출퇴근 시간을 단축시켜 생활의 질을 향상시키지만, 소음과 혼잡함이 스트레스를 유발할 수 있다. 생활비가 증가할 가능성이 있으며, 이는 재정적 부담으로 작용할 수 있다. 조용한 환경에 대한 갈망이 지속적으로 존재할 수 있어, 장기적으로 안정감에 영향을 미칠 수 있다. 출퇴근 시간이 늘어나면서 스트레스가 증가할 수 있다. 조용한 환경이 창의성에 긍정적인 영향을 미치지만, 도심의 편리함이 그리워질 수 있다. 재정적 압박이 불확실한 상황에서 이사 결정이 장기적으로 안정성을 해칠 수 있다. A는 출퇴근 편의성을 강조하고, B는 조용한 환경을 강조한다. A는 도심의 소음 문제를 우려하고, B는 출퇴근 시간 증가를 우려한다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0,
+    "uncertainty": 1,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "trigger_count": 3,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+      "도심으로의 이사가 출퇴근 시간을 단축시켜 생활의 질을 향상시키지만, 소음과 혼잡함이 스트레스를 유발할 수 있다.",
+      "생활비가 증가할 가능성이 있으며, 이는 재정적 부담으로 작용할 수 있다.",
+      "조용한 환경에 대한 갈망이 지속적으로 존재할 수 있어, 장기적으로 안정감에 영향을 미칠 수 있다.",
+      "출퇴근 시간이 늘어나면서 스트레스가 증가할 수 있다.",
+      "조용한 환경이 창의성에 긍정적인 영향을 미치지만, 도심의 편리함이 그리워질 수 있다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": false
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3955,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.5,
+      "safety_weight": 0,
+      "total_score": 1.3395
+    },
+    "reasoning_trace": [
+      "input_analysis: 월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue",
+      "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=1",
+      "risk_summary: A=medium (도심으로의 이사가 출퇴근 시간을 단축시켜 생활의 질을 향상시키지만, 소음과 혼잡함이 스트레스를 유발할 수 있다. | 생활비가 증가할 가능성이 있으며, 이는 재정적 부담으로 작용할 수 있다. | 조용한 환경에 대한 갈망이 지속적으로 존재할 수 있어, 장기적으로 안정감에 영향을 미칠 수 있다.) / B=medium (출퇴근 시간이 늘어나면서 스트레스가 증가할 수 있다. | 조용한 환경이 창의성에 긍정적인 영향을 미치지만, 도심의 편리함이 그리워질 수 있다. | 재정적 압박이 불확실한 상황에서 이사 결정이 장기적으로 안정성을 해칠 수 있다.)",
+      "reasoning_conflicts: A는 출퇴근 편의성을 강조하고, B는 조용한 환경을 강조한다. | A는 도심의 소음 문제를 우려하고, B는 출퇴근 시간 증가를 우려한다.",
+      "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

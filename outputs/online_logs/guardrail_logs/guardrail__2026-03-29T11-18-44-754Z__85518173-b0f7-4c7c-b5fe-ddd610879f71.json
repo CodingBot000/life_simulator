@@ -1,0 +1,173 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "high",
+    "guardrail_mode": "block",
+    "raw_guardrail_mode": "blocked",
+    "threshold_adjusted": true,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 7,
+    "threshold_score_ratio": 1,
+    "risk_score": 0.88,
+    "confidence_score": 0,
+    "uncertainty_score": 0.98,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1,
+      "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation",
+        "risk_warning"
+      ],
+      "risk_score": 0.88,
+      "confidence_score": 0,
+      "uncertainty_score": 0.98,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "blocked"
+    },
+    "signals": {
+      "state_unknown_count": 4,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.4,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "high",
+      "evidence_repeat_count": 1,
+      "user_input": "번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다.",
+      "context_text": "unknown burnout limits performance sustainability consider health impacts versus performance pressure",
+      "scenario_text": "속도를 줄이고 회복 시간을 확보하는 선택은 장기적으로 건강과 업무 효율성을 높일 수 있다. 지금처럼 강하게 밀어붙이는 선택은 단기적으로 성과를 극대화할 수 있지만, 장기적인 위험이 크다. 사용자의 건강과 지속 가능한 업무 스타일을 고려할 때 A 선택이 더 적합하다.",
+      "risk_text": "현재 번아웃 상태가 지속되면 건강에 심각한 영향을 미칠 수 있음. 속도를 줄이는 선택이 단기적으로 성과 압박을 완화하지만, 경력 발전에 대한 불안감을 초래할 수 있음. 정신적, 신체적 회복이 이루어지더라도 성과에 대한 압박이 여전히 존재하여 스트레스를 유발할 수 있음. 현재 극심한 번아웃 상태에서 성과 압박을 지속하면 건강이 더욱 악화될 위험이 크다. 프로젝트 성공에도 불구하고 장기적으로 건강 문제로 인해 직장을 떠날 가능성이 높다. 책임감이 무겁게 느껴지며, 이는 직장 내 관계에도 부정적인 영향을 미칠 수 있다. 현재 감정 상태가 번아웃으로 인해 불안정하여 의사결정에 부정적인 영향을 줄 수 있다. A는 건강을 우선시하며 장기적 안정성을 추구하는 반면, B는 단기 성과를 중시한다. A는 스트레스를 줄이는 반면, B는 성과 압박을 지속한다."
+    },
+    "reason": "risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+  },
+  "guardrail_derived": {
+    "risk_level": "high",
+    "confidence": 0,
+    "uncertainty": 0.98,
+    "decision": "block",
+    "output_mode": "blocked",
+    "summary": {
+      "raw_guardrail_mode": "blocked",
+      "output_mode": "blocked",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "trigger_count": 4,
+      "reason": "risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    },
+    "reasons": [
+      "risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+      "현재 번아웃 상태가 지속되면 건강에 심각한 영향을 미칠 수 있음.",
+      "속도를 줄이는 선택이 단기적으로 성과 압박을 완화하지만, 경력 발전에 대한 불안감을 초래할 수 있음.",
+      "정신적, 신체적 회복이 이루어지더라도 성과에 대한 압박이 여전히 존재하여 스트레스를 유발할 수 있음.",
+      "현재 극심한 번아웃 상태에서 성과 압박을 지속하면 건강이 더욱 악화될 위험이 크다.",
+      "프로젝트 성공에도 불구하고 장기적으로 건강 문제로 인해 직장을 떠날 가능성이 높다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.48,
+      "effect_weight": 0.5,
+      "recovery_weight": 0.4952,
+      "safety_weight": 0.6,
+      "total_score": 2.0752
+    },
+    "reasoning_trace": [
+      "input_analysis: 번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=high, threshold_score=7, confidence=0, uncertainty=0.98",
+      "risk_summary: A=medium (현재 번아웃 상태가 지속되면 건강에 심각한 영향을 미칠 수 있음. | 속도를 줄이는 선택이 단기적으로 성과 압박을 완화하지만, 경력 발전에 대한 불안감을 초래할 수 있음. | 정신적, 신체적 회복이 이루어지더라도 성과에 대한 압박이 여전히 존재하여 스트레스를 유발할 수 있음.) / B=high (현재 극심한 번아웃 상태에서 성과 압박을 지속하면 건강이 더욱 악화될 위험이 크다. | 프로젝트 성공에도 불구하고 장기적으로 건강 문제로 인해 직장을 떠날 가능성이 높다. | 책임감이 무겁게 느껴지며, 이는 직장 내 관계에도 부정적인 영향을 미칠 수 있다. | 현재 감정 상태가 번아웃으로 인해 불안정하여 의사결정에 부정적인 영향을 줄 수 있다.)",
+      "reasoning_conflicts: A는 건강을 우선시하며 장기적 안정성을 추구하는 반면, B는 단기 성과를 중시한다. | A는 스트레스를 줄이는 반면, B는 성과 압박을 지속한다.",
+      "final_decision: block because risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

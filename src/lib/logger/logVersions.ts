@@ -5,6 +5,7 @@ export const ONLINE_MONITORING_RECORD_VERSION = "online-monitoring.v2";
 export const GUARDRAIL_EVALUATOR_VERSION = "guardrail-evaluator.v1";
 export const SIGNAL_MAPPING_VERSION = "heuristic-derived-signal-mapping.v1";
 export const PROMPT_VERSION = "life-simulator-prompts.v1";
+export const CALIBRATION_VERSION = "calibration:v2";
 
 export function buildLogVersions(
   evaluation: Pick<
@@ -16,7 +17,7 @@ export function buildLogVersions(
     record_version: ONLINE_MONITORING_RECORD_VERSION,
     evaluator_version: GUARDRAIL_EVALUATOR_VERSION,
     threshold_version: `guardrail-threshold-set:${evaluation.threshold_set}`,
-    calibration_version: `confidence-uncertainty:${evaluation.confidence_band}/${evaluation.uncertainty_band}`,
+    calibration_version: CALIBRATION_VERSION,
     signal_mapping_version: SIGNAL_MAPPING_VERSION,
     prompt_version: PROMPT_VERSION,
   };

@@ -1,0 +1,395 @@
+{
+  "queue_id": "8be30baf-21bd-4d0f-966e-282b64b9b763",
+  "detected_at": "2026-03-29T11:28:53.157Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "8be30baf-21bd-4d0f-966e-282b64b9b763",
+    "timestamp": "2026-03-29T11:28:53.152Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+      "user_context": {
+        "userProfile": {
+          "age": 29,
+          "job": "designer",
+          "risk_tolerance": "low",
+          "priority": [
+            "commute",
+            "cost",
+            "quiet"
+          ]
+        },
+        "decision": {
+          "optionA": "회사와 가까운 도심으로 이사한다",
+          "optionB": "조용하지만 조금 먼 동네로 이사한다",
+          "context": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다."
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "8be30baf-21bd-4d0f-966e-282b64b9b763",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "low",
+            "decision_style": "deliberate",
+            "top_priorities": [
+              "commute",
+              "cost",
+              "quiet"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "unknown",
+            "financial_pressure": "unknown",
+            "time_pressure": "unknown",
+            "emotional_state": "unknown"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "unknown",
+          "current_constraint": "unknown",
+          "agent_guidance": "consider tradeoffs between commute convenience and quiet living environment"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "living",
+        "factors": [
+          "commute convenience",
+          "monthly rent cost",
+          "quiet living environment",
+          "risk tolerance",
+          "decision style"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "이사 후, 도심의 편리한 교통 덕분에 출퇴근이 훨씬 수월해졌다. 매일 아침 여유롭게 일어날 수 있어 기분이 좋고, 새로운 카페와 레스토랑을 탐방하며 즐거운 시간을 보내고 있다. 그러나 도심의 소음이 가끔 불편하게 느껴져 조용한 환경을 그리워하기도 한다. 월세는 예상했던 대로 비슷하게 유지되고 있어 재정적인 부담은 크지 않다.",
+          "one_year": "1년이 지나면서 도심 생활에 익숙해졌다. 출퇴근의 편리함 덕분에 업무에 더 집중할 수 있게 되었고, 새로운 친구들도 많이 사귀었다. 하지만 여전히 소음 문제는 가끔 스트레스를 주며, 조용한 환경을 찾고 싶다는 생각이 자주 든다. 월세는 여전히 비슷하지만, 다른 동네로 이사할 때의 장점도 생각하게 된다.",
+          "three_years": "3년 후, 도심에서의 생활이 일상이 되었다. 출퇴근의 편리함과 다양한 문화생활 덕분에 만족스러운 삶을 살고 있지만, 여전히 조용한 환경을 그리워하는 마음이 남아 있다. 이사한 후의 결정이 나쁘지 않았지만, 가끔은 조용한 동네에서의 삶도 경험해보고 싶다는 생각이 든다. 재정적으로는 안정적이지만, 새로운 도전을 갈망하는 마음이 커지고 있다."
+        },
+        "optionB": {
+          "three_months": "이사 후, 새로운 동네의 조용한 환경에 적응하는 중이다. 처음에는 통근 시간이 길어져 불편함을 느끼지만, 점차 조용한 생활이 주는 안정감에 만족감을 느낀다. 친구들과의 만남은 주말로 미뤄지지만, 집에서의 여유로운 시간이 소중하게 느껴진다. 월세는 예산 내에서 유지되고 있어 경제적 부담은 없다.",
+          "one_year": "조용한 동네에서의 생활이 익숙해지면서, 일과 삶의 균형이 잘 맞춰진다. 통근 시간이 길어지면서도, 출퇴근 시간에 책을 읽거나 음악을 듣는 여유를 즐기게 된다. 이사 결정이 잘한 선택이었다는 생각이 든다. 그러나 가끔 도심의 활기찬 분위기가 그리워지기도 한다.",
+          "three_years": "조용한 동네에서의 생활이 안정적으로 자리 잡았다. 직장에서도 안정적인 성과를 내고 있으며, 개인적인 시간도 잘 관리하고 있다. 통근 시간이 길어도 그 시간을 활용하는 방법을 터득하여 스트레스를 덜 느낀다. 이사 결정이 장기적으로 긍정적인 영향을 미쳤다는 확신이 들어, 앞으로도 조용한 환경을 유지할 계획이다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "도심의 소음이 가끔 불편하게 느껴져 조용한 환경을 그리워할 가능성이 있다.",
+            "출퇴근 편리함이 있지만, 장기적으로 조용한 환경에 대한 갈망이 커질 수 있다.",
+            "재정적으로 안정적이지만 새로운 도전 욕구가 증가할 수 있어 불안정성을 느낄 수 있다."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "통근 시간이 길어져 초기 불편함을 느낄 수 있으며, 이는 스트레스를 유발할 수 있다.",
+            "조용한 환경이 주는 안정감과 만족감이 있지만, 도심의 활기찬 분위기를 그리워할 가능성이 있다.",
+            "재정적 부담은 없지만, 통근 시간 증가로 인한 시간 관리의 어려움이 발생할 수 있다."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "8be30baf-21bd-4d0f-966e-282b64b9b763",
+        "input_summary": {
+          "user_profile": {
+            "age": 29,
+            "job": "designer",
+            "risk_tolerance": "low",
+            "priority": [
+              "commute",
+              "cost",
+              "quiet"
+            ]
+          },
+          "decision_options": {
+            "optionA": "회사와 가까운 도심으로 이사한다",
+            "optionB": "조용하지만 조금 먼 동네로 이사한다",
+            "context": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다."
+          },
+          "planner_goal": "이사 결정을 통해 통근 편의성과 조용한 생활 환경의 균형을 찾는 것."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "도심으로 이사하면 통근이 편리하지만 소음 문제로 스트레스를 받을 수 있다.",
+            "key_assumptions": [
+              "도심의 소음이 생활에 영향을 미칠 수 있다.",
+              "출퇴근 편의성이 생활의 질을 높일 수 있다."
+            ],
+            "pros": [
+              "출퇴근이 편리하여 시간 절약 가능",
+              "도심의 다양한 문화적 혜택을 누릴 수 있음"
+            ],
+            "cons": [
+              "소음으로 인한 스트레스 가능성",
+              "조용한 환경에 대한 갈망 증가"
+            ],
+            "recommended_option": "A",
+            "confidence": 0.7
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "조용한 동네로 이사하면 안정감과 여유로운 생활을 누릴 수 있다.",
+            "key_assumptions": [
+              "조용한 환경이 정신적 안정감을 제공할 것이다.",
+              "통근 시간이 길어도 그 시간을 활용할 수 있다."
+            ],
+            "pros": [
+              "조용한 환경에서의 안정적인 생활",
+              "자기 개발을 위한 여유 시간 확보"
+            ],
+            "cons": [
+              "초기 통근 시간 증가로 인한 불편함",
+              "도심의 활기찬 분위기를 그리워할 수 있음"
+            ],
+            "recommended_option": "B",
+            "confidence": 0.6
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 월세가 비슷하다.",
+              "각각의 환경에서의 장단점이 존재한다."
+            ],
+            "conflicts": [
+              "A는 통근 편의성을 중시하고, B는 조용한 환경을 중시한다.",
+              "A는 소음 문제를 우려하고, B는 초기 통근 불편을 우려한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자의 우선순위인 통근 편의성이 A에서 더 잘 충족되기 때문이다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "통근 편의성이 가장 중요한 우선순위이므로 도심으로 이사하는 것이 더 적합하다.",
+            "decision_confidence": 0.7
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "medium",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_adjusted": false,
+        "calibration_adjusted": false,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 5,
+        "threshold_score_ratio": 0.7143,
+        "risk_score": 0.6,
+        "confidence_score": 0,
+        "uncertainty_score": 0.98,
+        "confidence_band": "low",
+        "uncertainty_band": "high",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2,
+          "low_confidence": 1
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision",
+            "soft_recommendation"
+          ],
+          "risk_score": 0.6,
+          "confidence_score": 0,
+          "uncertainty_score": 0.98,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": true,
+            "ambiguous_wording": false,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 4,
+          "final_confidence": 0.7,
+          "a_confidence": 0.7,
+          "b_confidence": 0.6,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "medium",
+          "evidence_repeat_count": 1,
+          "user_input": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+          "context_text": "unknown unknown consider tradeoffs between commute convenience and quiet living environment",
+          "scenario_text": "도심으로 이사하면 통근이 편리하지만 소음 문제로 스트레스를 받을 수 있다. 조용한 동네로 이사하면 안정감과 여유로운 생활을 누릴 수 있다. 통근 편의성이 가장 중요한 우선순위이므로 도심으로 이사하는 것이 더 적합하다.",
+          "risk_text": "도심의 소음이 가끔 불편하게 느껴져 조용한 환경을 그리워할 가능성이 있다. 출퇴근 편리함이 있지만, 장기적으로 조용한 환경에 대한 갈망이 커질 수 있다. 재정적으로 안정적이지만 새로운 도전 욕구가 증가할 수 있어 불안정성을 느낄 수 있다. 통근 시간이 길어져 초기 불편함을 느낄 수 있으며, 이는 스트레스를 유발할 수 있다. 조용한 환경이 주는 안정감과 만족감이 있지만, 도심의 활기찬 분위기를 그리워할 가능성이 있다. 재정적 부담은 없지만, 통근 시간 증가로 인한 시간 관리의 어려움이 발생할 수 있다. A는 통근 편의성을 중시하고, B는 조용한 환경을 중시한다. A는 소음 문제를 우려하고, B는 초기 통근 불편을 우려한다."
+        },
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      },
+      "guardrail_derived": {
+        "risk_level": "medium",
+        "confidence": 0,
+        "uncertainty": 0.98,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence"
+          ],
+          "trigger_count": 3,
+          "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+        },
+        "reasons": [
+          "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+          "도심의 소음이 가끔 불편하게 느껴져 조용한 환경을 그리워할 가능성이 있다.",
+          "출퇴근 편리함이 있지만, 장기적으로 조용한 환경에 대한 갈망이 커질 수 있다.",
+          "재정적으로 안정적이지만 새로운 도전 욕구가 증가할 수 있어 불안정성을 느낄 수 있다.",
+          "통근 시간이 길어져 초기 불편함을 느낄 수 있으며, 이는 스트레스를 유발할 수 있다.",
+          "조용한 환경이 주는 안정감과 만족감이 있지만, 도심의 활기찬 분위기를 그리워할 가능성이 있다."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": false
+        },
+        "threshold_eval": {
+          "cost_weight": 0.3955,
+          "effect_weight": 0.444,
+          "recovery_weight": 0.4952,
+          "safety_weight": 0,
+          "total_score": 1.3347
+        },
+        "reasoning_trace": [
+          "input_analysis: 월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue",
+          "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=0.98",
+          "risk_summary: A=medium (도심의 소음이 가끔 불편하게 느껴져 조용한 환경을 그리워할 가능성이 있다. | 출퇴근 편리함이 있지만, 장기적으로 조용한 환경에 대한 갈망이 커질 수 있다. | 재정적으로 안정적이지만 새로운 도전 욕구가 증가할 수 있어 불안정성을 느낄 수 있다.) / B=medium (통근 시간이 길어져 초기 불편함을 느낄 수 있으며, 이는 스트레스를 유발할 수 있다. | 조용한 환경이 주는 안정감과 만족감이 있지만, 도심의 활기찬 분위기를 그리워할 가능성이 있다. | 재정적 부담은 없지만, 통근 시간 증가로 인한 시간 관리의 어려움이 발생할 수 있다.)",
+          "reasoning_conflicts: A는 통근 편의성을 중시하고, B는 조용한 환경을 중시한다. | A는 소음 문제를 우려하고, B는 초기 통근 불편을 우려한다.",
+          "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=추가 정보가 필요합니다. 두 옵션 간의 통근 편의성과 조용한 환경의 균형을 고려할 때, 사용자의 우선순위와 상황이 불확실합니다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 46793,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 22272
+    }
+  }
+}
