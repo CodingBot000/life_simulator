@@ -166,8 +166,40 @@ export const scenarioSchema = {
     three_years: {
       type: "string",
     },
+    structured_assessment: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        stability_outlook: {
+          type: "string",
+          enum: ["improve", "stable", "mixed", "decline"],
+        },
+        growth_outlook: {
+          type: "string",
+          enum: ["improve", "stable", "mixed", "decline"],
+        },
+        stress_load: {
+          type: "string",
+          enum: ["low", "medium", "high"],
+        },
+        missing_info: {
+          type: "boolean",
+        },
+      },
+      required: [
+        "stability_outlook",
+        "growth_outlook",
+        "stress_load",
+        "missing_info",
+      ],
+    },
   },
-  required: ["three_months", "one_year", "three_years"],
+  required: [
+    "three_months",
+    "one_year",
+    "three_years",
+    "structured_assessment",
+  ],
 } as const;
 
 export const riskSchema = {
@@ -185,8 +217,39 @@ export const riskSchema = {
       },
       minItems: 1,
     },
+    structured_assessment: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        risk_factors: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: [
+              "financial_pressure",
+              "time_pressure",
+              "stability_loss",
+              "growth_tradeoff",
+              "emotional_burden",
+              "relationship_strain",
+              "health_burnout",
+              "execution_uncertainty",
+            ],
+          },
+        },
+        missing_info: {
+          type: "boolean",
+        },
+        risk_score: {
+          type: "number",
+          minimum: 0,
+          maximum: 1,
+        },
+      },
+      required: ["risk_factors", "missing_info", "risk_score"],
+    },
   },
-  required: ["risk_level", "reasons"],
+  required: ["risk_level", "reasons", "structured_assessment"],
 } as const;
 
 export const abReasoningSchema = {
@@ -416,8 +479,24 @@ export const abReasoningSchema = {
       },
       required: ["a_reasoning", "b_reasoning", "comparison", "final_selection"],
     },
+    structured_signals: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        conflict: {
+          type: "boolean",
+        },
+        missing_info: {
+          type: "boolean",
+        },
+        low_confidence: {
+          type: "boolean",
+        },
+      },
+      required: ["conflict", "missing_info", "low_confidence"],
+    },
   },
-  required: ["case_id", "input_summary", "reasoning"],
+  required: ["case_id", "input_summary", "reasoning", "structured_signals"],
 } as const;
 
 export const guardrailSchema = {

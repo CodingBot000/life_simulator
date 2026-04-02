@@ -91,6 +91,9 @@ export function buildRequestLog(params: {
       latency_ms: Math.round(params.latencyMs),
       model: params.model,
       tokens: params.tokens,
+      deterministic_mode: params.guardrailEvaluation.deterministic_mode,
+      scoring_input_source: params.guardrailEvaluation.scoring_input_source,
+      generation_variance_flag: params.guardrailEvaluation.generation_variance_flag,
     },
   };
 }

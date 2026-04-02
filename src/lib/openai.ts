@@ -12,6 +12,7 @@ type StructuredOutputParams = {
   schema: JsonSchema;
   prompt: string;
   input: string;
+  temperature?: number;
   onUsage?: (usage: StructuredOutputUsage) => void;
 };
 
@@ -31,6 +32,7 @@ export async function generateStructuredOutput<T>({
   schema,
   prompt,
   input,
+  temperature = 0.3,
   onUsage,
 }: StructuredOutputParams): Promise<T> {
   if (!apiKey) {
@@ -45,7 +47,7 @@ export async function generateStructuredOutput<T>({
 
   const response = await client.responses.create({
     model: OPENAI_MODEL,
-    temperature: 0.3,
+    temperature,
     input: [
       {
         role: "system",

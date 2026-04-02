@@ -19,7 +19,8 @@
     "verify:monitoring": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/verify-monitoring.ts",
     "analyze:reeval": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/analyze-reeval-mismatches.ts",
     "compare:guardrail-adjustment": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/compare-guardrail-adjustment.ts",
-    "analyze:review-overtrigger": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/analyze-review-overtrigger.ts"
+    "analyze:review-overtrigger": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/analyze-review-overtrigger.ts",
+    "analyze:baseline-v8": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/analyze-baseline-v8.ts"
   },
   "dependencies": {
     "next": "16.2.1",

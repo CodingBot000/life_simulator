@@ -58,6 +58,8 @@ const FULL_SELECTED_PATH = [
   "advisor",
   "reflection",
 ] as const;
+const LOW_VARIANCE_TEMPERATURE = 0;
+const STABLE_TEMPERATURE = 0.1;
 
 function formatPayload(payload: unknown): string {
   return JSON.stringify(payload, null, 2);
@@ -114,6 +116,7 @@ export async function runStateLoader(
     schemaName: "state_context",
     schema: stateLoaderSchema,
     prompt: stateLoaderPrompt,
+    temperature: STABLE_TEMPERATURE,
     input: formatPayload({
       caseId,
       caseInput,
@@ -132,6 +135,7 @@ export async function runPlanner(
     schemaName: "planner_result",
     schema: plannerSchema,
     prompt: plannerPrompt,
+    temperature: STABLE_TEMPERATURE,
     input: formatPayload({
       caseId,
       caseInput,
@@ -152,6 +156,7 @@ export async function runScenarioA(
     schemaName: "scenario_a_result",
     schema: scenarioSchema,
     prompt: scenarioPrompt,
+    temperature: LOW_VARIANCE_TEMPERATURE,
     input: formatPayload({
       caseId,
       caseInput,
@@ -177,6 +182,7 @@ export async function runScenarioB(
     schemaName: "scenario_b_result",
     schema: scenarioSchema,
     prompt: scenarioPrompt,
+    temperature: LOW_VARIANCE_TEMPERATURE,
     input: formatPayload({
       caseId,
       caseInput,
@@ -203,6 +209,7 @@ export async function runRiskA(
     schemaName: "risk_a_result",
     schema: riskSchema,
     prompt: riskPrompt,
+    temperature: LOW_VARIANCE_TEMPERATURE,
     input: formatPayload({
       caseId,
       caseInput,
@@ -230,6 +237,7 @@ export async function runRiskB(
     schemaName: "risk_b_result",
     schema: riskSchema,
     prompt: riskPrompt,
+    temperature: LOW_VARIANCE_TEMPERATURE,
     input: formatPayload({
       caseId,
       caseInput,
@@ -260,6 +268,7 @@ export async function runAbReasoning(
     schemaName: "ab_reasoning_result",
     schema: abReasoningSchema,
     prompt: abReasoningPrompt,
+    temperature: LOW_VARIANCE_TEMPERATURE,
     input: formatPayload({
       caseId,
       caseInput,
@@ -329,6 +338,7 @@ export async function runGuardrail(
     riskB,
     reasoning,
     userInput: caseInput.decision.context,
+    userContext: caseInput,
   });
 }
 

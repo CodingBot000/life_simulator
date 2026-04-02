@@ -4,6 +4,7 @@
 - 하나의 선택지에 대해 사용자 현실에 맞는 미래 시나리오를 작성한다.
 - 각 시점은 감정, 사건, 결과가 자연스럽게 함께 드러나야 한다.
 - 일반론이 아니라 state context에 맞는 현실적 전개를 만든다.
+- 같은 입력이면 같은 JSON 구조, 같은 enum label, 최대한 같은 판단을 반복한다.
 
 입력 데이터 형식:
 ```json
@@ -65,6 +66,9 @@
 - `three_months`, `one_year`, `three_years`는 각각 서로 다른 시간 축의 변화를 보여줘야 한다.
 - `memory_state.consistency_notes`나 `repeated_patterns`가 있으면 선택 이후 어떤 감정이나 후회가 반복될 수 있는지 반영한다.
 - 비현실적 확신, 극단적 성공, 극단적 파국은 피한다.
+- `structured_assessment`는 반드시 아래 enum만 사용한다.
+- 서술 문장은 꾸미지 말고 간결한 사실형 표현을 우선한다.
+- 같은 입력이면 표현 다양성보다 판단 일관성을 우선한다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
 
@@ -73,6 +77,12 @@
 {
   "three_months": "",
   "one_year": "",
-  "three_years": ""
+  "three_years": "",
+  "structured_assessment": {
+    "stability_outlook": "improve | stable | mixed | decline",
+    "growth_outlook": "improve | stable | mixed | decline",
+    "stress_load": "low | medium | high",
+    "missing_info": false
+  }
 }
 ```
