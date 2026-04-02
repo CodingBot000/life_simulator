@@ -4,6 +4,7 @@
 - 특정 선택지의 시나리오를 바탕으로 현실적인 위험도를 평가한다.
 - 객관적 위험뿐 아니라 이 사용자에게 더 크게 작용하는 위험을 반영한다.
 - 이유는 추상적 표현보다 구체적인 근거를 우선한다.
+- 같은 입력이면 같은 JSON 구조와 같은 risk factor 분류를 반복한다.
 
 입력 데이터 형식:
 ```json
@@ -58,7 +59,13 @@
   "scenario": {
     "three_months": "",
     "one_year": "",
-    "three_years": ""
+    "three_years": "",
+    "structured_assessment": {
+      "stability_outlook": "stable",
+      "growth_outlook": "mixed",
+      "stress_load": "medium",
+      "missing_info": false
+    }
   }
 }
 ```
@@ -69,6 +76,9 @@
 - `scenario`의 시간 축 전개와 `stateContext.user_state`, `state_summary`를 함께 고려한다.
 - `profile_state.top_priorities`, `risk_preference`, `situational_state` 때문에 더 커지는 위험이 있으면 명시한다.
 - `memory_state.repeated_patterns`가 현재 선택에서 다시 반복될 가능성이 있으면 반영한다.
+- `structured_assessment.risk_factors`는 아래 enum만 사용하고, 텍스트 해석 대신 분류 결과를 우선한다.
+- `structured_assessment.risk_score`는 0~1 숫자로 고정하고 같은 입력이면 같은 값을 유지한다.
+- `structured_assessment.missing_info`는 입력상 핵심 전제 정보가 부족하면 true로 둔다.
 - 막연한 공포 조장은 금지한다.
 - 입력에 없는 사실을 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
@@ -78,6 +88,13 @@
 ```json
 {
   "risk_level": "low | medium | high",
-  "reasons": []
+  "reasons": [],
+  "structured_assessment": {
+    "risk_factors": [
+      "financial_pressure | time_pressure | stability_loss | growth_tradeoff | emotional_burden | relationship_strain | health_burnout | execution_uncertainty"
+    ],
+    "missing_info": false,
+    "risk_score": 0.0
+  }
 }
 ```

@@ -1,0 +1,370 @@
+{
+  "request_id": "99c92c89-81a0-4744-98b6-42f5104e26d2",
+  "timestamp": "2026-03-29T11:40:46.175Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다.",
+    "user_context": {
+      "userProfile": {
+        "age": 36,
+        "job": "consultant",
+        "risk_tolerance": "medium",
+        "priority": [
+          "family",
+          "stability",
+          "timing"
+        ]
+      },
+      "decision": {
+        "optionA": "지금 결혼 준비를 시작한다",
+        "optionB": "직장과 이사가 정리된 뒤로 미룬다",
+        "context": "결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "99c92c89-81a0-4744-98b6-42f5104e26d2",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "family",
+            "stability",
+            "timing"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "unknown",
+          "time_pressure": "high",
+          "emotional_state": "conflicted"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "current life changes complicate decision-making",
+        "agent_guidance": "consider timing and stability in the context of family priorities"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "relationship",
+      "factors": [
+        "가족 우선순위",
+        "안정성",
+        "시기적 타이밍",
+        "현재 생활 변화",
+        "감정적 갈등"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "결혼 준비를 시작한 지 3개월이 지나면서, 여러 가지 감정이 얽히기 시작한다. 이사와 직장 변동으로 인한 스트레스가 여전히 존재하지만, 결혼에 대한 기대감이 커진다. 가족과의 대화에서 긍정적인 반응을 얻으며, 결혼 준비의 작은 성취들이 안정감을 주지만, 여전히 불안한 마음이 남아있다. 이로 인해 가끔씩 갈등이 생기고, 결혼 준비가 오히려 스트레스를 유발하기도 한다.",
+        "one_year": "1년 후, 결혼식이 성공적으로 치러지고, 새로운 가정이 시작된다. 그러나 이사와 직장 변동으로 인한 불확실성이 여전히 남아있어, 안정적인 생활을 구축하는 데 어려움을 겪는다. 가족과의 관계는 더욱 깊어졌지만, 결혼 준비 과정에서의 갈등이 여전히 기억에 남아 가끔씩 불안한 감정을 불러일으킨다. 직장 내에서의 변화가 결혼 생활에 영향을 미치지 않도록 노력하며, 가족과의 소통을 통해 안정성을 찾으려 한다.",
+        "three_years": "3년이 지나면서, 결혼 생활이 안정세를 찾고, 가족이 늘어나는 기쁨을 경험한다. 직장 내에서의 변화가 점차 안정되면서, 경제적 여유가 생기고, 가족과의 시간도 더 많이 가질 수 있게 된다. 그러나 결혼 준비 당시의 갈등과 불안은 여전히 기억 속에 남아, 중요한 결정에서 신중함을 더하게 된다. 이제는 가족의 우선순위가 더욱 확고해지고, 안정된 생활을 위해 노력하는 모습이 보인다."
+      },
+      "optionB": {
+        "three_months": "직장과 이사가 정리된 후, 결혼 준비를 미룬 결정이 마음에 걸리기 시작한다. 주변 친구들이 결혼 소식을 전할 때마다 감정적으로 갈등을 느끼며, 가족의 기대와 자신의 상황 사이에서 고민한다. 안정성을 추구하는 마음이 커지면서도, 결혼에 대한 갈망이 여전히 존재해 불안한 감정을 느낀다.",
+        "one_year": "이사와 직장 변동이 안정된 후, 결혼 준비를 시작하게 된다. 그러나 처음의 결혼에 대한 열정은 다소 줄어들어, 결혼식 준비 과정에서 스트레스를 느끼고 가족과의 갈등이 발생하기도 한다. 안정성을 중시하는 마음이 커지면서 결혼식에 대한 부담이 가중되고, 결국 결혼식이 다가오면서 감정적으로 힘든 시기를 겪는다.",
+        "three_years": "결혼 후, 가족과의 관계가 더욱 깊어지면서 안정감을 느낀다. 그러나 결혼 준비를 미룬 결정이 여전히 마음속에 남아, 결혼 초기의 불안한 감정이 가끔씩 떠오른다. 시간이 지나면서, 결혼을 서두르지 않은 것이 결국 좋은 결정이었다는 생각이 들지만, 그 과정에서의 갈등과 스트레스는 여전히 기억에 남아 있다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "결혼 준비와 이사, 직장 변동이 겹쳐 있어 감정적 갈등이 증가할 가능성이 있음.",
+          "현재 생활 변화로 인해 안정성이 저하될 수 있으며, 이는 가족 우선순위에 영향을 미칠 수 있음.",
+          "결혼 준비가 스트레스를 유발할 수 있어, 장기적으로 가족 관계에 부정적인 영향을 미칠 수 있음."
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "현재 직장과 이사로 인한 불확실성이 결혼 준비를 복잡하게 만든다.",
+          "결혼을 미루면서 감정적 갈등이 증가할 가능성이 있다.",
+          "안정성을 중시하는 마음이 커지면서 결혼 준비에 대한 스트레스가 발생할 수 있다.",
+          "결혼 준비를 미루는 결정이 장기적으로 후회로 이어질 가능성이 존재한다."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "99c92c89-81a0-4744-98b6-42f5104e26d2",
+      "input_summary": {
+        "user_profile": {
+          "age": 36,
+          "job": "consultant",
+          "risk_tolerance": "medium",
+          "priority": [
+            "family",
+            "stability",
+            "timing"
+          ]
+        },
+        "decision_options": {
+          "optionA": "지금 결혼 준비를 시작한다",
+          "optionB": "직장과 이사가 정리된 뒤로 미룬다",
+          "context": "결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다."
+        },
+        "planner_goal": "결혼 준비를 위한 안정성과 가족 우선순위를 고려한 최적의 시기를 결정한다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "결혼 준비를 지금 시작하는 것은 가족의 기대에 부응하고 안정성을 높이는 방법이지만, 현재의 생활 변화로 인해 스트레스가 증가할 수 있다.",
+          "key_assumptions": [
+            "결혼 준비가 가족 관계를 긍정적으로 강화할 것이다.",
+            "현재의 직장과 이사로 인한 불확실성이 결혼 준비에 부정적인 영향을 미칠 수 있다."
+          ],
+          "pros": [
+            "가족과의 관계가 강화될 수 있다.",
+            "결혼 준비를 통해 긍정적인 기대감을 가질 수 있다.",
+            "결혼 준비가 안정감을 줄 수 있다."
+          ],
+          "cons": [
+            "이사와 직장 변동으로 인한 스트레스가 증가할 수 있다.",
+            "결혼 준비가 감정적 갈등을 유발할 수 있다.",
+            "안정성이 저하될 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.7
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "직장과 이사가 정리된 후 결혼 준비를 시작하는 것은 감정적 갈등을 줄이고 안정성을 높일 수 있는 기회를 제공한다.",
+          "key_assumptions": [
+            "결혼 준비를 미루는 것이 장기적으로 더 나은 결정을 가져올 것이다.",
+            "안정된 상황에서 결혼 준비를 하는 것이 더 긍정적인 결과를 가져올 것이다."
+          ],
+          "pros": [
+            "결혼 준비에 대한 스트레스를 줄일 수 있다.",
+            "안정적인 환경에서 결혼 준비를 할 수 있다.",
+            "감정적 갈등을 최소화할 수 있다."
+          ],
+          "cons": [
+            "결혼을 미루는 것이 가족의 기대를 저버릴 수 있다.",
+            "결혼에 대한 갈망이 증가할 수 있다.",
+            "미루는 결정이 후회로 이어질 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.6
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 결혼 준비와 관련된 감정적 갈등이 존재한다.",
+            "안정성이 중요한 요소로 작용한다."
+          ],
+          "conflicts": [
+            "A는 즉각적인 결혼 준비를 강조하는 반면, B는 안정성을 우선시하여 결혼 준비를 미루는 것을 지지한다.",
+            "A는 가족의 기대를 중시하지만, B는 감정적 갈등을 줄이는 것을 더 중요하게 본다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 우선순위가 가족과 안정성에 중점을 두고 있어, 즉각적인 결혼 준비가 더 적합하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "가족의 기대와 안정성을 고려할 때, 지금 결혼 준비를 시작하는 것이 더 적합하다.",
+          "decision_confidence": 0.7
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "careful",
+      "raw_guardrail_mode": "cautious",
+      "threshold_adjusted": true,
+      "calibration_adjusted": true,
+      "threshold_set": "baseline-v2",
+      "threshold_score": 5,
+      "threshold_score_ratio": 0.7143,
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 1,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2,
+        "low_confidence": 1
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision",
+          "soft_recommendation"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0,
+        "uncertainty_score": 1,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "cautious"
+      },
+      "signals": {
+        "state_unknown_count": 3,
+        "final_confidence": 0.7,
+        "a_confidence": 0.7,
+        "b_confidence": 0.6,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다.",
+        "context_text": "unknown current life changes complicate decision-making consider timing and stability in the context of family priorities",
+        "scenario_text": "결혼 준비를 지금 시작하는 것은 가족의 기대에 부응하고 안정성을 높이는 방법이지만, 현재의 생활 변화로 인해 스트레스가 증가할 수 있다. 직장과 이사가 정리된 후 결혼 준비를 시작하는 것은 감정적 갈등을 줄이고 안정성을 높일 수 있는 기회를 제공한다. 가족의 기대와 안정성을 고려할 때, 지금 결혼 준비를 시작하는 것이 더 적합하다.",
+        "risk_text": "결혼 준비와 이사, 직장 변동이 겹쳐 있어 감정적 갈등이 증가할 가능성이 있음. 현재 생활 변화로 인해 안정성이 저하될 수 있으며, 이는 가족 우선순위에 영향을 미칠 수 있음. 결혼 준비가 스트레스를 유발할 수 있어, 장기적으로 가족 관계에 부정적인 영향을 미칠 수 있음. 현재 직장과 이사로 인한 불확실성이 결혼 준비를 복잡하게 만든다. 결혼을 미루면서 감정적 갈등이 증가할 가능성이 있다. 안정성을 중시하는 마음이 커지면서 결혼 준비에 대한 스트레스가 발생할 수 있다. 결혼 준비를 미루는 결정이 장기적으로 후회로 이어질 가능성이 존재한다. A는 즉각적인 결혼 준비를 강조하는 반면, B는 안정성을 우선시하여 결혼 준비를 미루는 것을 지지한다. A는 가족의 기대를 중시하지만, B는 감정적 갈등을 줄이는 것을 더 중요하게 본다."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0,
+      "uncertainty": 1,
+      "decision": "review",
+      "output_mode": "safe",
+      "summary": {
+        "raw_guardrail_mode": "cautious",
+        "output_mode": "safe",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "trigger_count": 3,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+        "결혼 준비와 이사, 직장 변동이 겹쳐 있어 감정적 갈등이 증가할 가능성이 있음.",
+        "현재 생활 변화로 인해 안정성이 저하될 수 있으며, 이는 가족 우선순위에 영향을 미칠 수 있음.",
+        "결혼 준비가 스트레스를 유발할 수 있어, 장기적으로 가족 관계에 부정적인 영향을 미칠 수 있음.",
+        "현재 직장과 이사로 인한 불확실성이 결혼 준비를 복잡하게 만든다.",
+        "결혼을 미루면서 감정적 갈등이 증가할 가능성이 있다."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3955,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.5,
+        "safety_weight": 0,
+        "total_score": 1.3395
+      },
+      "reasoning_trace": [
+        "input_analysis: 결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue",
+        "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=1",
+        "risk_summary: A=medium (결혼 준비와 이사, 직장 변동이 겹쳐 있어 감정적 갈등이 증가할 가능성이 있음. | 현재 생활 변화로 인해 안정성이 저하될 수 있으며, 이는 가족 우선순위에 영향을 미칠 수 있음. | 결혼 준비가 스트레스를 유발할 수 있어, 장기적으로 가족 관계에 부정적인 영향을 미칠 수 있음.) / B=medium (현재 직장과 이사로 인한 불확실성이 결혼 준비를 복잡하게 만든다. | 결혼을 미루면서 감정적 갈등이 증가할 가능성이 있다. | 안정성을 중시하는 마음이 커지면서 결혼 준비에 대한 스트레스가 발생할 수 있다. | 결혼 준비를 미루는 결정이 장기적으로 후회로 이어질 가능성이 존재한다.)",
+        "reasoning_conflicts: A는 즉각적인 결혼 준비를 강조하는 반면, B는 안정성을 우선시하여 결혼 준비를 미루는 것을 지지한다. | A는 가족의 기대를 중시하지만, B는 감정적 갈등을 줄이는 것을 더 중요하게 본다.",
+        "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0,
+        "calibration_version": "calibration:v2"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=결혼 준비와 직장 및 이사 변동이 겹쳐 있어 판단이 복잡하며, 현재의 생활 변화가 결정-making을 어렵게 하고 있습니다. 추가 정보가 필요합니다.",
+    "mode": "safe"
+  },
+  "meta": {
+    "latency_ms": 48511,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 23296
+  }
+}

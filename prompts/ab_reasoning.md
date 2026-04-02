@@ -6,6 +6,7 @@
 - B reasoning은 기회와 성장성을 더 중시하는 관점으로 작성한다.
 - 두 reasoning의 차이를 분명하게 드러내고, 마지막에 비교와 최종 선택을 구조적으로 정리한다.
 - user fit과 state_summary를 명시적으로 고려한다.
+- 같은 입력이면 같은 구조와 같은 `structured_signals` 판단을 반복한다.
 
 입력 데이터 형식:
 ```json
@@ -57,20 +58,42 @@
   "scenarioA": {
     "three_months": "",
     "one_year": "",
-    "three_years": ""
+    "three_years": "",
+    "structured_assessment": {
+      "stability_outlook": "stable",
+      "growth_outlook": "mixed",
+      "stress_load": "medium",
+      "missing_info": false
+    }
   },
   "scenarioB": {
     "three_months": "",
     "one_year": "",
-    "three_years": ""
+    "three_years": "",
+    "structured_assessment": {
+      "stability_outlook": "mixed",
+      "growth_outlook": "improve",
+      "stress_load": "high",
+      "missing_info": false
+    }
   },
   "riskA": {
     "risk_level": "low",
-    "reasons": []
+    "reasons": [],
+    "structured_assessment": {
+      "risk_factors": ["stability_loss"],
+      "missing_info": false,
+      "risk_score": 0.32
+    }
   },
   "riskB": {
     "risk_level": "high",
-    "reasons": []
+    "reasons": [],
+    "structured_assessment": {
+      "risk_factors": ["financial_pressure", "execution_uncertainty"],
+      "missing_info": false,
+      "risk_score": 0.82
+    }
   }
 }
 ```
@@ -86,6 +109,10 @@
 - confidence와 decision_confidence는 반드시 0 이상 1 이하의 숫자만 사용한다.
 - recommended_option, which_fits_user_better, selected_reasoning, selected_option은 반드시 `A` 또는 `B`만 사용한다.
 - planner_goal은 plannerResult의 decision_type, factors, state summary를 바탕으로 이번 판단의 핵심 목표를 한 문장으로 요약한다.
+- `structured_signals.conflict`는 comparison에 실질 충돌이 있으면 true다.
+- `structured_signals.missing_info`는 입력상 핵심 전제가 비어 있거나 불확실하면 true다.
+- `structured_signals.low_confidence`는 최종 선택을 강하게 밀기 어렵거나 판단 전제가 부족하면 true다.
+- 표현 다양성보다 판단 일관성을 우선한다.
 - 입력에 없는 사실을 새로 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
@@ -139,6 +166,11 @@
       "why_selected": "",
       "decision_confidence": 0.0
     }
+  },
+  "structured_signals": {
+    "conflict": false,
+    "missing_info": false,
+    "low_confidence": false
   }
 }
 ```

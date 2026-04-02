@@ -1,0 +1,31 @@
+{
+  "total_reeval_results": 13,
+  "total_mismatches": 2,
+  "mismatch_rate": 0.1538,
+  "by_type": {
+    "underblocking_related": 1,
+    "overblocking_related": 0,
+    "low_confidence_related": 1,
+    "conflict_related": 0,
+    "high_confidence_wrong": 0,
+    "boundary_shift_only": 0
+  },
+  "by_decision_transition": {
+    "review->block": 1,
+    "review->allow": 1
+  },
+  "by_risk_transition": {
+    "medium->high": 1,
+    "medium->medium": 1
+  },
+  "by_threshold_version": {
+    "guardrail-threshold-set:baseline": 2
+  },
+  "by_prompt_version": {
+    "life-simulator-prompts.v1": 2
+  },
+  "by_evaluator_version": {
+    "guardrail-evaluator.v1": 2
+  },
+  "critical_mismatch_count": 1
+}

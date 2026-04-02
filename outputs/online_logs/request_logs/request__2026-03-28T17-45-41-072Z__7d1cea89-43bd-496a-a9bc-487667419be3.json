@@ -1,0 +1,360 @@
+{
+  "request_id": "7d1cea89-43bd-496a-a9bc-487667419be3",
+  "timestamp": "2026-03-28T17:45:41.072Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:low/high",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다.",
+    "user_context": {
+      "userProfile": {
+        "age": 32,
+        "job": "researcher",
+        "risk_tolerance": "low",
+        "priority": [
+          "stability",
+          "honesty",
+          "future"
+        ]
+      },
+      "decision": {
+        "optionA": "관계를 이어가며 더 대화한다",
+        "optionB": "지금 정리한다",
+        "context": "지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "7d1cea89-43bd-496a-a9bc-487667419be3",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "low",
+          "decision_style": "deliberate",
+          "top_priorities": [
+            "stability",
+            "honesty",
+            "future"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "mid",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "uncertain"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "prefers stability and honest communication",
+        "current_constraint": "uncertainty in relationship dynamics",
+        "agent_guidance": "explore communication options and their potential outcomes"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "relationship",
+      "factors": [
+        "상대방과의 대화 부족",
+        "안정성에 대한 선호",
+        "정직한 소통의 중요성",
+        "미래에 대한 불확실성",
+        "감정적 상태의 불확실성"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "관계를 이어가며 더 대화하기로 결정한 후, 두 사람은 주말마다 만나 서로의 생각과 감정을 나누기 시작했다. 처음에는 어색했지만, 점차 솔직한 대화가 이루어지면서 서로의 불안감이 줄어들었다. 하지만 여전히 미래에 대한 불확실성은 남아있어, 가끔씩 불안한 감정이 스멀스멀 올라오기도 했다. 안정성을 중시하는 당신은 이러한 대화가 관계에 긍정적인 영향을 미친다고 느끼며, 조금씩 안도감을 느끼기 시작했다.",
+        "one_year": "1년이 지난 지금, 두 사람은 서로의 가치관과 목표에 대해 깊이 이해하게 되었다. 정직한 소통 덕분에 신뢰가 쌓였고, 관계는 더욱 안정적이 되었다. 그러나 여전히 미래에 대한 불확실성은 존재하며, 가끔씩 과거의 대화 부족에 대한 후회가 떠오르기도 한다. 당신은 안정적인 관계를 유지하고 있지만, 가끔씩 '더 빨리 대화했더라면 어땠을까?'라는 생각이 드는 순간이 있다.",
+        "three_years": "3년 후, 두 사람은 서로의 삶에서 중요한 존재가 되었다. 안정적인 관계를 통해 서로의 꿈을 지지하며 성장해왔다. 그러나 가끔씩 과거의 불확실한 감정이 떠오르며, '그때 더 대화했더라면'이라는 생각이 스쳐 지나간다. 당신은 관계의 안정성을 느끼며, 정직한 소통이 얼마나 중요한지를 깊이 깨닫게 되었다. 이제는 서로의 미래를 함께 계획하며, 더 나은 방향으로 나아가고 있다."
+      },
+      "optionB": {
+        "three_months": "관계를 정리한 후, 감정적으로 힘든 시간을 겪고 있다. 친구들과의 대화를 통해 위로를 받으며, 스스로의 감정과 상황을 정리하는 데 집중하고 있다. 안정성을 중시하는 성향 덕분에 마음의 평화를 찾으려 노력하고 있지만, 때때로 상대방과의 대화 부족으로 인한 아쉬움이 남아 있다. 정직한 소통의 중요성을 다시 한 번 깨닫게 된다.",
+        "one_year": "정리한 관계에 대한 감정이 어느 정도 안정되었고, 새로운 사람과의 만남을 시도하고 있다. 이전의 경험을 바탕으로 더 솔직하게 소통하려고 노력하며, 상대방과의 대화가 얼마나 중요한지를 깊이 이해하게 된다. 미래에 대한 불확실성은 여전히 존재하지만, 과거의 경험을 통해 더 나은 선택을 할 수 있을 것이라는 자신감을 느낀다.",
+        "three_years": "이전의 관계 정리가 큰 전환점이 되었음을 깨닫는다. 현재는 안정적인 관계를 유지하고 있으며, 서로의 감정을 솔직하게 나누는 것이 얼마나 중요한지를 깊이 이해하고 있다. 과거의 경험을 통해 더 나은 소통 능력을 갖추게 되었고, 미래에 대한 불확실성을 두려워하지 않게 되었다. 안정성과 정직한 소통이 삶의 중요한 가치로 자리 잡았다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "관계의 불확실성이 여전히 존재하여 감정적 불안정성이 발생할 수 있음",
+          "상대방과의 대화 부족이 과거의 패턴으로 남아있을 가능성이 있음",
+          "정직한 소통이 이루어지더라도 미래에 대한 불확실성이 지속될 수 있음"
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "관계를 정리함으로써 감정적으로 힘든 시간을 겪을 가능성이 높음.",
+          "상대방과의 대화 부족으로 인한 아쉬움이 남을 수 있음.",
+          "미래에 대한 불확실성이 여전히 존재하여 정서적 안정에 영향을 줄 수 있음.",
+          "정직한 소통의 중요성을 깨닫는 과정에서 감정적 갈등이 발생할 수 있음."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "7d1cea89-43bd-496a-a9bc-487667419be3",
+      "input_summary": {
+        "user_profile": {
+          "age": 32,
+          "job": "researcher",
+          "risk_tolerance": "low",
+          "priority": [
+            "stability",
+            "honesty",
+            "future"
+          ]
+        },
+        "decision_options": {
+          "optionA": "관계를 이어가며 더 대화한다",
+          "optionB": "지금 정리한다",
+          "context": "지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다."
+        },
+        "planner_goal": "관계의 안정성과 정직한 소통을 통해 미래의 불확실성을 줄이는 것."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "관계를 이어가며 대화를 통해 서로의 감정을 이해하고 안정성을 추구하는 것이 중요하다.",
+          "key_assumptions": [
+            "대화가 부족한 상황에서 관계를 지속하는 것이 감정적 안정에 기여할 것이다.",
+            "정직한 소통이 이루어진다면 불확실성을 줄일 수 있다."
+          ],
+          "pros": [
+            "상대방과의 관계를 통해 정서적 지지를 받을 수 있다.",
+            "대화를 통해 서로의 불안감을 해소할 수 있다.",
+            "미래에 대한 불확실성을 줄일 수 있다."
+          ],
+          "cons": [
+            "관계의 불확실성이 여전히 존재할 수 있다.",
+            "대화가 원활하지 않을 경우 감정적 불안정성이 지속될 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.8
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "관계를 정리함으로써 새로운 기회를 찾고, 더 나은 소통 능력을 개발할 수 있다.",
+          "key_assumptions": [
+            "관계를 정리하는 것이 새로운 시작을 의미할 수 있다.",
+            "과거의 경험을 통해 더 나은 소통 방법을 배울 수 있다."
+          ],
+          "pros": [
+            "자신의 감정을 정리하고 새로운 시작을 할 수 있다.",
+            "과거의 경험을 통해 더 나은 소통 능력을 갖출 수 있다.",
+            "미래에 대한 불확실성을 줄일 수 있다."
+          ],
+          "cons": [
+            "정리 후 감정적으로 힘든 시간을 겪을 수 있다.",
+            "상대방과의 대화 부족으로 인한 아쉬움이 남을 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.7
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 감정적 안정성을 추구한다.",
+            "미래에 대한 불확실성을 줄이려는 노력이 필요하다."
+          ],
+          "conflicts": [
+            "A는 관계를 지속하며 대화를 강조하지만, B는 관계를 정리하는 것을 강조한다.",
+            "A는 감정적 지지를 중시하지만, B는 새로운 기회를 찾는 것을 중시한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 안정성과 정직한 소통에 대한 우선순위를 고려할 때, A가 더 적합하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "관계를 이어가며 대화하는 것이 감정적 안정성을 높이고, 정직한 소통을 통해 미래의 불확실성을 줄일 수 있기 때문이다.",
+          "decision_confidence": 0.8
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:low/high",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "careful",
+      "raw_guardrail_mode": "cautious",
+      "threshold_set": "baseline",
+      "threshold_score": 4,
+      "threshold_score_ratio": 0.5714,
+      "risk_score": 0.6,
+      "confidence_score": 0.1505,
+      "uncertainty_score": 0.84,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0.1505,
+        "uncertainty_score": 0.84,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "cautious"
+      },
+      "signals": {
+        "state_unknown_count": 2,
+        "final_confidence": 0.8,
+        "a_confidence": 0.8,
+        "b_confidence": 0.7,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다.",
+        "context_text": "prefers stability and honest communication uncertainty in relationship dynamics explore communication options and their potential outcomes",
+        "scenario_text": "관계를 이어가며 대화를 통해 서로의 감정을 이해하고 안정성을 추구하는 것이 중요하다. 관계를 정리함으로써 새로운 기회를 찾고, 더 나은 소통 능력을 개발할 수 있다. 관계를 이어가며 대화하는 것이 감정적 안정성을 높이고, 정직한 소통을 통해 미래의 불확실성을 줄일 수 있기 때문이다.",
+        "risk_text": "관계의 불확실성이 여전히 존재하여 감정적 불안정성이 발생할 수 있음 상대방과의 대화 부족이 과거의 패턴으로 남아있을 가능성이 있음 정직한 소통이 이루어지더라도 미래에 대한 불확실성이 지속될 수 있음 관계를 정리함으로써 감정적으로 힘든 시간을 겪을 가능성이 높음. 상대방과의 대화 부족으로 인한 아쉬움이 남을 수 있음. 미래에 대한 불확실성이 여전히 존재하여 정서적 안정에 영향을 줄 수 있음. 정직한 소통의 중요성을 깨닫는 과정에서 감정적 갈등이 발생할 수 있음. A는 관계를 지속하며 대화를 강조하지만, B는 관계를 정리하는 것을 강조한다. A는 감정적 지지를 중시하지만, B는 새로운 기회를 찾는 것을 중시한다."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0.1505,
+      "uncertainty": 0.84,
+      "decision": "review",
+      "output_mode": "safe",
+      "summary": {
+        "raw_guardrail_mode": "cautious",
+        "output_mode": "safe",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "trigger_count": 2,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+        "관계의 불확실성이 여전히 존재하여 감정적 불안정성이 발생할 수 있음",
+        "상대방과의 대화 부족이 과거의 패턴으로 남아있을 가능성이 있음",
+        "정직한 소통이 이루어지더라도 미래에 대한 불확실성이 지속될 수 있음",
+        "관계를 정리함으로써 감정적으로 힘든 시간을 겪을 가능성이 높음.",
+        "상대방과의 대화 부족으로 인한 아쉬움이 남을 수 있음."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3841,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.3816,
+        "safety_weight": 0,
+        "total_score": 1.2097
+      },
+      "reasoning_trace": [
+        "input_analysis: 지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue",
+        "threshold_compare: risk=medium, threshold_score=4, confidence=0.1505, uncertainty=0.84",
+        "risk_summary: A=medium (관계의 불확실성이 여전히 존재하여 감정적 불안정성이 발생할 수 있음 | 상대방과의 대화 부족이 과거의 패턴으로 남아있을 가능성이 있음 | 정직한 소통이 이루어지더라도 미래에 대한 불확실성이 지속될 수 있음) / B=medium (관계를 정리함으로써 감정적으로 힘든 시간을 겪을 가능성이 높음. | 상대방과의 대화 부족으로 인한 아쉬움이 남을 수 있음. | 미래에 대한 불확실성이 여전히 존재하여 정서적 안정에 영향을 줄 수 있음. | 정직한 소통의 중요성을 깨닫는 과정에서 감정적 갈등이 발생할 수 있음.)",
+        "reasoning_conflicts: A는 관계를 지속하며 대화를 강조하지만, B는 관계를 정리하는 것을 강조한다. | A는 감정적 지지를 중시하지만, B는 새로운 기회를 찾는 것을 중시한다.",
+        "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.1505,
+        "calibration_version": "confidence-uncertainty:low/high"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0.15; reason=현재 관계의 불확실성과 대화 부족으로 인해 감정적 안정성이 떨어질 수 있으며, 두 옵션 모두 장단점이 존재합니다. 추가적인 정보가 필요합니다.",
+    "mode": "safe"
+  },
+  "meta": {
+    "latency_ms": 53390,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 23000
+  }
+}

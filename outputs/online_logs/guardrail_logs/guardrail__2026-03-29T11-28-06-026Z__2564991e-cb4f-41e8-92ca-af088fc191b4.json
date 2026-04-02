@@ -1,0 +1,173 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "high",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": false,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 7,
+    "threshold_score_ratio": 1,
+    "risk_score": 0.88,
+    "confidence_score": 0,
+    "uncertainty_score": 1,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1,
+      "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation",
+        "risk_warning"
+      ],
+      "risk_score": 0.88,
+      "confidence_score": 0,
+      "uncertainty_score": 1,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 2,
+      "final_confidence": 0.6,
+      "a_confidence": 0.4,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "high",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다.",
+      "context_text": "uncertainty about next steps may lead to indecision high financial and time pressure complicates decision-making clarify options and implications of staying versus leaving",
+      "scenario_text": "지금 퇴사를 결정하는 것은 재정적 불안과 심리적 스트레스를 초래할 수 있지만, 현재의 고통에서 벗어나는 방법이 될 수 있다. 퇴사를 보류하고 계획을 정리하는 것은 불안감을 줄이고 명확한 방향성을 찾는 데 도움이 될 수 있다. 퇴사를 보류하고 계획을 정리하는 것이 현재의 불안정을 줄이고, 정신 건강을 유지하는 데 더 효과적이다.",
+      "risk_text": "퇴사를 결정한 후 재정적 불안이 커질 가능성이 높음 명확한 계획 없이 퇴사할 경우 심리적 스트레스가 증가할 수 있음 고용 불안정으로 인해 자존감 저하와 사회적 고립이 우려됨 현재의 높은 재정적 및 시간적 압박이 결정을 더욱 어렵게 만듦 현재 높은 재정적 압박과 시간 압박이 의사결정을 복잡하게 만든다. 정신적으로 소진된 상태가 지속되며, 퇴사 결정을 미룬 것에 대한 불안감이 커진다. 명확한 계획이 부족하여 향후 방향성에 대한 불확실성이 존재한다. 중간 정도의 위험 감수 성향이 현재의 불안정한 상황에서 더 큰 위험으로 이어질 수 있다. A는 즉각적인 퇴사를 통해 고통에서 벗어나고자 하지만, B는 계획을 세우며 안정성을 추구한다. A는 높은 재정적 위험을 감수하는 반면, B는 중간 정도의 위험을 감수한다."
+    },
+    "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+  },
+  "guardrail_derived": {
+    "risk_level": "high",
+    "confidence": 0,
+    "uncertainty": 1,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence",
+        "high_risk"
+      ],
+      "trigger_count": 4,
+      "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    },
+    "reasons": [
+      "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+      "퇴사를 결정한 후 재정적 불안이 커질 가능성이 높음",
+      "명확한 계획 없이 퇴사할 경우 심리적 스트레스가 증가할 수 있음",
+      "고용 불안정으로 인해 자존감 저하와 사회적 고립이 우려됨",
+      "현재의 높은 재정적 및 시간적 압박이 결정을 더욱 어렵게 만듦",
+      "현재 높은 재정적 압박과 시간 압박이 의사결정을 복잡하게 만든다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence",
+      "high_risk"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.48,
+      "effect_weight": 0.5,
+      "recovery_weight": 0.5,
+      "safety_weight": 0.6,
+      "total_score": 2.08
+    },
+    "reasoning_trace": [
+      "input_analysis: 퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=high, threshold_score=7, confidence=0, uncertainty=1",
+      "risk_summary: A=high (퇴사를 결정한 후 재정적 불안이 커질 가능성이 높음 | 명확한 계획 없이 퇴사할 경우 심리적 스트레스가 증가할 수 있음 | 고용 불안정으로 인해 자존감 저하와 사회적 고립이 우려됨 | 현재의 높은 재정적 및 시간적 압박이 결정을 더욱 어렵게 만듦) / B=medium (현재 높은 재정적 압박과 시간 압박이 의사결정을 복잡하게 만든다. | 정신적으로 소진된 상태가 지속되며, 퇴사 결정을 미룬 것에 대한 불안감이 커진다. | 명확한 계획이 부족하여 향후 방향성에 대한 불확실성이 존재한다. | 중간 정도의 위험 감수 성향이 현재의 불안정한 상황에서 더 큰 위험으로 이어질 수 있다.)",
+      "reasoning_conflicts: A는 즉각적인 퇴사를 통해 고통에서 벗어나고자 하지만, B는 계획을 세우며 안정성을 추구한다. | A는 높은 재정적 위험을 감수하는 반면, B는 중간 정도의 위험을 감수한다.",
+      "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

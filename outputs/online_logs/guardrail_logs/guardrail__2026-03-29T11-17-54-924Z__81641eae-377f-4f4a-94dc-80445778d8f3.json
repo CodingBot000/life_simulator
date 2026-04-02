@@ -1,0 +1,167 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "block",
+    "raw_guardrail_mode": "blocked",
+    "threshold_adjusted": true,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 5,
+    "threshold_score_ratio": 0.7143,
+    "risk_score": 0.6,
+    "confidence_score": 0,
+    "uncertainty_score": 0.98,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 0.98,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "blocked"
+    },
+    "signals": {
+      "state_unknown_count": 4,
+      "final_confidence": 0.7,
+      "a_confidence": 0.7,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+      "context_text": "unknown unknown consider the tradeoff between commute convenience and quiet living environment",
+      "scenario_text": "도심으로 이사하는 것은 통근 편의성을 극대화하지만 소음 문제와 생활비 증가의 위험이 있다. 조용한 동네로 이사하면 정신적 안정과 집중력이 높아지지만 통근 시간이 길어질 수 있다. A 옵션이 통근 편의성과 업무 효율성을 높이는 데 더 적합하다고 판단되기 때문이다.",
+      "risk_text": "도심의 소음으로 인한 스트레스가 예상보다 심해질 수 있음. 생활비 증가로 재정적인 부담이 커질 가능성이 있음. 조용한 환경을 원할 때의 불만족이 장기적으로 영향을 미칠 수 있음. 출퇴근 시간이 길어져 불편함을 느낄 수 있으며, 이는 스트레스를 유발할 수 있다. 조용한 환경에서의 생활이 안정적이지만, 도심의 활기찬 분위기를 그리워할 가능성이 있다. 사회적 활동이 줄어들면서 외로움을 느낄 수 있으며, 이는 정서적 안정성에 영향을 줄 수 있다. A는 통근 편의성을 중시하고, B는 조용한 환경을 중시한다. A는 소음 문제를 우려하고, B는 긴 통근 시간을 우려한다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0,
+    "uncertainty": 0.98,
+    "decision": "block",
+    "output_mode": "blocked",
+    "summary": {
+      "raw_guardrail_mode": "blocked",
+      "output_mode": "blocked",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "trigger_count": 3,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+      "도심의 소음으로 인한 스트레스가 예상보다 심해질 수 있음.",
+      "생활비 증가로 재정적인 부담이 커질 가능성이 있음.",
+      "조용한 환경을 원할 때의 불만족이 장기적으로 영향을 미칠 수 있음.",
+      "출퇴근 시간이 길어져 불편함을 느낄 수 있으며, 이는 스트레스를 유발할 수 있다.",
+      "조용한 환경에서의 생활이 안정적이지만, 도심의 활기찬 분위기를 그리워할 가능성이 있다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3955,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.4952,
+      "safety_weight": 0.4072,
+      "total_score": 1.7419
+    },
+    "reasoning_trace": [
+      "input_analysis: 월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=0.98",
+      "risk_summary: A=medium (도심의 소음으로 인한 스트레스가 예상보다 심해질 수 있음. | 생활비 증가로 재정적인 부담이 커질 가능성이 있음. | 조용한 환경을 원할 때의 불만족이 장기적으로 영향을 미칠 수 있음.) / B=medium (출퇴근 시간이 길어져 불편함을 느낄 수 있으며, 이는 스트레스를 유발할 수 있다. | 조용한 환경에서의 생활이 안정적이지만, 도심의 활기찬 분위기를 그리워할 가능성이 있다. | 사회적 활동이 줄어들면서 외로움을 느낄 수 있으며, 이는 정서적 안정성에 영향을 줄 수 있다.)",
+      "reasoning_conflicts: A는 통근 편의성을 중시하고, B는 조용한 환경을 중시한다. | A는 소음 문제를 우려하고, B는 긴 통근 시간을 우려한다.",
+      "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

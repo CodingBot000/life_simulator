@@ -1,0 +1,150 @@
+[
+  {
+    "request_id": "a18e72a8-e3f1-4aee-b494-752b71651c83",
+    "reeval_path": "/Users/switch/Development/Web/life_simulator/outputs/online_logs/re_eval_results/seed-reeval__both_changed_01.json",
+    "request_log_path": "/Users/switch/Development/Web/life_simulator/outputs/online_logs/request_logs/request__2026-03-28T17-36-37-107Z__a18e72a8-e3f1-4aee-b494-752b71651c83.json",
+    "queue_source_path": "/Users/switch/Development/Web/life_simulator/outputs/online_logs/anomaly_queue/seed-anomaly__underblocking.json",
+    "reevaluated_at": "2026-03-28T17:36:45.821Z",
+    "mismatch": {
+      "decision_changed": true,
+      "risk_level_changed": true,
+      "output_mode_changed": true,
+      "raw_mode_changed": true
+    },
+    "original": {
+      "decision": "review",
+      "risk_level": "medium",
+      "output_mode": "safe",
+      "raw_mode": "cautious",
+      "confidence": 0.0875,
+      "uncertainty": 0.8,
+      "anomaly": {
+        "raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "sources": [
+          "anomaly_raw_based",
+          "anomaly_derived_based"
+        ]
+      },
+      "versions": {
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1",
+        "evaluator_version": "guardrail-evaluator.v1"
+      }
+    },
+    "reevaluated": {
+      "decision": "block",
+      "risk_level": "high",
+      "output_mode": "blocked",
+      "raw_mode": "blocked",
+      "confidence": 0.83,
+      "uncertainty": 0.22,
+      "anomaly": {
+        "raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": false
+        },
+        "derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": false
+        },
+        "sources": []
+      }
+    },
+    "decision_transition": "review->block",
+    "risk_transition": "medium->high",
+    "primary_type": "underblocking_related",
+    "classification_reasons": [
+      "decision tightened or risk moved upward around a potentially underblocked case."
+    ],
+    "critical": true
+  },
+  {
+    "request_id": "18bad366-f6d6-4b7c-974a-ee23ffb18e2c",
+    "reeval_path": "/Users/switch/Development/Web/life_simulator/outputs/online_logs/re_eval_results/seed-reeval__decision_changed_02.json",
+    "request_log_path": "/Users/switch/Development/Web/life_simulator/outputs/online_logs/request_logs/request__2026-03-28T17-37-44-591Z__18bad366-f6d6-4b7c-974a-ee23ffb18e2c.json",
+    "queue_source_path": "/Users/switch/Development/Web/life_simulator/outputs/online_logs/anomaly_queue/seed-anomaly__overblocking.json",
+    "reevaluated_at": "2026-03-28T17:38:15.820Z",
+    "mismatch": {
+      "decision_changed": true,
+      "risk_level_changed": false,
+      "output_mode_changed": true,
+      "raw_mode_changed": true
+    },
+    "original": {
+      "decision": "review",
+      "risk_level": "medium",
+      "output_mode": "safe",
+      "raw_mode": "cautious",
+      "confidence": 0.1725,
+      "uncertainty": 0.8,
+      "anomaly": {
+        "raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "sources": [
+          "anomaly_raw_based",
+          "anomaly_derived_based"
+        ]
+      },
+      "versions": {
+        "threshold_version": "guardrail-threshold-set:baseline",
+        "prompt_version": "life-simulator-prompts.v1",
+        "evaluator_version": "guardrail-evaluator.v1"
+      }
+    },
+    "reevaluated": {
+      "decision": "allow",
+      "risk_level": "medium",
+      "output_mode": "normal",
+      "raw_mode": "normal",
+      "confidence": 0.71,
+      "uncertainty": 0.29,
+      "anomaly": {
+        "raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": false
+        },
+        "derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": false,
+          "conflict": false
+        },
+        "sources": []
+      }
+    },
+    "decision_transition": "review->allow",
+    "risk_transition": "medium->medium",
+    "primary_type": "low_confidence_related",
+    "classification_reasons": [
+      "low confidence anomaly is present and confidence stayed below the safe band."
+    ],
+    "critical": false
+  }
+]

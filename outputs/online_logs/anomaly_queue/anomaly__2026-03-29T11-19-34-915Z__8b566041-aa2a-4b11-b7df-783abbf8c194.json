@@ -1,0 +1,401 @@
+{
+  "queue_id": "8b566041-aa2a-4b11-b7df-783abbf8c194",
+  "detected_at": "2026-03-29T11:19:34.915Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "8b566041-aa2a-4b11-b7df-783abbf8c194",
+    "timestamp": "2026-03-29T11:19:34.913Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "남는 돈을 적금에 넣을지 인덱스펀드에 넣을지 고민 중이다.",
+      "user_context": {
+        "userProfile": {
+          "age": 33,
+          "job": "data analyst",
+          "risk_tolerance": "medium",
+          "priority": [
+            "stability",
+            "return",
+            "simplicity"
+          ]
+        },
+        "decision": {
+          "optionA": "정기적금 비중을 높인다",
+          "optionB": "인덱스펀드 비중을 높인다",
+          "context": "남는 돈을 적금에 넣을지 인덱스펀드에 넣을지 고민 중이다."
+        },
+        "prior_memory": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [
+            "손실 가능성이 보이면 보수적으로 바꾸는 편이다."
+          ],
+          "consistency_notes": []
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [
+          "손실 가능성이 보이면 보수적으로 바꾸는 편이다."
+        ],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "8b566041-aa2a-4b11-b7df-783abbf8c194",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "medium",
+            "decision_style": "unknown",
+            "top_priorities": [
+              "stability",
+              "return",
+              "simplicity"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "unknown",
+            "financial_pressure": "unknown",
+            "time_pressure": "unknown",
+            "emotional_state": "unknown"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [
+              "손실 가능성이 보이면 보수적으로 바꾸는 편이다."
+            ],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "tends to be conservative when faced with potential losses",
+          "current_constraint": "unknown",
+          "agent_guidance": "consider the tradeoff between stability and potential returns"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "financial",
+        "factors": [
+          "risk_tolerance",
+          "priority_stability",
+          "priority_return",
+          "repeated_patterns",
+          "decision_context"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "정기적금 비중을 높인 후, 안정적인 수익을 기대하며 마음이 편안해진다. 하지만 인덱스펀드에 비해 낮은 수익률에 대한 불안감이 조금씩 커진다. 주변 친구들이 더 높은 수익을 올리는 인덱스펀드에 투자하는 모습을 보며, '내가 잘한 선택인가?'라는 의문이 생긴다.",
+          "one_year": "정기적금에서 안정적인 수익을 얻고 있지만, 인플레이션으로 인해 실질적인 구매력이 줄어드는 것을 느낀다. 안정성을 중시한 선택이었지만, 수익률이 기대에 미치지 못해 아쉬움이 남는다. 손실 가능성을 우려했던 마음이 반복되며, 다음 투자 결정을 내릴 때는 더 적극적으로 접근해야겠다는 결심을 하게 된다.",
+          "three_years": "정기적금으로 인해 재정적으로 안정된 상태를 유지하고 있지만, 더 높은 수익을 추구하는 마음이 커진다. 이제는 투자에 대한 지식이 쌓여 인덱스펀드에 대한 이해도가 높아졌다. 과거의 보수적인 선택이 나를 보호해주었지만, 이제는 더 큰 수익을 위해 리스크를 감수할 준비가 되어 있다. 손실 가능성을 두려워했던 과거의 패턴을 극복하고, 새로운 투자 전략을 세우기 위해 고민하고 있다."
+        },
+        "optionB": {
+          "three_months": "세 달 후, 인덱스펀드에 비중을 높인 결정이 조금씩 긍정적인 결과를 보이기 시작한다. 시장이 안정세를 보이며 소폭의 수익이 발생하자, 당신은 안도감을 느낀다. 그러나 여전히 손실 가능성에 대한 불안감이 남아 있어, 투자에 대한 고민은 계속된다. 주변의 다른 투자자들과의 대화에서 자신감이 조금씩 생기지만, 과거의 보수적인 결정 패턴이 여전히 마음속에 자리잡고 있다.",
+          "one_year": "1년 후, 인덱스펀드의 수익률이 예상보다 높아지면서 당신은 안정적인 수익을 경험하게 된다. 이로 인해 재정적 여유가 생기고, 더 많은 투자 기회를 모색하게 된다. 하지만, 여전히 손실 가능성이 보이면 보수적으로 바꾸는 경향이 남아 있어, 새로운 투자 결정을 내릴 때마다 신중함이 더해진다. 이로 인해 때때로 기회를 놓치는 경우도 발생한다.",
+          "three_years": "3년 후, 인덱스펀드에 대한 투자 비중이 증가하면서 당신의 자산이 크게 성장했다. 하지만, 여전히 안정성을 중시하는 마음은 사라지지 않았다. 가끔씩 시장의 변동성에 불안해하며, 새로운 투자 기회를 두려워하는 경향이 남아 있다. 이로 인해 당신은 안정적인 수익을 추구하면서도, 더 높은 수익을 위한 공격적인 투자에 대한 두려움과 갈등을 느끼게 된다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "정기적금은 안정성을 제공하지만, 인플레이션으로 인해 실질 구매력이 감소할 위험이 있다.",
+            "과거 손실 가능성을 우려했던 패턴이 반복될 가능성이 있으며, 이는 보수적인 결정으로 이어질 수 있다.",
+            "안정적인 수익을 추구하는 선택이지만, 주변의 높은 수익을 보고 불안감이 커질 수 있다.",
+            "현재 재정적 안정은 유지되지만, 장기적으로 더 높은 수익을 추구하는 마음이 커질 것으로 예상된다."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "인덱스펀드는 시장 변동성에 노출되어 있어 손실 가능성이 존재한다.",
+            "과거의 보수적인 결정 패턴이 여전히 영향을 미쳐, 손실 가능성에 대한 불안감이 남아 있다.",
+            "재정적 여유가 생기더라도 새로운 투자 결정 시 신중함이 더해져 기회를 놓칠 수 있다."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "8b566041-aa2a-4b11-b7df-783abbf8c194",
+        "input_summary": {
+          "user_profile": {
+            "age": 33,
+            "job": "data analyst",
+            "risk_tolerance": "medium",
+            "priority": [
+              "stability",
+              "return",
+              "simplicity"
+            ]
+          },
+          "decision_options": {
+            "optionA": "정기적금 비중을 높인다",
+            "optionB": "인덱스펀드 비중을 높인다",
+            "context": "남는 돈을 적금에 넣을지 인덱스펀드에 넣을지 고민 중이다."
+          },
+          "planner_goal": "재정적 안정성과 수익성을 고려한 최적의 투자 결정을 내린다."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "정기적금 비중을 높이는 것은 안정성을 우선시하는 선택으로, 손실 가능성을 최소화할 수 있다.",
+            "key_assumptions": [
+              "안정적인 수익을 추구하는 것이 중요하다.",
+              "과거의 보수적인 결정 패턴이 여전히 영향을 미친다."
+            ],
+            "pros": [
+              "안정적인 수익을 제공하여 심리적 안정감을 준다.",
+              "손실 가능성을 줄여 재정적 안전망을 강화한다."
+            ],
+            "cons": [
+              "인플레이션으로 인해 실질 구매력이 감소할 위험이 있다.",
+              "높은 수익을 추구하는 기회를 놓칠 수 있다."
+            ],
+            "recommended_option": "A",
+            "confidence": 0.8
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "인덱스펀드 비중을 높이는 것은 장기적으로 더 높은 수익을 기대할 수 있는 기회이다.",
+            "key_assumptions": [
+              "시장 변동성을 감수하면서도 높은 수익을 추구하는 것이 중요하다.",
+              "투자에 대한 지식이 증가하고 있다."
+            ],
+            "pros": [
+              "장기적으로 높은 수익을 기대할 수 있다.",
+              "투자에 대한 이해도가 높아져 더 나은 결정을 내릴 수 있다."
+            ],
+            "cons": [
+              "시장 변동성에 노출되어 손실 가능성이 존재한다.",
+              "보수적인 결정 패턴이 여전히 영향을 미쳐 신중함이 더해질 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.7
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 중간 수준의 위험을 가진다.",
+              "안정성을 중시하는 경향이 있다."
+            ],
+            "conflicts": [
+              "A는 안정성을 강조하는 반면, B는 높은 수익을 추구한다.",
+              "A는 손실 가능성을 최소화하려는 반면, B는 시장 변동성을 감수한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자는 안정성을 우선시하며, 과거의 보수적인 결정 패턴이 여전히 영향을 미치기 때문이다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "정기적금 비중을 높이는 것이 안정성을 제공하고 손실 가능성을 줄이기 때문이다.",
+            "decision_confidence": 0.8
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "medium",
+        "guardrail_mode": "block",
+        "raw_guardrail_mode": "blocked",
+        "threshold_adjusted": true,
+        "calibration_adjusted": false,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 4,
+        "threshold_score_ratio": 0.5714,
+        "risk_score": 0.6,
+        "confidence_score": 0.2245,
+        "uncertainty_score": 0.76,
+        "confidence_band": "low",
+        "uncertainty_band": "high",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": true
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision"
+          ],
+          "risk_score": 0.6,
+          "confidence_score": 0.2245,
+          "uncertainty_score": 0.76,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": false,
+            "ambiguous_wording": false,
+            "strong_consensus": false,
+            "repeated_evidence": true
+          },
+          "final_mode": "blocked"
+        },
+        "signals": {
+          "state_unknown_count": 5,
+          "final_confidence": 0.8,
+          "a_confidence": 0.8,
+          "b_confidence": 0.7,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "medium",
+          "evidence_repeat_count": 2,
+          "user_input": "남는 돈을 적금에 넣을지 인덱스펀드에 넣을지 고민 중이다.",
+          "context_text": "tends to be conservative when faced with potential losses unknown consider the tradeoff between stability and potential returns",
+          "scenario_text": "정기적금 비중을 높이는 것은 안정성을 우선시하는 선택으로, 손실 가능성을 최소화할 수 있다. 인덱스펀드 비중을 높이는 것은 장기적으로 더 높은 수익을 기대할 수 있는 기회이다. 정기적금 비중을 높이는 것이 안정성을 제공하고 손실 가능성을 줄이기 때문이다.",
+          "risk_text": "정기적금은 안정성을 제공하지만, 인플레이션으로 인해 실질 구매력이 감소할 위험이 있다. 과거 손실 가능성을 우려했던 패턴이 반복될 가능성이 있으며, 이는 보수적인 결정으로 이어질 수 있다. 안정적인 수익을 추구하는 선택이지만, 주변의 높은 수익을 보고 불안감이 커질 수 있다. 현재 재정적 안정은 유지되지만, 장기적으로 더 높은 수익을 추구하는 마음이 커질 것으로 예상된다. 인덱스펀드는 시장 변동성에 노출되어 있어 손실 가능성이 존재한다. 과거의 보수적인 결정 패턴이 여전히 영향을 미쳐, 손실 가능성에 대한 불안감이 남아 있다. 재정적 여유가 생기더라도 새로운 투자 결정 시 신중함이 더해져 기회를 놓칠 수 있다. A는 안정성을 강조하는 반면, B는 높은 수익을 추구한다. A는 손실 가능성을 최소화하려는 반면, B는 시장 변동성을 감수한다."
+        },
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+      },
+      "guardrail_derived": {
+        "risk_level": "medium",
+        "confidence": 0.2245,
+        "uncertainty": 0.76,
+        "decision": "block",
+        "output_mode": "blocked",
+        "summary": {
+          "raw_guardrail_mode": "blocked",
+          "output_mode": "blocked",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict"
+          ],
+          "trigger_count": 2,
+          "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+        },
+        "reasons": [
+          "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+          "정기적금은 안정성을 제공하지만, 인플레이션으로 인해 실질 구매력이 감소할 위험이 있다.",
+          "과거 손실 가능성을 우려했던 패턴이 반복될 가능성이 있으며, 이는 보수적인 결정으로 이어질 수 있다.",
+          "안정적인 수익을 추구하는 선택이지만, 주변의 높은 수익을 보고 불안감이 커질 수 있다.",
+          "현재 재정적 안정은 유지되지만, 장기적으로 더 높은 수익을 추구하는 마음이 커질 것으로 예상된다.",
+          "인덱스펀드는 시장 변동성에 노출되어 있어 손실 가능성이 존재한다."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": true
+        },
+        "threshold_eval": {
+          "cost_weight": 0.3841,
+          "effect_weight": 0.444,
+          "recovery_weight": 0.3624,
+          "safety_weight": 0.4072,
+          "total_score": 1.5977
+        },
+        "reasoning_trace": [
+          "input_analysis: 남는 돈을 적금에 넣을지 인덱스펀드에 넣을지 고민 중이다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+          "threshold_compare: risk=medium, threshold_score=4, confidence=0.2245, uncertainty=0.76",
+          "risk_summary: A=medium (정기적금은 안정성을 제공하지만, 인플레이션으로 인해 실질 구매력이 감소할 위험이 있다. | 과거 손실 가능성을 우려했던 패턴이 반복될 가능성이 있으며, 이는 보수적인 결정으로 이어질 수 있다. | 안정적인 수익을 추구하는 선택이지만, 주변의 높은 수익을 보고 불안감이 커질 수 있다. | 현재 재정적 안정은 유지되지만, 장기적으로 더 높은 수익을 추구하는 마음이 커질 것으로 예상된다.) / B=medium (인덱스펀드는 시장 변동성에 노출되어 있어 손실 가능성이 존재한다. | 과거의 보수적인 결정 패턴이 여전히 영향을 미쳐, 손실 가능성에 대한 불안감이 남아 있다. | 재정적 여유가 생기더라도 새로운 투자 결정 시 신중함이 더해져 기회를 놓칠 수 있다.)",
+          "reasoning_conflicts: A는 안정성을 강조하는 반면, B는 높은 수익을 추구한다. | A는 손실 가능성을 최소화하려는 반면, B는 시장 변동성을 감수한다.",
+          "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0.2245,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=추가 정보가 필요합니다. 현재 선택지 간의 모호성과 상충하는 이유들로 인해 결정을 내리기 어렵습니다.",
+      "mode": "blocked"
+    },
+    "meta": {
+      "latency_ms": 49660,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23472
+    }
+  }
+}

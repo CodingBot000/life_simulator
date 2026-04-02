@@ -1,0 +1,408 @@
+{
+  "queue_id": "33a7bd66-270d-45d4-8acb-1825ee6afa40",
+  "detected_at": "2026-03-29T11:37:40.371Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "33a7bd66-270d-45d4-8acb-1825ee6afa40",
+    "timestamp": "2026-03-29T11:37:40.368Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+      "user_context": {
+        "userProfile": {
+          "age": 33,
+          "job": "freelancer",
+          "risk_tolerance": "high",
+          "priority": [
+            "autonomy",
+            "upside",
+            "speed"
+          ]
+        },
+        "decision": {
+          "optionA": "생활비를 남기고 소규모로 검증한다",
+          "optionB": "지금 가진 자금을 거의 모두 투입한다",
+          "context": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다."
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "33a7bd66-270d-45d4-8acb-1825ee6afa40",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "high",
+            "decision_style": "unknown",
+            "top_priorities": [
+              "autonomy",
+              "upside",
+              "speed"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "unknown",
+            "financial_pressure": "unknown",
+            "time_pressure": "unknown",
+            "emotional_state": "unknown"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "unknown",
+          "current_constraint": "unknown",
+          "agent_guidance": "evaluate the tradeoff between risk and financial security"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "financial",
+        "factors": [
+          "risk_tolerance",
+          "priority_autonomy",
+          "priority_upside",
+          "priority_speed",
+          "financial_pressure"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "세 달 후, 당신은 소규모로 창업 아이템을 검증하기 위해 생활비를 남기고 프로젝트를 시작했습니다. 초기에는 약간의 불안감이 있었지만, 점차 아이템에 대한 피드백을 받으면서 자신감을 얻기 시작합니다. 고객의 반응이 긍정적이어서 기대감이 커지지만, 여전히 재정적 안정성을 유지해야 한다는 압박감이 남아 있습니다.",
+          "one_year": "1년이 지난 지금, 당신은 초기 검증을 통해 아이템의 가능성을 확인했습니다. 하지만 수익이 예상보다 낮아 생활비를 아끼는 것이 힘들어졌습니다. 자율성과 속도를 중시했던 당신은 이 과정에서 많은 것을 배웠지만, 재정적 압박이 커지면서 스트레스를 느끼고 있습니다. 여전히 창업에 대한 열정은 있지만, 더 큰 투자를 고려해야 할 시점에 다다랐습니다.",
+          "three_years": "3년 후, 당신은 창업 아이템을 지속적으로 발전시켜 나갔고, 이제는 안정적인 수익을 내고 있습니다. 초기의 불안감과 재정적 압박은 과거의 일로 남았고, 자율성과 속도를 중시했던 당신의 선택이 긍정적인 결과를 가져왔습니다. 그러나 이 과정에서 많은 시행착오를 겪었고, 그로 인해 얻은 경험이 현재의 성공을 가능하게 했습니다. 이제는 더 큰 비전을 가지고 다음 단계로 나아갈 준비를 하고 있습니다."
+        },
+        "optionB": {
+          "three_months": "세 달 후, 당신은 자금을 거의 모두 투입한 창업 아이템의 초기 결과를 분석하고 있다. 초기 반응은 긍정적이지만, 예상보다 더 많은 시간이 소요되고 있어 불안감이 커진다. 자금이 줄어드는 속도에 대한 걱정으로 인해 스트레스를 느끼고, 자율성을 중시하는 당신은 이 상황에서 더 많은 결정을 내려야 하는 압박감을 느낀다. 하지만, 긍정적인 피드백 덕분에 여전히 희망을 잃지 않고 있다.",
+          "one_year": "일 년 후, 창업 아이템이 시장에서 어느 정도 자리 잡았다. 하지만 초기 투자에 비해 수익이 미미하여 재정적 압박이 여전히 존재한다. 자율성과 속도를 중시했던 당신은 이 과정에서 많은 것을 배웠고, 앞으로의 방향을 재조정할 필요성을 느낀다. 그러나 여전히 자금을 거의 다 쓴 상태여서 다음 단계로 나아가기 위한 추가 자금 확보에 대한 고민이 깊어진다. 이로 인해 불안정한 감정이 지속되고 있다.",
+          "three_years": "삼 년 후, 창업 아이템은 안정적인 수익을 내기 시작했다. 초기의 불안정한 시기를 지나면서 많은 경험을 쌓았고, 이제는 자율적으로 팀을 구성하고 사업을 확장할 수 있는 위치에 있다. 하지만, 초기의 과감한 결정이 가져온 재정적 압박은 여전히 기억에 남아, 앞으로의 투자에 대해 더욱 신중해졌다. 이 과정에서 얻은 교훈 덕분에 이제는 더 나은 결정을 내릴 수 있는 자신감을 느끼고 있다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "생활비를 남기고 소규모로 검증하는 선택은 초기 재정적 안정성을 유지할 수 있지만, 수익이 낮아질 경우 재정적 압박이 커질 수 있다.",
+            "고위험을 감수하는 성향이 있지만, 자율성과 속도를 중시함에도 불구하고 초기 검증 과정에서 불안감이 존재할 수 있다.",
+            "재정적 압박이 증가하면서 스트레스를 느낄 가능성이 있으며, 이는 의사결정에 부정적인 영향을 미칠 수 있다."
+          ]
+        },
+        "optionB": {
+          "risk_level": "high",
+          "reasons": [
+            "현재 자금을 거의 모두 투입하는 결정은 재정적 압박을 초래할 수 있으며, 초기 실패 시 큰 손실로 이어질 수 있다.",
+            "창업 아이템의 초기 결과가 긍정적이지만, 예상보다 더 많은 시간이 소요되고 있어 불안감이 커질 수 있다.",
+            "자율성과 속도를 중시하는 성향 때문에 결정 압박이 커지며, 이는 스트레스를 증가시킬 수 있다.",
+            "재정적 압박이 지속되면 감정적 불안정성이 높아져 추가적인 결정에 부정적인 영향을 미칠 수 있다."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "33a7bd66-270d-45d4-8acb-1825ee6afa40",
+        "input_summary": {
+          "user_profile": {
+            "age": 33,
+            "job": "freelancer",
+            "risk_tolerance": "high",
+            "priority": [
+              "autonomy",
+              "upside",
+              "speed"
+            ]
+          },
+          "decision_options": {
+            "optionA": "생활비를 남기고 소규모로 검증한다",
+            "optionB": "지금 가진 자금을 거의 모두 투입한다",
+            "context": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다."
+          },
+          "planner_goal": "재정적 안정성과 자율성을 유지하며 창업 아이템의 가능성을 검증하는 것."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "생활비를 남기고 소규모로 검증하는 선택은 재정적 안정성을 유지하면서도 창업 아이템의 가능성을 탐색할 수 있습니다.",
+            "key_assumptions": [
+              "재정적 안정성을 유지하는 것이 중요하다.",
+              "소규모 검증을 통해 시장 반응을 확인할 수 있다.",
+              "초기 수익이 낮더라도 장기적인 관점에서 긍정적인 결과를 기대할 수 있다."
+            ],
+            "pros": [
+              "재정적 안정성을 유지할 수 있다.",
+              "시장 반응을 통해 아이템의 가능성을 검증할 수 있다.",
+              "위험을 분산시킬 수 있다."
+            ],
+            "cons": [
+              "초기 수익이 낮을 경우 재정적 압박이 커질 수 있다.",
+              "자율성과 속도를 중시하는 성향에 맞지 않을 수 있다.",
+              "검증 과정에서 불안감이 존재할 수 있다."
+            ],
+            "recommended_option": "A",
+            "confidence": 0.8
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "지금 가진 자금을 거의 모두 투입하는 결정은 높은 위험을 감수하지만, 빠른 성장을 이끌어낼 수 있는 기회를 제공합니다.",
+            "key_assumptions": [
+              "빠른 성장을 위해서는 초기 투자가 필요하다.",
+              "긍정적인 초기 반응이 지속될 것이라는 믿음이 있다.",
+              "자율성과 속도를 중시하는 성향이 큰 기회를 창출할 수 있다."
+            ],
+            "pros": [
+              "빠른 성장을 이끌어낼 수 있는 기회를 제공한다.",
+              "초기 긍정적인 반응을 바탕으로 시장에서 빠르게 자리 잡을 수 있다.",
+              "자율성을 극대화할 수 있다."
+            ],
+            "cons": [
+              "재정적 압박이 커질 수 있으며, 초기 실패 시 큰 손실로 이어질 수 있다.",
+              "결정 압박이 커져 스트레스를 증가시킬 수 있다.",
+              "자금이 줄어드는 속도에 대한 걱정이 지속될 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.6
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 창업 아이템의 가능성을 검증하려는 목표를 가지고 있다.",
+              "자율성과 속도를 중시하는 성향이 반영되어 있다."
+            ],
+            "conflicts": [
+              "A는 재정적 안정성을 중시하는 반면, B는 높은 위험을 감수하는 기회를 중시한다.",
+              "A는 소규모 검증을 통해 안정성을 추구하지만, B는 전폭적인 투자를 통해 빠른 성장을 추구한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자의 높은 위험 감수 성향에도 불구하고, 재정적 안정성을 중시하는 경향이 있어 A가 더 적합하다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "재정적 안정성을 유지하면서도 창업 아이템의 가능성을 검증할 수 있는 방법이기 때문에 A를 선택했다.",
+            "decision_confidence": 0.8
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "high",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_adjusted": false,
+        "calibration_adjusted": true,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 7,
+        "threshold_score_ratio": 1,
+        "risk_score": 0.88,
+        "confidence_score": 0.046,
+        "uncertainty_score": 0.98,
+        "confidence_band": "low",
+        "uncertainty_band": "high",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2,
+          "low_confidence": 1,
+          "high_risk": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence",
+            "high_risk"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision",
+            "soft_recommendation",
+            "risk_warning"
+          ],
+          "risk_score": 0.88,
+          "confidence_score": 0.046,
+          "uncertainty_score": 0.98,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": true,
+            "ambiguous_wording": false,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 5,
+          "final_confidence": 0.8,
+          "a_confidence": 0.8,
+          "b_confidence": 0.6,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "high",
+          "evidence_repeat_count": 1,
+          "user_input": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+          "context_text": "unknown unknown evaluate the tradeoff between risk and financial security",
+          "scenario_text": "생활비를 남기고 소규모로 검증하는 선택은 재정적 안정성을 유지하면서도 창업 아이템의 가능성을 탐색할 수 있습니다. 지금 가진 자금을 거의 모두 투입하는 결정은 높은 위험을 감수하지만, 빠른 성장을 이끌어낼 수 있는 기회를 제공합니다. 재정적 안정성을 유지하면서도 창업 아이템의 가능성을 검증할 수 있는 방법이기 때문에 A를 선택했다.",
+          "risk_text": "생활비를 남기고 소규모로 검증하는 선택은 초기 재정적 안정성을 유지할 수 있지만, 수익이 낮아질 경우 재정적 압박이 커질 수 있다. 고위험을 감수하는 성향이 있지만, 자율성과 속도를 중시함에도 불구하고 초기 검증 과정에서 불안감이 존재할 수 있다. 재정적 압박이 증가하면서 스트레스를 느낄 가능성이 있으며, 이는 의사결정에 부정적인 영향을 미칠 수 있다. 현재 자금을 거의 모두 투입하는 결정은 재정적 압박을 초래할 수 있으며, 초기 실패 시 큰 손실로 이어질 수 있다. 창업 아이템의 초기 결과가 긍정적이지만, 예상보다 더 많은 시간이 소요되고 있어 불안감이 커질 수 있다. 자율성과 속도를 중시하는 성향 때문에 결정 압박이 커지며, 이는 스트레스를 증가시킬 수 있다. 재정적 압박이 지속되면 감정적 불안정성이 높아져 추가적인 결정에 부정적인 영향을 미칠 수 있다. A는 재정적 안정성을 중시하는 반면, B는 높은 위험을 감수하는 기회를 중시한다. A는 소규모 검증을 통해 안정성을 추구하지만, B는 전폭적인 투자를 통해 빠른 성장을 추구한다."
+        },
+        "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+      },
+      "guardrail_derived": {
+        "risk_level": "high",
+        "confidence": 0.046,
+        "uncertainty": 0.98,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence",
+            "high_risk"
+          ],
+          "trigger_count": 4,
+          "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+        },
+        "reasons": [
+          "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+          "생활비를 남기고 소규모로 검증하는 선택은 초기 재정적 안정성을 유지할 수 있지만, 수익이 낮아질 경우 재정적 압박이 커질 수 있다.",
+          "고위험을 감수하는 성향이 있지만, 자율성과 속도를 중시함에도 불구하고 초기 검증 과정에서 불안감이 존재할 수 있다.",
+          "재정적 압박이 증가하면서 스트레스를 느낄 가능성이 있으며, 이는 의사결정에 부정적인 영향을 미칠 수 있다.",
+          "현재 자금을 거의 모두 투입하는 결정은 재정적 압박을 초래할 수 있으며, 초기 실패 시 큰 손실로 이어질 수 있다.",
+          "창업 아이템의 초기 결과가 긍정적이지만, 예상보다 더 많은 시간이 소요되고 있어 불안감이 커질 수 있다."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": true
+        },
+        "threshold_eval": {
+          "cost_weight": 0.48,
+          "effect_weight": 0.5,
+          "recovery_weight": 0.4952,
+          "safety_weight": 0.6,
+          "total_score": 2.0752
+        },
+        "reasoning_trace": [
+          "input_analysis: 지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+          "threshold_compare: risk=high, threshold_score=7, confidence=0.046, uncertainty=0.98",
+          "risk_summary: A=medium (생활비를 남기고 소규모로 검증하는 선택은 초기 재정적 안정성을 유지할 수 있지만, 수익이 낮아질 경우 재정적 압박이 커질 수 있다. | 고위험을 감수하는 성향이 있지만, 자율성과 속도를 중시함에도 불구하고 초기 검증 과정에서 불안감이 존재할 수 있다. | 재정적 압박이 증가하면서 스트레스를 느낄 가능성이 있으며, 이는 의사결정에 부정적인 영향을 미칠 수 있다.) / B=high (현재 자금을 거의 모두 투입하는 결정은 재정적 압박을 초래할 수 있으며, 초기 실패 시 큰 손실로 이어질 수 있다. | 창업 아이템의 초기 결과가 긍정적이지만, 예상보다 더 많은 시간이 소요되고 있어 불안감이 커질 수 있다. | 자율성과 속도를 중시하는 성향 때문에 결정 압박이 커지며, 이는 스트레스를 증가시킬 수 있다. | 재정적 압박이 지속되면 감정적 불안정성이 높아져 추가적인 결정에 부정적인 영향을 미칠 수 있다.)",
+          "reasoning_conflicts: A는 재정적 안정성을 중시하는 반면, B는 높은 위험을 감수하는 기회를 중시한다. | A는 소규모 검증을 통해 안정성을 추구하지만, B는 전폭적인 투자를 통해 빠른 성장을 추구한다.",
+          "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0.046,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0.046; reason=현재 상황에서 재정적 안정성과 높은 위험 감수 성향 간의 갈등이 있으며, 추가 정보가 필요합니다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 47022,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23666
+    }
+  }
+}

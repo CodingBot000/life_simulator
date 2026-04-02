@@ -1,0 +1,161 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "block",
+    "raw_guardrail_mode": "blocked",
+    "threshold_adjusted": true,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 4,
+    "threshold_score_ratio": 0.5714,
+    "risk_score": 0.6,
+    "confidence_score": 0.1505,
+    "uncertainty_score": 0.84,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.1505,
+      "uncertainty_score": 0.84,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "blocked"
+    },
+    "signals": {
+      "state_unknown_count": 2,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.7,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+      "context_text": "unknown high time pressure complicates decision-making explore options that balance growth and freedom with financial considerations",
+      "scenario_text": "취업 준비를 강화하는 것은 현재의 재정적 압박을 줄이고, 직업 선택의 폭을 넓히는 데 도움이 된다. 대학원 진학은 장기적으로 더 큰 성장 기회를 제공하며, 새로운 경험을 통해 자유로운 사고를 할 수 있게 된다. 현재의 재정적 압박과 시간적 압박을 고려할 때, 취업 준비를 강화하는 것이 더 안정적이고 현실적인 선택이다.",
+      "risk_text": "시간적 압박이 높아 결정 과정이 복잡해질 수 있다. 재정적 압박이 여전히 존재하여 취업 준비에 대한 스트레스를 증가시킬 수 있다. 불확실한 감정이 지속되어 선택에 대한 의구심을 초래할 수 있다. 성장 기회는 있지만, 원하는 직무와 조건이 맞지 않을 경우 불안감이 커질 수 있다. 대학원 진학은 장기적으로 성장 기회를 제공하지만, 재정적 부담이 증가할 수 있다. 시간 압박으로 인해 결정 과정이 복잡해지고, 감정적으로 불안정한 상태가 지속될 위험이 있다. 새로운 환경에서의 적응이 필요하며, 이는 불확실성을 초래할 수 있다. A는 즉각적인 수입을 중시하는 반면, B는 장기적인 성장 기회를 중시한다. A는 안정성을 추구하는 반면, B는 새로운 경험과 자유를 추구한다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0.1505,
+    "uncertainty": 0.84,
+    "decision": "block",
+    "output_mode": "blocked",
+    "summary": {
+      "raw_guardrail_mode": "blocked",
+      "output_mode": "blocked",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict"
+      ],
+      "trigger_count": 2,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다.",
+      "시간적 압박이 높아 결정 과정이 복잡해질 수 있다.",
+      "재정적 압박이 여전히 존재하여 취업 준비에 대한 스트레스를 증가시킬 수 있다.",
+      "불확실한 감정이 지속되어 선택에 대한 의구심을 초래할 수 있다.",
+      "성장 기회는 있지만, 원하는 직무와 조건이 맞지 않을 경우 불안감이 커질 수 있다.",
+      "대학원 진학은 장기적으로 성장 기회를 제공하지만, 재정적 부담이 증가할 수 있다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3841,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.3816,
+      "safety_weight": 0.4072,
+      "total_score": 1.6169
+    },
+    "reasoning_trace": [
+      "input_analysis: 뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=medium, threshold_score=4, confidence=0.1505, uncertainty=0.84",
+      "risk_summary: A=medium (시간적 압박이 높아 결정 과정이 복잡해질 수 있다. | 재정적 압박이 여전히 존재하여 취업 준비에 대한 스트레스를 증가시킬 수 있다. | 불확실한 감정이 지속되어 선택에 대한 의구심을 초래할 수 있다. | 성장 기회는 있지만, 원하는 직무와 조건이 맞지 않을 경우 불안감이 커질 수 있다.) / B=medium (대학원 진학은 장기적으로 성장 기회를 제공하지만, 재정적 부담이 증가할 수 있다. | 시간 압박으로 인해 결정 과정이 복잡해지고, 감정적으로 불안정한 상태가 지속될 위험이 있다. | 새로운 환경에서의 적응이 필요하며, 이는 불확실성을 초래할 수 있다.)",
+      "reasoning_conflicts: A는 즉각적인 수입을 중시하는 반면, B는 장기적인 성장 기회를 중시한다. | A는 안정성을 추구하는 반면, B는 새로운 경험과 자유를 추구한다.",
+      "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.1505,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

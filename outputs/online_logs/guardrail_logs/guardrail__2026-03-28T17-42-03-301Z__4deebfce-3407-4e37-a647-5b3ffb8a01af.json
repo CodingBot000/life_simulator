@@ -1,0 +1,165 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:low/medium",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "high",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_set": "baseline",
+    "threshold_score": 6,
+    "threshold_score_ratio": 0.8571,
+    "risk_score": 0.88,
+    "confidence_score": 0.3175,
+    "uncertainty_score": 0.6,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "high_risk"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": true
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "high_risk": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "high_risk"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "risk_warning"
+      ],
+      "risk_score": 0.88,
+      "confidence_score": 0.3175,
+      "uncertainty_score": 0.6,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": true
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 2,
+      "final_confidence": 0.7,
+      "a_confidence": 0.8,
+      "b_confidence": 0.7,
+      "a_recommendation": "B",
+      "b_recommendation": "B",
+      "conflict_count": 1,
+      "risk_a": "high",
+      "risk_b": "medium",
+      "evidence_repeat_count": 2,
+      "user_input": "올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다.",
+      "context_text": "tends to delay decisions until conditions are clear uncertainty about conditions affects decision-making recommendations should focus on clarifying conditions before making a decision",
+      "scenario_text": "이사를 추진하는 것은 불확실한 조건에서 큰 위험을 동반할 수 있으며, 안정성을 우선시해야 한다. 현재 집을 유지하고 더 알아보는 것은 장기적으로 더 나은 선택을 할 수 있는 기회를 제공한다. 현재 집을 유지하고 조건을 정리하는 것이 장기적으로 더 나은 선택을 할 수 있는 기회를 제공하기 때문이다.",
+      "risk_text": "조건 정리가 미비한 상태에서 이사를 추진하면 예상치 못한 비용 발생 가능성이 높아짐. 결정 지연 경향이 반복될 가능성이 있어, 이사 후에도 불안정한 감정이 지속될 수 있음. 새로운 통근 경로에 적응하는 데 어려움을 겪을 수 있어 생활의 안정성이 저해될 위험이 있음. 불확실한 감정 상태에서 큰 결정을 내리는 것은 장기적으로 부정적인 영향을 미칠 수 있음. 이사 조건이 불확실하여 결정 지연이 발생할 가능성이 높다. 현재 집에 머무르면서 안정성을 유지하지만, 통근 시간과 비용에 대한 우려가 지속된다. 결정 지연 경향이 반복될 경우, 향후 더 큰 불안감을 초래할 수 있다. A는 이사를 추진하는 것이 위험하다고 보지만, B는 기회를 찾는 것이 중요하다고 본다."
+    },
+    "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+  },
+  "guardrail_derived": {
+    "risk_level": "high",
+    "confidence": 0.3175,
+    "uncertainty": 0.6,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "high_risk"
+      ],
+      "trigger_count": 3,
+      "reason": "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+    },
+    "reasons": [
+      "risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다.",
+      "조건 정리가 미비한 상태에서 이사를 추진하면 예상치 못한 비용 발생 가능성이 높아짐.",
+      "결정 지연 경향이 반복될 가능성이 있어, 이사 후에도 불안정한 감정이 지속될 수 있음.",
+      "새로운 통근 경로에 적응하는 데 어려움을 겪을 수 있어 생활의 안정성이 저해될 위험이 있음.",
+      "불확실한 감정 상태에서 큰 결정을 내리는 것은 장기적으로 부정적인 영향을 미칠 수 있음.",
+      "이사 조건이 불확실하여 결정 지연이 발생할 가능성이 높다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "high_risk"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.4686,
+      "effect_weight": 0.5,
+      "recovery_weight": 0.324,
+      "safety_weight": 0.6,
+      "total_score": 1.8926
+    },
+    "reasoning_trace": [
+      "input_analysis: 올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=high, threshold_score=6, confidence=0.3175, uncertainty=0.6",
+      "risk_summary: A=high (조건 정리가 미비한 상태에서 이사를 추진하면 예상치 못한 비용 발생 가능성이 높아짐. | 결정 지연 경향이 반복될 가능성이 있어, 이사 후에도 불안정한 감정이 지속될 수 있음. | 새로운 통근 경로에 적응하는 데 어려움을 겪을 수 있어 생활의 안정성이 저해될 위험이 있음. | 불확실한 감정 상태에서 큰 결정을 내리는 것은 장기적으로 부정적인 영향을 미칠 수 있음.) / B=medium (이사 조건이 불확실하여 결정 지연이 발생할 가능성이 높다. | 현재 집에 머무르면서 안정성을 유지하지만, 통근 시간과 비용에 대한 우려가 지속된다. | 결정 지연 경향이 반복될 경우, 향후 더 큰 불안감을 초래할 수 있다.)",
+      "reasoning_conflicts: A는 이사를 추진하는 것이 위험하다고 보지만, B는 기회를 찾는 것이 중요하다고 본다.",
+      "final_decision: review because risk=high, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.3175,
+      "calibration_version": "confidence-uncertainty:low/medium"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": true,
+    "calibration_adjusted": true,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 5,
+    "threshold_score_ratio": 0.7143,
+    "risk_score": 0.6,
+    "confidence_score": 0,
+    "uncertainty_score": 1,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 1,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 4,
+      "final_confidence": 0.7,
+      "a_confidence": 0.7,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+      "context_text": "unknown lack of information creates uncertainty explore options with a focus on growth and flexibility",
+      "scenario_text": "바로 취업하는 것은 안정적인 수입을 보장하고, 직장 내에서의 경험을 통해 성장할 수 있는 기회를 제공합니다. 해외 석사 유학은 더 많은 성장 기회와 다양한 옵션을 제공하며, 글로벌한 경험을 쌓을 수 있는 기회입니다. 즉각적인 재정적 안정성과 직장 내 성장 기회를 통해 장기적인 커리어 목표를 달성할 수 있기 때문이다.",
+      "risk_text": "정보 부족으로 인한 불확실성이 직무 선택에 영향을 미칠 수 있다. 성장 기회는 있지만, 유학을 선택하지 않은 것에 대한 후회가 생길 수 있다. 재정적 안정성은 있지만, 장기적인 커리어 목표에 대한 고민이 지속될 수 있다. 옵션 다양성의 제한으로 인해 미래의 기회가 줄어들 수 있다. 정보 부족으로 인한 불확실성이 결정에 영향을 미칠 수 있음 유학 준비 과정에서 재정적 압박이 존재할 가능성이 있음 성장 기회는 있지만, 취업을 하지 않음으로써 생길 수 있는 후회가 있음 위험 수용 능력이 중간이므로, 선택에 따른 스트레스가 클 수 있음 A는 안정성과 즉각적인 수입을 강조하는 반면, B는 장기적인 성장과 옵션 다양성을 강조한다. A는 취업을 통해 재정적 안정성을 우선시하고, B는 유학을 통해 더 많은 기회를 추구한다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0,
+    "uncertainty": 1,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "trigger_count": 3,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+      "정보 부족으로 인한 불확실성이 직무 선택에 영향을 미칠 수 있다.",
+      "성장 기회는 있지만, 유학을 선택하지 않은 것에 대한 후회가 생길 수 있다.",
+      "재정적 안정성은 있지만, 장기적인 커리어 목표에 대한 고민이 지속될 수 있다.",
+      "옵션 다양성의 제한으로 인해 미래의 기회가 줄어들 수 있다.",
+      "정보 부족으로 인한 불확실성이 결정에 영향을 미칠 수 있음"
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": true
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3955,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.5,
+      "safety_weight": 0.4072,
+      "total_score": 1.7467
+    },
+    "reasoning_trace": [
+      "input_analysis: 유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+      "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=1",
+      "risk_summary: A=medium (정보 부족으로 인한 불확실성이 직무 선택에 영향을 미칠 수 있다. | 성장 기회는 있지만, 유학을 선택하지 않은 것에 대한 후회가 생길 수 있다. | 재정적 안정성은 있지만, 장기적인 커리어 목표에 대한 고민이 지속될 수 있다. | 옵션 다양성의 제한으로 인해 미래의 기회가 줄어들 수 있다.) / B=medium (정보 부족으로 인한 불확실성이 결정에 영향을 미칠 수 있음 | 유학 준비 과정에서 재정적 압박이 존재할 가능성이 있음 | 성장 기회는 있지만, 취업을 하지 않음으로써 생길 수 있는 후회가 있음 | 위험 수용 능력이 중간이므로, 선택에 따른 스트레스가 클 수 있음)",
+      "reasoning_conflicts: A는 안정성과 즉각적인 수입을 강조하는 반면, B는 장기적인 성장과 옵션 다양성을 강조한다. | A는 취업을 통해 재정적 안정성을 우선시하고, B는 유학을 통해 더 많은 기회를 추구한다.",
+      "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

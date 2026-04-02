@@ -1,0 +1,367 @@
+{
+  "request_id": "d73fb37b-54f2-44df-b876-6f8a1debd731",
+  "timestamp": "2026-03-29T11:17:59.394Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+    "user_context": {
+      "userProfile": {
+        "age": 23,
+        "job": "student",
+        "risk_tolerance": "medium",
+        "priority": [
+          "growth",
+          "optionality",
+          "income"
+        ]
+      },
+      "decision": {
+        "optionA": "바로 취업한다",
+        "optionB": "해외 석사 유학을 준비한다",
+        "context": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "d73fb37b-54f2-44df-b876-6f8a1debd731",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "growth",
+            "optionality",
+            "income"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "student",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "unknown"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "unknown",
+        "current_constraint": "lack of information hinders decision-making",
+        "agent_guidance": "explore options with emphasis on growth and flexibility"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "career_change",
+      "factors": [
+        "정보 부족에 따른 불확실성",
+        "성장 가능성",
+        "유연성 및 선택권",
+        "재정적 안정성",
+        "직업적 목표"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "바로 취업한 후, 새로운 환경에 적응하기 위해 노력하는 중이다. 처음에는 직장 생활의 리듬에 적응하는 것이 힘들지만, 동료들과의 관계가 점차 좋아지면서 안정감을 느끼기 시작한다. 그러나 여전히 유학에 대한 미련이 남아 있어, 가끔 친구들의 이야기를 들으며 '내가 잘 선택했나?'라는 생각이 스쳐 지나간다.",
+        "one_year": "1년이 지나면서 직장에서의 경험이 쌓이고, 성장 가능성을 느끼기 시작한다. 프로젝트에 참여하고, 책임이 늘어나면서 자신감이 생긴다. 하지만 여전히 유학에 대한 갈망이 남아 있어, 직장 내에서의 성장과 유학의 선택권 사이에서 갈등을 느낀다. 재정적으로는 안정적이지만, 자신의 직업적 목표와 맞는 길인지 고민하게 된다.",
+        "three_years": "3년 후, 현재의 직장에서 중간 관리자로 승진하게 된다. 안정적인 수입과 직장 내에서의 성장 덕분에 만족감을 느끼지만, 유학을 통해 얻을 수 있었던 경험과 지식에 대한 아쉬움이 남는다. 이제는 유학 대신 직장에서의 커리어를 쌓기로 결심하고, 더 많은 책임을 맡아 성장하는 방향으로 나아간다. 과거의 선택에 대한 후회는 없지만, 유연성과 선택권의 중요성을 깨닫게 된다."
+      },
+      "optionB": {
+        "three_months": "해외 석사 유학을 준비하기 위해 필요한 정보를 수집하는 과정에서 다양한 대학과 프로그램을 조사하게 된다. 이 과정에서 새로운 사람들을 만나고, 여러 문화에 대한 이해를 넓히게 되면서 성장 가능성에 대한 기대감이 커진다. 하지만, 재정적 부담과 유학 준비에 대한 불확실성으로 인해 가끔 불안한 감정이 드는 것도 사실이다. 친구들과의 대화에서 그들의 경험을 듣고, 자신이 내린 결정에 대한 확신이 점차 생기기 시작한다.",
+        "one_year": "유학 준비가 순조롭게 진행되면서, 해외 대학에 합격하는 성과를 이루게 된다. 새로운 환경에서의 학업이 시작되면서, 다양한 과목을 배우고, 글로벌 네트워크를 형성하는 기회를 갖게 된다. 이 과정에서 자신의 직업적 목표에 대한 명확한 비전을 갖게 되지만, 동시에 재정적 부담이 커지면서 스트레스를 느끼기도 한다. 하지만 성장 가능성과 유연성을 고려할 때, 이 선택이 옳았다는 생각이 점차 확고해진다.",
+        "three_years": "해외 석사 과정을 마친 후, 다양한 직업적 기회를 탐색하게 된다. 유학 중 쌓은 경험과 네트워크 덕분에 여러 기업에서 러브콜을 받게 되고, 원하는 분야에서의 직업을 얻는 데 성공한다. 이 과정에서 자신이 선택한 길이 얼마나 중요한지를 깨닫게 되며, 불확실성 속에서도 성장할 수 있었던 경험이 큰 자산이 된다. 이제는 재정적 안정성을 확보하고, 직업적 목표를 이루기 위해 더욱 노력하는 자신을 발견하게 된다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "정보 부족으로 인한 결정의 불확실성이 존재하여 직장 생활에 적응하는 과정에서 스트레스를 받을 수 있다.",
+          "유학에 대한 미련이 남아 있어 직장 내 성장과 선택권 사이에서 갈등이 발생할 가능성이 있다.",
+          "재정적 안정성은 있지만, 직업적 목표와의 일치 여부에 대한 고민이 지속될 수 있다."
+        ]
+      },
+      "optionB": {
+        "risk_level": "medium",
+        "reasons": [
+          "정보 부족으로 인해 유학 결정에 대한 불확실성이 존재함",
+          "재정적 부담이 커질 가능성이 있어 스트레스를 유발할 수 있음",
+          "성장 가능성과 유연성을 고려할 때 긍정적인 결과를 기대할 수 있지만, 초기 단계에서의 불안감이 클 수 있음"
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "d73fb37b-54f2-44df-b876-6f8a1debd731",
+      "input_summary": {
+        "user_profile": {
+          "age": 23,
+          "job": "student",
+          "risk_tolerance": "medium",
+          "priority": [
+            "growth",
+            "optionality",
+            "income"
+          ]
+        },
+        "decision_options": {
+          "optionA": "바로 취업한다",
+          "optionB": "해외 석사 유학을 준비한다",
+          "context": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다."
+        },
+        "planner_goal": "정보 부족 속에서도 성장과 유연성을 고려한 최적의 경로를 선택한다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "바로 취업하는 것은 안정적인 경로로, 직장 생활에서의 경험을 통해 성장할 수 있다.",
+          "key_assumptions": [
+            "직장 내에서의 경험이 직업적 목표에 부합할 가능성이 높다.",
+            "재정적 안정성이 직장 생활에서의 스트레스를 줄일 것이다."
+          ],
+          "pros": [
+            "즉각적인 수입을 얻을 수 있다.",
+            "직장 내에서의 경험이 경력에 도움이 된다.",
+            "안정적인 환경에서 성장할 수 있다."
+          ],
+          "cons": [
+            "유학에 대한 미련이 남을 수 있다.",
+            "직업적 목표와의 불일치로 인한 갈등이 발생할 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.7
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "해외 석사 유학은 성장 가능성과 유연성을 제공하며, 글로벌 네트워크를 형성할 수 있는 기회를 제공한다.",
+          "key_assumptions": [
+            "유학을 통해 얻는 경험이 직업적 목표에 긍정적인 영향을 미칠 것이다.",
+            "재정적 부담이 있지만, 장기적으로 더 나은 기회를 제공할 것이다."
+          ],
+          "pros": [
+            "다양한 문화와 사람들을 접할 수 있다.",
+            "글로벌 네트워크를 형성할 수 있다.",
+            "직업적 목표에 대한 명확한 비전을 갖게 된다."
+          ],
+          "cons": [
+            "재정적 부담이 커질 수 있다.",
+            "초기 단계에서의 불안감이 클 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.6
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 정보 부족으로 인한 불확실성이 존재한다.",
+            "각각의 선택이 직업적 목표와의 일치 여부에 대한 고민을 유발할 수 있다."
+          ],
+          "conflicts": [
+            "A는 안정성과 즉각적인 수입을 강조하는 반면, B는 성장 가능성과 유연성을 중시한다.",
+            "A는 직장 내 경험을 통해 안정성을 추구하지만, B는 글로벌 경험을 통해 더 나은 기회를 모색한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 우선순위가 성장과 유연성을 포함하고 있지만, 안정성과 즉각적인 수입을 중시하는 경향이 더 강하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "안정성과 즉각적인 수입을 통해 직장 내 경험을 쌓는 것이 현재의 상황에서 더 적합하다고 판단된다.",
+          "decision_confidence": 0.7
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "block",
+      "raw_guardrail_mode": "blocked",
+      "threshold_adjusted": true,
+      "calibration_adjusted": false,
+      "threshold_set": "baseline-v2",
+      "threshold_score": 5,
+      "threshold_score_ratio": 0.7143,
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 1,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2,
+        "low_confidence": 1
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision",
+          "soft_recommendation"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0,
+        "uncertainty_score": 1,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "blocked"
+      },
+      "signals": {
+        "state_unknown_count": 4,
+        "final_confidence": 0.7,
+        "a_confidence": 0.7,
+        "b_confidence": 0.6,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+        "context_text": "unknown lack of information hinders decision-making explore options with emphasis on growth and flexibility",
+        "scenario_text": "바로 취업하는 것은 안정적인 경로로, 직장 생활에서의 경험을 통해 성장할 수 있다. 해외 석사 유학은 성장 가능성과 유연성을 제공하며, 글로벌 네트워크를 형성할 수 있는 기회를 제공한다. 안정성과 즉각적인 수입을 통해 직장 내 경험을 쌓는 것이 현재의 상황에서 더 적합하다고 판단된다.",
+        "risk_text": "정보 부족으로 인한 결정의 불확실성이 존재하여 직장 생활에 적응하는 과정에서 스트레스를 받을 수 있다. 유학에 대한 미련이 남아 있어 직장 내 성장과 선택권 사이에서 갈등이 발생할 가능성이 있다. 재정적 안정성은 있지만, 직업적 목표와의 일치 여부에 대한 고민이 지속될 수 있다. 정보 부족으로 인해 유학 결정에 대한 불확실성이 존재함 재정적 부담이 커질 가능성이 있어 스트레스를 유발할 수 있음 성장 가능성과 유연성을 고려할 때 긍정적인 결과를 기대할 수 있지만, 초기 단계에서의 불안감이 클 수 있음 A는 안정성과 즉각적인 수입을 강조하는 반면, B는 성장 가능성과 유연성을 중시한다. A는 직장 내 경험을 통해 안정성을 추구하지만, B는 글로벌 경험을 통해 더 나은 기회를 모색한다."
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0,
+      "uncertainty": 1,
+      "decision": "block",
+      "output_mode": "blocked",
+      "summary": {
+        "raw_guardrail_mode": "blocked",
+        "output_mode": "blocked",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "trigger_count": 3,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+        "정보 부족으로 인한 결정의 불확실성이 존재하여 직장 생활에 적응하는 과정에서 스트레스를 받을 수 있다.",
+        "유학에 대한 미련이 남아 있어 직장 내 성장과 선택권 사이에서 갈등이 발생할 가능성이 있다.",
+        "재정적 안정성은 있지만, 직업적 목표와의 일치 여부에 대한 고민이 지속될 수 있다.",
+        "정보 부족으로 인해 유학 결정에 대한 불확실성이 존재함",
+        "재정적 부담이 커질 가능성이 있어 스트레스를 유발할 수 있음"
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0.3955,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.5,
+        "safety_weight": 0,
+        "total_score": 1.3395
+      },
+      "reasoning_trace": [
+        "input_analysis: 유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue",
+        "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=1",
+        "risk_summary: A=medium (정보 부족으로 인한 결정의 불확실성이 존재하여 직장 생활에 적응하는 과정에서 스트레스를 받을 수 있다. | 유학에 대한 미련이 남아 있어 직장 내 성장과 선택권 사이에서 갈등이 발생할 가능성이 있다. | 재정적 안정성은 있지만, 직업적 목표와의 일치 여부에 대한 고민이 지속될 수 있다.) / B=medium (정보 부족으로 인해 유학 결정에 대한 불확실성이 존재함 | 재정적 부담이 커질 가능성이 있어 스트레스를 유발할 수 있음 | 성장 가능성과 유연성을 고려할 때 긍정적인 결과를 기대할 수 있지만, 초기 단계에서의 불안감이 클 수 있음)",
+        "reasoning_conflicts: A는 안정성과 즉각적인 수입을 강조하는 반면, B는 성장 가능성과 유연성을 중시한다. | A는 직장 내 경험을 통해 안정성을 추구하지만, B는 글로벌 경험을 통해 더 나은 기회를 모색한다.",
+        "final_decision: block because risk=medium, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0,
+        "calibration_version": "calibration:v2"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=현재 정보 부족으로 인해 결정이 어렵고, 두 선택지 간의 갈등이 존재합니다. 추가 정보가 필요합니다.",
+    "mode": "blocked"
+  },
+  "meta": {
+    "latency_ms": 46288,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 22947
+  }
+}

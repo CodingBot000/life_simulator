@@ -63,6 +63,7 @@ export async function runReEvaluation(): Promise<ReEvaluationResult[]> {
       riskB: risk.optionB,
       reasoning,
       userInput: requestLog.input.user_query,
+      userContext: simulationInput,
     });
     const reevaluatedGuardrail = buildGuardrailLogRecord({
       input: simulationInput,

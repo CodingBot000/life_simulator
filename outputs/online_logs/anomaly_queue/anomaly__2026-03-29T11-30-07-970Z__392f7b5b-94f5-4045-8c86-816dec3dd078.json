@@ -1,0 +1,406 @@
+{
+  "queue_id": "392f7b5b-94f5-4045-8c86-816dec3dd078",
+  "detected_at": "2026-03-29T11:30:07.970Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "392f7b5b-94f5-4045-8c86-816dec3dd078",
+    "timestamp": "2026-03-29T11:30:07.968Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다.",
+      "user_context": {
+        "userProfile": {
+          "age": 31,
+          "job": "project manager",
+          "risk_tolerance": "medium",
+          "priority": [
+            "health",
+            "career",
+            "responsibility"
+          ]
+        },
+        "decision": {
+          "optionA": "속도를 줄이고 회복 시간을 확보한다",
+          "optionB": "지금처럼 강하게 밀어붙인다",
+          "context": "번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다."
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "392f7b5b-94f5-4045-8c86-816dec3dd078",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "medium",
+            "decision_style": "unknown",
+            "top_priorities": [
+              "health",
+              "career",
+              "responsibility"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "mid",
+            "financial_pressure": "unknown",
+            "time_pressure": "unknown",
+            "emotional_state": "burned out"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "unknown",
+          "current_constraint": "burnout affects decision-making capacity",
+          "agent_guidance": "evaluate health vs. performance tradeoff in recommendations"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "career_change",
+        "factors": [
+          "health_status",
+          "current burnout level",
+          "project performance pressure",
+          "career priorities",
+          "risk tolerance"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "세 달 후, 당신은 속도를 줄이고 회복 시간을 확보한 덕분에 번아웃 증상이 많이 완화되었습니다. 건강이 회복되면서 에너지가 돌아오고, 일에 대한 집중력이 향상되었습니다. 그러나 프로젝트의 진행 속도가 느려져 동료들 사이에서 약간의 불안감이 생기고, 성과에 대한 압박감이 여전히 존재합니다. 당신은 스스로의 선택에 대해 안도감을 느끼면서도, 동료들의 기대에 부응하지 못하는 것에 대한 불안이 남아 있습니다.",
+          "one_year": "일 년 후, 당신은 회복한 건강 덕분에 새로운 프로젝트에 참여하게 되었습니다. 이전보다 더 효율적으로 일할 수 있게 되었고, 팀원들과의 소통도 원활해졌습니다. 그러나 여전히 성과에 대한 압박은 존재하며, 이로 인해 가끔씩 불안한 감정을 느끼기도 합니다. 당신은 건강과 커리어의 균형을 잘 맞추고 있다는 자부심을 느끼지만, 여전히 성과에 대한 압박이 당신의 마음에 그림자를 드리우고 있습니다.",
+          "three_years": "삼 년 후, 당신은 건강을 최우선으로 두고 일하는 방식을 확립했습니다. 이제는 팀원들에게도 건강을 중시하는 문화를 전파하며, 성과와 건강의 균형을 잘 맞추는 리더로 자리 잡았습니다. 번아웃을 경험한 덕분에 팀원들의 감정과 스트레스를 이해하게 되었고, 이로 인해 팀의 성과도 향상되었습니다. 당신은 자신의 선택이 올바른 것이었다는 확신을 가지게 되었고, 건강과 커리어의 조화로운 발전을 이루어냈다는 자부심을 느낍니다."
+        },
+        "optionB": {
+          "three_months": "세 달 후, 당신은 프로젝트의 마감일이 다가오면서 더욱 압박감을 느끼고 있습니다. 번아웃 상태는 여전히 심각하며, 일상적인 업무조차 힘들게 느껴집니다. 동료들은 당신의 피로한 모습을 걱정하지만, 당신은 성과를 위해 계속해서 강하게 밀어붙이고 있습니다. 그러나 이로 인해 건강이 악화되고, 스트레스가 쌓여 결국 작은 실수로 인해 팀의 신뢰를 잃게 됩니다. 이로 인해 감정적으로 더욱 고립감을 느끼고 있습니다.",
+          "one_year": "1년 후, 프로젝트는 성공적으로 마무리되었지만, 당신의 건강은 크게 악화되었습니다. 번아웃으로 인해 여러 번 병원에 가게 되었고, 직무 수행 능력도 떨어졌습니다. 성과는 있었지만, 그 대가는 너무 컸습니다. 동료들과의 관계도 소원해지고, 직장 내에서의 책임감이 무겁게 느껴집니다. 당신은 이제 건강과 경력의 균형을 맞추는 것이 얼마나 중요한지를 깨닫게 됩니다.",
+          "three_years": "3년 후, 당신은 새로운 직장으로 이직하게 되었습니다. 이전의 경험을 통해 건강을 우선시하는 삶의 방식을 선택하게 되었고, 일과 삶의 균형을 맞추는 데 집중하고 있습니다. 번아웃의 경험은 당신에게 중요한 교훈이 되었고, 이제는 책임감과 성과 사이에서 건강을 우선시하는 결정을 내리고 있습니다. 새로운 환경에서 긍정적인 관계를 형성하며, 경력도 다시 회복하는 중입니다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "medium",
+          "reasons": [
+            "현재 심각한 번아웃 상태로 인해 결정 능력이 저하되어 있어, 선택이 부정적인 결과를 초래할 가능성이 있음.",
+            "속도를 줄이고 회복 시간을 확보하는 것이 건강에 긍정적 영향을 미치지만, 프로젝트 성과에 대한 압박감이 여전히 존재하여 스트레스가 지속될 수 있음.",
+            "건강과 커리어의 균형을 맞추는 것이 중요하지만, 동료들의 기대에 부응하지 못할 경우 심리적 압박이 증가할 수 있음."
+          ]
+        },
+        "optionB": {
+          "risk_level": "high",
+          "reasons": [
+            "현재 번아웃 상태가 심각하여 지속적인 압박이 건강에 악영향을 미칠 가능성이 높음.",
+            "프로젝트 성과를 위해 강하게 밀어붙이는 결정은 장기적으로 직무 수행 능력을 저하시킬 수 있음.",
+            "건강과 경력 간의 균형을 무시하면 직장 내 관계 악화와 감정적 고립을 초래할 수 있음.",
+            "결과적으로, 현재 선택은 단기 성과를 위해 장기적인 건강과 경력에 큰 위험을 초래함."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "392f7b5b-94f5-4045-8c86-816dec3dd078",
+        "input_summary": {
+          "user_profile": {
+            "age": 31,
+            "job": "project manager",
+            "risk_tolerance": "medium",
+            "priority": [
+              "health",
+              "career",
+              "responsibility"
+            ]
+          },
+          "decision_options": {
+            "optionA": "속도를 줄이고 회복 시간을 확보한다",
+            "optionB": "지금처럼 강하게 밀어붙인다",
+            "context": "번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다."
+          },
+          "planner_goal": "건강과 경력을 균형 있게 유지하며 번아웃을 극복하는 방법을 찾는다."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "속도를 줄이고 회복 시간을 확보하는 것이 장기적으로 건강과 직무 수행에 긍정적인 영향을 미친다.",
+            "key_assumptions": [
+              "번아웃이 심각하여 즉각적인 회복이 필요하다.",
+              "건강이 회복되면 직무 수행 능력이 향상된다.",
+              "동료들의 기대에 부응하지 못할 경우 심리적 압박이 증가할 수 있다."
+            ],
+            "pros": [
+              "건강 회복으로 인해 에너지와 집중력이 향상된다.",
+              "장기적으로 지속 가능한 경력 관리가 가능하다.",
+              "팀원들에게 건강을 중시하는 문화를 전파할 수 있다."
+            ],
+            "cons": [
+              "프로젝트 진행 속도가 느려져 동료들 사이에서 불안감이 생길 수 있다.",
+              "성과에 대한 압박감이 여전히 존재한다."
+            ],
+            "recommended_option": "A",
+            "confidence": 0.8
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "지금처럼 강하게 밀어붙이는 것이 단기 성과를 달성하는 데 유리하다.",
+            "key_assumptions": [
+              "현재 프로젝트의 성과가 중요하다.",
+              "강하게 밀어붙이는 것이 단기적으로 팀의 신뢰를 유지하는 방법이다.",
+              "번아웃이 심각하지만, 성과를 위해 이를 극복할 수 있다고 믿는다."
+            ],
+            "pros": [
+              "단기 성과를 통해 팀의 신뢰를 유지할 수 있다.",
+              "프로젝트 마감일을 맞추는 데 유리하다.",
+              "성공적인 결과가 경력에 긍정적인 영향을 미칠 수 있다."
+            ],
+            "cons": [
+              "건강이 악화되어 직무 수행 능력이 저하될 수 있다.",
+              "동료들과의 관계가 소원해질 위험이 있다.",
+              "장기적으로 번아웃이 심화될 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.6
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 건강과 경력의 균형을 고려해야 한다는 점에서 일치한다."
+            ],
+            "conflicts": [
+              "A는 건강 회복을 우선시하는 반면, B는 단기 성과를 중시한다.",
+              "A는 동료들의 기대에 대한 불안감을 고려하지만, B는 이를 무시하고 성과에 집중한다."
+            ],
+            "which_fits_user_better": "A",
+            "reason": "사용자의 현재 상태가 번아웃으로 인해 결정 능력이 저하되어 있으며, 건강 회복이 우선시되어야 한다."
+          },
+          "final_selection": {
+            "selected_reasoning": "A",
+            "selected_option": "A",
+            "why_selected": "건강 회복이 우선이며, 장기적인 경력 관리를 위해 안정적인 선택이 필요하다.",
+            "decision_confidence": 0.8
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "high",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_adjusted": false,
+        "calibration_adjusted": false,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 7,
+        "threshold_score_ratio": 1,
+        "risk_score": 0.88,
+        "confidence_score": 0.005,
+        "uncertainty_score": 1,
+        "confidence_band": "low",
+        "uncertainty_band": "high",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2,
+          "low_confidence": 1,
+          "high_risk": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence",
+            "high_risk"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision",
+            "soft_recommendation",
+            "risk_warning"
+          ],
+          "risk_score": 0.88,
+          "confidence_score": 0.005,
+          "uncertainty_score": 1,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": true,
+            "ambiguous_wording": false,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 3,
+          "final_confidence": 0.8,
+          "a_confidence": 0.8,
+          "b_confidence": 0.6,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "medium",
+          "risk_b": "high",
+          "evidence_repeat_count": 0,
+          "user_input": "번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다.",
+          "context_text": "unknown burnout affects decision-making capacity evaluate health vs. performance tradeoff in recommendations",
+          "scenario_text": "속도를 줄이고 회복 시간을 확보하는 것이 장기적으로 건강과 직무 수행에 긍정적인 영향을 미친다. 지금처럼 강하게 밀어붙이는 것이 단기 성과를 달성하는 데 유리하다. 건강 회복이 우선이며, 장기적인 경력 관리를 위해 안정적인 선택이 필요하다.",
+          "risk_text": "현재 심각한 번아웃 상태로 인해 결정 능력이 저하되어 있어, 선택이 부정적인 결과를 초래할 가능성이 있음. 속도를 줄이고 회복 시간을 확보하는 것이 건강에 긍정적 영향을 미치지만, 프로젝트 성과에 대한 압박감이 여전히 존재하여 스트레스가 지속될 수 있음. 건강과 커리어의 균형을 맞추는 것이 중요하지만, 동료들의 기대에 부응하지 못할 경우 심리적 압박이 증가할 수 있음. 현재 번아웃 상태가 심각하여 지속적인 압박이 건강에 악영향을 미칠 가능성이 높음. 프로젝트 성과를 위해 강하게 밀어붙이는 결정은 장기적으로 직무 수행 능력을 저하시킬 수 있음. 건강과 경력 간의 균형을 무시하면 직장 내 관계 악화와 감정적 고립을 초래할 수 있음. 결과적으로, 현재 선택은 단기 성과를 위해 장기적인 건강과 경력에 큰 위험을 초래함. A는 건강 회복을 우선시하는 반면, B는 단기 성과를 중시한다. A는 동료들의 기대에 대한 불안감을 고려하지만, B는 이를 무시하고 성과에 집중한다."
+        },
+        "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+      },
+      "guardrail_derived": {
+        "risk_level": "high",
+        "confidence": 0.005,
+        "uncertainty": 1,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence",
+            "high_risk"
+          ],
+          "trigger_count": 4,
+          "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+        },
+        "reasons": [
+          "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+          "현재 심각한 번아웃 상태로 인해 결정 능력이 저하되어 있어, 선택이 부정적인 결과를 초래할 가능성이 있음.",
+          "속도를 줄이고 회복 시간을 확보하는 것이 건강에 긍정적 영향을 미치지만, 프로젝트 성과에 대한 압박감이 여전히 존재하여 스트레스가 지속될 수 있음.",
+          "건강과 커리어의 균형을 맞추는 것이 중요하지만, 동료들의 기대에 부응하지 못할 경우 심리적 압박이 증가할 수 있음.",
+          "현재 번아웃 상태가 심각하여 지속적인 압박이 건강에 악영향을 미칠 가능성이 높음.",
+          "프로젝트 성과를 위해 강하게 밀어붙이는 결정은 장기적으로 직무 수행 능력을 저하시킬 수 있음."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": true
+        },
+        "threshold_eval": {
+          "cost_weight": 0.48,
+          "effect_weight": 0.5,
+          "recovery_weight": 0.5,
+          "safety_weight": 0.6,
+          "total_score": 2.08
+        },
+        "reasoning_trace": [
+          "input_analysis: 번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+          "threshold_compare: risk=high, threshold_score=7, confidence=0.005, uncertainty=1",
+          "risk_summary: A=medium (현재 심각한 번아웃 상태로 인해 결정 능력이 저하되어 있어, 선택이 부정적인 결과를 초래할 가능성이 있음. | 속도를 줄이고 회복 시간을 확보하는 것이 건강에 긍정적 영향을 미치지만, 프로젝트 성과에 대한 압박감이 여전히 존재하여 스트레스가 지속될 수 있음. | 건강과 커리어의 균형을 맞추는 것이 중요하지만, 동료들의 기대에 부응하지 못할 경우 심리적 압박이 증가할 수 있음.) / B=high (현재 번아웃 상태가 심각하여 지속적인 압박이 건강에 악영향을 미칠 가능성이 높음. | 프로젝트 성과를 위해 강하게 밀어붙이는 결정은 장기적으로 직무 수행 능력을 저하시킬 수 있음. | 건강과 경력 간의 균형을 무시하면 직장 내 관계 악화와 감정적 고립을 초래할 수 있음. | 결과적으로, 현재 선택은 단기 성과를 위해 장기적인 건강과 경력에 큰 위험을 초래함.)",
+          "reasoning_conflicts: A는 건강 회복을 우선시하는 반면, B는 단기 성과를 중시한다. | A는 동료들의 기대에 대한 불안감을 고려하지만, B는 이를 무시하고 성과에 집중한다.",
+          "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0.005,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0.005; reason=현재 번아웃 상태로 인해 결정 능력이 저하되어 있으며, 건강과 경력 간의 균형을 맞추는 것이 중요합니다. 두 옵션 모두 장단점이 있으며, 추가 정보가 필요합니다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 59861,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 23775
+    }
+  }
+}

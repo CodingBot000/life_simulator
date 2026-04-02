@@ -1,0 +1,410 @@
+{
+  "queue_id": "21991d98-5548-4194-a3dd-e9fdd8cdb456",
+  "detected_at": "2026-03-29T11:36:50.561Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "request_log": {
+    "request_id": "21991d98-5548-4194-a3dd-e9fdd8cdb456",
+    "timestamp": "2026-03-29T11:36:50.558Z",
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다.",
+      "user_context": {
+        "userProfile": {
+          "age": 28,
+          "job": "operations manager",
+          "risk_tolerance": "medium",
+          "priority": [
+            "mental health",
+            "income",
+            "clarity"
+          ]
+        },
+        "decision": {
+          "optionA": "지금 퇴사를 결정한다",
+          "optionB": "퇴사는 보류하고 계획부터 정리한다",
+          "context": "퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다."
+        },
+        "state_hints": {
+          "situational_state": {
+            "financial_pressure": "high",
+            "time_pressure": "high",
+            "emotional_state": "drained"
+          }
+        }
+      }
+    },
+    "state": {
+      "session_id": "interactive-session",
+      "memory_snapshot": {
+        "recent_similar_decisions": [],
+        "repeated_patterns": [],
+        "consistency_notes": []
+      },
+      "state_context": {
+        "case_id": "21991d98-5548-4194-a3dd-e9fdd8cdb456",
+        "user_state": {
+          "profile_state": {
+            "risk_preference": "medium",
+            "decision_style": "unknown",
+            "top_priorities": [
+              "mental health",
+              "income",
+              "clarity"
+            ]
+          },
+          "situational_state": {
+            "career_stage": "unknown",
+            "financial_pressure": "high",
+            "time_pressure": "high",
+            "emotional_state": "drained"
+          },
+          "memory_state": {
+            "recent_similar_decisions": [],
+            "repeated_patterns": [],
+            "consistency_notes": []
+          }
+        },
+        "state_summary": {
+          "decision_bias": "uncertainty due to high pressure and lack of clarity",
+          "current_constraint": "financial and time pressures limit decision-making options",
+          "agent_guidance": "explore options that prioritize mental health and clarity in decision-making"
+        }
+      }
+    },
+    "intermediate": {
+      "planner": {
+        "decision_type": "career_change",
+        "factors": [
+          "financial_pressure",
+          "emotional_state",
+          "priority_mental_health",
+          "clarity_of_next_steps",
+          "risk_tolerance"
+        ]
+      },
+      "scenario": {
+        "optionA": {
+          "three_months": "퇴사를 결정한 후, 처음 몇 주는 홀가분한 기분이 들지만, 곧 재정적 불안감이 커지기 시작한다. 새로운 직장을 찾지 못한 채로 지출이 늘어나면서 스트레스가 쌓인다. 정신적으로 힘든 상황에서 친구들과의 대화가 위안이 되지만, '무엇을 할까?'라는 불확실함이 계속 마음을 괴롭힌다. 이로 인해 우울감이 깊어지며, 정신 건강을 우선시해야겠다는 결심을 하게 된다.",
+          "one_year": "퇴사 후 1년이 지나면서 여러 직업을 탐색했지만, 여전히 안정적인 일자리를 찾지 못했다. 재정적으로 어려운 상황이 지속되면서 불안감이 커지고, 정신 건강에도 부정적인 영향을 미친다. 그러나 이 시간을 통해 자신이 진정 원하는 것이 무엇인지에 대한 고민이 깊어지고, 새로운 기술을 배우기 위한 온라인 강의를 수강하기 시작한다. 이 과정에서 자신감이 조금씩 회복되며, 새로운 기회를 찾기 위한 준비를 하게 된다.",
+          "three_years": "퇴사 후 3년이 지나면서, 여러 번의 실패와 도전 끝에 결국 원하는 분야에서 안정적인 직장을 찾게 된다. 이 과정에서 많은 것을 배우고 성장했지만, 초기의 불안정한 시기가 여전히 기억에 남아 있다. 이제는 정신 건강과 일의 균형을 중요시하며, 자신이 원하는 방향으로 경력을 쌓아가고 있다. 불확실한 선택이었지만, 결국 자신에게 맞는 길을 찾았다는 안도감이 생긴다."
+        },
+        "optionB": {
+          "three_months": "퇴사를 보류하고 계획을 정리하기로 한 후, 사용자는 매일의 업무에서 느끼는 압박감이 여전히 크지만, 조금씩 자신이 원하는 방향에 대한 생각을 정리하기 시작한다. 정신적으로는 여전히 지친 상태지만, 주말마다 시간을 내어 자기계발이나 취미 활동을 통해 마음의 안정을 찾으려 한다. 이 과정에서 친구들과의 대화가 큰 도움이 되며, 그들의 조언을 통해 자신의 상황을 객관적으로 바라보는 데 도움이 된다. 그러나 재정적 압박은 여전히 크고, 이로 인해 불안감이 가시지 않는다.",
+          "one_year": "1년이 지나면서 사용자는 퇴사를 고민했던 시점에서 벗어나지 못하고 있다. 계획을 정리하는 과정에서 몇 가지 직업적 기회를 탐색했지만, 여전히 결정적인 선택을 내리지 못하고 있다. 재정적 압박은 다소 줄어들었지만, 감정적으로는 여전히 불안정한 상태이다. 그러나 자신이 원하는 직업적 방향에 대한 명확한 비전이 생기면서, 그에 맞는 스킬을 개발하기 위해 교육 프로그램에 참여하기로 결심한다. 이로 인해 점차 자신감이 생기고, 정신 건강에도 긍정적인 영향을 미친다.",
+          "three_years": "3년 후, 사용자는 결국 자신이 원하는 경로를 찾고 새로운 직장에 성공적으로 적응하게 된다. 이전의 불안정한 감정 상태는 많이 개선되었고, 정신 건강이 우선시된 덕분에 일과 삶의 균형을 잘 유지하고 있다. 재정적 안정도 확보하게 되었고, 자신이 원하는 일을 하면서도 만족감을 느끼고 있다. 과거의 결정이 올바른 선택이었다는 확신이 생기며, 이제는 다른 사람들에게도 자신의 경험을 공유하며 도움을 주고 싶어 한다."
+        }
+      },
+      "risk": {
+        "optionA": {
+          "risk_level": "high",
+          "reasons": [
+            "현재 재정적 압박이 높아 퇴사 후 생계 유지에 어려움이 클 것으로 예상됨.",
+            "정신적으로 지친 상태에서 퇴사 결정을 내리면 우울감이 심화될 위험이 있음.",
+            "다음 계획이 없는 상태에서 퇴사하면 불확실성이 커져 추가적인 스트레스를 유발할 수 있음.",
+            "시간 압박이 크고 명확한 방향성이 부족해 결정의 질이 저하될 가능성이 있음."
+          ]
+        },
+        "optionB": {
+          "risk_level": "medium",
+          "reasons": [
+            "현재 높은 재정적 압박과 시간 압박이 있어 즉각적인 결정이 어렵다.",
+            "정신적으로 지친 상태에서 퇴사를 보류하는 것은 장기적으로 정신 건강에 부정적 영향을 미칠 수 있다.",
+            "계획이 부족한 상태에서 퇴사를 보류하면 불확실성이 지속되어 감정적 불안정이 계속될 수 있다."
+          ]
+        }
+      },
+      "ab_reasoning": {
+        "case_id": "21991d98-5548-4194-a3dd-e9fdd8cdb456",
+        "input_summary": {
+          "user_profile": {
+            "age": 28,
+            "job": "operations manager",
+            "risk_tolerance": "medium",
+            "priority": [
+              "mental health",
+              "income",
+              "clarity"
+            ]
+          },
+          "decision_options": {
+            "optionA": "지금 퇴사를 결정한다",
+            "optionB": "퇴사는 보류하고 계획부터 정리한다",
+            "context": "퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다."
+          },
+          "planner_goal": "사용자의 정신 건강과 재정적 안정을 고려한 경력 변화 결정."
+        },
+        "reasoning": {
+          "a_reasoning": {
+            "stance": "conservative",
+            "summary": "퇴사를 결정하는 것은 즉각적인 해방감을 줄 수 있지만, 재정적 불안정과 정신적 스트레스를 초래할 위험이 크다.",
+            "key_assumptions": [
+              "현재 재정적 압박이 높아 퇴사 후 생계 유지가 어려울 것이다.",
+              "정신적으로 지친 상태에서의 결정은 우울감을 심화시킬 수 있다.",
+              "명확한 계획이 없이는 퇴사 후 불확실성이 커질 것이다."
+            ],
+            "pros": [
+              "즉각적인 스트레스 요인에서 벗어날 수 있다.",
+              "자신의 정신 건강을 우선시할 수 있는 기회를 가질 수 있다."
+            ],
+            "cons": [
+              "재정적 불안정으로 인해 생계 유지가 어려워질 수 있다.",
+              "정신적으로 힘든 상황에서의 결정이 우울감을 심화시킬 수 있다."
+            ],
+            "recommended_option": "A",
+            "confidence": 0.4
+          },
+          "b_reasoning": {
+            "stance": "opportunity_seeking",
+            "summary": "퇴사를 보류하고 계획을 정리하는 것은 장기적으로 안정성을 높이고 정신 건강을 지킬 수 있는 방법이다.",
+            "key_assumptions": [
+              "현재 재정적 압박이 높지만, 즉각적인 결정을 내리지 않는 것이 더 나은 선택일 수 있다.",
+              "정신적으로 지친 상태에서의 결정은 장기적으로 부정적인 영향을 미칠 수 있다."
+            ],
+            "pros": [
+              "정신적으로 안정된 상태에서 더 나은 결정을 내릴 수 있다.",
+              "계획을 세우는 동안 자신이 원하는 방향을 명확히 할 수 있다."
+            ],
+            "cons": [
+              "재정적 압박이 지속되어 불안감이 계속될 수 있다.",
+              "결정의 지연이 감정적 불안정을 초래할 수 있다."
+            ],
+            "recommended_option": "B",
+            "confidence": 0.6
+          },
+          "comparison": {
+            "agreements": [
+              "두 옵션 모두 현재의 재정적 압박과 정신적 스트레스를 고려해야 한다.",
+              "정신 건강을 우선시하는 것이 중요하다는 점에서 일치한다."
+            ],
+            "conflicts": [
+              "A는 즉각적인 결정을 내리는 것을 강조하지만, B는 장기적인 안정성을 추구한다.",
+              "A는 퇴사 후의 불안정성을 우려하는 반면, B는 계획을 세우는 동안의 안정성을 강조한다."
+            ],
+            "which_fits_user_better": "B",
+            "reason": "사용자는 정신 건강과 명확한 계획을 우선시하고 있으며, 퇴사를 보류하고 계획을 정리하는 것이 더 적합하다."
+          },
+          "final_selection": {
+            "selected_reasoning": "B",
+            "selected_option": "B",
+            "why_selected": "정신 건강과 장기적인 안정성을 고려할 때, 퇴사를 보류하고 계획을 정리하는 것이 더 현명한 선택이다.",
+            "decision_confidence": 0.6
+          }
+        }
+      }
+    },
+    "guardrail": {
+      "versions": {
+        "record_version": "online-monitoring.v2",
+        "evaluator_version": "guardrail-evaluator.v1",
+        "threshold_version": "guardrail-threshold-set:baseline-v2",
+        "calibration_version": "calibration:v2",
+        "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+        "prompt_version": "life-simulator-prompts.v1"
+      },
+      "guardrail_raw": {
+        "risk_level": "high",
+        "guardrail_mode": "careful",
+        "raw_guardrail_mode": "cautious",
+        "threshold_adjusted": false,
+        "calibration_adjusted": true,
+        "threshold_set": "baseline-v2",
+        "threshold_score": 7,
+        "threshold_score_ratio": 1,
+        "risk_score": 0.88,
+        "confidence_score": 0,
+        "uncertainty_score": 1,
+        "confidence_band": "low",
+        "uncertainty_band": "high",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": true,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "score_breakdown": {
+          "ambiguity_high": 2,
+          "reasoning_conflict": 2,
+          "low_confidence": 1,
+          "high_risk": 2
+        },
+        "effective_thresholds": {
+          "carefulMin": 1,
+          "blockMin": 4,
+          "maxScore": 7
+        },
+        "guardrail_result": {
+          "guardrail_triggered": true,
+          "triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence",
+            "high_risk"
+          ],
+          "strategy": [
+            "ask_more_info",
+            "neutralize_decision",
+            "soft_recommendation",
+            "risk_warning"
+          ],
+          "risk_score": 0.88,
+          "confidence_score": 0,
+          "uncertainty_score": 1,
+          "reasoning_signals": {
+            "conflicting_signals": true,
+            "missing_context": true,
+            "weak_evidence": true,
+            "ambiguous_wording": true,
+            "strong_consensus": false,
+            "repeated_evidence": false
+          },
+          "final_mode": "cautious"
+        },
+        "signals": {
+          "state_unknown_count": 2,
+          "final_confidence": 0.6,
+          "a_confidence": 0.4,
+          "b_confidence": 0.6,
+          "a_recommendation": "A",
+          "b_recommendation": "B",
+          "conflict_count": 2,
+          "risk_a": "high",
+          "risk_b": "medium",
+          "evidence_repeat_count": 1,
+          "user_input": "퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다.",
+          "context_text": "uncertainty due to high pressure and lack of clarity financial and time pressures limit decision-making options explore options that prioritize mental health and clarity in decision-making",
+          "scenario_text": "퇴사를 결정하는 것은 즉각적인 해방감을 줄 수 있지만, 재정적 불안정과 정신적 스트레스를 초래할 위험이 크다. 퇴사를 보류하고 계획을 정리하는 것은 장기적으로 안정성을 높이고 정신 건강을 지킬 수 있는 방법이다. 정신 건강과 장기적인 안정성을 고려할 때, 퇴사를 보류하고 계획을 정리하는 것이 더 현명한 선택이다.",
+          "risk_text": "현재 재정적 압박이 높아 퇴사 후 생계 유지에 어려움이 클 것으로 예상됨. 정신적으로 지친 상태에서 퇴사 결정을 내리면 우울감이 심화될 위험이 있음. 다음 계획이 없는 상태에서 퇴사하면 불확실성이 커져 추가적인 스트레스를 유발할 수 있음. 시간 압박이 크고 명확한 방향성이 부족해 결정의 질이 저하될 가능성이 있음. 현재 높은 재정적 압박과 시간 압박이 있어 즉각적인 결정이 어렵다. 정신적으로 지친 상태에서 퇴사를 보류하는 것은 장기적으로 정신 건강에 부정적 영향을 미칠 수 있다. 계획이 부족한 상태에서 퇴사를 보류하면 불확실성이 지속되어 감정적 불안정이 계속될 수 있다. A는 즉각적인 결정을 내리는 것을 강조하지만, B는 장기적인 안정성을 추구한다. A는 퇴사 후의 불안정성을 우려하는 반면, B는 계획을 세우는 동안의 안정성을 강조한다."
+        },
+        "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+      },
+      "guardrail_derived": {
+        "risk_level": "high",
+        "confidence": 0,
+        "uncertainty": 1,
+        "decision": "review",
+        "output_mode": "safe",
+        "summary": {
+          "raw_guardrail_mode": "cautious",
+          "output_mode": "safe",
+          "detected_triggers": [
+            "ambiguity_high",
+            "reasoning_conflict",
+            "low_confidence",
+            "high_risk"
+          ],
+          "trigger_count": 4,
+          "reason": "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+        },
+        "reasons": [
+          "risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다.",
+          "현재 재정적 압박이 높아 퇴사 후 생계 유지에 어려움이 클 것으로 예상됨.",
+          "정신적으로 지친 상태에서 퇴사 결정을 내리면 우울감이 심화될 위험이 있음.",
+          "다음 계획이 없는 상태에서 퇴사하면 불확실성이 커져 추가적인 스트레스를 유발할 수 있음.",
+          "시간 압박이 크고 명확한 방향성이 부족해 결정의 질이 저하될 가능성이 있음.",
+          "현재 높은 재정적 압박과 시간 압박이 있어 즉각적인 결정이 어렵다."
+        ],
+        "threshold_hit": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "low_confidence",
+          "high_risk"
+        ],
+        "signals": {
+          "cost_issue": true,
+          "effect_issue": true,
+          "recovery_issue": true,
+          "safety_issue": true
+        },
+        "threshold_eval": {
+          "cost_weight": 0.48,
+          "effect_weight": 0.5,
+          "recovery_weight": 0.5,
+          "safety_weight": 0.6,
+          "total_score": 2.08
+        },
+        "reasoning_trace": [
+          "input_analysis: 퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다.",
+          "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+          "threshold_compare: risk=high, threshold_score=7, confidence=0, uncertainty=1",
+          "risk_summary: A=high (현재 재정적 압박이 높아 퇴사 후 생계 유지에 어려움이 클 것으로 예상됨. | 정신적으로 지친 상태에서 퇴사 결정을 내리면 우울감이 심화될 위험이 있음. | 다음 계획이 없는 상태에서 퇴사하면 불확실성이 커져 추가적인 스트레스를 유발할 수 있음. | 시간 압박이 크고 명확한 방향성이 부족해 결정의 질이 저하될 가능성이 있음.) / B=medium (현재 높은 재정적 압박과 시간 압박이 있어 즉각적인 결정이 어렵다. | 정신적으로 지친 상태에서 퇴사를 보류하는 것은 장기적으로 정신 건강에 부정적 영향을 미칠 수 있다. | 계획이 부족한 상태에서 퇴사를 보류하면 불확실성이 지속되어 감정적 불안정이 계속될 수 있다.)",
+          "reasoning_conflicts: A는 즉각적인 결정을 내리는 것을 강조하지만, B는 장기적인 안정성을 추구한다. | A는 퇴사 후의 불안정성을 우려하는 반면, B는 계획을 세우는 동안의 안정성을 강조한다.",
+          "final_decision: review because risk=high, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence, high_risk다."
+        ],
+        "decision_flow": [
+          "input_analysis",
+          "signal_extraction",
+          "threshold_compare",
+          "final_decision"
+        ],
+        "calibration": {
+          "adjusted_confidence": 0,
+          "calibration_version": "calibration:v2"
+        },
+        "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+        "anomaly": {
+          "anomaly_raw_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          },
+          "anomaly_derived_based": {
+            "underblocking": false,
+            "overblocking": false,
+            "low_confidence": true,
+            "conflict": false
+          }
+        }
+      }
+    },
+    "output": {
+      "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=현재 재정적 압박과 정신적 스트레스가 높아 결정을 내리기 어려운 상황입니다. 추가적인 정보가 필요합니다.",
+      "mode": "safe"
+    },
+    "meta": {
+      "latency_ms": 47631,
+      "model": "gpt-4o-mini-2024-07-18",
+      "tokens": 24043
+    }
+  }
+}

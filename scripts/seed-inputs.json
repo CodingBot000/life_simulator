@@ -1,0 +1,402 @@
+[
+  {
+    "id": "case-01",
+    "category": "normal",
+    "input": {
+      "user_query": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+      "userProfile": {
+        "age": 31,
+        "job": "frontend engineer",
+        "risk_tolerance": "medium",
+        "priority": ["stability", "growth", "income"]
+      },
+      "decision": {
+        "optionA": "현재 회사에 남는다",
+        "optionB": "대기업 이직 제안을 수락한다",
+        "context": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "financial_pressure": "stable",
+          "time_pressure": "medium",
+          "emotional_state": "calm"
+        }
+      }
+    }
+  },
+  {
+    "id": "case-02",
+    "category": "normal",
+    "input": {
+      "user_query": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다.",
+      "userProfile": {
+        "age": 29,
+        "job": "designer",
+        "risk_tolerance": "low",
+        "priority": ["commute", "cost", "quiet"]
+      },
+      "decision": {
+        "optionA": "회사와 가까운 도심으로 이사한다",
+        "optionB": "조용하지만 조금 먼 동네로 이사한다",
+        "context": "월세가 비슷한 두 동네 중 어디로 이사할지 결정하고 싶다."
+      }
+    }
+  },
+  {
+    "id": "case-03",
+    "category": "normal",
+    "input": {
+      "user_query": "주말마다 운동을 시작할지 그냥 휴식을 유지할지 고민된다.",
+      "userProfile": {
+        "age": 35,
+        "job": "marketer",
+        "risk_tolerance": "low",
+        "priority": ["health", "energy", "routine"]
+      },
+      "decision": {
+        "optionA": "주말 오전 운동 루틴을 시작한다",
+        "optionB": "현재처럼 휴식 위주로 보낸다",
+        "context": "주말마다 운동을 시작할지 그냥 휴식을 유지할지 고민된다."
+      }
+    }
+  },
+  {
+    "id": "case-04",
+    "category": "normal",
+    "input": {
+      "user_query": "남는 돈을 적금에 넣을지 인덱스펀드에 넣을지 고민 중이다.",
+      "userProfile": {
+        "age": 33,
+        "job": "data analyst",
+        "risk_tolerance": "medium",
+        "priority": ["stability", "return", "simplicity"]
+      },
+      "decision": {
+        "optionA": "정기적금 비중을 높인다",
+        "optionB": "인덱스펀드 비중을 높인다",
+        "context": "남는 돈을 적금에 넣을지 인덱스펀드에 넣을지 고민 중이다."
+      },
+      "prior_memory": {
+        "repeated_patterns": ["손실 가능성이 보이면 보수적으로 바꾸는 편이다."]
+      }
+    }
+  },
+  {
+    "id": "case-05",
+    "category": "normal",
+    "input": {
+      "user_query": "짧은 해외여행을 갈지 집에서 쉬면서 비용을 아낄지 고민이다.",
+      "userProfile": {
+        "age": 27,
+        "job": "teacher",
+        "risk_tolerance": "medium",
+        "priority": ["rest", "experience", "budget"]
+      },
+      "decision": {
+        "optionA": "짧은 해외여행을 간다",
+        "optionB": "집에서 쉬면서 비용을 아낀다",
+        "context": "짧은 해외여행을 갈지 집에서 쉬면서 비용을 아낄지 고민이다."
+      }
+    }
+  },
+  {
+    "id": "case-06",
+    "category": "low_confidence",
+    "input": {
+      "user_query": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+      "userProfile": {
+        "age": 24,
+        "job": "student",
+        "risk_tolerance": "medium",
+        "priority": ["growth", "freedom", "income"]
+      },
+      "decision": {
+        "optionA": "지금 바로 취업 준비를 강화한다",
+        "optionB": "일단 대학원 진학 가능성을 알아본다",
+        "context": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "financial_pressure": "medium",
+          "time_pressure": "high",
+          "emotional_state": "uncertain"
+        }
+      }
+    }
+  },
+  {
+    "id": "case-07",
+    "category": "low_confidence",
+    "input": {
+      "user_query": "올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다.",
+      "userProfile": {
+        "age": 30,
+        "job": "accountant",
+        "risk_tolerance": "low",
+        "priority": ["cost", "stability", "commute"]
+      },
+      "decision": {
+        "optionA": "올해 안에 이사를 추진한다",
+        "optionB": "지금 집을 유지하고 더 알아본다",
+        "context": "올해는 이사를 할지 말지 판단이 잘 안 선다. 조건도 아직 정리가 안 됐다."
+      },
+      "prior_memory": {
+        "consistency_notes": ["큰 결정을 앞두면 조건 정리를 미루는 편이다."]
+      }
+    }
+  },
+  {
+    "id": "case-08",
+    "category": "low_confidence",
+    "input": {
+      "user_query": "퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다.",
+      "userProfile": {
+        "age": 28,
+        "job": "operations manager",
+        "risk_tolerance": "medium",
+        "priority": ["mental health", "income", "clarity"]
+      },
+      "decision": {
+        "optionA": "지금 퇴사를 결정한다",
+        "optionB": "퇴사는 보류하고 계획부터 정리한다",
+        "context": "퇴사를 고민하지만 다음 계획은 아직 없다. 그냥 버티는 게 맞나 싶다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "financial_pressure": "high",
+          "time_pressure": "high",
+          "emotional_state": "drained"
+        }
+      }
+    }
+  },
+  {
+    "id": "case-09",
+    "category": "low_confidence",
+    "input": {
+      "user_query": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다.",
+      "userProfile": {
+        "age": 23,
+        "job": "student",
+        "risk_tolerance": "medium",
+        "priority": ["growth", "optionality", "income"]
+      },
+      "decision": {
+        "optionA": "바로 취업한다",
+        "optionB": "해외 석사 유학을 준비한다",
+        "context": "유학을 갈지 취업할지 아직 정보가 부족해서 감이 안 온다."
+      }
+    }
+  },
+  {
+    "id": "case-10",
+    "category": "low_confidence",
+    "input": {
+      "user_query": "지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다.",
+      "userProfile": {
+        "age": 32,
+        "job": "researcher",
+        "risk_tolerance": "low",
+        "priority": ["stability", "honesty", "future"]
+      },
+      "decision": {
+        "optionA": "관계를 이어가며 더 대화한다",
+        "optionB": "지금 정리한다",
+        "context": "지금 연애를 이어갈지 정리할지 모르겠는데 서로 이야기한 게 부족하다."
+      }
+    }
+  },
+  {
+    "id": "case-11",
+    "category": "conflict",
+    "input": {
+      "user_query": "창업을 하고 싶지만 생활비 압박도 커서 회사를 그만둘지 고민이다.",
+      "userProfile": {
+        "age": 34,
+        "job": "product manager",
+        "risk_tolerance": "high",
+        "priority": ["autonomy", "income", "stability"]
+      },
+      "decision": {
+        "optionA": "현재 회사를 유지한다",
+        "optionB": "친구와 스타트업 공동창업을 한다",
+        "context": "창업을 하고 싶지만 생활비 압박도 커서 회사를 그만둘지 고민이다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "financial_pressure": "high",
+          "time_pressure": "high",
+          "emotional_state": "excited"
+        }
+      }
+    }
+  },
+  {
+    "id": "case-12",
+    "category": "conflict",
+    "input": {
+      "user_query": "연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다.",
+      "userProfile": {
+        "age": 30,
+        "job": "backend engineer",
+        "risk_tolerance": "medium",
+        "priority": ["income", "team_fit", "growth"]
+      },
+      "decision": {
+        "optionA": "현재 팀에 남는다",
+        "optionB": "연봉이 높은 새 제안을 수락한다",
+        "context": "연봉은 높은데 팀 문화가 안 맞을 것 같은 제안을 받을지 고민된다."
+      }
+    }
+  },
+  {
+    "id": "case-13",
+    "category": "conflict",
+    "input": {
+      "user_query": "결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다.",
+      "userProfile": {
+        "age": 36,
+        "job": "consultant",
+        "risk_tolerance": "medium",
+        "priority": ["family", "stability", "timing"]
+      },
+      "decision": {
+        "optionA": "지금 결혼 준비를 시작한다",
+        "optionB": "직장과 이사가 정리된 뒤로 미룬다",
+        "context": "결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다."
+      }
+    }
+  },
+  {
+    "id": "case-14",
+    "category": "conflict",
+    "input": {
+      "user_query": "해외 근무는 커리어에 좋아 보이지만 가족과 떨어져야 해서 갈등된다.",
+      "userProfile": {
+        "age": 38,
+        "job": "sales lead",
+        "risk_tolerance": "medium",
+        "priority": ["family", "growth", "income"]
+      },
+      "decision": {
+        "optionA": "국내 근무를 유지한다",
+        "optionB": "2년 해외 근무를 수락한다",
+        "context": "해외 근무는 커리어에 좋아 보이지만 가족과 떨어져야 해서 갈등된다."
+      }
+    }
+  },
+  {
+    "id": "case-15",
+    "category": "conflict",
+    "input": {
+      "user_query": "박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다.",
+      "userProfile": {
+        "age": 29,
+        "job": "lab engineer",
+        "risk_tolerance": "medium",
+        "priority": ["research", "income", "stability"]
+      },
+      "decision": {
+        "optionA": "산업체 경력을 더 쌓는다",
+        "optionB": "이번 사이클에 박사 지원을 한다",
+        "context": "박사 진학은 꿈이지만 수입 공백이 걱정돼서 바로 지원할지 망설여진다."
+      }
+    }
+  },
+  {
+    "id": "case-16",
+    "category": "edge",
+    "input": {
+      "user_query": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다.",
+      "userProfile": {
+        "age": 33,
+        "job": "freelancer",
+        "risk_tolerance": "high",
+        "priority": ["autonomy", "upside", "speed"]
+      },
+      "decision": {
+        "optionA": "생활비를 남기고 소규모로 검증한다",
+        "optionB": "지금 가진 자금을 거의 모두 투입한다",
+        "context": "지금 가진 돈을 거의 다 써서 창업 아이템에 올인해도 될지 고민이다."
+      }
+    }
+  },
+  {
+    "id": "case-17",
+    "category": "edge",
+    "input": {
+      "user_query": "번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다.",
+      "userProfile": {
+        "age": 31,
+        "job": "project manager",
+        "risk_tolerance": "medium",
+        "priority": ["health", "career", "responsibility"]
+      },
+      "decision": {
+        "optionA": "속도를 줄이고 회복 시간을 확보한다",
+        "optionB": "지금처럼 강하게 밀어붙인다",
+        "context": "번아웃이 심한데도 무조건 성과를 위해 지금 프로젝트를 계속 밀어붙여야 할지 고민이다."
+      }
+    }
+  },
+  {
+    "id": "case-18",
+    "category": "edge",
+    "input": {
+      "user_query": "불법은 아닌 것 같은 회색지대 방식으로 매출을 빨리 키워도 되는지 고민된다.",
+      "userProfile": {
+        "age": 40,
+        "job": "small business owner",
+        "risk_tolerance": "medium",
+        "priority": ["growth", "reputation", "stability"]
+      },
+      "decision": {
+        "optionA": "보수적으로 합법성이 명확한 방식만 쓴다",
+        "optionB": "회색지대 전략을 일부 활용한다",
+        "context": "불법은 아닌 것 같은 회색지대 방식으로 매출을 빨리 키워도 되는지 고민된다."
+      }
+    }
+  },
+  {
+    "id": "case-19",
+    "category": "edge",
+    "input": {
+      "user_query": "관계가 힘든데 감정적으로 바로 손절하는 게 맞는지 아니면 시간을 둘지 모르겠다.",
+      "userProfile": {
+        "age": 26,
+        "job": "content creator",
+        "risk_tolerance": "medium",
+        "priority": ["peace", "honesty", "stability"]
+      },
+      "decision": {
+        "optionA": "감정이 가라앉을 때까지 시간을 둔다",
+        "optionB": "지금 바로 관계를 끊는다",
+        "context": "관계가 힘든데 감정적으로 바로 손절하는 게 맞는지 아니면 시간을 둘지 모르겠다."
+      },
+      "state_hints": {
+        "situational_state": {
+          "emotional_state": "angry",
+          "time_pressure": "medium"
+        }
+      }
+    }
+  },
+  {
+    "id": "case-20",
+    "category": "edge",
+    "input": {
+      "user_query": "건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다.",
+      "userProfile": {
+        "age": 37,
+        "job": "planner",
+        "risk_tolerance": "medium",
+        "priority": ["health", "experience", "cost"]
+      },
+      "decision": {
+        "optionA": "추가 진료 후 여행 여부를 결정한다",
+        "optionB": "예정대로 장기여행을 떠난다",
+        "context": "건강검진에서 애매한 결과를 받았는데 해외 장기여행을 그냥 강행할지 고민이다."
+      }
+    }
+  }
+]

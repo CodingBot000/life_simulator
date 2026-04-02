@@ -1,0 +1,167 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": true,
+    "calibration_adjusted": true,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 5,
+    "threshold_score_ratio": 0.7143,
+    "risk_score": 0.6,
+    "confidence_score": 0,
+    "uncertainty_score": 1,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0,
+      "uncertainty_score": 1,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 3,
+      "final_confidence": 0.7,
+      "a_confidence": 0.7,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다.",
+      "context_text": "unknown current life changes complicate decision-making consider timing and stability in the context of family priorities",
+      "scenario_text": "결혼 준비를 지금 시작하는 것은 가족의 기대에 부응하고 안정성을 높이는 방법이지만, 현재의 생활 변화로 인해 스트레스가 증가할 수 있다. 직장과 이사가 정리된 후 결혼 준비를 시작하는 것은 감정적 갈등을 줄이고 안정성을 높일 수 있는 기회를 제공한다. 가족의 기대와 안정성을 고려할 때, 지금 결혼 준비를 시작하는 것이 더 적합하다.",
+      "risk_text": "결혼 준비와 이사, 직장 변동이 겹쳐 있어 감정적 갈등이 증가할 가능성이 있음. 현재 생활 변화로 인해 안정성이 저하될 수 있으며, 이는 가족 우선순위에 영향을 미칠 수 있음. 결혼 준비가 스트레스를 유발할 수 있어, 장기적으로 가족 관계에 부정적인 영향을 미칠 수 있음. 현재 직장과 이사로 인한 불확실성이 결혼 준비를 복잡하게 만든다. 결혼을 미루면서 감정적 갈등이 증가할 가능성이 있다. 안정성을 중시하는 마음이 커지면서 결혼 준비에 대한 스트레스가 발생할 수 있다. 결혼 준비를 미루는 결정이 장기적으로 후회로 이어질 가능성이 존재한다. A는 즉각적인 결혼 준비를 강조하는 반면, B는 안정성을 우선시하여 결혼 준비를 미루는 것을 지지한다. A는 가족의 기대를 중시하지만, B는 감정적 갈등을 줄이는 것을 더 중요하게 본다."
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0,
+    "uncertainty": 1,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "trigger_count": 3,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+      "결혼 준비와 이사, 직장 변동이 겹쳐 있어 감정적 갈등이 증가할 가능성이 있음.",
+      "현재 생활 변화로 인해 안정성이 저하될 수 있으며, 이는 가족 우선순위에 영향을 미칠 수 있음.",
+      "결혼 준비가 스트레스를 유발할 수 있어, 장기적으로 가족 관계에 부정적인 영향을 미칠 수 있음.",
+      "현재 직장과 이사로 인한 불확실성이 결혼 준비를 복잡하게 만든다.",
+      "결혼을 미루면서 감정적 갈등이 증가할 가능성이 있다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": false
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3955,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.5,
+      "safety_weight": 0,
+      "total_score": 1.3395
+    },
+    "reasoning_trace": [
+      "input_analysis: 결혼을 서두르고 싶지만 지금 이사와 직장 변동이 겹쳐서 판단이 복잡하다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue",
+      "threshold_compare: risk=medium, threshold_score=5, confidence=0, uncertainty=1",
+      "risk_summary: A=medium (결혼 준비와 이사, 직장 변동이 겹쳐 있어 감정적 갈등이 증가할 가능성이 있음. | 현재 생활 변화로 인해 안정성이 저하될 수 있으며, 이는 가족 우선순위에 영향을 미칠 수 있음. | 결혼 준비가 스트레스를 유발할 수 있어, 장기적으로 가족 관계에 부정적인 영향을 미칠 수 있음.) / B=medium (현재 직장과 이사로 인한 불확실성이 결혼 준비를 복잡하게 만든다. | 결혼을 미루면서 감정적 갈등이 증가할 가능성이 있다. | 안정성을 중시하는 마음이 커지면서 결혼 준비에 대한 스트레스가 발생할 수 있다. | 결혼 준비를 미루는 결정이 장기적으로 후회로 이어질 가능성이 존재한다.)",
+      "reasoning_conflicts: A는 즉각적인 결혼 준비를 강조하는 반면, B는 안정성을 우선시하여 결혼 준비를 미루는 것을 지지한다. | A는 가족의 기대를 중시하지만, B는 감정적 갈등을 줄이는 것을 더 중요하게 본다.",
+      "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

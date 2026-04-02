@@ -1,0 +1,234 @@
+{
+  "request_id": "a18e72a8-e3f1-4aee-b494-752b71651c83",
+  "reevaluated_at": "2026-03-28T17:39:14.831Z",
+  "source_log_path": "/Users/switch/Development/Web/life_simulator/outputs/online_logs/anomaly_queue/anomaly__2026-03-28T17-36-37-112Z__a18e72a8-e3f1-4aee-b494-752b71651c83.json",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline",
+    "calibration_version": "confidence-uncertainty:low/high",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "source": [
+    "anomaly_raw_based",
+    "anomaly_derived_based"
+  ],
+  "anomaly": {
+    "anomaly_raw_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    },
+    "anomaly_derived_based": {
+      "underblocking": false,
+      "overblocking": false,
+      "low_confidence": true,
+      "conflict": false
+    }
+  },
+  "reevaluated_guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:low/high",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "medium",
+      "guardrail_mode": "careful",
+      "raw_guardrail_mode": "cautious",
+      "threshold_set": "baseline",
+      "threshold_score": 3,
+      "threshold_score_ratio": 0.4286,
+      "risk_score": 0.6,
+      "confidence_score": 0.0875,
+      "uncertainty_score": 0.8,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "reasoning_conflict": 2,
+        "low_confidence": 1
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "strategy": [
+          "neutralize_decision",
+          "soft_recommendation"
+        ],
+        "risk_score": 0.6,
+        "confidence_score": 0.0875,
+        "uncertainty_score": 0.8,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": true,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "cautious"
+      },
+      "signals": {
+        "state_unknown_count": 1,
+        "final_confidence": 0.7,
+        "a_confidence": 0.7,
+        "b_confidence": 0.6,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "medium",
+        "evidence_repeat_count": 1,
+        "user_input": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+        "context_text": "unknown none evaluate tradeoffs between stability and growth opportunities",
+        "scenario_text": "현재 회사에 남는 것은 안정성과 팀 관계를 유지할 수 있는 선택입니다. 하지만 성장 기회가 제한적입니다. 대기업으로 이직하면 성장 기회가 많아지고, 경력 발전에 긍정적인 영향을 미칠 수 있습니다. 그러나 새로운 환경에 적응해야 합니다. 현재의 안정성을 유지하며 팀과의 관계를 강화하는 것이 장기적으로 더 유리할 것으로 판단됨",
+        "risk_text": "현재 회사에서의 안정성은 높지만, 성장 기회 부족으로 인한 경력 발전의 불안감이 존재한다. 이직 후 더 큰 회사에서의 성장 가능성은 있지만, 새로운 환경에 적응해야 하는 리스크가 있다. 현재의 감정 상태가 차분하지만, 시간이 지남에 따라 성장의 한계에 대한 불만이 커질 수 있다. 대기업 이직 후 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있음. 일과 삶의 균형이 무너질 수 있어 개인적인 시간 부족으로 인한 스트레스가 증가할 수 있음. 성장 기회가 있지만, 반복적인 업무로 인한 지루함과 불만이 생길 수 있음. A는 안정성을 중시하지만 성장 기회 부족을 우려함 B는 성장 기회를 중시하지만 새로운 환경 적응의 스트레스를 우려함"
+      },
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, low_confidence다."
+    },
+    "guardrail_derived": {
+      "risk_level": "medium",
+      "confidence": 0.0875,
+      "uncertainty": 0.8,
+      "decision": "review",
+      "output_mode": "safe",
+      "summary": {
+        "raw_guardrail_mode": "cautious",
+        "output_mode": "safe",
+        "detected_triggers": [
+          "reasoning_conflict",
+          "low_confidence"
+        ],
+        "trigger_count": 2,
+        "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, low_confidence다."
+      },
+      "reasons": [
+        "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, low_confidence다.",
+        "현재 회사에서의 안정성은 높지만, 성장 기회 부족으로 인한 경력 발전의 불안감이 존재한다.",
+        "이직 후 더 큰 회사에서의 성장 가능성은 있지만, 새로운 환경에 적응해야 하는 리스크가 있다.",
+        "현재의 감정 상태가 차분하지만, 시간이 지남에 따라 성장의 한계에 대한 불만이 커질 수 있다.",
+        "대기업 이직 후 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있음.",
+        "일과 삶의 균형이 무너질 수 있어 개인적인 시간 부족으로 인한 스트레스가 증가할 수 있음."
+      ],
+      "threshold_hit": [
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "signals": {
+        "cost_issue": false,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": false
+      },
+      "threshold_eval": {
+        "cost_weight": 0,
+        "effect_weight": 0.444,
+        "recovery_weight": 0.452,
+        "safety_weight": 0,
+        "total_score": 0.896
+      },
+      "reasoning_trace": [
+        "input_analysis: 현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+        "signal_extraction: effect_issue, recovery_issue",
+        "threshold_compare: risk=medium, threshold_score=3, confidence=0.0875, uncertainty=0.8",
+        "risk_summary: A=medium (현재 회사에서의 안정성은 높지만, 성장 기회 부족으로 인한 경력 발전의 불안감이 존재한다. | 이직 후 더 큰 회사에서의 성장 가능성은 있지만, 새로운 환경에 적응해야 하는 리스크가 있다. | 현재의 감정 상태가 차분하지만, 시간이 지남에 따라 성장의 한계에 대한 불만이 커질 수 있다.) / B=medium (대기업 이직 후 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있음. | 일과 삶의 균형이 무너질 수 있어 개인적인 시간 부족으로 인한 스트레스가 증가할 수 있음. | 성장 기회가 있지만, 반복적인 업무로 인한 지루함과 불만이 생길 수 있음.)",
+        "reasoning_conflicts: A는 안정성을 중시하지만 성장 기회 부족을 우려함 | B는 성장 기회를 중시하지만 새로운 환경 적응의 스트레스를 우려함",
+        "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict, low_confidence다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.0875,
+        "calibration_version": "confidence-uncertainty:low/high"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "dataset_candidate": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline",
+      "calibration_version": "confidence-uncertainty:low/high",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "input": {
+      "user_query": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+      "user_context": {
+        "userProfile": {
+          "age": 31,
+          "job": "frontend engineer",
+          "risk_tolerance": "medium",
+          "priority": [
+            "stability",
+            "growth",
+            "income"
+          ]
+        },
+        "decision": {
+          "optionA": "현재 회사에 남는다",
+          "optionB": "대기업 이직 제안을 수락한다",
+          "context": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다."
+        },
+        "state_hints": {
+          "situational_state": {
+            "financial_pressure": "stable",
+            "time_pressure": "medium",
+            "emotional_state": "calm"
+          }
+        }
+      }
+    },
+    "expected": {
+      "risk_level": "medium",
+      "decision": "review",
+      "mode": "safe"
+    },
+    "source": "online_anomaly",
+    "judge": "auto_re_eval"
+  }
+}

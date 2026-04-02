@@ -73,15 +73,48 @@ export interface PlannerResult {
   factors: string[];
 }
 
+export type ScenarioOutlook = "improve" | "stable" | "mixed" | "decline";
+export type ScenarioStressLoad = "low" | "medium" | "high";
+export type RiskFactor =
+  | "financial_pressure"
+  | "time_pressure"
+  | "stability_loss"
+  | "growth_tradeoff"
+  | "emotional_burden"
+  | "relationship_strain"
+  | "health_burnout"
+  | "execution_uncertainty";
+
+export interface ScenarioStructuredAssessment {
+  stability_outlook: ScenarioOutlook;
+  growth_outlook: ScenarioOutlook;
+  stress_load: ScenarioStressLoad;
+  missing_info: boolean;
+}
+
 export interface ScenarioResult {
   three_months: string;
   one_year: string;
   three_years: string;
+  structured_assessment: ScenarioStructuredAssessment;
+}
+
+export interface RiskStructuredAssessment {
+  risk_factors: RiskFactor[];
+  missing_info: boolean;
+  risk_score: number;
 }
 
 export interface RiskResult {
   risk_level: RiskTolerance;
   reasons: string[];
+  structured_assessment: RiskStructuredAssessment;
+}
+
+export interface ReasoningStructuredSignals {
+  conflict: boolean;
+  missing_info: boolean;
+  low_confidence: boolean;
 }
 
 export type DecisionOptionLabel = "A" | "B";
@@ -151,6 +184,7 @@ export interface AbReasoningResult {
     comparison: ReasoningComparison;
     final_selection: ReasoningFinalSelection;
   };
+  structured_signals: ReasoningStructuredSignals;
 }
 
 export interface GuardrailResult {
@@ -274,6 +308,9 @@ export interface RequestLog {
     latency_ms: number;
     model: string;
     tokens: number;
+    deterministic_mode: boolean;
+    scoring_input_source: "structured_only" | "legacy_fallback";
+    generation_variance_flag: boolean;
   };
 }
 

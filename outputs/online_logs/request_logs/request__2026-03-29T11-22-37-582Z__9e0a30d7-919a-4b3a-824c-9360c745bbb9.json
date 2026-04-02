@@ -1,0 +1,370 @@
+{
+  "request_id": "9e0a30d7-919a-4b3a-824c-9360c745bbb9",
+  "timestamp": "2026-03-29T11:22:37.582Z",
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "input": {
+    "user_query": "해외 근무는 커리어에 좋아 보이지만 가족과 떨어져야 해서 갈등된다.",
+    "user_context": {
+      "userProfile": {
+        "age": 38,
+        "job": "sales lead",
+        "risk_tolerance": "medium",
+        "priority": [
+          "family",
+          "growth",
+          "income"
+        ]
+      },
+      "decision": {
+        "optionA": "국내 근무를 유지한다",
+        "optionB": "2년 해외 근무를 수락한다",
+        "context": "해외 근무는 커리어에 좋아 보이지만 가족과 떨어져야 해서 갈등된다."
+      }
+    }
+  },
+  "state": {
+    "session_id": "interactive-session",
+    "memory_snapshot": {
+      "recent_similar_decisions": [],
+      "repeated_patterns": [],
+      "consistency_notes": []
+    },
+    "state_context": {
+      "case_id": "9e0a30d7-919a-4b3a-824c-9360c745bbb9",
+      "user_state": {
+        "profile_state": {
+          "risk_preference": "medium",
+          "decision_style": "unknown",
+          "top_priorities": [
+            "family",
+            "growth",
+            "income"
+          ]
+        },
+        "situational_state": {
+          "career_stage": "unknown",
+          "financial_pressure": "unknown",
+          "time_pressure": "unknown",
+          "emotional_state": "conflicted"
+        },
+        "memory_state": {
+          "recent_similar_decisions": [],
+          "repeated_patterns": [],
+          "consistency_notes": []
+        }
+      },
+      "state_summary": {
+        "decision_bias": "conflicted between family and career growth",
+        "current_constraint": "family separation impacts decision-making",
+        "agent_guidance": "evaluate family impact against career growth opportunities"
+      }
+    }
+  },
+  "intermediate": {
+    "planner": {
+      "decision_type": "career_change",
+      "factors": [
+        "가족과의 거리",
+        "커리어 성장 기회",
+        "재정적 안정성",
+        "위험 감수 성향",
+        "우선 순위에 따른 결정"
+      ]
+    },
+    "scenario": {
+      "optionA": {
+        "three_months": "국내 근무를 유지한 후, 가족과의 시간은 더욱 소중하게 느껴진다. 주말마다 가족과의 활동을 계획하며 행복한 순간들을 공유한다. 그러나 커리어 성장에 대한 갈증이 여전히 남아, 동료들이 해외 근무를 통해 새로운 경험을 쌓는 모습을 보며 약간의 불안감이 느껴진다. 이로 인해 직장에서의 동기부여가 다소 떨어질 수도 있다.",
+        "one_year": "1년이 지나면서 가족과의 유대감은 더욱 깊어지지만, 커리어의 정체감이 뚜렷해진다. 회사에서의 성장은 미미하고, 동료들이 해외에서 쌓은 경험을 바탕으로 빠르게 성장하는 모습을 보며 자주 비교하게 된다. 이로 인해 스스로의 결정에 대한 후회가 조금씩 커지며, 가족과의 안정적인 관계와 커리어 성장 간의 갈등이 심화된다.",
+        "three_years": "3년 후, 가족과의 관계는 더욱 단단해졌지만, 커리어는 정체된 상태로 남아 있다. 이직이나 새로운 기회를 찾고자 하는 마음이 커지지만, 가족을 우선시한 결정에 대한 확신이 여전히 존재한다. 그러나 커리어 성장의 기회를 놓친 것에 대한 아쉬움이 남아, 가끔씩 '만약 해외 근무를 선택했다면 어땠을까?'라는 생각이 스쳐 지나간다. 결국, 가족과의 안정적인 삶과 커리어 성장 사이에서의 균형을 찾기 위해 새로운 방향을 모색하게 된다."
+      },
+      "optionB": {
+        "three_months": "해외 근무를 시작한 지 3개월이 지나면서, 새로운 환경과 문화에 적응하는 데 어려움을 겪고 있다. 업무는 기대 이상으로 흥미롭고 도전적이지만, 가족과의 거리 때문에 외로움과 그리움이 커지고 있다. 주말마다 영상 통화를 하며 아이들의 성장 모습을 지켜보지만, 직접 곁에 있지 못하는 현실이 마음을 아프게 한다. 이로 인해 커리어 성장의 기쁨과 가족과의 거리에서 오는 슬픔이 상충하며 감정적으로 복잡한 상태가 지속되고 있다.",
+        "one_year": "해외 근무 1년이 지나면서, 직장에서의 성과가 눈에 띄게 향상되었고, 동료들과의 관계도 깊어졌다. 하지만 가족과의 소통이 점점 더 힘들어지고, 아이들이 성장하는 모습을 직접 보지 못하는 것에 대한 후회가 쌓이고 있다. 재정적으로는 안정성이 높아졌지만, 가족과의 관계가 소원해지는 것에 대한 불안감이 커지고 있다. 이로 인해 커리어 성장의 기쁨과 가족과의 거리에서 오는 슬픔이 더욱 뚜렷해지며, 갈등이 심화되고 있다.",
+        "three_years": "해외 근무를 마치고 귀국한 지 3년이 지나면서, 커리어에서의 성장은 분명히 있었지만 가족과의 관계 회복이 쉽지 않다. 아이들은 이미 성장해버렸고, 그동안의 공백이 느껴진다. 가족과의 재회는 기쁘지만, 그리움과 상실감이 여전히 남아있다. 직장에서는 높은 위치에 올라갔지만, 가족과의 관계가 소원해진 것에 대한 후회가 마음속에 남아있다. 결국, 커리어 성장과 가족의 소중함 사이에서의 갈등은 여전히 해결되지 않은 채로 남아있다."
+      }
+    },
+    "risk": {
+      "optionA": {
+        "risk_level": "medium",
+        "reasons": [
+          "가족과의 거리로 인한 정서적 갈등이 지속될 가능성이 있음",
+          "커리어 성장 기회 상실로 인한 직무 만족도 저하 우려",
+          "결정 후 후회감이 커질 수 있어 심리적 부담 증가",
+          "가족 우선의 결정이 장기적으로 커리어에 부정적 영향을 미칠 수 있음"
+        ]
+      },
+      "optionB": {
+        "risk_level": "high",
+        "reasons": [
+          "가족과의 거리로 인한 정서적 고통이 커질 가능성이 높음.",
+          "해외 근무로 인해 가족과의 관계가 소원해질 수 있음.",
+          "커리어 성장의 기쁨과 가족과의 거리에서 오는 슬픔이 상충하여 정신적 스트레스가 증가할 수 있음.",
+          "결국 가족과의 관계 회복이 어려워질 수 있어 장기적인 후회로 이어질 위험이 있음."
+        ]
+      }
+    },
+    "ab_reasoning": {
+      "case_id": "9e0a30d7-919a-4b3a-824c-9360c745bbb9",
+      "input_summary": {
+        "user_profile": {
+          "age": 38,
+          "job": "sales lead",
+          "risk_tolerance": "medium",
+          "priority": [
+            "family",
+            "growth",
+            "income"
+          ]
+        },
+        "decision_options": {
+          "optionA": "국내 근무를 유지한다",
+          "optionB": "2년 해외 근무를 수락한다",
+          "context": "해외 근무는 커리어에 좋아 보이지만 가족과 떨어져야 해서 갈등된다."
+        },
+        "planner_goal": "가족과의 관계를 유지하면서 커리어 성장 기회를 평가한다."
+      },
+      "reasoning": {
+        "a_reasoning": {
+          "stance": "conservative",
+          "summary": "국내 근무를 유지함으로써 가족과의 관계를 우선시하고 안정적인 삶을 지속할 수 있다.",
+          "key_assumptions": [
+            "가족과의 유대감이 직장 내 동기부여에 긍정적인 영향을 미칠 것이다.",
+            "커리어 성장의 기회는 언제든지 다시 올 수 있다."
+          ],
+          "pros": [
+            "가족과의 관계를 강화할 수 있다.",
+            "정서적 안정감을 유지할 수 있다.",
+            "직무 만족도를 높일 수 있다."
+          ],
+          "cons": [
+            "커리어 성장의 기회를 놓칠 수 있다.",
+            "동료들과의 비교에서 뒤처질 수 있다.",
+            "미래에 대한 불안감이 커질 수 있다."
+          ],
+          "recommended_option": "A",
+          "confidence": 0.8
+        },
+        "b_reasoning": {
+          "stance": "opportunity_seeking",
+          "summary": "해외 근무를 통해 커리어 성장의 기회를 극대화하고 새로운 경험을 쌓을 수 있다.",
+          "key_assumptions": [
+            "해외 근무가 장기적으로 커리어에 긍정적인 영향을 미칠 것이다.",
+            "가족과의 관계는 시간이 지나면서 회복될 수 있다."
+          ],
+          "pros": [
+            "커리어 성장의 기회를 확보할 수 있다.",
+            "새로운 문화와 경험을 통해 개인적으로 성장할 수 있다.",
+            "재정적 안정성을 높일 수 있다."
+          ],
+          "cons": [
+            "가족과의 관계가 소원해질 위험이 있다.",
+            "정서적 고통이 증가할 수 있다.",
+            "결정 후 후회감이 커질 수 있다."
+          ],
+          "recommended_option": "B",
+          "confidence": 0.7
+        },
+        "comparison": {
+          "agreements": [
+            "두 옵션 모두 가족과의 관계와 커리어 성장 간의 갈등을 내포하고 있다."
+          ],
+          "conflicts": [
+            "A는 가족을 우선시하는 반면, B는 커리어 성장을 우선시한다.",
+            "A는 안정성을 강조하지만, B는 기회를 강조한다."
+          ],
+          "which_fits_user_better": "A",
+          "reason": "사용자의 우선 순위가 가족과의 관계에 중점을 두고 있기 때문에 A가 더 적합하다."
+        },
+        "final_selection": {
+          "selected_reasoning": "A",
+          "selected_option": "A",
+          "why_selected": "가족과의 관계를 유지하는 것이 현재의 우선 순위에 부합하며, 안정적인 삶을 지속할 수 있기 때문이다.",
+          "decision_confidence": 0.8
+        }
+      }
+    }
+  },
+  "guardrail": {
+    "versions": {
+      "record_version": "online-monitoring.v2",
+      "evaluator_version": "guardrail-evaluator.v1",
+      "threshold_version": "guardrail-threshold-set:baseline-v2",
+      "calibration_version": "calibration:v2",
+      "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+      "prompt_version": "life-simulator-prompts.v1"
+    },
+    "guardrail_raw": {
+      "risk_level": "high",
+      "guardrail_mode": "block",
+      "raw_guardrail_mode": "blocked",
+      "threshold_adjusted": true,
+      "calibration_adjusted": false,
+      "threshold_set": "baseline-v2",
+      "threshold_score": 6,
+      "threshold_score_ratio": 0.8571,
+      "risk_score": 0.88,
+      "confidence_score": 0.1205,
+      "uncertainty_score": 0.84,
+      "confidence_band": "low",
+      "uncertainty_band": "high",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "high_risk"
+      ],
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "score_breakdown": {
+        "ambiguity_high": 2,
+        "reasoning_conflict": 2,
+        "high_risk": 2
+      },
+      "effective_thresholds": {
+        "carefulMin": 1,
+        "blockMin": 4,
+        "maxScore": 7
+      },
+      "guardrail_result": {
+        "guardrail_triggered": true,
+        "triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "high_risk"
+        ],
+        "strategy": [
+          "ask_more_info",
+          "neutralize_decision",
+          "risk_warning"
+        ],
+        "risk_score": 0.88,
+        "confidence_score": 0.1205,
+        "uncertainty_score": 0.84,
+        "reasoning_signals": {
+          "conflicting_signals": true,
+          "missing_context": true,
+          "weak_evidence": false,
+          "ambiguous_wording": false,
+          "strong_consensus": false,
+          "repeated_evidence": false
+        },
+        "final_mode": "blocked"
+      },
+      "signals": {
+        "state_unknown_count": 4,
+        "final_confidence": 0.8,
+        "a_confidence": 0.8,
+        "b_confidence": 0.7,
+        "a_recommendation": "A",
+        "b_recommendation": "B",
+        "conflict_count": 2,
+        "risk_a": "medium",
+        "risk_b": "high",
+        "evidence_repeat_count": 0,
+        "user_input": "해외 근무는 커리어에 좋아 보이지만 가족과 떨어져야 해서 갈등된다.",
+        "context_text": "conflicted between family and career growth family separation impacts decision-making evaluate family impact against career growth opportunities",
+        "scenario_text": "국내 근무를 유지함으로써 가족과의 관계를 우선시하고 안정적인 삶을 지속할 수 있다. 해외 근무를 통해 커리어 성장의 기회를 극대화하고 새로운 경험을 쌓을 수 있다. 가족과의 관계를 유지하는 것이 현재의 우선 순위에 부합하며, 안정적인 삶을 지속할 수 있기 때문이다.",
+        "risk_text": "가족과의 거리로 인한 정서적 갈등이 지속될 가능성이 있음 커리어 성장 기회 상실로 인한 직무 만족도 저하 우려 결정 후 후회감이 커질 수 있어 심리적 부담 증가 가족 우선의 결정이 장기적으로 커리어에 부정적 영향을 미칠 수 있음 가족과의 거리로 인한 정서적 고통이 커질 가능성이 높음. 해외 근무로 인해 가족과의 관계가 소원해질 수 있음. 커리어 성장의 기쁨과 가족과의 거리에서 오는 슬픔이 상충하여 정신적 스트레스가 증가할 수 있음. 결국 가족과의 관계 회복이 어려워질 수 있어 장기적인 후회로 이어질 위험이 있음. A는 가족을 우선시하는 반면, B는 커리어 성장을 우선시한다. A는 안정성을 강조하지만, B는 기회를 강조한다."
+      },
+      "reason": "risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+    },
+    "guardrail_derived": {
+      "risk_level": "high",
+      "confidence": 0.1205,
+      "uncertainty": 0.84,
+      "decision": "block",
+      "output_mode": "blocked",
+      "summary": {
+        "raw_guardrail_mode": "blocked",
+        "output_mode": "blocked",
+        "detected_triggers": [
+          "ambiguity_high",
+          "reasoning_conflict",
+          "high_risk"
+        ],
+        "trigger_count": 3,
+        "reason": "risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+      },
+      "reasons": [
+        "risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다.",
+        "가족과의 거리로 인한 정서적 갈등이 지속될 가능성이 있음",
+        "커리어 성장 기회 상실로 인한 직무 만족도 저하 우려",
+        "결정 후 후회감이 커질 수 있어 심리적 부담 증가",
+        "가족 우선의 결정이 장기적으로 커리어에 부정적 영향을 미칠 수 있음",
+        "가족과의 거리로 인한 정서적 고통이 커질 가능성이 높음."
+      ],
+      "threshold_hit": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "high_risk"
+      ],
+      "signals": {
+        "cost_issue": true,
+        "effect_issue": true,
+        "recovery_issue": true,
+        "safety_issue": true
+      },
+      "threshold_eval": {
+        "cost_weight": 0.4686,
+        "effect_weight": 0.5,
+        "recovery_weight": 0.3816,
+        "safety_weight": 0.6,
+        "total_score": 1.9502
+      },
+      "reasoning_trace": [
+        "input_analysis: 해외 근무는 커리어에 좋아 보이지만 가족과 떨어져야 해서 갈등된다.",
+        "signal_extraction: cost_issue, effect_issue, recovery_issue, safety_issue",
+        "threshold_compare: risk=high, threshold_score=6, confidence=0.1205, uncertainty=0.84",
+        "risk_summary: A=medium (가족과의 거리로 인한 정서적 갈등이 지속될 가능성이 있음 | 커리어 성장 기회 상실로 인한 직무 만족도 저하 우려 | 결정 후 후회감이 커질 수 있어 심리적 부담 증가 | 가족 우선의 결정이 장기적으로 커리어에 부정적 영향을 미칠 수 있음) / B=high (가족과의 거리로 인한 정서적 고통이 커질 가능성이 높음. | 해외 근무로 인해 가족과의 관계가 소원해질 수 있음. | 커리어 성장의 기쁨과 가족과의 거리에서 오는 슬픔이 상충하여 정신적 스트레스가 증가할 수 있음. | 결국 가족과의 관계 회복이 어려워질 수 있어 장기적인 후회로 이어질 위험이 있음.)",
+        "reasoning_conflicts: A는 가족을 우선시하는 반면, B는 커리어 성장을 우선시한다. | A는 안정성을 강조하지만, B는 기회를 강조한다.",
+        "final_decision: block because risk=high, confidence=low, uncertainty=high 조합으로 block이 필요하다. 핵심 신호는 ambiguity_high, reasoning_conflict, high_risk다."
+      ],
+      "decision_flow": [
+        "input_analysis",
+        "signal_extraction",
+        "threshold_compare",
+        "final_decision"
+      ],
+      "calibration": {
+        "adjusted_confidence": 0.1205,
+        "calibration_version": "calibration:v2"
+      },
+      "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+      "anomaly": {
+        "anomaly_raw_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        },
+        "anomaly_derived_based": {
+          "underblocking": false,
+          "overblocking": false,
+          "low_confidence": true,
+          "conflict": false
+        }
+      }
+    }
+  },
+  "output": {
+    "final_answer": "decision=undecided; recommended_option=undecided; confidence=0; reason=추가 정보가 필요합니다. 가족과의 관계와 커리어 성장 간의 갈등이 크고, 결정에 대한 확신이 부족합니다.",
+    "mode": "blocked"
+  },
+  "meta": {
+    "latency_ms": 58425,
+    "model": "gpt-4o-mini-2024-07-18",
+    "tokens": 23650
+  }
+}

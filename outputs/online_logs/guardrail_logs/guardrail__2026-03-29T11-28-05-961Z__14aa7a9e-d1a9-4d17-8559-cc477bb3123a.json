@@ -1,0 +1,155 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": false,
+    "calibration_adjusted": false,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 2,
+    "threshold_score_ratio": 0.2857,
+    "risk_score": 0.6,
+    "confidence_score": 0.2715,
+    "uncertainty_score": 0.62,
+    "confidence_band": "low",
+    "uncertainty_band": "medium",
+    "detected_triggers": [
+      "reasoning_conflict"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": false,
+      "ambiguous_wording": false,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "reasoning_conflict": 2
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "reasoning_conflict"
+      ],
+      "strategy": [
+        "neutralize_decision"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.2715,
+      "uncertainty_score": 0.62,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": false,
+        "ambiguous_wording": false,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 1,
+      "final_confidence": 0.8,
+      "a_confidence": 0.8,
+      "b_confidence": 0.7,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+      "context_text": "unknown none evaluate stability versus growth opportunities in decision-making",
+      "scenario_text": "현재 회사에 남는 것은 안정적인 직장 환경을 유지하며, 감정적으로도 안정된 상태를 지속할 수 있다. 대기업으로 이직하면 더 많은 성장 기회를 얻을 수 있으며, 경력 발전에 긍정적인 영향을 미칠 수 있다. 현재 회사의 안정성이 사용자에게 더 큰 만족을 줄 것으로 예상되며, 감정적으로도 안정된 상태를 유지할 수 있다.",
+      "risk_text": "현재 회사에 남는 선택은 안정적인 직장 환경을 제공하지만, 성장 기회가 제한적일 수 있다. 대기업 이직 제안이 없어진 경우, 현재의 안정성은 유지되지만 장기적으로 성장의 한계를 느낄 수 있다. 감정적으로 안정된 상태이지만, 가끔씩 대기업에서의 기회에 대한 후회가 생길 수 있다. 재정적으로 안정적이지만, 성장 욕구가 충족되지 않아 불안감이 지속될 수 있다. 대기업으로의 이직은 성장 기회를 제공하지만, 업무 강도가 높아져 일과 삶의 균형이 흔들릴 수 있다. 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있으며, 이전의 안정감을 그리워할 수 있다. 재정적으로는 만족스러운 보상을 받을 수 있지만, 감정적으로는 불안감이 커질 수 있다. A는 안정성을 중시하고, B는 성장 기회를 중시함 A는 감정적 안정성을 강조하지만, B는 새로운 도전의 필요성을 강조함"
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0.2715,
+    "uncertainty": 0.62,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "reasoning_conflict"
+      ],
+      "trigger_count": 1,
+      "reason": "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다.",
+      "현재 회사에 남는 선택은 안정적인 직장 환경을 제공하지만, 성장 기회가 제한적일 수 있다.",
+      "대기업 이직 제안이 없어진 경우, 현재의 안정성은 유지되지만 장기적으로 성장의 한계를 느낄 수 있다.",
+      "감정적으로 안정된 상태이지만, 가끔씩 대기업에서의 기회에 대한 후회가 생길 수 있다.",
+      "재정적으로 안정적이지만, 성장 욕구가 충족되지 않아 불안감이 지속될 수 있다.",
+      "대기업으로의 이직은 성장 기회를 제공하지만, 업무 강도가 높아져 일과 삶의 균형이 흔들릴 수 있다."
+    ],
+    "threshold_hit": [
+      "reasoning_conflict"
+    ],
+    "signals": {
+      "cost_issue": false,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": false
+    },
+    "threshold_eval": {
+      "cost_weight": 0,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.3288,
+      "safety_weight": 0,
+      "total_score": 0.7728
+    },
+    "reasoning_trace": [
+      "input_analysis: 현재 회사에 남을지 더 큰 회사로 이직할지 고민 중이다.",
+      "signal_extraction: effect_issue, recovery_issue",
+      "threshold_compare: risk=medium, threshold_score=2, confidence=0.2715, uncertainty=0.62",
+      "risk_summary: A=medium (현재 회사에 남는 선택은 안정적인 직장 환경을 제공하지만, 성장 기회가 제한적일 수 있다. | 대기업 이직 제안이 없어진 경우, 현재의 안정성은 유지되지만 장기적으로 성장의 한계를 느낄 수 있다. | 감정적으로 안정된 상태이지만, 가끔씩 대기업에서의 기회에 대한 후회가 생길 수 있다. | 재정적으로 안정적이지만, 성장 욕구가 충족되지 않아 불안감이 지속될 수 있다.) / B=medium (대기업으로의 이직은 성장 기회를 제공하지만, 업무 강도가 높아져 일과 삶의 균형이 흔들릴 수 있다. | 새로운 환경에 적응하는 과정에서 스트레스를 느낄 가능성이 있으며, 이전의 안정감을 그리워할 수 있다. | 재정적으로는 만족스러운 보상을 받을 수 있지만, 감정적으로는 불안감이 커질 수 있다.)",
+      "reasoning_conflicts: A는 안정성을 중시하고, B는 성장 기회를 중시함 | A는 감정적 안정성을 강조하지만, B는 새로운 도전의 필요성을 강조함",
+      "final_decision: review because risk=medium, confidence=low, uncertainty=medium 조합이라 normal보다 careful이 안전하다. 핵심 신호는 reasoning_conflict다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.2715,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}

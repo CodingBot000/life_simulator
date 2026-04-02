@@ -1,0 +1,167 @@
+{
+  "versions": {
+    "record_version": "online-monitoring.v2",
+    "evaluator_version": "guardrail-evaluator.v1",
+    "threshold_version": "guardrail-threshold-set:baseline-v2",
+    "calibration_version": "calibration:v2",
+    "signal_mapping_version": "heuristic-derived-signal-mapping.v1",
+    "prompt_version": "life-simulator-prompts.v1"
+  },
+  "guardrail_raw": {
+    "risk_level": "medium",
+    "guardrail_mode": "careful",
+    "raw_guardrail_mode": "cautious",
+    "threshold_adjusted": true,
+    "calibration_adjusted": true,
+    "threshold_set": "baseline-v2",
+    "threshold_score": 5,
+    "threshold_score_ratio": 0.7143,
+    "risk_score": 0.6,
+    "confidence_score": 0.0435,
+    "uncertainty_score": 0.88,
+    "confidence_band": "low",
+    "uncertainty_band": "high",
+    "detected_triggers": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "reasoning_signals": {
+      "conflicting_signals": true,
+      "missing_context": true,
+      "weak_evidence": true,
+      "ambiguous_wording": true,
+      "strong_consensus": false,
+      "repeated_evidence": false
+    },
+    "score_breakdown": {
+      "ambiguity_high": 2,
+      "reasoning_conflict": 2,
+      "low_confidence": 1
+    },
+    "effective_thresholds": {
+      "carefulMin": 1,
+      "blockMin": 4,
+      "maxScore": 7
+    },
+    "guardrail_result": {
+      "guardrail_triggered": true,
+      "triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "strategy": [
+        "ask_more_info",
+        "neutralize_decision",
+        "soft_recommendation"
+      ],
+      "risk_score": 0.6,
+      "confidence_score": 0.0435,
+      "uncertainty_score": 0.88,
+      "reasoning_signals": {
+        "conflicting_signals": true,
+        "missing_context": true,
+        "weak_evidence": true,
+        "ambiguous_wording": true,
+        "strong_consensus": false,
+        "repeated_evidence": false
+      },
+      "final_mode": "cautious"
+    },
+    "signals": {
+      "state_unknown_count": 1,
+      "final_confidence": 0.7,
+      "a_confidence": 0.7,
+      "b_confidence": 0.6,
+      "a_recommendation": "A",
+      "b_recommendation": "B",
+      "conflict_count": 2,
+      "risk_a": "medium",
+      "risk_b": "medium",
+      "evidence_repeat_count": 1,
+      "user_input": "뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+      "context_text": "unknown high time pressure complicates decision-making explore options that balance growth and freedom with potential income",
+      "scenario_text": "현재 취업 준비를 강화하는 것은 안정적인 수입을 확보할 수 있는 기회를 제공한다. 대학원 진학은 장기적인 성장과 자유를 제공할 수 있는 기회를 열어준다. 현재의 재정적 압박과 시간 압박을 고려할 때, 안정적인 수입을 확보하는 것이 더 중요하다.",
+      "risk_text": "고용 시장에서의 경쟁이 치열해 취업 준비가 예상보다 어려울 수 있음. 시간 압박으로 인해 충분한 준비 없이 결정할 경우 후회할 가능성이 있음. 대학원 진학 가능성을 고려하지 않음으로써 장기적인 성장 기회를 놓칠 수 있음. 대학원 진학은 성장 기회를 제공하지만, 재정적 압박이 여전히 존재하여 불안감을 유발할 수 있다. 시간 압박이 높아 결정 과정에서 감정적으로 불안정할 가능성이 크다. 졸업 후 취업에 대한 불확실성이 여전히 존재하여 장기적으로 안정성을 해칠 수 있다. A는 즉각적인 수입을 강조하는 반면, B는 장기적인 성장과 자유를 강조함 A는 취업 준비의 중요성을 강조하고, B는 대학원 진학의 기회를 강조함"
+    },
+    "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+  },
+  "guardrail_derived": {
+    "risk_level": "medium",
+    "confidence": 0.0435,
+    "uncertainty": 0.88,
+    "decision": "review",
+    "output_mode": "safe",
+    "summary": {
+      "raw_guardrail_mode": "cautious",
+      "output_mode": "safe",
+      "detected_triggers": [
+        "ambiguity_high",
+        "reasoning_conflict",
+        "low_confidence"
+      ],
+      "trigger_count": 3,
+      "reason": "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    },
+    "reasons": [
+      "risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다.",
+      "고용 시장에서의 경쟁이 치열해 취업 준비가 예상보다 어려울 수 있음.",
+      "시간 압박으로 인해 충분한 준비 없이 결정할 경우 후회할 가능성이 있음.",
+      "대학원 진학 가능성을 고려하지 않음으로써 장기적인 성장 기회를 놓칠 수 있음.",
+      "대학원 진학은 성장 기회를 제공하지만, 재정적 압박이 여전히 존재하여 불안감을 유발할 수 있다.",
+      "시간 압박이 높아 결정 과정에서 감정적으로 불안정할 가능성이 크다."
+    ],
+    "threshold_hit": [
+      "ambiguity_high",
+      "reasoning_conflict",
+      "low_confidence"
+    ],
+    "signals": {
+      "cost_issue": true,
+      "effect_issue": true,
+      "recovery_issue": true,
+      "safety_issue": false
+    },
+    "threshold_eval": {
+      "cost_weight": 0.3955,
+      "effect_weight": 0.444,
+      "recovery_weight": 0.4712,
+      "safety_weight": 0,
+      "total_score": 1.3107
+    },
+    "reasoning_trace": [
+      "input_analysis: 뭔가 새로운 걸 해야 할 것 같은데 뭘 선택해야 할지 모르겠다.",
+      "signal_extraction: cost_issue, effect_issue, recovery_issue",
+      "threshold_compare: risk=medium, threshold_score=5, confidence=0.0435, uncertainty=0.88",
+      "risk_summary: A=medium (고용 시장에서의 경쟁이 치열해 취업 준비가 예상보다 어려울 수 있음. | 시간 압박으로 인해 충분한 준비 없이 결정할 경우 후회할 가능성이 있음. | 대학원 진학 가능성을 고려하지 않음으로써 장기적인 성장 기회를 놓칠 수 있음.) / B=medium (대학원 진학은 성장 기회를 제공하지만, 재정적 압박이 여전히 존재하여 불안감을 유발할 수 있다. | 시간 압박이 높아 결정 과정에서 감정적으로 불안정할 가능성이 크다. | 졸업 후 취업에 대한 불확실성이 여전히 존재하여 장기적으로 안정성을 해칠 수 있다.)",
+      "reasoning_conflicts: A는 즉각적인 수입을 강조하는 반면, B는 장기적인 성장과 자유를 강조함 | A는 취업 준비의 중요성을 강조하고, B는 대학원 진학의 기회를 강조함",
+      "final_decision: review because risk=medium, confidence=low, uncertainty=high 조합이라 normal보다 careful이 안전하다. 핵심 신호는 ambiguity_high, reasoning_conflict, low_confidence다."
+    ],
+    "decision_flow": [
+      "input_analysis",
+      "signal_extraction",
+      "threshold_compare",
+      "final_decision"
+    ],
+    "calibration": {
+      "adjusted_confidence": 0.0435,
+      "calibration_version": "calibration:v2"
+    },
+    "mapping_note": "Derived signals are observational heuristics for online monitoring and do not feed back into the core guardrail evaluator decision.",
+    "anomaly": {
+      "anomaly_raw_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      },
+      "anomaly_derived_based": {
+        "underblocking": false,
+        "overblocking": false,
+        "low_confidence": true,
+        "conflict": false
+      }
+    }
+  }
+}
