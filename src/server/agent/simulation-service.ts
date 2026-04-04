@@ -27,13 +27,19 @@ import type {
   ScenarioResult,
   SimulationRequest,
   SimulationResponse,
+  SimulationRoutingSummary,
   StateContext,
   StateHints,
   UserProfile,
 } from "../../lib/types.ts";
 import { buildRoutingDecision } from "../routing/request-router.ts";
 import { invokeStructuredLLM } from "../llm/client.ts";
-import { buildGuardrailFlags, evaluateSimulationGuardrail } from "../guardrail/service.ts";
+import {
+  buildGuardrailFlags,
+  deriveSelectiveGuardrailEvaluation,
+  evaluateSimulationGuardrail,
+} from "../guardrail/service.ts";
+import type { GuardrailEvaluationActual } from "../../lib/guardrail-eval.ts";
 import type { LLMStageLogEntry, RequestExecutionEnvelope } from "../logging/types.ts";
 import {
   recordGuardrailTriggers,
@@ -93,6 +99,7 @@ async function runStructuredStage<T>(params: {
   schema: Record<string, unknown>;
   prompt: string;
   inputPayload: unknown;
+  model: string;
   temperature: number;
   context: ExecutionContext;
   fallbackModel?: string;
@@ -102,7 +109,7 @@ async function runStructuredStage<T>(params: {
     schema: params.schema,
     prompt: params.prompt,
     input: formatPayload(params.inputPayload),
-    model: params.context.selected_model,
+    model: params.model,
     fallbackModel: params.fallbackModel,
     temperature: params.temperature,
     metadata: {
@@ -141,6 +148,7 @@ async function runStructuredStage<T>(params: {
       user_id: params.context.user_id,
       session_id: params.context.session_id,
       route_name: params.context.route_name,
+      execution_mode: params.context.execution_mode,
       selected_path: params.context.selected_path,
       stage_name: params.stageName,
       model: response.model,
@@ -165,6 +173,7 @@ async function runStructuredStage<T>(params: {
 
 function createDeterministicStageLog(params: {
   stageName: string;
+  model?: string;
   context: ExecutionContext;
   requestPayload: unknown;
   responsePayload: unknown;
@@ -175,9 +184,10 @@ function createDeterministicStageLog(params: {
     user_id: params.context.user_id,
     session_id: params.context.session_id,
     route_name: params.context.route_name,
+    execution_mode: params.context.execution_mode,
     selected_path: params.context.selected_path,
     stage_name: params.stageName,
-    model: "deterministic-guardrail",
+    model: params.model ?? "deterministic-stage",
     latency_ms: 0,
     input_tokens: 0,
     output_tokens: 0,
@@ -207,6 +217,117 @@ function hasAny(stages: LLMStageLogEntry[], key: "fallback_used" | "cache_hit"):
   return stages.some((stage) => stage[key]);
 }
 
+function shouldRunGroupedStage(
+  selectedPath: string[],
+  stageName: "scenario" | "risk" | "ab_reasoning" | "guardrail" | "reflection",
+): boolean {
+  return selectedPath.includes(stageName);
+}
+
+function applyRoutingDecision(
+  context: ExecutionContext,
+  routingDecision: ReturnType<typeof buildRoutingDecision>,
+): void {
+  context.execution_mode = routingDecision.executionMode;
+  context.selected_path = [...routingDecision.selectedPath];
+  context.selected_model = routingDecision.selectedModel;
+  context.stage_model_plan = { ...routingDecision.stageModelPlan };
+  context.stage_fallback_plan = { ...routingDecision.stageFallbackPlan };
+}
+
+function buildRoutingSummary(
+  routingDecision: ReturnType<typeof buildRoutingDecision>,
+): SimulationRoutingSummary {
+  return {
+    execution_mode: routingDecision.executionMode,
+    selected_path: [...routingDecision.selectedPath],
+    stage_model_plan: { ...routingDecision.stageModelPlan },
+    stage_fallback_plan: { ...routingDecision.stageFallbackPlan },
+    reasons: [...routingDecision.reasons],
+    risk_profile: {
+      model_tier: routingDecision.riskProfile.modelTier,
+      risk_band: routingDecision.riskProfile.riskBand,
+      complexity: routingDecision.riskProfile.complexity,
+      ambiguity: routingDecision.riskProfile.ambiguity,
+      state_unknown_count: routingDecision.riskProfile.stateUnknownCount,
+      estimated_tokens: routingDecision.riskProfile.estimatedTokens,
+    },
+  };
+}
+
+function deriveReflectionResult(params: {
+  executionMode: ExecutionContext["execution_mode"];
+  advisor: AdvisorResult;
+  guardrailEvaluation: GuardrailEvaluationActual;
+}): ReflectionResult {
+  const cautious = params.guardrailEvaluation.guardrail_result.final_mode === "cautious";
+  const blocked = params.guardrailEvaluation.guardrail_result.final_mode === "blocked";
+
+  return {
+    evaluation:
+      blocked
+        ? "The run stayed safe, but more information is required before a decisive recommendation."
+        : cautious
+          ? "The run is directionally useful, but uncertainty remains visible and should stay surfaced."
+          : "The run stayed coherent for the selected execution path and produced an auditable recommendation.",
+    scores: {
+      realism: blocked ? 3 : 4,
+      consistency: cautious ? 4 : 5,
+      profile_alignment: 4,
+      recommendation_clarity: blocked ? 3 : 4,
+    },
+    issues: [
+      {
+        type:
+          params.executionMode === "light"
+            ? "profile"
+            : params.executionMode === "standard"
+              ? "scenario"
+              : params.executionMode === "careful"
+                ? "risk"
+                : "advisor",
+        description:
+          params.executionMode === "light"
+            ? "Light mode omits scenario and risk stages, so the recommendation depends more heavily on planner framing and state summary fidelity."
+            : params.executionMode === "standard"
+              ? "Standard mode stops after scenario comparison, so downside exposure is not stress-tested with a dedicated risk stage."
+              : params.executionMode === "careful"
+                ? "Careful mode includes risk inspection but omits A/B reasoning, so the final comparison remains less explicit than the full path."
+                : "Advisor traceability should stay explicit when the path escalates to the full chain.",
+      },
+    ],
+    improvement_suggestions: [
+      {
+        target:
+          params.executionMode === "light"
+            ? "planner"
+            : params.executionMode === "standard"
+              ? "scenario"
+              : params.executionMode === "careful"
+                ? "risk"
+                : "advisor",
+        suggestion:
+          params.executionMode === "light"
+            ? "Expose the top priority and risk tolerance more directly in planner output so advisor reasoning stays grounded."
+            : params.executionMode === "standard"
+              ? "Tie each scenario horizon more explicitly to the user's top priority so the skipped risk stage is easier to audit."
+              : params.executionMode === "careful"
+                ? "Separate short-term and long-term risks so advisor can quote the key difference more directly."
+                : "Keep routing reason, core evidence, and guardrail impact explicit in the final recommendation.",
+      },
+    ],
+    overall_comment:
+      params.advisor.guardrail_applied
+        ? "The recommendation already reflects guardrail pressure, which makes the selective path easier to audit."
+        : "The selected path stayed efficient while preserving a usable recommendation and a derived monitoring trail.",
+    guardrail_review: {
+      was_needed: params.guardrailEvaluation.detected_triggers.length > 0,
+      was_triggered: params.guardrailEvaluation.guardrail_result.guardrail_triggered,
+      correctness: "good",
+    },
+  };
+}
+
 export interface SimulationRunOptions {
   userId?: string;
   sessionId?: string;
@@ -227,11 +348,14 @@ export async function runSimulationRequest(
   options?: SimulationRunOptions,
 ): Promise<SimulationRunResult> {
   const caseInput = buildCaseInput(userProfile, decision, priorMemory, stateHints);
-  const routingDecision = buildRoutingDecision(caseInput);
+  const bootstrapRoutingDecision = buildRoutingDecision(caseInput);
   const executionContext = createExecutionContext({
-    routeName: routingDecision.routeName,
-    selectedPath: routingDecision.selectedPath,
-    selectedModel: routingDecision.selectedModel,
+    routeName: bootstrapRoutingDecision.routeName,
+    executionMode: bootstrapRoutingDecision.executionMode,
+    selectedPath: bootstrapRoutingDecision.selectedPath,
+    selectedModel: bootstrapRoutingDecision.selectedModel,
+    stageModelPlan: bootstrapRoutingDecision.stageModelPlan,
+    stageFallbackPlan: bootstrapRoutingDecision.stageFallbackPlan,
     userId: options?.userId,
     sessionId: options?.sessionId,
     traceId: options?.traceId,
@@ -249,12 +373,18 @@ export async function runSimulationRequest(
       caseId,
       caseInput,
     },
+    model:
+      executionContext.stage_model_plan.state_loader ?? executionContext.selected_model,
     temperature: STABLE_TEMPERATURE,
     context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
+    fallbackModel: executionContext.stage_fallback_plan.state_loader,
   });
   stageLogs.push(stateContextStage.stageLog);
   const stateContext = stateContextStage.output;
+  const routingDecision = buildRoutingDecision(caseInput, stateContext);
+  applyRoutingDecision(executionContext, routingDecision);
+  stateContextStage.stageLog.execution_mode = executionContext.execution_mode;
+  stateContextStage.stageLog.selected_path = [...executionContext.selected_path];
 
   const plannerStage = await runStructuredStage<PlannerResult>({
     stageName: "planner",
@@ -266,148 +396,185 @@ export async function runSimulationRequest(
       caseInput,
       stateContext,
     },
+    model: executionContext.stage_model_plan.planner,
     temperature: STABLE_TEMPERATURE,
     context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
+    fallbackModel: executionContext.stage_fallback_plan.planner,
   });
   stageLogs.push(plannerStage.stageLog);
   const planner = plannerStage.output;
 
-  const scenarioAStage = await runStructuredStage<ScenarioResult>({
-    stageName: "scenario_a",
-    schemaName: "scenario_a_result",
-    schema: scenarioSchema,
-    prompt: scenarioPrompt,
-    inputPayload: {
-      caseId,
-      caseInput,
-      stateContext,
-      optionLabel: "A",
-      selectedOption: caseInput.decision.optionA,
-      decisionContext: caseInput.decision.context,
-      factors: planner.factors,
-      plannerResult: planner,
-    },
-    temperature: LOW_VARIANCE_TEMPERATURE,
-    context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
-  });
-  stageLogs.push(scenarioAStage.stageLog);
-  const scenarioA = scenarioAStage.output;
+  let scenarioA: ScenarioResult | undefined;
+  let scenarioB: ScenarioResult | undefined;
+  let riskA: RiskResult | undefined;
+  let riskB: RiskResult | undefined;
+  let reasoning: AbReasoningResult | undefined;
+  let guardrailEvaluation: GuardrailEvaluationActual | undefined;
+  let guardrail: GuardrailResult | undefined;
 
-  const scenarioBStage = await runStructuredStage<ScenarioResult>({
-    stageName: "scenario_b",
-    schemaName: "scenario_b_result",
-    schema: scenarioSchema,
-    prompt: scenarioPrompt,
-    inputPayload: {
-      caseId,
-      caseInput,
-      stateContext,
-      optionLabel: "B",
-      selectedOption: caseInput.decision.optionB,
-      decisionContext: caseInput.decision.context,
-      factors: planner.factors,
-      plannerResult: planner,
-    },
-    temperature: LOW_VARIANCE_TEMPERATURE,
-    context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
-  });
-  stageLogs.push(scenarioBStage.stageLog);
-  const scenarioB = scenarioBStage.output;
-
-  const riskAStage = await runStructuredStage<RiskResult>({
-    stageName: "risk_a",
-    schemaName: "risk_a_result",
-    schema: riskSchema,
-    prompt: riskPrompt,
-    inputPayload: {
-      caseId,
-      caseInput,
-      stateContext,
-      optionLabel: "A",
-      selectedOption: caseInput.decision.optionA,
-      decisionContext: caseInput.decision.context,
-      factors: planner.factors,
-      plannerResult: planner,
-      scenario: scenarioA,
-    },
-    temperature: LOW_VARIANCE_TEMPERATURE,
-    context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
-  });
-  stageLogs.push(riskAStage.stageLog);
-  const riskA = riskAStage.output;
-
-  const riskBStage = await runStructuredStage<RiskResult>({
-    stageName: "risk_b",
-    schemaName: "risk_b_result",
-    schema: riskSchema,
-    prompt: riskPrompt,
-    inputPayload: {
-      caseId,
-      caseInput,
-      stateContext,
-      optionLabel: "B",
-      selectedOption: caseInput.decision.optionB,
-      decisionContext: caseInput.decision.context,
-      factors: planner.factors,
-      plannerResult: planner,
-      scenario: scenarioB,
-    },
-    temperature: LOW_VARIANCE_TEMPERATURE,
-    context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
-  });
-  stageLogs.push(riskBStage.stageLog);
-  const riskB = riskBStage.output;
-
-  const reasoningStage = await runStructuredStage<AbReasoningResult>({
-    stageName: "ab_reasoning",
-    schemaName: "ab_reasoning_result",
-    schema: abReasoningSchema,
-    prompt: abReasoningPrompt,
-    inputPayload: {
-      caseId,
-      caseInput,
-      stateContext,
-      plannerResult: planner,
-      scenarioA,
-      scenarioB,
-      riskA,
-      riskB,
-    },
-    temperature: LOW_VARIANCE_TEMPERATURE,
-    context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
-  });
-  stageLogs.push(reasoningStage.stageLog);
-  const reasoning = reasoningStage.output;
-
-  const guardrailEvaluation = await evaluateSimulationGuardrail({
-    input: caseInput,
-    stateContext,
-    riskA,
-    riskB,
-    reasoning,
-  });
-  const guardrail = guardrailEvaluation.guardrail_result;
-  stageLogs.push(
-    createDeterministicStageLog({
-      stageName: "guardrail",
-      context: executionContext,
-      requestPayload: {
+  if (shouldRunGroupedStage(executionContext.selected_path, "scenario")) {
+    const scenarioAStage = await runStructuredStage<ScenarioResult>({
+      stageName: "scenario_a",
+      schemaName: "scenario_a_result",
+      schema: scenarioSchema,
+      prompt: scenarioPrompt,
+      inputPayload: {
+        caseId,
         caseInput,
         stateContext,
+        optionLabel: "A",
+        selectedOption: caseInput.decision.optionA,
+        decisionContext: caseInput.decision.context,
+        factors: planner.factors,
+        plannerResult: planner,
+      },
+      model: executionContext.stage_model_plan.scenario_a,
+      temperature: LOW_VARIANCE_TEMPERATURE,
+      context: executionContext,
+      fallbackModel: executionContext.stage_fallback_plan.scenario_a,
+    });
+    stageLogs.push(scenarioAStage.stageLog);
+    scenarioA = scenarioAStage.output;
+
+    const scenarioBStage = await runStructuredStage<ScenarioResult>({
+      stageName: "scenario_b",
+      schemaName: "scenario_b_result",
+      schema: scenarioSchema,
+      prompt: scenarioPrompt,
+      inputPayload: {
+        caseId,
+        caseInput,
+        stateContext,
+        optionLabel: "B",
+        selectedOption: caseInput.decision.optionB,
+        decisionContext: caseInput.decision.context,
+        factors: planner.factors,
+        plannerResult: planner,
+      },
+      model: executionContext.stage_model_plan.scenario_b,
+      temperature: LOW_VARIANCE_TEMPERATURE,
+      context: executionContext,
+      fallbackModel: executionContext.stage_fallback_plan.scenario_b,
+    });
+    stageLogs.push(scenarioBStage.stageLog);
+    scenarioB = scenarioBStage.output;
+  }
+
+  if (
+    shouldRunGroupedStage(executionContext.selected_path, "risk") &&
+    scenarioA &&
+    scenarioB
+  ) {
+    const riskAStage = await runStructuredStage<RiskResult>({
+      stageName: "risk_a",
+      schemaName: "risk_a_result",
+      schema: riskSchema,
+      prompt: riskPrompt,
+      inputPayload: {
+        caseId,
+        caseInput,
+        stateContext,
+        optionLabel: "A",
+        selectedOption: caseInput.decision.optionA,
+        decisionContext: caseInput.decision.context,
+        factors: planner.factors,
+        plannerResult: planner,
+        scenario: scenarioA,
+      },
+      model: executionContext.stage_model_plan.risk_a,
+      temperature: LOW_VARIANCE_TEMPERATURE,
+      context: executionContext,
+      fallbackModel: executionContext.stage_fallback_plan.risk_a,
+    });
+    stageLogs.push(riskAStage.stageLog);
+    riskA = riskAStage.output;
+
+    const riskBStage = await runStructuredStage<RiskResult>({
+      stageName: "risk_b",
+      schemaName: "risk_b_result",
+      schema: riskSchema,
+      prompt: riskPrompt,
+      inputPayload: {
+        caseId,
+        caseInput,
+        stateContext,
+        optionLabel: "B",
+        selectedOption: caseInput.decision.optionB,
+        decisionContext: caseInput.decision.context,
+        factors: planner.factors,
+        plannerResult: planner,
+        scenario: scenarioB,
+      },
+      model: executionContext.stage_model_plan.risk_b,
+      temperature: LOW_VARIANCE_TEMPERATURE,
+      context: executionContext,
+      fallbackModel: executionContext.stage_fallback_plan.risk_b,
+    });
+    stageLogs.push(riskBStage.stageLog);
+    riskB = riskBStage.output;
+  }
+
+  if (
+    shouldRunGroupedStage(executionContext.selected_path, "ab_reasoning") &&
+    scenarioA &&
+    scenarioB &&
+    riskA &&
+    riskB
+  ) {
+    const reasoningStage = await runStructuredStage<AbReasoningResult>({
+      stageName: "ab_reasoning",
+      schemaName: "ab_reasoning_result",
+      schema: abReasoningSchema,
+      prompt: abReasoningPrompt,
+      inputPayload: {
+        caseId,
+        caseInput,
+        stateContext,
+        plannerResult: planner,
+        scenarioA,
+        scenarioB,
         riskA,
         riskB,
-        reasoning,
       },
-      responsePayload: guardrail,
-    }),
-  );
-  recordGuardrailTriggers(executionContext.route_name, guardrail.triggers);
+      model: executionContext.stage_model_plan.ab_reasoning,
+      temperature: LOW_VARIANCE_TEMPERATURE,
+      context: executionContext,
+      fallbackModel: executionContext.stage_fallback_plan.ab_reasoning,
+    });
+    stageLogs.push(reasoningStage.stageLog);
+    reasoning = reasoningStage.output;
+  }
+
+  if (
+    shouldRunGroupedStage(executionContext.selected_path, "guardrail") &&
+    riskA &&
+    riskB &&
+    reasoning
+  ) {
+    guardrailEvaluation = await evaluateSimulationGuardrail({
+      input: caseInput,
+      stateContext,
+      riskA,
+      riskB,
+      reasoning,
+    });
+    guardrail = guardrailEvaluation.guardrail_result;
+    stageLogs.push(
+      createDeterministicStageLog({
+        stageName: "guardrail",
+        model: "deterministic-guardrail",
+        context: executionContext,
+        requestPayload: {
+          caseInput,
+          stateContext,
+          riskA,
+          riskB,
+          reasoning,
+        },
+        responsePayload: guardrail,
+      }),
+    );
+  }
 
   const advisorStage = await runStructuredStage<AdvisorResult>({
     stageName: "advisor",
@@ -415,64 +582,131 @@ export async function runSimulationRequest(
     schema: advisorSchema,
     prompt: advisorPrompt,
     inputPayload: {
-      executionMode: "full",
+      executionMode: executionContext.execution_mode,
       routing: {
-        execution_mode: "full",
+        execution_mode: executionContext.execution_mode,
         selected_path: routingDecision.selectedPath,
       },
       caseId,
       caseInput,
       stateContext,
       plannerResult: planner,
-      scenarioA,
-      scenarioB,
-      riskA,
-      riskB,
-      abReasoning: reasoning,
-      guardrailResult: guardrail,
+      ...(scenarioA ? { scenarioA } : {}),
+      ...(scenarioB ? { scenarioB } : {}),
+      ...(riskA ? { riskA } : {}),
+      ...(riskB ? { riskB } : {}),
+      ...(reasoning ? { abReasoning: reasoning } : {}),
+      ...(guardrail ? { guardrailResult: guardrail } : {}),
     },
+    model: executionContext.stage_model_plan.advisor,
     temperature: STABLE_TEMPERATURE,
     context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
+    fallbackModel: executionContext.stage_fallback_plan.advisor,
   });
   stageLogs.push(advisorStage.stageLog);
   const advisor = advisorStage.output;
 
-  const reflectionStage = await runStructuredStage<ReflectionResult>({
-    stageName: "reflection",
-    schemaName: "reflection_result",
-    schema: reflectionSchema,
-    prompt: reflectionPrompt,
-    inputPayload: {
-      caseId,
-      caseInput,
+  if (!guardrailEvaluation) {
+    guardrailEvaluation = deriveSelectiveGuardrailEvaluation({
+      input: caseInput,
       stateContext,
-      plannerResult: planner,
-      scenarioA,
-      scenarioB,
+      riskProfile: routingDecision.riskProfile,
+      advisor,
       riskA,
       riskB,
-      abReasoning: reasoning,
-      guardrailResult: guardrail,
-      advisorResult: advisor,
-    },
-    temperature: STABLE_TEMPERATURE,
-    context: executionContext,
-    fallbackModel: routingDecision.fallbackModel,
-  });
-  stageLogs.push(reflectionStage.stageLog);
-  const reflection = reflectionStage.output;
+    });
+    guardrail = guardrailEvaluation.guardrail_result;
+    stageLogs.push(
+      createDeterministicStageLog({
+        stageName: "guardrail",
+        model: "derived-guardrail",
+        context: executionContext,
+        requestPayload: {
+          executionMode: executionContext.execution_mode,
+          routing: buildRoutingSummary(routingDecision),
+          advisorResult: advisor,
+          riskA,
+          riskB,
+        },
+        responsePayload: guardrail,
+      }),
+    );
+  }
+
+  const finalizedGuardrail = guardrailEvaluation.guardrail_result;
+
+  recordGuardrailTriggers(
+    executionContext.route_name,
+    finalizedGuardrail.triggers,
+  );
+
+  let reflection: ReflectionResult;
+
+  if (
+    shouldRunGroupedStage(executionContext.selected_path, "reflection") &&
+    scenarioA &&
+    scenarioB &&
+    riskA &&
+    riskB &&
+    reasoning
+  ) {
+    const reflectionStage = await runStructuredStage<ReflectionResult>({
+      stageName: "reflection",
+      schemaName: "reflection_result",
+      schema: reflectionSchema,
+      prompt: reflectionPrompt,
+      inputPayload: {
+        caseId,
+        caseInput,
+        stateContext,
+        plannerResult: planner,
+        scenarioA,
+        scenarioB,
+        riskA,
+        riskB,
+        abReasoning: reasoning,
+        guardrailResult: finalizedGuardrail,
+        advisorResult: advisor,
+      },
+      model: executionContext.stage_model_plan.reflection,
+      temperature: STABLE_TEMPERATURE,
+      context: executionContext,
+      fallbackModel: executionContext.stage_fallback_plan.reflection,
+    });
+    stageLogs.push(reflectionStage.stageLog);
+    reflection = reflectionStage.output;
+  } else {
+    reflection = deriveReflectionResult({
+      executionMode: executionContext.execution_mode,
+      advisor,
+      guardrailEvaluation,
+    });
+    stageLogs.push(
+      createDeterministicStageLog({
+        stageName: "reflection",
+        model: "derived-reflection",
+        context: executionContext,
+        requestPayload: {
+          executionMode: executionContext.execution_mode,
+          advisorResult: advisor,
+          guardrailResult: finalizedGuardrail,
+        },
+        responsePayload: reflection,
+      }),
+    );
+  }
 
   const response: SimulationResponse = {
     request_id: executionContext.request_id,
+    routing: buildRoutingSummary(routingDecision),
     stateContext,
     planner,
-    scenarioA,
-    scenarioB,
-    riskA,
-    riskB,
-    reasoning,
-    guardrail,
+    ...(scenarioA ? { scenarioA } : {}),
+    ...(scenarioB ? { scenarioB } : {}),
+    ...(riskA ? { riskA } : {}),
+    ...(riskB ? { riskB } : {}),
+    ...(reasoning ? { reasoning } : {}),
+    guardrail: finalizedGuardrail,
     advisor,
     reflection,
   };
@@ -501,8 +735,11 @@ export async function runSimulationRequest(
     user_id: executionContext.user_id,
     session_id: executionContext.session_id,
     route_name: executionContext.route_name,
+    execution_mode: executionContext.execution_mode,
     selected_path: executionContext.selected_path,
     selected_model: executionContext.selected_model,
+    stage_model_plan: { ...executionContext.stage_model_plan },
+    stage_fallback_plan: { ...executionContext.stage_fallback_plan },
     prompt_version: executionContext.prompt_version,
     context_version: executionContext.context_version,
     decision: advisor.decision,

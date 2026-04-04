@@ -339,6 +339,106 @@ function StateContextCard({ stateContext }: { stateContext: StateContext }) {
   );
 }
 
+function RoutingCard({
+  routing,
+}: {
+  routing: SimulationResponse["routing"];
+}) {
+  return (
+    <section className="card-surface rounded-[28px] p-6">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="section-label">Routing</p>
+          <h3 className="display-font mt-2 text-xl font-semibold text-slate-900">
+            실행 경로 요약
+          </h3>
+        </div>
+        <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold uppercase text-white">
+          {routing.execution_mode}
+        </span>
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-4">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Risk Band
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {routing.risk_profile.risk_band}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Complexity
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {routing.risk_profile.complexity}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Ambiguity
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {routing.risk_profile.ambiguity}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Model Tier
+          </p>
+          <p className="mt-2 text-xl font-semibold text-slate-950">
+            {routing.risk_profile.model_tier}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+          Selected Path
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {routing.selected_path.map((stage) => (
+            <span
+              key={stage}
+              className="rounded-full border border-amber-900/10 bg-amber-600/[0.08] px-3 py-1 text-sm font-medium text-amber-900"
+            >
+              {stage}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+          Stage Model Plan
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {Object.entries(routing.stage_model_plan).map(([stage, model]) => (
+            <div
+              key={stage}
+              className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm text-slate-700"
+            >
+              <span className="font-semibold text-slate-950">{stage}</span>: {model}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <ul className="mt-4 grid gap-3">
+        {routing.reasons.map((reason, index) => (
+          <li
+            key={`${reason}-${index}`}
+            className="rounded-2xl border border-slate-900/8 bg-white/70 px-4 py-3 text-sm leading-7 text-slate-700"
+          >
+            {reason}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function RiskCard({
   title,
   risk,
@@ -631,7 +731,13 @@ function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
   );
 }
 
-function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
+function GuardrailCard({
+  guardrail,
+  derived = false,
+}: {
+  guardrail: GuardrailResult;
+  derived?: boolean;
+}) {
   const activeReasoningSignals = Object.entries(guardrail.reasoning_signals)
     .filter(([, enabled]) => enabled)
     .map(([label]) => formatReasoningSignal(label));
@@ -643,9 +749,16 @@ function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
         <h3 className="display-font text-2xl font-semibold text-slate-950">
           결론 안전장치
         </h3>
-        <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
-          {guardrail.final_mode}
-        </span>
+        <div className="flex items-center gap-2">
+          {derived ? (
+            <span className="rounded-full border border-slate-900/10 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
+              derived
+            </span>
+          ) : null}
+          <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
+            {guardrail.final_mode}
+          </span>
+        </div>
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-4">
         <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
@@ -717,7 +830,13 @@ function GuardrailCard({ guardrail }: { guardrail: GuardrailResult }) {
   );
 }
 
-function ReflectionCard({ reflection }: { reflection: ReflectionResult }) {
+function ReflectionCard({
+  reflection,
+  derived = false,
+}: {
+  reflection: ReflectionResult;
+  derived?: boolean;
+}) {
   const scoreEntries: Array<{
     label: keyof ReflectionResult["scores"];
     value: number;
@@ -741,6 +860,11 @@ function ReflectionCard({ reflection }: { reflection: ReflectionResult }) {
         <h3 className="display-font text-2xl font-semibold text-slate-950">
           결과 검증
         </h3>
+        {derived ? (
+          <span className="rounded-full border border-slate-900/10 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
+            derived
+          </span>
+        ) : null}
       </div>
       <p className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
         {reflection.evaluation}
@@ -891,7 +1015,8 @@ export default function HomePage() {
               사용자 프로필과 두 가지 선택지를 입력하면 State Loader가 먼저
               사용자 상태를 구조화하고, 이어서 Planner, Scenario, Risk, A/B
               Reasoning, Guardrail, Advisor, Reflection 단계가 그 상태를
-              공통으로 사용합니다.
+              공통으로 사용합니다. 실제 실행 경로는 요청 위험도에 따라
+              `light`, `standard`, `careful`, `full` 중 하나로 선택됩니다.
             </p>
           </div>
 
@@ -1077,9 +1202,9 @@ export default function HomePage() {
                 Agent chain 실행 중
               </h2>
               <p className="mt-3">
-                State Loader부터 Planner, Guardrail, Reflection까지 순서대로
-                실행하고 있습니다. 응답이 도착하면 결과 카드가 자동으로
-                채워집니다.
+                State Loader를 먼저 실행한 뒤 요청 특성에 맞춰 selective path를
+                결정하고 있습니다. 응답이 도착하면 실제 선택된 경로와 stage별
+                모델 계획이 함께 표시됩니다.
               </p>
             </div>
           ) : null}
@@ -1091,25 +1216,36 @@ export default function HomePage() {
                 결과 대기 중
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                좌측 폼을 제출하면 state context, Planner, 시나리오, 리스크,
-                A/B reasoning, guardrail, 최종 판단, reflection 검증 결과가
-                카드 형태로 정리됩니다.
+                좌측 폼을 제출하면 state context를 먼저 만들고, 요청 위험도에
+                따라 필요한 단계만 실행합니다. 실행 경로와 stage별 모델 계획도
+                함께 표시됩니다.
               </p>
             </div>
           ) : null}
 
           {result ? (
             <>
+              <RoutingCard routing={result.routing} />
               <StateContextCard stateContext={result.stateContext} />
               <PlannerCard planner={result.planner} />
-              <TimelineCard title="선택지 A 시나리오" scenario={result.scenarioA} />
-              <TimelineCard title="선택지 B 시나리오" scenario={result.scenarioB} />
-              <RiskCard title="Risk A" risk={result.riskA} />
-              <RiskCard title="Risk B" risk={result.riskB} />
-              <ReasoningCard reasoning={result.reasoning} />
-              <GuardrailCard guardrail={result.guardrail} />
+              {result.scenarioA ? (
+                <TimelineCard title="선택지 A 시나리오" scenario={result.scenarioA} />
+              ) : null}
+              {result.scenarioB ? (
+                <TimelineCard title="선택지 B 시나리오" scenario={result.scenarioB} />
+              ) : null}
+              {result.riskA ? <RiskCard title="Risk A" risk={result.riskA} /> : null}
+              {result.riskB ? <RiskCard title="Risk B" risk={result.riskB} /> : null}
+              {result.reasoning ? <ReasoningCard reasoning={result.reasoning} /> : null}
+              <GuardrailCard
+                guardrail={result.guardrail}
+                derived={!result.routing.selected_path.includes("guardrail")}
+              />
               <AdvisorCard advisor={result.advisor} />
-              <ReflectionCard reflection={result.reflection} />
+              <ReflectionCard
+                reflection={result.reflection}
+                derived={!result.routing.selected_path.includes("reflection")}
+              />
             </>
           ) : null}
         </section>

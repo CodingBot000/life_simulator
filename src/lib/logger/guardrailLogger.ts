@@ -114,21 +114,21 @@ function round(value: number): number {
 
 function buildSignalCorpus(
   input: SimulationRequest,
-  riskA: RiskResult,
-  riskB: RiskResult,
-  reasoning: AbReasoningResult,
+  riskA?: RiskResult,
+  riskB?: RiskResult,
+  reasoning?: AbReasoningResult,
 ): string {
   return [
     input.decision.context,
     input.decision.optionA,
     input.decision.optionB,
-    riskA.reasons.join(" "),
-    riskB.reasons.join(" "),
-    reasoning.reasoning.a_reasoning.summary,
-    reasoning.reasoning.b_reasoning.summary,
-    reasoning.reasoning.final_selection.why_selected,
-    reasoning.reasoning.comparison.reason,
-    reasoning.reasoning.comparison.conflicts.join(" "),
+    riskA?.reasons.join(" ") ?? "",
+    riskB?.reasons.join(" ") ?? "",
+    reasoning?.reasoning.a_reasoning.summary ?? "",
+    reasoning?.reasoning.b_reasoning.summary ?? "",
+    reasoning?.reasoning.final_selection.why_selected ?? "",
+    reasoning?.reasoning.comparison.reason ?? "",
+    reasoning?.reasoning.comparison.conflicts.join(" ") ?? "",
   ]
     .join(" ")
     .toLowerCase();
@@ -137,9 +137,9 @@ function buildSignalCorpus(
 function inferSignals(
   input: SimulationRequest,
   stateContext: StateContext,
-  riskA: RiskResult,
-  riskB: RiskResult,
-  reasoning: AbReasoningResult,
+  riskA: RiskResult | undefined,
+  riskB: RiskResult | undefined,
+  reasoning: AbReasoningResult | undefined,
   evaluation: GuardrailEvaluationActual,
 ): GuardrailLogSignals {
   const corpus = buildSignalCorpus(input, riskA, riskB, reasoning);
@@ -155,12 +155,12 @@ function inferSignals(
     effect_issue:
       hasKeyword(corpus, EFFECT_KEYWORDS) ||
       evaluation.risk_level !== "low" ||
-      reasoning.reasoning.comparison.conflicts.length > 0,
+      (reasoning?.reasoning.comparison.conflicts.length ?? 0) > 0,
     recovery_issue:
       hasKeyword(corpus, RECOVERY_KEYWORDS) ||
       evaluation.uncertainty_score > 0.4 ||
-      riskA.risk_level === "high" ||
-      riskB.risk_level === "high",
+      riskA?.risk_level === "high" ||
+      riskB?.risk_level === "high",
     safety_issue:
       hasKeyword(corpus, SAFETY_KEYWORDS) ||
       evaluation.detected_triggers.includes("high_risk"),
@@ -237,9 +237,9 @@ export function mapGuardrailModeToOutputMode(
 
 function buildReasoningTrace(
   input: SimulationRequest,
-  riskA: RiskResult,
-  riskB: RiskResult,
-  reasoning: AbReasoningResult,
+  riskA: RiskResult | undefined,
+  riskB: RiskResult | undefined,
+  reasoning: AbReasoningResult | undefined,
   evaluation: GuardrailEvaluationActual,
   signals: GuardrailLogSignals,
   decision: GuardrailDecision,
@@ -255,8 +255,8 @@ function buildReasoningTrace(
     `threshold_compare: risk=${evaluation.risk_level}, threshold_score=${evaluation.threshold_score}, confidence=${round(
       evaluation.confidence_score,
     )}, uncertainty=${round(evaluation.uncertainty_score)}`,
-    `risk_summary: A=${riskA.risk_level} (${riskA.reasons.join(" | ") || "none"}) / B=${riskB.risk_level} (${riskB.reasons.join(" | ") || "none"})`,
-    `reasoning_conflicts: ${reasoning.reasoning.comparison.conflicts.join(" | ") || "none"}`,
+    `risk_summary: A=${riskA?.risk_level ?? "not_run"} (${riskA?.reasons.join(" | ") || "none"}) / B=${riskB?.risk_level ?? "not_run"} (${riskB?.reasons.join(" | ") || "none"})`,
+    `reasoning_conflicts: ${reasoning?.reasoning.comparison.conflicts.join(" | ") || "not_run"}`,
     `final_decision: ${decision} because ${evaluation.reason}`,
   ];
 }
@@ -264,9 +264,9 @@ function buildReasoningTrace(
 export function buildGuardrailDerivedLog(params: {
   input: SimulationRequest;
   stateContext: StateContext;
-  riskA: RiskResult;
-  riskB: RiskResult;
-  reasoning: AbReasoningResult;
+  riskA?: RiskResult;
+  riskB?: RiskResult;
+  reasoning?: AbReasoningResult;
   evaluation: GuardrailEvaluationActual;
 }): GuardrailDerivedLog {
   const { input, stateContext, riskA, riskB, reasoning, evaluation } = params;
@@ -295,7 +295,11 @@ export function buildGuardrailDerivedLog(params: {
       trigger_count: evaluation.detected_triggers.length,
       reason: evaluation.reason,
     },
-    reasons: [evaluation.reason, ...riskA.reasons, ...riskB.reasons].slice(0, 6),
+    reasons: [
+      evaluation.reason,
+      ...(riskA?.reasons ?? []),
+      ...(riskB?.reasons ?? []),
+    ].slice(0, 6),
     threshold_hit: evaluation.detected_triggers,
     signals,
     threshold_eval: buildThresholdEval(signals, evaluation),
@@ -346,9 +350,9 @@ export function buildGuardrailDerivedLog(params: {
 export function buildGuardrailLogRecord(params: {
   input: SimulationRequest;
   stateContext: StateContext;
-  riskA: RiskResult;
-  riskB: RiskResult;
-  reasoning: AbReasoningResult;
+  riskA?: RiskResult;
+  riskB?: RiskResult;
+  reasoning?: AbReasoningResult;
   evaluation: GuardrailEvaluationActual;
 }): GuardrailLogRecord {
   const { evaluation } = params;

@@ -498,6 +498,32 @@ export async function runSimulationChain(
 
   const response: SimulationResponse = {
     request_id: requestId,
+    routing: {
+      execution_mode: "full",
+      selected_path: [...FULL_SELECTED_PATH],
+      stage_model_plan: {
+        state_loader: OPENAI_MODEL,
+        planner: OPENAI_MODEL,
+        scenario_a: OPENAI_MODEL,
+        scenario_b: OPENAI_MODEL,
+        risk_a: OPENAI_MODEL,
+        risk_b: OPENAI_MODEL,
+        ab_reasoning: OPENAI_MODEL,
+        guardrail: "deterministic",
+        advisor: OPENAI_MODEL,
+        reflection: OPENAI_MODEL,
+      },
+      stage_fallback_plan: {},
+      reasons: ["legacy_full_path"],
+      risk_profile: {
+        model_tier: "premium",
+        risk_band: "medium",
+        complexity: "medium",
+        ambiguity: "medium",
+        state_unknown_count: 0,
+        estimated_tokens: usageTotals.tokens,
+      },
+    },
     stateContext,
     planner,
     scenarioA,

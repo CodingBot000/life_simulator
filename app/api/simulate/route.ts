@@ -69,6 +69,12 @@ function shouldReturnDegraded(errorCode: string): boolean {
   ].includes(errorCode);
 }
 
+function serializeHeaderPlan(plan: Record<string, string>): string {
+  return Object.entries(plan)
+    .map(([stage, model]) => `${stage}:${model}`)
+    .join(",");
+}
+
 function isRiskTolerance(value: unknown): value is RiskTolerance {
   return value === "low" || value === "medium" || value === "high";
 }
@@ -370,6 +376,11 @@ export async function POST(request: Request) {
         "x-request-id": result.executionContext.request_id,
         "x-trace-id": result.executionContext.trace_id,
         "x-llm-model": result.executionContext.selected_model,
+        "x-llm-execution-mode": result.executionContext.execution_mode,
+        "x-llm-selected-path": result.executionContext.selected_path.join(","),
+        "x-llm-stage-model-plan": serializeHeaderPlan(
+          result.executionContext.stage_model_plan,
+        ),
       },
     });
   } catch (error) {

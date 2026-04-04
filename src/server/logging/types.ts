@@ -1,5 +1,6 @@
 import type { GuardrailEvaluationActual } from "../../lib/guardrail-eval.ts";
 import type {
+  ExecutionMode,
   RequestLog,
   SimulationRequest,
   SimulationResponse,
@@ -11,6 +12,7 @@ export interface LLMStageLogEntry {
   user_id: string;
   session_id: string;
   route_name: string;
+  execution_mode: ExecutionMode;
   selected_path: string[];
   stage_name: string;
   model: string;
@@ -38,8 +40,11 @@ export interface RequestExecutionEnvelope {
   user_id: string;
   session_id: string;
   route_name: string;
+  execution_mode: ExecutionMode;
   selected_path: string[];
   selected_model: string;
+  stage_model_plan: Record<string, string>;
+  stage_fallback_plan: Record<string, string>;
   prompt_version: string;
   context_version: string;
   decision: string;

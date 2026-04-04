@@ -34,11 +34,11 @@ export function buildRequestLog(params: {
   input: SimulationRequest;
   stateContext: StateContext;
   planner: PlannerResult;
-  scenarioA: ScenarioResult;
-  scenarioB: ScenarioResult;
-  riskA: RiskResult;
-  riskB: RiskResult;
-  reasoning: AbReasoningResult;
+  scenarioA?: ScenarioResult;
+  scenarioB?: ScenarioResult;
+  riskA?: RiskResult;
+  riskB?: RiskResult;
+  reasoning?: AbReasoningResult;
   guardrailEvaluation: GuardrailEvaluationActual;
   advisor: AdvisorResult;
   latencyMs: number;
@@ -70,14 +70,22 @@ export function buildRequestLog(params: {
     },
     intermediate: {
       planner: params.planner,
-      scenario: {
-        optionA: params.scenarioA,
-        optionB: params.scenarioB,
-      },
-      risk: {
-        optionA: params.riskA,
-        optionB: params.riskB,
-      },
+      ...(params.scenarioA && params.scenarioB
+        ? {
+            scenario: {
+              optionA: params.scenarioA,
+              optionB: params.scenarioB,
+            },
+          }
+        : {}),
+      ...(params.riskA && params.riskB
+        ? {
+            risk: {
+              optionA: params.riskA,
+              optionB: params.riskB,
+            },
+          }
+        : {}),
       ab_reasoning: params.reasoning,
     },
     guardrail,

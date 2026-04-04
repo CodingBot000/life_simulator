@@ -18,6 +18,7 @@ import {
   estimateCostForTokens,
   getModelDefinition,
 } from "./model-registry.ts";
+import { codexCliProvider } from "./providers/codex-cli.ts";
 import { mockProvider } from "./providers/mock.ts";
 import { openAiProvider } from "./providers/openai.ts";
 import type {
@@ -79,6 +80,10 @@ const validatorCache = new Map<string, ValidateFunction>();
 const defaultCache = new InMemoryTtlCache<StructuredLLMResponse<unknown>>();
 
 function getProvider(providerName: string): LLMProvider {
+  if (providerName === "codex") {
+    return codexCliProvider;
+  }
+
   if (providerName === "openai") {
     return openAiProvider;
   }

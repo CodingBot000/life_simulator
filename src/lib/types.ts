@@ -1,4 +1,5 @@
 export type RiskTolerance = "low" | "medium" | "high";
+export type ExecutionMode = "light" | "standard" | "careful" | "full";
 
 export interface UserProfile {
   age: number;
@@ -546,15 +547,32 @@ export interface ReflectionResult {
   guardrail_review: ReflectionGuardrailReview;
 }
 
+export interface SimulationRoutingSummary {
+  execution_mode: ExecutionMode;
+  selected_path: string[];
+  stage_model_plan: Record<string, string>;
+  stage_fallback_plan: Record<string, string>;
+  reasons: string[];
+  risk_profile: {
+    model_tier: "low_cost" | "premium";
+    risk_band: RiskTolerance;
+    complexity: RiskTolerance;
+    ambiguity: RiskTolerance;
+    state_unknown_count: number;
+    estimated_tokens: number;
+  };
+}
+
 export interface SimulationResponse {
   request_id: string;
+  routing: SimulationRoutingSummary;
   stateContext: StateContext;
   planner: PlannerResult;
-  scenarioA: ScenarioResult;
-  scenarioB: ScenarioResult;
-  riskA: RiskResult;
-  riskB: RiskResult;
-  reasoning: AbReasoningResult;
+  scenarioA?: ScenarioResult;
+  scenarioB?: ScenarioResult;
+  riskA?: RiskResult;
+  riskB?: RiskResult;
+  reasoning?: AbReasoningResult;
   guardrail: GuardrailResult;
   advisor: AdvisorResult;
   reflection: ReflectionResult;
