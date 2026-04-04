@@ -42,12 +42,12 @@ jq -n \
   --arg description "Prepared request payload for Codex CLI live execution." \
   --arg prompt_file "$(relative_to_root "$PROMPT_FILE")" \
   --arg input_source "$(relative_to_root "$INPUT_FILE")" \
-  --arg output_file "$(relative_to_root "$RESULT_FILE")" \
   --arg prompt_text "$PROMPT_TEXT" \
   --arg input_json "$INPUT_JSON" \
   --argjson input_data "$INPUT_DATA_COMPACT" \
   --argjson expected_output_schema "$SCHEMA_JSON" \
   --argjson previous_stage_result_files "[\"$(relative_to_root "$STATE_CONTEXT_FILE")\"]" \
+  --argjson provider_payload "$(live_provider_payload_json "planner" "$RESULT_FILE" "$INPUT_FILE")" \
   '{
     stage: $stage,
     generated_at: $generated_at,
@@ -59,11 +59,7 @@ jq -n \
     expected_output_schema: $expected_output_schema,
     input_data: $input_data,
     input_json: $input_json,
-    provider_payload: {
-      runner: "codex exec",
-      call_status: "ready",
-      output_file: $output_file
-    }
+    provider_payload: $provider_payload
   }' > "$REQUEST_FILE"
 
 jq -n \

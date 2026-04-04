@@ -153,6 +153,132 @@ state_context_stub_path() {
   printf '%s/state-context.stub.json\n' "$OUTPUTS_DIR"
 }
 
+stage_plan_key_for_stage_name() {
+  case "$1" in
+    state_loader|state-loader)
+      printf 'state_loader\n'
+      ;;
+    planner)
+      printf 'planner\n'
+      ;;
+    scenario-a)
+      printf 'scenario_a\n'
+      ;;
+    scenario-b)
+      printf 'scenario_b\n'
+      ;;
+    risk-a)
+      printf 'risk_a\n'
+      ;;
+    risk-b)
+      printf 'risk_b\n'
+      ;;
+    ab_reasoning|reasoning)
+      printf 'ab_reasoning\n'
+      ;;
+    advisor)
+      printf 'advisor\n'
+      ;;
+    reflection)
+      printf 'reflection\n'
+      ;;
+    *)
+      echo "Error: unsupported stage name '$1' for stage model resolution." >&2
+      exit 1
+      ;;
+  esac
+}
+
+resolve_routing_json_for_stage() {
+  local input_file="$1"
+  local routing_file=""
+  local case_id
+  local state_context_file
+
+  case_id="$(case_id_from_output_dir "$OUTPUTS_DIR")"
+
+  if routing_file="$(optional_stage_result_file "routing" 2>/dev/null)"; then
+    cat "$routing_file"
+    return 0
+  fi
+
+  state_context_file="$(state_context_path)"
+
+  if [ -f "$state_context_file" ]; then
+    node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types \
+      "$REPO_ROOT/scripts/resolve_playground_routing.ts" \
+      "$input_file" \
+      "$state_context_file" \
+      "$case_id"
+    return 0
+  fi
+
+  node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types \
+    "$REPO_ROOT/scripts/resolve_playground_routing.ts" \
+    "$input_file" \
+    "-" \
+    "$case_id"
+}
+
+live_provider_payload_json() {
+  local stage_name="$1"
+  local output_file="$2"
+  local input_file="$3"
+  local stage_plan_key
+  local routing_json
+  local model
+  local fallback_model
+  local model_plan_source
+  local forced_model="${PLAYGROUND_FORCE_MODEL:-${CODEX_MODEL:-}}"
+
+  stage_plan_key="$(stage_plan_key_for_stage_name "$stage_name")"
+
+  if [ -n "${PLAYGROUND_FORCE_MODEL:-}" ]; then
+    model_plan_source="playground_force_model"
+  elif [ -n "${CODEX_MODEL:-}" ]; then
+    model_plan_source="codex_model_override"
+  elif optional_stage_result_file "routing" >/dev/null 2>&1; then
+    model_plan_source="routing_result"
+  elif [ -f "$(state_context_path)" ]; then
+    model_plan_source="computed_web_routing"
+  else
+    model_plan_source="bootstrap_web_routing"
+  fi
+
+  routing_json="$(resolve_routing_json_for_stage "$input_file")"
+
+  if [ -n "$forced_model" ]; then
+    model="$forced_model"
+  else
+    model="$(printf '%s' "$routing_json" | jq -r --arg key "$stage_plan_key" '.routing.stage_model_plan[$key] // empty')"
+  fi
+
+  fallback_model="$(printf '%s' "$routing_json" | jq -r --arg key "$stage_plan_key" '.routing.stage_fallback_plan[$key] // empty')"
+
+  if [ -z "$model" ]; then
+    echo "Error: unable to resolve model for stage '$stage_name'." >&2
+    exit 1
+  fi
+
+  jq -cn \
+    --arg runner "codex exec" \
+    --arg call_status "ready" \
+    --arg output_file "$(relative_to_root "$output_file")" \
+    --arg model "$model" \
+    --arg fallback_model "$fallback_model" \
+    --arg stage_plan_key "$stage_plan_key" \
+    --arg model_plan_source "$model_plan_source" \
+    '{
+      runner: $runner,
+      call_status: $call_status,
+      output_file: $output_file,
+      model: $model,
+      fallback_model: (if $fallback_model | length > 0 then $fallback_model else null end),
+      stage_plan_key: $stage_plan_key,
+      model_plan_source: $model_plan_source
+    }'
+}
+
 selected_path_json_for_mode() {
   case "$1" in
     light)
@@ -224,274 +350,25 @@ aggregate_summary_path() {
 }
 
 write_default_guardrail_result() {
-  local execution_mode="${1:-$(infer_execution_mode_from_artifacts)}"
-  local stub_file
-  local result_file
-  local routing_file=""
-  local risk_a_file=""
-  local risk_b_file=""
-  local state_context_file
-  local routing_risk_level="low"
-  local routing_ambiguity="low"
-  local risk_a_level="not_run"
-  local risk_b_level="not_run"
-  local state_unknown_count="0"
-  local guardrail_triggered="false"
-  local final_mode="normal"
-  local triggers_json
-  local strategy_json
-  local -a triggers=()
-  local -a strategies=()
+  local input_file="$OUTPUTS_DIR/input.json"
 
-  require_jq
-
-  stub_file="$(stage_stub_path "guardrail")"
-  result_file="$(stage_result_path "guardrail")"
-  state_context_file="$(state_context_path)"
-
-  if [ -f "$state_context_file" ]; then
-    state_unknown_count="$(jq -r '[.user_state.profile_state.risk_preference, .user_state.profile_state.decision_style, .user_state.situational_state.career_stage, .user_state.situational_state.financial_pressure, .user_state.situational_state.time_pressure, .user_state.situational_state.emotional_state] | map(select(. == "unknown" or . == "none")) | length' "$state_context_file")"
+  if [ ! -f "$input_file" ]; then
+    echo "Error: input snapshot not found for derived guardrail helper: $input_file" >&2
+    exit 1
   fi
 
-  if routing_file="$(optional_stage_result_file "routing" 2>/dev/null)"; then
-    routing_risk_level="$(jq -r '.routing.risk_level' "$routing_file")"
-    routing_ambiguity="$(jq -r '.routing.ambiguity' "$routing_file")"
-  fi
-
-  if risk_a_file="$(optional_stage_result_file "risk-a" 2>/dev/null)"; then
-    risk_b_file="$(resolve_stage_result_file "risk-b")"
-    risk_a_level="$(jq -r '.risk_level' "$risk_a_file")"
-    risk_b_level="$(jq -r '.risk_level' "$risk_b_file")"
-  fi
-
-  if [ "$routing_ambiguity" = "high" ] || [ "$state_unknown_count" -ge 3 ]; then
-    triggers+=("ambiguity_high")
-    strategies+=("ask_more_info")
-  fi
-
-  if [ "$routing_risk_level" = "high" ] || [ "$risk_a_level" = "high" ] || [ "$risk_b_level" = "high" ]; then
-    triggers+=("high_risk")
-    strategies+=("risk_warning")
-  fi
-
-  if [ "${#triggers[@]}" -gt 0 ]; then
-    guardrail_triggered="true"
-    final_mode="cautious"
-  fi
-
-  triggers_json='[]'
-  strategy_json='[]'
-
-  if [ "${#triggers[@]}" -gt 0 ]; then
-    triggers_json="$(array_to_json "${triggers[@]}")"
-    strategy_json="$(array_to_json "${strategies[@]}")"
-  fi
-
-  jq -n \
-    --argjson guardrail_triggered "$guardrail_triggered" \
-    --argjson triggers "$triggers_json" \
-    --argjson strategy "$strategy_json" \
-    --arg final_mode "$final_mode" \
-    '{
-      guardrail_triggered: $guardrail_triggered,
-      triggers: $triggers,
-      strategy: $strategy,
-      final_mode: $final_mode
-    }' > "$stub_file"
-
-  cp "$stub_file" "$result_file"
-
-  echo "Created $(relative_to_root "$stub_file")"
-  echo "Created $(relative_to_root "$result_file") as derived guardrail output for execution_mode=$execution_mode"
+  "$SCRIPT_DIR/run-guardrail.sh" "$input_file" "$OUTPUTS_DIR"
 }
 
 write_default_reflection_result() {
-  local execution_mode="${1:-$(infer_execution_mode_from_artifacts)}"
-  local stub_file
-  local result_file
-  local advisor_file
-  local guardrail_file=""
-  local routing_file=""
-  local risk_a_file=""
-  local risk_b_file=""
-  local advisor_decision
-  local advisor_confidence
-  local advisor_guardrail_applied
-  local guardrail_final_mode="normal"
-  local guardrail_triggered="false"
-  local guardrail_was_needed="false"
-  local guardrail_correctness="good"
-  local routing_risk_level="low"
-  local routing_ambiguity="low"
-  local risk_a_level="not_run"
-  local risk_b_level="not_run"
-  local evaluation_text
-  local overall_comment
-  local stage_issue_type="advisor"
-  local stage_issue_text
-  local stage_target="advisor"
-  local stage_suggestion_text
+  local input_file="$OUTPUTS_DIR/input.json"
 
-  require_jq
-
-  stub_file="$(stage_stub_path "reflection")"
-  result_file="$(stage_result_path "reflection")"
-  advisor_file="$(resolve_stage_result_file "advisor")"
-
-  advisor_decision="$(jq -r '.decision' "$advisor_file")"
-  advisor_confidence="$(jq -r '.confidence' "$advisor_file")"
-  advisor_guardrail_applied="$(jq -r '.guardrail_applied' "$advisor_file")"
-
-  if guardrail_file="$(optional_stage_result_file "guardrail" 2>/dev/null)"; then
-    guardrail_triggered="$(jq -r '.guardrail_triggered' "$guardrail_file")"
-    guardrail_final_mode="$(jq -r '.final_mode' "$guardrail_file")"
+  if [ ! -f "$input_file" ]; then
+    echo "Error: input snapshot not found for derived reflection helper: $input_file" >&2
+    exit 1
   fi
 
-  if routing_file="$(optional_stage_result_file "routing" 2>/dev/null)"; then
-    routing_risk_level="$(jq -r '.routing.risk_level' "$routing_file")"
-    routing_ambiguity="$(jq -r '.routing.ambiguity' "$routing_file")"
-  fi
-
-  if risk_a_file="$(optional_stage_result_file "risk-a" 2>/dev/null)"; then
-    risk_b_file="$(resolve_stage_result_file "risk-b")"
-    risk_a_level="$(jq -r '.risk_level' "$risk_a_file")"
-    risk_b_level="$(jq -r '.risk_level' "$risk_b_file")"
-  fi
-
-  if [ "$guardrail_triggered" = "true" ] || [ "$guardrail_final_mode" != "normal" ] || [ "$routing_risk_level" = "high" ] || [ "$routing_ambiguity" = "high" ] || [ "$risk_a_level" = "high" ] || [ "$risk_b_level" = "high" ]; then
-    guardrail_was_needed="true"
-  fi
-
-  if [ "$guardrail_was_needed" = "true" ] && [ "$guardrail_triggered" = "false" ]; then
-    guardrail_correctness="missing"
-  elif [ "$guardrail_was_needed" = "false" ] && [ "$guardrail_triggered" = "true" ]; then
-    guardrail_correctness="over"
-  fi
-
-  case "$execution_mode" in
-    light)
-      stage_issue_type="profile"
-      stage_issue_text="light 경로에서는 planner와 advisor만 사용하므로, 우선순위와 risk_tolerance가 추천 근거에 얼마나 직접 연결됐는지 더 선명하게 보여줄 필요가 있다."
-      stage_target="planner"
-      stage_suggestion_text="planner에서 최우선 priority와 risk_tolerance를 한 줄 요약으로 고정해 advisor reason이 그대로 재사용할 수 있게 하라."
-      ;;
-    standard)
-      stage_issue_type="scenario"
-      stage_issue_text="standard 경로에서는 scenario 비교가 핵심이므로, 각 옵션의 시간축 변화가 최우선 priority와 어떻게 연결되는지 더 직접적으로 드러낼 필요가 있다."
-      stage_target="scenario"
-      stage_suggestion_text="scenario A/B의 3개월, 1년, 3년 문장마다 사용자의 최우선 priority 유지 여부를 한 문장씩 명시하라."
-      ;;
-    careful)
-      stage_issue_type="risk"
-      stage_issue_text="careful 경로에서는 risk 판단이 guardrail 필요성에 직접 연결되므로, risk 차이가 advisor reason에 어떻게 반영됐는지 더 또렷해야 한다."
-      stage_target="risk"
-      stage_suggestion_text="risk 단계에서 high/medium 차이를 advisor가 그대로 인용할 수 있도록 단기 리스크와 장기 리스크를 분리해 적어라."
-      ;;
-    *)
-      stage_issue_type="advisor"
-      stage_issue_text="현재 실행 경로의 핵심 증거가 advisor reason에 압축돼 있어, 어떤 근거가 결론을 지탱하는지 추적성이 약해질 수 있다."
-      stage_target="advisor"
-      stage_suggestion_text="advisor reason을 routing, 핵심 증거, 최종 선택 순서로 다시 정리해 guardrail 영향이 한눈에 보이게 하라."
-      ;;
-  esac
-
-  case "$guardrail_final_mode" in
-    blocked)
-      evaluation_text="guardrail final_mode=blocked 조건에서 advisor가 결론을 보류한 판단이 현재 증거 수준에 비해 과하거나 부족하지 않은지 다시 점검한다."
-      overall_comment="blocked 모드에서는 결론 보류 자체는 타당하지만, 어떤 추가 정보가 들어오면 판단을 재개할지까지 적어야 검증 가능성이 높아진다."
-      ;;
-    cautious)
-      evaluation_text="guardrail final_mode=cautious 조건에서 advisor가 약한 추천과 낮아진 confidence로 위험 신호를 충분히 반영했는지 다시 점검한다."
-      overall_comment="cautious 모드 전환은 적절하며, 위험 신호를 유지한 채 추천 강도를 낮춘 점이 현재 실행 경로와 잘 맞는다."
-      ;;
-    *)
-      evaluation_text="guardrail final_mode=normal 조건에서 advisor가 불필요하게 보수적이지 않으면서도 현재 실행 경로의 증거를 충분히 연결했는지 다시 점검한다."
-      overall_comment="normal 모드에서는 현재 추천 강도가 크게 과하지 않지만, 사용된 근거 축을 더 분명히 적으면 검증 추적성이 좋아진다."
-      ;;
-  esac
-
-  jq -n \
-    --arg execution_mode "$execution_mode" \
-    --arg advisor_decision "$advisor_decision" \
-    --argjson advisor_confidence "$advisor_confidence" \
-    --arg advisor_guardrail_applied "$advisor_guardrail_applied" \
-    --arg guardrail_final_mode "$guardrail_final_mode" \
-    --arg risk_a_level "$risk_a_level" \
-    --arg risk_b_level "$risk_b_level" \
-    --arg routing_risk_level "$routing_risk_level" \
-    --arg routing_ambiguity "$routing_ambiguity" \
-    --arg evaluation_text "$evaluation_text" \
-    --arg overall_comment "$overall_comment" \
-    --arg stage_issue_type "$stage_issue_type" \
-    --arg stage_issue_text "$stage_issue_text" \
-    --arg stage_target "$stage_target" \
-    --arg stage_suggestion_text "$stage_suggestion_text" \
-    --argjson guardrail_was_needed "$guardrail_was_needed" \
-    --argjson guardrail_was_triggered "$guardrail_triggered" \
-    --arg guardrail_correctness "$guardrail_correctness" \
-    '{
-      evaluation: $evaluation_text,
-      scores: {
-        realism: 4,
-        consistency: (if $guardrail_correctness == "good" then 4 else 2 end),
-        profile_alignment: 4,
-        recommendation_clarity: (
-          if $guardrail_final_mode == "blocked" then 3
-          elif $guardrail_final_mode == "cautious" then 4
-          else 4
-          end
-        )
-      },
-      issues: [
-        {
-          type: "advisor",
-          description: (
-            "advisor decision=" + $advisor_decision
-            + ", confidence=" + ($advisor_confidence | tostring)
-            + ", guardrail_applied=" + $advisor_guardrail_applied
-            + " 조합이 guardrail final_mode=" + $guardrail_final_mode
-            + " 및 위험 신호(routing risk=" + $routing_risk_level
-            + ", ambiguity=" + $routing_ambiguity
-            + ", riskA=" + $risk_a_level
-            + ", riskB=" + $risk_b_level
-            + ")와 어떻게 연결되는지 문장 수준에서 더 직접적으로 드러나야 한다."
-          )
-        },
-        {
-          type: $stage_issue_type,
-          description: $stage_issue_text
-        }
-      ],
-      improvement_suggestions: [
-        {
-          target: "advisor",
-          suggestion: (
-            if $guardrail_final_mode == "blocked" then
-              "advisor reason에 추가 정보 필요 조건과 결론 재개 기준을 직접 적어 blocked 판단의 근거를 명확히 하라."
-            elif $guardrail_final_mode == "cautious" then
-              "advisor reason에 조심스러운 추천임을 직접 밝히고 risk/uncertainty가 confidence를 낮춘 이유를 한 문장으로 덧붙여라."
-            else
-              "advisor reason에 사용된 핵심 증거 축을 routing과 함께 적어 normal 추천이 왜 과도하게 보수적이지 않은지 보여줘라."
-            end
-          )
-        },
-        {
-          target: $stage_target,
-          suggestion: $stage_suggestion_text
-        }
-      ],
-      overall_comment: $overall_comment,
-      guardrail_review: {
-        was_needed: $guardrail_was_needed,
-        was_triggered: $guardrail_was_triggered,
-        correctness: $guardrail_correctness
-      }
-    }' > "$stub_file"
-
-  cp "$stub_file" "$result_file"
-
-  echo "Created $(relative_to_root "$stub_file")"
-  echo "Created $(relative_to_root "$result_file") as derived reflection output for execution_mode=$execution_mode"
+  "$SCRIPT_DIR/run-reflection.sh" "$input_file" "$OUTPUTS_DIR"
 }
 
 copy_input_snapshot() {
@@ -674,11 +551,70 @@ JSON
           },
           "minItems": 2
         },
+        "selected_model": {
+          "type": "string"
+        },
+        "fallback_model": {
+          "type": ["string", "null"]
+        },
+        "stage_model_plan": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "stage_fallback_plan": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "estimated_cost_usd": {
+          "type": "number"
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
         "routing_reason": {
           "type": "string"
+        },
+        "risk_profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "model_tier": {
+              "type": "string",
+              "enum": ["low_cost", "premium"]
+            },
+            "risk_band": {
+              "type": "string",
+              "enum": ["low", "medium", "high"]
+            },
+            "complexity": {
+              "type": "string",
+              "enum": ["low", "medium", "high"]
+            },
+            "ambiguity": {
+              "type": "string",
+              "enum": ["low", "medium", "high"]
+            },
+            "state_unknown_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "estimated_tokens": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["model_tier", "risk_band", "complexity", "ambiguity", "state_unknown_count", "estimated_tokens"]
         }
       },
-      "required": ["complexity", "risk_level", "ambiguity", "execution_mode", "selected_path", "routing_reason"]
+      "required": ["complexity", "risk_level", "ambiguity", "execution_mode", "selected_path", "selected_model", "fallback_model", "stage_model_plan", "stage_fallback_plan", "estimated_cost_usd", "reasons", "routing_reason", "risk_profile"]
     }
   },
   "required": ["case_id", "routing"]
@@ -720,9 +656,31 @@ JSON
     },
     "three_years": {
       "type": "string"
+    },
+    "structured_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stability_outlook": {
+          "type": "string",
+          "enum": ["improve", "stable", "mixed", "decline"]
+        },
+        "growth_outlook": {
+          "type": "string",
+          "enum": ["improve", "stable", "mixed", "decline"]
+        },
+        "stress_load": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "missing_info": {
+          "type": "boolean"
+        }
+      },
+      "required": ["stability_outlook", "growth_outlook", "stress_load", "missing_info"]
     }
   },
-  "required": ["three_months", "one_year", "three_years"]
+  "required": ["three_months", "one_year", "three_years", "structured_assessment"]
 }
 JSON
       ;;
@@ -742,9 +700,40 @@ JSON
         "type": "string"
       },
       "minItems": 1
+    },
+    "structured_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "risk_factors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "financial_pressure",
+              "time_pressure",
+              "stability_loss",
+              "growth_tradeoff",
+              "emotional_burden",
+              "relationship_strain",
+              "health_burnout",
+              "execution_uncertainty"
+            ]
+          }
+        },
+        "missing_info": {
+          "type": "boolean"
+        },
+        "risk_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["risk_factors", "missing_info", "risk_score"]
     }
   },
-  "required": ["risk_level", "reasons"]
+  "required": ["risk_level", "reasons", "structured_assessment"]
 }
 JSON
       ;;
@@ -950,9 +939,25 @@ JSON
         }
       },
       "required": ["a_reasoning", "b_reasoning", "comparison", "final_selection"]
+    },
+    "structured_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "conflict": {
+          "type": "boolean"
+        },
+        "missing_info": {
+          "type": "boolean"
+        },
+        "low_confidence": {
+          "type": "boolean"
+        }
+      },
+      "required": ["conflict", "missing_info", "low_confidence"]
     }
   },
-  "required": ["case_id", "input_summary", "reasoning"]
+  "required": ["case_id", "input_summary", "reasoning", "structured_signals"]
 }
 JSON
       ;;
@@ -981,12 +986,46 @@ JSON
       },
       "uniqueItems": true
     },
+    "risk_score": {
+      "type": "number"
+    },
+    "confidence_score": {
+      "type": "number"
+    },
+    "uncertainty_score": {
+      "type": "number"
+    },
+    "reasoning_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "conflicting_signals": {
+          "type": "boolean"
+        },
+        "missing_context": {
+          "type": "boolean"
+        },
+        "weak_evidence": {
+          "type": "boolean"
+        },
+        "ambiguous_wording": {
+          "type": "boolean"
+        },
+        "strong_consensus": {
+          "type": "boolean"
+        },
+        "repeated_evidence": {
+          "type": "boolean"
+        }
+      },
+      "required": ["conflicting_signals", "missing_context", "weak_evidence", "ambiguous_wording", "strong_consensus", "repeated_evidence"]
+    },
     "final_mode": {
       "type": "string",
       "enum": ["normal", "cautious", "blocked"]
     }
   },
-  "required": ["guardrail_triggered", "triggers", "strategy", "final_mode"]
+  "required": ["guardrail_triggered", "triggers", "strategy", "risk_score", "confidence_score", "uncertainty_score", "reasoning_signals", "final_mode"]
 }
 JSON
       ;;
@@ -1250,13 +1289,33 @@ validate_stage_result() {
         ((keys | sort) == ["case_id", "routing"]) and
         (.case_id | type == "string" and length > 0) and
         (.routing | type == "object") and
-        ((.routing | keys | sort) == ["ambiguity", "complexity", "execution_mode", "risk_level", "routing_reason", "selected_path"]) and
+        ((.routing | keys | sort) == ["ambiguity", "complexity", "estimated_cost_usd", "execution_mode", "fallback_model", "reasons", "risk_level", "risk_profile", "routing_reason", "selected_model", "selected_path", "stage_fallback_plan", "stage_model_plan"]) and
         (.routing.complexity | IN("low", "medium", "high")) and
         (.routing.risk_level | IN("low", "medium", "high")) and
         (.routing.ambiguity | IN("low", "medium", "high")) and
         (.routing.execution_mode | IN("light", "standard", "careful", "full")) and
         (.routing.selected_path | type == "array" and length >= 2 and all(.[]; IN("planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"))) and
+        (.routing.selected_model | type == "string" and length > 0) and
+        (.routing.fallback_model == null or (.routing.fallback_model | type == "string" and length > 0)) and
+        (.routing.stage_model_plan | type == "object") and
+        (.routing.stage_fallback_plan | type == "object") and
+        (.routing.stage_model_plan.state_loader | type == "string" and length > 0) and
+        (.routing.stage_model_plan.planner | type == "string" and length > 0) and
+        (.routing.stage_model_plan.advisor | type == "string" and length > 0) and
+        (.routing.stage_fallback_plan.state_loader | type == "string" and length > 0) and
+        (.routing.stage_fallback_plan.planner | type == "string" and length > 0) and
+        (.routing.stage_fallback_plan.advisor | type == "string" and length > 0) and
+        (.routing.estimated_cost_usd | type == "number" and . >= 0) and
+        (.routing.reasons | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
         (.routing.routing_reason | type == "string" and length > 0) and
+        (.routing.risk_profile | type == "object") and
+        ((.routing.risk_profile | keys | sort) == ["ambiguity", "complexity", "estimated_tokens", "model_tier", "risk_band", "state_unknown_count"]) and
+        (.routing.risk_profile.model_tier | IN("low_cost", "premium")) and
+        (.routing.risk_profile.risk_band | IN("low", "medium", "high")) and
+        (.routing.risk_profile.complexity | IN("low", "medium", "high")) and
+        (.routing.risk_profile.ambiguity | IN("low", "medium", "high")) and
+        (.routing.risk_profile.state_unknown_count | type == "number" and . >= 0) and
+        (.routing.risk_profile.estimated_tokens | type == "number" and . >= 0) and
         (
           .routing.selected_path ==
           (if .routing.execution_mode == "light" then ["planner", "advisor"]
@@ -1264,7 +1323,12 @@ validate_stage_result() {
            elif .routing.execution_mode == "careful" then ["planner", "scenario", "risk", "advisor"]
            else ["planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"]
            end)
-        )
+        ) and
+        ((.routing.execution_mode == "light") or (.routing.stage_model_plan | has("scenario_a") and has("scenario_b"))) and
+        ((.routing.execution_mode == "light" or .routing.execution_mode == "standard") or (.routing.stage_model_plan | has("risk_a") and has("risk_b"))) and
+        ((.routing.execution_mode != "full") or (.routing.stage_model_plan.ab_reasoning == "gpt-5.4" or (.routing.stage_model_plan.ab_reasoning | type == "string" and length > 0))) and
+        ((.routing.execution_mode != "full") or (.routing.stage_model_plan.guardrail == "deterministic")) and
+        ((.routing.execution_mode != "full") or (.routing.stage_model_plan.reflection | type == "string" and length > 0))
       ' "$result_file" >/dev/null
       ;;
     planner)
@@ -1278,24 +1342,35 @@ validate_stage_result() {
     scenario)
       jq -e '
         type == "object" and
-        ((keys | sort) == ["one_year", "three_months", "three_years"]) and
+        ((keys | sort) == ["one_year", "structured_assessment", "three_months", "three_years"]) and
         (.three_months | type == "string" and length > 0) and
         (.one_year | type == "string" and length > 0) and
-        (.three_years | type == "string" and length > 0)
+        (.three_years | type == "string" and length > 0) and
+        (.structured_assessment | type == "object") and
+        ((.structured_assessment | keys | sort) == ["growth_outlook", "missing_info", "stability_outlook", "stress_load"]) and
+        (.structured_assessment.stability_outlook | IN("improve", "stable", "mixed", "decline")) and
+        (.structured_assessment.growth_outlook | IN("improve", "stable", "mixed", "decline")) and
+        (.structured_assessment.stress_load | IN("low", "medium", "high")) and
+        (.structured_assessment.missing_info | type == "boolean")
       ' "$result_file" >/dev/null
       ;;
     risk)
       jq -e '
         type == "object" and
-        ((keys | sort) == ["reasons", "risk_level"]) and
+        ((keys | sort) == ["reasons", "risk_level", "structured_assessment"]) and
         (.risk_level | IN("low", "medium", "high")) and
-        (.reasons | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0))
+        (.reasons | type == "array" and length >= 1 and all(.[]; type == "string" and length > 0)) and
+        (.structured_assessment | type == "object") and
+        ((.structured_assessment | keys | sort) == ["missing_info", "risk_factors", "risk_score"]) and
+        (.structured_assessment.risk_factors | type == "array" and all(.[]; IN("financial_pressure", "time_pressure", "stability_loss", "growth_tradeoff", "emotional_burden", "relationship_strain", "health_burnout", "execution_uncertainty"))) and
+        (.structured_assessment.missing_info | type == "boolean") and
+        (.structured_assessment.risk_score | type == "number" and . >= 0 and . <= 1)
       ' "$result_file" >/dev/null
       ;;
     reasoning)
       jq -e '
         type == "object" and
-        ((keys | sort) == ["case_id", "input_summary", "reasoning"]) and
+        ((keys | sort) == ["case_id", "input_summary", "reasoning", "structured_signals"]) and
         (.case_id | type == "string" and length > 0) and
         (.input_summary | type == "object") and
         ((.input_summary | keys | sort) == ["decision_options", "planner_goal", "user_profile"]) and
@@ -1335,18 +1410,37 @@ validate_stage_result() {
         (.reasoning.final_selection.selected_reasoning | IN("A", "B")) and
         (.reasoning.final_selection.selected_option | IN("A", "B")) and
         (.reasoning.final_selection.why_selected | type == "string" and length > 0) and
-        (.reasoning.final_selection.decision_confidence | type == "number" and . >= 0 and . <= 1)
+        (.reasoning.final_selection.decision_confidence | type == "number" and . >= 0 and . <= 1) and
+        (.structured_signals | type == "object") and
+        ((.structured_signals | keys | sort) == ["conflict", "low_confidence", "missing_info"]) and
+        (.structured_signals.conflict | type == "boolean") and
+        (.structured_signals.missing_info | type == "boolean") and
+        (.structured_signals.low_confidence | type == "boolean")
       ' "$result_file" >/dev/null
       ;;
     guardrail)
       jq -e '
         type == "object" and
-        ((keys | sort) == ["final_mode", "guardrail_triggered", "strategy", "triggers"]) and
+        ((keys | sort) == ["confidence_score", "final_mode", "guardrail_triggered", "reasoning_signals", "risk_score", "strategy", "triggers", "uncertainty_score"]) and
         (.guardrail_triggered | type == "boolean") and
         (.triggers | type == "array" and all(.[]; IN("ambiguity_high", "reasoning_conflict", "low_confidence", "high_risk"))) and
         (.strategy | type == "array" and all(.[]; IN("ask_more_info", "neutralize_decision", "soft_recommendation", "risk_warning"))) and
+        (.risk_score | type == "number" and . >= 0 and . <= 1) and
+        (.confidence_score | type == "number" and . >= 0 and . <= 1) and
+        (.uncertainty_score | type == "number" and . >= 0 and . <= 1) and
+        (.reasoning_signals | type == "object") and
+        ((.reasoning_signals | keys | sort) == ["ambiguous_wording", "conflicting_signals", "missing_context", "repeated_evidence", "strong_consensus", "weak_evidence"]) and
+        (.reasoning_signals.conflicting_signals | type == "boolean") and
+        (.reasoning_signals.missing_context | type == "boolean") and
+        (.reasoning_signals.weak_evidence | type == "boolean") and
+        (.reasoning_signals.ambiguous_wording | type == "boolean") and
+        (.reasoning_signals.strong_consensus | type == "boolean") and
+        (.reasoning_signals.repeated_evidence | type == "boolean") and
         (.final_mode | IN("normal", "cautious", "blocked")) and
-        ((.guardrail_triggered == false and (.triggers | length) == 0 and (.strategy | length) == 0 and .final_mode == "normal") or .guardrail_triggered == true)
+        (
+          (.guardrail_triggered == false and (.triggers | length) == 0 and (.strategy | length) == 0 and .final_mode == "normal") or
+          .guardrail_triggered == true
+        )
       ' "$result_file" >/dev/null
       ;;
     advisor)
@@ -1405,16 +1499,26 @@ run_codex_for_request() {
   local raw_output_file
   local model
   local reasoning_effort
+  local fallback_model
 
   exec_prompt_file="$(mktemp)"
   tmp_result_file="$(mktemp)"
   raw_output_file="${result_file%.json}.raw.txt"
-  model="${CODEX_MODEL:-}"
+  model="$(jq -r '.provider_payload.model // empty' "$request_file")"
+  fallback_model="$(jq -r '.provider_payload.fallback_model // empty' "$request_file")"
   reasoning_effort="${CODEX_REASONING_EFFORT:-high}"
 
   build_codex_exec_prompt "$request_file" "$stage_name" > "$exec_prompt_file"
 
-  echo "Running live Codex execution for $(relative_to_root "$request_file")"
+  if [ -n "$model" ]; then
+    echo "Running live Codex execution for $(relative_to_root "$request_file") with model=$model"
+  else
+    echo "Running live Codex execution for $(relative_to_root "$request_file")"
+  fi
+
+  if [ -n "$fallback_model" ]; then
+    echo "Fallback model noted in routing metadata: $fallback_model"
+  fi
 
   local -a cmd=(
     codex
@@ -1463,6 +1567,11 @@ write_case_summary() {
   local routing_risk_level
   local routing_ambiguity
   local routing_reason
+  local routing_selected_model="n/a"
+  local routing_fallback_model="n/a"
+  local routing_stage_model_plan="n/a"
+  local routing_stage_fallback_plan="n/a"
+  local routing_risk_profile="n/a"
   local execution_mode
   local selected_path_json
   local selected_path_text
@@ -1500,6 +1609,11 @@ write_case_summary() {
     routing_complexity="$(jq -r '.routing.complexity' "$routing_file")"
     routing_risk_level="$(jq -r '.routing.risk_level' "$routing_file")"
     routing_ambiguity="$(jq -r '.routing.ambiguity' "$routing_file")"
+    routing_selected_model="$(jq -r '.routing.selected_model' "$routing_file")"
+    routing_fallback_model="$(jq -r '.routing.fallback_model // "none"' "$routing_file")"
+    routing_stage_model_plan="$(jq -r '.routing.stage_model_plan | to_entries | map("\(.key)=\(.value)") | join(", ")' "$routing_file")"
+    routing_stage_fallback_plan="$(jq -r '.routing.stage_fallback_plan | to_entries | map("\(.key)=\(.value)") | join(", ")' "$routing_file")"
+    routing_risk_profile="$(jq -r '.routing.risk_profile | "model_tier=\(.model_tier), risk_band=\(.risk_band), complexity=\(.complexity), ambiguity=\(.ambiguity), state_unknown_count=\(.state_unknown_count), estimated_tokens=\(.estimated_tokens)"' "$routing_file")"
     routing_reason="$(jq -r '.routing.routing_reason' "$routing_file" | normalize_inline_text)"
   else
     execution_mode="$(infer_execution_mode_from_artifacts)"
@@ -1600,6 +1714,11 @@ write_case_summary() {
     printf -- '- ambiguity: %s\n' "$routing_ambiguity"
     printf -- '- execution_mode: %s\n' "$execution_mode"
     printf -- '- selected_path: %s\n' "$selected_path_text"
+    printf -- '- selected_model: %s\n' "$routing_selected_model"
+    printf -- '- fallback_model: %s\n' "$routing_fallback_model"
+    printf -- '- stage_model_plan: %s\n' "$routing_stage_model_plan"
+    printf -- '- stage_fallback_plan: %s\n' "$routing_stage_fallback_plan"
+    printf -- '- risk_profile: %s\n' "$routing_risk_profile"
     printf -- '- reason: %s\n' "$routing_reason"
 
     printf '\n## Planner\n\n'

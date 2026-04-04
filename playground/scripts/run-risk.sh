@@ -122,12 +122,12 @@ for OPTION_LABEL in A B; do
     --arg description "Prepared request payload for Codex CLI live execution." \
     --arg prompt_file "$(relative_to_root "$PROMPT_FILE")" \
     --arg input_source "$(relative_to_root "$INPUT_FILE")" \
-    --arg output_file "$(relative_to_root "$RESULT_FILE")" \
     --arg prompt_text "$PROMPT_TEXT" \
     --arg input_json "$INPUT_JSON" \
     --argjson input_data "$INPUT_DATA_COMPACT" \
     --argjson expected_output_schema "$SCHEMA_JSON" \
     --argjson previous_stage_result_files "[\"$STATE_CONTEXT_REL\", \"$PLANNER_RESULT_REL\", \"$SCENARIO_RESULT_REL\"]" \
+    --argjson provider_payload "$(live_provider_payload_json "$STAGE_NAME" "$RESULT_FILE" "$INPUT_FILE")" \
     '{
       stage: $stage,
       generated_at: $generated_at,
@@ -139,11 +139,7 @@ for OPTION_LABEL in A B; do
       expected_output_schema: $expected_output_schema,
       input_data: $input_data,
       input_json: $input_json,
-      provider_payload: {
-        runner: "codex exec",
-        call_status: "ready",
-        output_file: $output_file
-      }
+      provider_payload: $provider_payload
     }' > "$REQUEST_FILE"
 
   jq -n \

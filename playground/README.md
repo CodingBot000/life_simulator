@@ -2,6 +2,7 @@
 
 이 디렉토리는 의사결정 시뮬레이션 프롬프트 체인을 웹앱 런타임과 분리해서 검증하기 위한 공간이다.
 기본 모드는 ChatGPT 계정으로 로그인된 Codex CLI의 구독 기반 모델을 실제로 호출하는 방식이며, 필요하면 request payload 조합만 수행하는 compose-only 모드로도 실행할 수 있다.
+현재 playground는 웹 런타임과 같은 `buildRoutingDecision()` source of truth를 재사용해 `execution_mode`, `selected_path`, `stage_model_plan`, `stage_fallback_plan`을 계산한다.
 
 ## 목적
 
@@ -11,6 +12,7 @@
 - 로컬 터미널에서 `codex exec`로 실제 결과 JSON을 생성한다.
 - 필요 시 `CODEX_COMPOSE_ONLY=1`로 request composition만 수행할 수 있다.
 - 테스트 케이스별 결과를 별도 output 폴더로 분리해 덮어쓰기를 방지한다.
+- playground routing 정책과 stage 모델 계획이 웹과 의미상 동일하게 유지되는지 확인한다.
 
 ## 디렉토리 구조
 
@@ -52,35 +54,44 @@ playground/
 
 - `scripts/run-planner.sh`
   - 입력 JSON과 `prompts/planner.md`를 합쳐 `planner-request.json`을 만든다.
+  - `routing-result.json`의 `stage_model_plan.planner`를 읽어 `codex exec -m ...` 모델을 결정한다.
   - 기본적으로 `codex exec`를 호출해 `planner-result.json`을 만든다.
   - 모델 미실행 대비용 `planner-result.stub.json`도 함께 만든다.
 - `scripts/run-scenario.sh`
   - `A`, `B`, `all` 중 하나를 받아 scenario 요청 payload를 만든다.
   - planner 결과 파일이 있으면 우선 사용하고, 없으면 stub 결과를 사용한다.
+  - `routing-result.json`의 `stage_model_plan.scenario_a`, `stage_model_plan.scenario_b`를 사용한다.
   - 기본적으로 `scenario-a-result.json`, `scenario-b-result.json`을 생성한다.
   - 모델 미실행 대비용 stub도 함께 만든다.
 - `scripts/run-risk.sh`
   - scenario 결과를 바탕으로 risk 요청 payload를 만든다.
+  - `routing-result.json`의 `stage_model_plan.risk_a`, `stage_model_plan.risk_b`를 사용한다.
   - 기본적으로 `risk-a-result.json`, `risk-b-result.json`을 생성한다.
   - 모델 미실행 대비용 stub도 함께 만든다.
 - `scripts/run-ab-reasoning.sh`
   - planner, scenario, risk 결과를 합쳐 A/B reasoning 요청 payload를 만든다.
+  - `routing-result.json`의 `stage_model_plan.ab_reasoning`를 사용한다.
   - 기본적으로 `reasoning-result.json`을 생성한다.
   - 모델 미실행 대비용 stub도 함께 만든다.
 - `scripts/run-guardrail.sh`
-  - state context, planner, scenario, risk, reasoning 결과를 합쳐 guardrail 요청 payload를 만든다.
-  - 기본적으로 `guardrail-result.json`을 생성한다.
-  - 모델 미실행 대비용 stub도 함께 만든다.
+  - 웹 런타임과 동일하게 deterministic guardrail 로직을 사용한다.
+  - full 경로에서는 `evaluateSimulationGuardrail`, non-full 경로에서는 `deriveSelectiveGuardrailEvaluation`을 사용한다.
+  - 기본적으로 `guardrail-result.json`을 생성하며, compose-only 여부와 무관하게 같은 deterministic 결과를 남긴다.
 - `scripts/run-advisor.sh`
   - planner, scenario, risk, reasoning, guardrail 결과를 합쳐 advisor 요청 payload를 만든다.
+  - `routing-result.json`의 `stage_model_plan.advisor`를 사용한다.
+  - non-full 경로에서는 웹과 동일하게 guardrail 결과 없이 먼저 advisor를 실행한다.
   - 기본적으로 `advisor-result.json`을 생성한다.
   - compose-only 검증을 위한 `advisor-result.stub.json`도 함께 만든다.
 - `scripts/run-reflection.sh`
-  - planner, scenario, risk, reasoning, guardrail, advisor 결과를 다시 평가하는 reflection 요청 payload를 만든다.
+  - full 경로에서는 `stage_model_plan.reflection` 모델로 live reflection을 실행한다.
+  - non-full 경로에서는 웹과 같은 derived reflection 로직을 사용한다.
   - 기본적으로 `reflection-result.json`을 생성한다.
   - compose-only 또는 결과 점검용 `reflection-result.stub.json`도 함께 만든다.
 - `scripts/run-full-pipeline.sh`
-  - planner -> scenario -> risk -> A/B reasoning -> guardrail -> advisor -> reflection 순서로 전체 파이프라인을 실행한다.
+  - state_loader -> router -> planner 이후 routing 결과에 따라 selective execution을 수행한다.
+  - full 경로는 scenario -> risk -> A/B reasoning -> guardrail -> advisor -> reflection 순서다.
+  - standard/careful/light 경로는 advisor 이후 derived guardrail, derived reflection을 생성한다.
   - 입력 파일 경로와 output 디렉토리를 인자로 받을 수 있다.
   - 실행 완료 후 `summary.md`를 생성한다.
 - `scripts/run-case.sh`
@@ -134,6 +145,21 @@ request 조합만 보고 싶다면 compose-only 모드를 쓴다.
 CODEX_COMPOSE_ONLY=1 ./playground/scripts/run-case.sh ./playground/inputs/cases/case-01-career-stability.json
 ```
 
+## 라우팅 및 모델 계획
+
+- `scripts/run-router.sh`는 shell heuristic을 쓰지 않고 웹의 [`buildRoutingDecision()`](/Users/switch/Development/Web/life_simulator/src/server/routing/request-router.ts)를 직접 재사용한다.
+- `routing-result.json`에는 `execution_mode`, `selected_path`, `selected_model`, `stage_model_plan`, `stage_fallback_plan`, `risk_profile`, `reasons`가 기록된다.
+- live stage의 `provider_payload.model`은 `routing-result.json`의 stage별 모델 계획과 맞춰진다.
+- `guardrail`은 모델 호출이 아니라 deterministic stage다.
+- `summary.md`에는 routing reason과 stage model plan이 같이 표시된다.
+
+모델 override가 필요하면 아래 순서를 따른다.
+
+- `PLAYGROUND_FORCE_MODEL`: 모든 live stage 모델을 강제로 덮는 playground 전용 override
+- `CODEX_MODEL`: 하위 호환용 전역 override
+
+둘 다 없으면 `routing-result.json`의 `stage_model_plan`이 source of truth다.
+
 ## sample-input.json 수정 방법
 
 - `playground/inputs/sample-input.json`에서 `userProfile`과 `decision` 값을 바꾼다.
@@ -182,7 +208,7 @@ stub 결과 파일도 함께 생성될 수 있다.
 ## summary.md 보는 법
 
 - `summary.md`는 전체 JSON을 열지 않고도 케이스 품질을 빠르게 보는 용도다.
-- 입력 요약, planner factors, scenario A/B, risk A/B, A/B reasoning, guardrail 상태, advisor 추천, reflection 점수가 한 파일에 모여 있다.
+- 입력 요약, routing 정책, stage model plan, planner factors, scenario A/B, risk A/B, A/B reasoning, guardrail 상태, advisor 추천, reflection 점수가 한 파일에 모여 있다.
 - 사람이 여러 케이스를 순서대로 훑어보기에 가장 먼저 열어야 하는 파일이다.
 
 ## evaluations/checklist.md 활용 방법

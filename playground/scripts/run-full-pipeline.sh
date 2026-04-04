@@ -39,22 +39,19 @@ echo "Running planner..."
 
 case "$MODE" in
   light)
-    echo "Skipping scenario, risk, A/B reasoning, guardrail, and reflection for light mode."
-    write_default_guardrail_result "$MODE"
+    echo "Skipping scenario, risk, and A/B reasoning for light mode."
     ;;
   standard)
     echo "Running scenario..."
     "$SCRIPT_DIR/run-scenario.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
-    echo "Skipping risk, A/B reasoning, guardrail, and reflection for standard mode."
-    write_default_guardrail_result "$MODE"
+    echo "Skipping risk and A/B reasoning for standard mode."
     ;;
   careful)
     echo "Running scenario..."
     "$SCRIPT_DIR/run-scenario.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
     echo "Running risk..."
     "$SCRIPT_DIR/run-risk.sh" all "$INPUT_FILE" "$OUTPUTS_DIR"
-    echo "Skipping A/B reasoning, guardrail, and reflection for careful mode."
-    write_default_guardrail_result "$MODE"
+    echo "Skipping A/B reasoning for careful mode."
     ;;
   full)
     echo "Running scenario..."
@@ -79,8 +76,10 @@ if [ "$MODE" = "full" ]; then
   echo "Running reflection..."
   "$SCRIPT_DIR/run-reflection.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
 else
-  echo "Writing derived reflection output for $MODE mode."
-  write_default_reflection_result "$MODE"
+  echo "Running derived guardrail..."
+  "$SCRIPT_DIR/run-guardrail.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
+  echo "Running derived reflection..."
+  "$SCRIPT_DIR/run-reflection.sh" "$INPUT_FILE" "$OUTPUTS_DIR"
 fi
 
 write_case_summary "$OUTPUTS_DIR/input.json"
