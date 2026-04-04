@@ -1,0 +1,104 @@
+services:
+  db:
+    image: postgres:16
+    container_name: life_simulator_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-life_simulator_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-life_sim_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-life_sim_password}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/migrations/20260403_init_production_llmops.sql:/docker-entrypoint-initdb.d/20260403_init_production_llmops.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-life_sim_user} -d ${POSTGRES_DB:-life_simulator_dev}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: life_simulator_app
+    init: true
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${PORT:-3000}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-life_sim_user}:${POSTGRES_PASSWORD:-life_sim_password}@db:5432/${POSTGRES_DB:-life_simulator_dev}
+      LLM_PROVIDER_MODE: ${LLM_PROVIDER_MODE:-mock}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5}
+      LOW_COST_MODEL: ${LOW_COST_MODEL:-gpt-5-mini}
+      PREMIUM_MODEL: ${PREMIUM_MODEL:-gpt-5}
+      LOW_COST_FALLBACK_MODEL: ${LOW_COST_FALLBACK_MODEL:-gpt-5-mini}
+      PREMIUM_FALLBACK_MODEL: ${PREMIUM_FALLBACK_MODEL:-gpt-5-mini}
+      REQUEST_DEADLINE_MS: ${REQUEST_DEADLINE_MS:-25000}
+      LLM_CACHE_TTL_MS: ${LLM_CACHE_TTL_MS:-300000}
+      LLMOPS_INLINE_QUEUE_DRAIN: ${LLMOPS_INLINE_QUEUE_DRAIN:-false}
+      REQUIRE_SIM_AUTH: ${REQUIRE_SIM_AUTH:-false}
+      LLMOPS_RATE_LIMIT_COUNT: ${LLMOPS_RATE_LIMIT_COUNT:-30}
+      LLMOPS_RATE_LIMIT_WINDOW_MS: ${LLMOPS_RATE_LIMIT_WINDOW_MS:-60000}
+      DRIFT_BUCKET_HOURS: ${DRIFT_BUCKET_HOURS:-24}
+      EVAL_WORKER_LIMIT: ${EVAL_WORKER_LIMIT:-10}
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    volumes:
+      - .:/app:cached
+      - app_node_modules:/app/node_modules
+      - app_next:/app/.next
+    command: sh -c "npm run dev -- --hostname 0.0.0.0 --port $$PORT"
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: life_simulator_prometheus
+    restart: unless-stopped
+    depends_on:
+      - app
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: life_simulator_grafana
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SERVER_HTTP_PORT: "3000"
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+
+volumes:
+  postgres_data:
+  app_node_modules:
+  app_next:
+  prometheus_data:
+  grafana_data:
