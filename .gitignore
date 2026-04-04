@@ -6,3 +6,24 @@ out
 npm-debug.log*
 docs/
 .DS_Store
+tsconfig.tsbuildinfo
+
+# Runtime/generated artifacts
+outputs/queues/
+outputs/online_logs/anomaly_events/
+outputs/online_logs/anomaly_queue/
+outputs/online_logs/dataset_candidates/
+outputs/online_logs/drift_metrics/
+outputs/online_logs/eval_samples/
+outputs/online_logs/guardrail_logs/
+outputs/online_logs/re_eval_results/
+outputs/online_logs/request_logs/
+outputs/online_logs/stage_logs/
+outputs/monitoring/baseline-v4-analysis.md
+outputs/monitoring/baseline-v4-comparison.json
+outputs/monitoring/baseline-v5-analysis.md
+outputs/monitoring/baseline-v5-comparison.json
+outputs/monitoring/baseline-v6-analysis.md
+outputs/monitoring/baseline-v6-comparison.json
+outputs/monitoring/baseline-v7-analysis.md
+outputs/monitoring/baseline-v7-comparison.json
