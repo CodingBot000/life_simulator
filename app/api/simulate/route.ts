@@ -1,4 +1,14 @@
-import { runSimulationChain } from "@/lib/agent";
+import { randomUUID } from "node:crypto";
+
+import { runSimulationRequest } from "@/server/agent/simulation-service";
+import { enqueueRequestLogJob } from "@/server/logging/service";
+import {
+  recordDegradedResponse,
+  recordRequestFailure,
+  recordRequestSuccess,
+} from "@/server/monitoring/prometheus";
+import { buildDegradedResponse } from "@/server/resilience/fallback";
+import { checkRateLimit } from "@/server/routing/rate-limit";
 import type {
   DecisionInput,
   MemoryDecisionRecord,
@@ -10,6 +20,54 @@ import type {
 } from "@/lib/types";
 
 export const runtime = "nodejs";
+
+const ROUTE_NAME = "simulate";
+
+function getHeader(request: Request, name: string): string | undefined {
+  const value = request.headers.get(name);
+  return value?.trim() ? value.trim() : undefined;
+}
+
+function resolveIdentity(request: Request) {
+  const userId = getHeader(request, "x-user-id");
+  const sessionId = getHeader(request, "x-session-id");
+  const traceId = getHeader(request, "x-trace-id") ?? randomUUID();
+  const forwardedFor = getHeader(request, "x-forwarded-for");
+  const rateLimitKey = userId ?? forwardedFor ?? sessionId ?? "anonymous";
+
+  if (process.env.REQUIRE_SIM_AUTH === "true" && !userId) {
+    const error = new Error("Authentication required: provide x-user-id.");
+    (error as Error & { code?: string }).code = "auth_required";
+    throw error;
+  }
+
+  return {
+    userId,
+    sessionId,
+    traceId,
+    rateLimitKey,
+  };
+}
+
+function toErrorCode(error: unknown): string {
+  if (!error || typeof error !== "object") {
+    return "unknown_error";
+  }
+
+  const candidate = error as { code?: unknown };
+  return typeof candidate.code === "string" ? candidate.code : "internal_error";
+}
+
+function shouldReturnDegraded(errorCode: string): boolean {
+  return [
+    "stage_timeout",
+    "deadline_exceeded",
+    "circuit_open",
+    "provider_not_configured",
+    "schema_validation_failed",
+    "empty_provider_response",
+  ].includes(errorCode);
+}
 
 function isRiskTolerance(value: unknown): value is RiskTolerance {
   return value === "low" || value === "medium" || value === "high";
@@ -264,31 +322,117 @@ function validateRequestBody(value: unknown): SimulationRequest {
 }
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
+  let traceId: string = randomUUID();
+
   try {
+    const identity = resolveIdentity(request);
+    traceId = identity.traceId;
     const body = validateRequestBody(await request.json());
-    const result = await runSimulationChain(
+    const rateLimit = checkRateLimit(identity.rateLimitKey);
+
+    if (!rateLimit.allowed) {
+      recordRequestFailure(ROUTE_NAME, Date.now() - startedAt, "rate_limited");
+
+      return Response.json(
+        {
+          error: "Rate limit exceeded.",
+          trace_id: traceId,
+          reset_at: rateLimit.resetAt,
+        },
+        {
+          status: 429,
+          headers: {
+            "x-trace-id": traceId,
+            "x-ratelimit-reset": rateLimit.resetAt,
+          },
+        },
+      );
+    }
+
+    const result = await runSimulationRequest(
       body.userProfile,
       body.decision,
       body.prior_memory,
       body.state_hints,
+      {
+        userId: identity.userId,
+        sessionId: identity.sessionId,
+        traceId: identity.traceId,
+      },
     );
 
-    return Response.json(result);
+    await enqueueRequestLogJob(result.envelope);
+    recordRequestSuccess(ROUTE_NAME, Date.now() - startedAt);
+
+    return Response.json(result.response, {
+      headers: {
+        "x-request-id": result.executionContext.request_id,
+        "x-trace-id": result.executionContext.trace_id,
+        "x-llm-model": result.executionContext.selected_model,
+      },
+    });
   } catch (error) {
     const message =
       error instanceof Error
         ? error.message
         : "Simulation failed due to an unknown server error.";
+    const errorCode = toErrorCode(error);
 
     console.error("[simulate] error", error);
 
+    if (message.startsWith("Authentication required")) {
+      recordRequestFailure(ROUTE_NAME, Date.now() - startedAt, errorCode);
+
+      return Response.json(
+        {
+          error: message,
+          trace_id: traceId,
+        },
+        {
+          status: 401,
+          headers: {
+            "x-trace-id": traceId,
+          },
+        },
+      );
+    }
+
+    if (shouldReturnDegraded(errorCode)) {
+      const degraded = buildDegradedResponse({
+        requestId: randomUUID(),
+        traceId,
+        routeName: ROUTE_NAME,
+        message,
+        selectedModel: getHeader(request, "x-llm-model"),
+        errorCode,
+      });
+
+      recordRequestFailure(ROUTE_NAME, Date.now() - startedAt, errorCode);
+      recordDegradedResponse(ROUTE_NAME, errorCode);
+
+      return Response.json(degraded, {
+        status: 503,
+        headers: {
+          "x-trace-id": traceId,
+        },
+      });
+    }
+
     const status = message.startsWith("Invalid request") ? 400 : 500;
+    recordRequestFailure(ROUTE_NAME, Date.now() - startedAt, errorCode);
 
     return Response.json(
       {
         error: message,
+        trace_id: traceId,
       },
-      { status },
+      {
+        status,
+        headers: {
+          "x-trace-id": traceId,
+        },
+      },
     );
   }
 }

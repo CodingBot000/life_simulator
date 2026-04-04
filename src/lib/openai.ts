@@ -1,6 +1,7 @@
-import "server-only";
+import { randomUUID } from "node:crypto";
 
-import OpenAI from "openai";
+import { invokeStructuredLLM } from "../server/llm/client.ts";
+import { getRoutingModelCandidates } from "../server/llm/model-registry.ts";
 
 type JsonSchema = {
   type: string;
@@ -21,11 +22,15 @@ export interface StructuredOutputUsage {
   inputTokens: number;
   outputTokens: number;
   totalTokens: number;
+  estimatedCostUsd?: number;
+  latencyMs?: number;
+  retryCount?: number;
+  fallbackUsed?: boolean;
+  cacheHit?: boolean;
 }
 
-const OPENAI_MODEL = process.env.OPENAI_MODEL?.trim() || "gpt-5";
-const apiKey = process.env.OPENAI_API_KEY;
-const client = apiKey ? new OpenAI({ apiKey }) : null;
+const OPENAI_MODEL =
+  process.env.OPENAI_MODEL?.trim() || getRoutingModelCandidates().premium;
 
 export async function generateStructuredOutput<T>({
   schemaName,
@@ -35,66 +40,35 @@ export async function generateStructuredOutput<T>({
   temperature = 0.3,
   onUsage,
 }: StructuredOutputParams): Promise<T> {
-  if (!apiKey) {
-    throw new Error(
-      "OPENAI_API_KEY is not set. Add it to .env.local before running the simulation.",
-    );
-  }
-
-  if (!client) {
-    throw new Error("OpenAI client could not be initialized.");
-  }
-
-  const response = await client.responses.create({
+  const response = await invokeStructuredLLM<T>({
+    schemaName,
+    schema,
+    prompt,
+    input,
     model: OPENAI_MODEL,
+    fallbackModel: getRoutingModelCandidates().premiumFallback,
     temperature,
-    input: [
-      {
-        role: "system",
-        content: prompt,
-      },
-      {
-        role: "user",
-        content: input,
-      },
-    ],
-    text: {
-      format: {
-        type: "json_schema",
-        name: schemaName,
-        schema,
-        strict: true,
-      },
+    metadata: {
+      requestId: randomUUID(),
+      traceId: randomUUID(),
+      routeName: "legacy-lib-call",
+      stageName: schemaName,
     },
   });
-  const responseMeta = response as {
-    model?: string;
-    usage?: {
-      input_tokens?: number;
-      output_tokens?: number;
-      total_tokens?: number;
-    };
-  };
 
   onUsage?.({
-    model: responseMeta.model ?? OPENAI_MODEL,
-    inputTokens: responseMeta.usage?.input_tokens ?? 0,
-    outputTokens: responseMeta.usage?.output_tokens ?? 0,
-    totalTokens: responseMeta.usage?.total_tokens ?? 0,
+    model: response.model,
+    inputTokens: response.usage.inputTokens,
+    outputTokens: response.usage.outputTokens,
+    totalTokens: response.usage.totalTokens,
+    estimatedCostUsd: response.estimatedCostUsd,
+    latencyMs: response.latencyMs,
+    retryCount: response.retryCount,
+    fallbackUsed: response.fallbackUsed,
+    cacheHit: response.cacheHit,
   });
 
-  const rawText = response.output_text?.trim();
-
-  if (!rawText) {
-    throw new Error(`OpenAI returned an empty response for ${schemaName}.`);
-  }
-
-  try {
-    return JSON.parse(rawText) as T;
-  } catch (error) {
-    console.error(`[openai] failed to parse ${schemaName}`, error, rawText);
-    throw new Error(`Failed to parse JSON response for ${schemaName}.`);
-  }
+  return response.output;
 }
 
 export { OPENAI_MODEL };
