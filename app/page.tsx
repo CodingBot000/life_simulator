@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 
 import type {
@@ -8,16 +8,21 @@ import type {
   AdvisorResult,
   CasePreset,
   CasePresetCategory,
+  ExecutionMode,
   GuardrailResult,
   PlannerResult,
   ReflectionResult,
   RiskResult,
   RiskTolerance,
   SimulationRequest,
+  SimulationProgressEvent,
+  SimulationStageExecutionKind,
+  SimulationStageName,
   ScenarioResult,
   SimulationResponse,
   StateContext,
 } from "@/lib/types";
+import { SIMULATION_STAGE_ORDER } from "@/lib/types";
 import {
   getPriorityLabel,
   MAX_PRIORITY_SELECTIONS,
@@ -61,6 +66,295 @@ const CASE_CATEGORY_ORDER: CasePresetCategory[] = [
   "health",
   "other",
 ];
+
+type StageProgressStatus =
+  | "pending"
+  | "active"
+  | "completed"
+  | "skipped"
+  | "failed";
+
+type StageProgressEntry = {
+  status: StageProgressStatus;
+  executionKind: SimulationStageExecutionKind | null;
+  model: string | null;
+};
+
+type SimulationProgressState = {
+  requestId: string | null;
+  traceId: string | null;
+  executionMode: ExecutionMode | null;
+  selectedPath: string[];
+  stages: Record<SimulationStageName, StageProgressEntry>;
+};
+
+const EXECUTION_MODE_LABELS: Record<ExecutionMode, string> = {
+  light: "Light",
+  standard: "Standard",
+  careful: "Careful",
+  full: "Full",
+};
+
+const STAGE_METADATA: Record<
+  SimulationStageName,
+  {
+    label: string;
+    summary: string;
+  }
+> = {
+  state_loader: {
+    label: "State Loader",
+    summary: "입력 상태를 구조화합니다.",
+  },
+  planner: {
+    label: "Planner",
+    summary: "판단 프레임과 비교 요인을 정리합니다.",
+  },
+  scenario_a: {
+    label: "Scenario A",
+    summary: "선택지 A의 미래 시나리오를 펼칩니다.",
+  },
+  scenario_b: {
+    label: "Scenario B",
+    summary: "선택지 B의 미래 시나리오를 펼칩니다.",
+  },
+  risk_a: {
+    label: "Risk A",
+    summary: "선택지 A의 리스크를 평가합니다.",
+  },
+  risk_b: {
+    label: "Risk B",
+    summary: "선택지 B의 리스크를 평가합니다.",
+  },
+  ab_reasoning: {
+    label: "A/B Reasoning",
+    summary: "두 판단 후보를 비교합니다.",
+  },
+  guardrail: {
+    label: "Guardrail",
+    summary: "안전장치와 경고 신호를 점검합니다.",
+  },
+  advisor: {
+    label: "Advisor",
+    summary: "최종 판단을 정리합니다.",
+  },
+  reflection: {
+    label: "Reflection",
+    summary: "결과를 검토하고 보정합니다.",
+  },
+};
+
+const STAGE_STATUS_LABELS: Record<StageProgressStatus, string> = {
+  pending: "대기",
+  active: "진행 중",
+  completed: "완료",
+  skipped: "건너뜀",
+  failed: "실패",
+};
+
+const EXECUTION_KIND_LABELS: Record<SimulationStageExecutionKind, string> = {
+  llm: "LLM",
+  deterministic: "Rule",
+  derived: "Derived",
+};
+
+function createInitialProgressState(): SimulationProgressState {
+  return {
+    requestId: null,
+    traceId: null,
+    executionMode: null,
+    selectedPath: [],
+    stages: Object.fromEntries(
+      SIMULATION_STAGE_ORDER.map((stageName) => [
+        stageName,
+        {
+          status: "pending",
+          executionKind: null,
+          model: null,
+        },
+      ]),
+    ) as Record<SimulationStageName, StageProgressEntry>,
+  };
+}
+
+function applyProgressEvent(
+  current: SimulationProgressState,
+  event: SimulationProgressEvent,
+): SimulationProgressState {
+  if (event.type === "request_started") {
+    return {
+      ...createInitialProgressState(),
+      requestId: event.request_id,
+      traceId: event.trace_id,
+    };
+  }
+
+  const next: SimulationProgressState = {
+    ...current,
+    stages: { ...current.stages },
+  };
+
+  switch (event.type) {
+    case "routing_resolved": {
+      next.executionMode = event.execution_mode;
+      next.selectedPath = [...event.selected_path];
+
+      for (const stageName of event.skipped_stages) {
+        next.stages[stageName] = {
+          ...next.stages[stageName],
+          status: "skipped",
+        };
+      }
+
+      return next;
+    }
+    case "stage_started": {
+      next.requestId = event.request_id;
+      next.stages[event.stage_name] = {
+        status: "active",
+        executionKind: event.execution_kind,
+        model: event.model ?? next.stages[event.stage_name].model,
+      };
+      return next;
+    }
+    case "stage_completed": {
+      next.requestId = event.request_id;
+      next.stages[event.stage_name] = {
+        status: "completed",
+        executionKind: event.execution_kind,
+        model: event.model ?? next.stages[event.stage_name].model,
+      };
+      return next;
+    }
+    case "error": {
+      next.traceId = event.trace_id;
+
+      const activeStage = (SIMULATION_STAGE_ORDER as readonly SimulationStageName[])
+        .map((stageName) => ({
+          stageName,
+          entry: next.stages[stageName],
+        }))
+        .find(({ entry }) => entry.status === "active");
+
+      if (activeStage) {
+        next.stages[activeStage.stageName] = {
+          ...activeStage.entry,
+          status: "failed",
+        };
+      }
+
+      return next;
+    }
+    case "result":
+      next.requestId = event.request_id;
+      return next;
+    default:
+      return next;
+  }
+}
+
+function getCurrentStage(progress: SimulationProgressState): SimulationStageName | null {
+  for (const stageName of SIMULATION_STAGE_ORDER) {
+    if (progress.stages[stageName].status === "active") {
+      return stageName;
+    }
+  }
+
+  return null;
+}
+
+function hasProgressHistory(progress: SimulationProgressState): boolean {
+  return Boolean(progress.requestId);
+}
+
+function isProgressFinished(progress: SimulationProgressState): boolean {
+  return SIMULATION_STAGE_ORDER.every((stageName) => {
+    const status = progress.stages[stageName].status;
+    return status === "completed" || status === "skipped";
+  });
+}
+
+function getProgressHeadline(progress: SimulationProgressState): string {
+  const currentStage = getCurrentStage(progress);
+
+  if (currentStage) {
+    return `${STAGE_METADATA[currentStage].label} 실행 중`;
+  }
+
+  if (isProgressFinished(progress)) {
+    return "모든 단계 실행이 완료되었습니다.";
+  }
+
+  if (progress.executionMode) {
+    return `${EXECUTION_MODE_LABELS[progress.executionMode]} 경로가 확정되었습니다.`;
+  }
+
+  return "State Loader를 먼저 실행하며 실제 경로를 결정하고 있습니다.";
+}
+
+async function readSimulationProgressStream(
+  response: Response,
+  onEvent: (event: SimulationProgressEvent) => void,
+): Promise<SimulationResponse> {
+  const reader = response.body?.getReader();
+
+  if (!reader) {
+    throw new Error("진행 스트림을 열지 못했습니다.");
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let streamResult: SimulationResponse | null = null;
+  let streamError: string | null = null;
+
+  function handleLine(rawLine: string) {
+    const line = rawLine.trim();
+
+    if (!line) {
+      return;
+    }
+
+    const event = JSON.parse(line) as SimulationProgressEvent;
+    onEvent(event);
+
+    if (event.type === "result") {
+      streamResult = event.response;
+    }
+
+    if (event.type === "error") {
+      streamError = event.error;
+    }
+  }
+
+  while (true) {
+    const { value, done } = await reader.read();
+    buffer += decoder.decode(value ?? new Uint8Array(), { stream: !done });
+
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+
+    for (const line of lines) {
+      handleLine(line);
+    }
+
+    if (done) {
+      if (buffer.trim()) {
+        handleLine(buffer);
+      }
+      break;
+    }
+  }
+
+  if (streamError) {
+    throw new Error(streamError);
+  }
+
+  if (!streamResult) {
+    throw new Error("시뮬레이션 결과를 받지 못했습니다.");
+  }
+
+  return streamResult;
+}
 
 function buildPayload(form: FormState): SimulationRequest {
   return {
@@ -1025,6 +1319,133 @@ function ReflectionCard({
   );
 }
 
+function ProgressStageCard({
+  stageName,
+  index,
+  entry,
+}: {
+  stageName: SimulationStageName;
+  index: number;
+  entry: StageProgressEntry;
+}) {
+  const metadata = STAGE_METADATA[stageName];
+  const isActive = entry.status === "active";
+  const badgeLabel =
+    entry.model ?? (entry.executionKind ? EXECUTION_KIND_LABELS[entry.executionKind] : null);
+
+  const toneClass =
+    entry.status === "completed"
+      ? "border-slate-950 bg-slate-950 text-white shadow-[0_18px_40px_rgba(15,23,42,0.18)]"
+      : entry.status === "active"
+        ? "animate-pulse border-amber-500/60 bg-amber-100 text-amber-950 shadow-[0_20px_44px_rgba(217,119,6,0.18)]"
+        : entry.status === "skipped"
+          ? "border-dashed border-slate-300 bg-slate-100/80 text-slate-500"
+          : entry.status === "failed"
+            ? "border-rose-300 bg-rose-50 text-rose-950 shadow-[0_18px_40px_rgba(190,24,93,0.12)]"
+            : "border-slate-200 bg-white/90 text-slate-600";
+
+  const metaToneClass =
+    entry.status === "completed"
+      ? "text-white/70"
+      : entry.status === "active"
+        ? "text-amber-900/70"
+        : entry.status === "failed"
+          ? "text-rose-900/70"
+          : "text-slate-400";
+
+  return (
+    <div
+      className={`min-w-[148px] rounded-[22px] border px-4 py-3 transition ${toneClass}`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className={`text-[11px] font-bold uppercase tracking-[0.18em] ${metaToneClass}`}>
+            {String(index + 1).padStart(2, "0")}
+          </p>
+          <p className="mt-2 text-sm font-semibold">{metadata.label}</p>
+        </div>
+        {badgeLabel ? (
+          <span
+            className={`max-w-[112px] break-all rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold leading-4 ${
+              entry.status === "completed"
+                ? "border-white/20 bg-white/10 text-white"
+                : entry.status === "active"
+                  ? "border-amber-900/10 bg-white/70 text-amber-950"
+                  : entry.status === "failed"
+                    ? "border-rose-900/10 bg-white/70 text-rose-900"
+                    : "border-slate-900/8 bg-white/80 text-slate-600"
+            }`}
+          >
+            {badgeLabel}
+          </span>
+        ) : null}
+      </div>
+      <p className={`mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] ${metaToneClass}`}>
+        {STAGE_STATUS_LABELS[entry.status]}
+      </p>
+      <p className={`mt-2 text-xs leading-6 ${isActive ? "text-amber-950/90" : entry.status === "completed" ? "text-white/80" : entry.status === "failed" ? "text-rose-900/90" : "text-slate-500"}`}>
+        {metadata.summary}
+      </p>
+    </div>
+  );
+}
+
+function LoadingStageStrip({ progress }: { progress: SimulationProgressState }) {
+  return (
+    <div className="rounded-[24px] border border-slate-900/8 bg-white/70 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="section-label">Live Progress</p>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            {getProgressHeadline(progress)}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {isProgressFinished(progress) ? (
+            <span className="rounded-full border border-emerald-900/10 bg-emerald-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-900">
+              completed
+            </span>
+          ) : null}
+          {progress.executionMode ? (
+            <span className="rounded-full bg-slate-950 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+              {EXECUTION_MODE_LABELS[progress.executionMode]}
+            </span>
+          ) : (
+            <span className="rounded-full border border-amber-900/10 bg-amber-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-amber-900">
+              routing
+            </span>
+          )}
+          {progress.traceId ? (
+            <span className="rounded-full border border-slate-900/8 bg-white px-3 py-1.5 text-xs font-medium text-slate-500">
+              trace {progress.traceId.slice(0, 8)}
+            </span>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="mt-4 overflow-x-auto pb-2">
+        <div className="flex min-w-max items-center gap-2">
+          {SIMULATION_STAGE_ORDER.map((stageName, index) => (
+            <Fragment key={stageName}>
+              <ProgressStageCard
+                stageName={stageName}
+                index={index}
+                entry={progress.stages[stageName]}
+              />
+              {index < SIMULATION_STAGE_ORDER.length - 1 ? (
+                <div className="flex items-center justify-center px-1 text-lg font-semibold text-slate-300">
+                  →
+                </div>
+              ) : null}
+            </Fragment>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [presets, setPresets] = useState<CasePreset[]>([]);
@@ -1036,6 +1457,9 @@ export default function HomePage() {
   const [result, setResult] = useState<SimulationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState<SimulationProgressState>(() =>
+    createInitialProgressState(),
+  );
   const presetCategories = listPresetCategories(presets);
   const visiblePresets = selectedCategory
     ? presets.filter((preset) => preset.category === selectedCategory)
@@ -1153,15 +1577,31 @@ export default function HomePage() {
     setIsLoading(true);
     setError(null);
     setResult(null);
+    setProgress(createInitialProgressState());
 
     try {
       const response = await fetch("/api/simulate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-simulate-stream": "ndjson",
         },
         body: JSON.stringify(buildPayload(form)),
       });
+
+      const contentType = response.headers.get("content-type") ?? "";
+
+      if (contentType.includes("application/x-ndjson")) {
+        const streamedResult = await readSimulationProgressStream(
+          response,
+          (progressEvent) => {
+            setProgress((current) => applyProgressEvent(current, progressEvent));
+          },
+        );
+
+        setResult(streamedResult);
+        return;
+      }
 
       const data = (await response.json()) as SimulationResponse & {
         error?: string;
@@ -1397,10 +1837,10 @@ export default function HomePage() {
                       ))}
                     </select>
                   ))}
-                  <p className="text-xs leading-6 text-slate-500">
+                  {/* <p className="text-xs leading-6 text-slate-500">
                     고유 id는 내부적으로 `quality_of_life` 같은 형식으로 유지되고,
                     화면에는 자연어 라벨만 표시됩니다.
-                  </p>
+                  </p> */}
                 </div>
               </InputField>
             </section>
@@ -1462,6 +1902,10 @@ export default function HomePage() {
         </section>
 
         <section className="grid content-start gap-5 xl:sticky xl:top-8 xl:self-start">
+          {hasProgressHistory(progress) ? (
+            <LoadingStageStrip progress={progress} />
+          ) : null}
+
           {error ? (
             <div className="rounded-[28px] border border-rose-900/10 bg-white/80 p-6 shadow-[0_20px_60px_rgba(127,29,29,0.08)]">
               <p className="section-label" style={{ color: "var(--danger)" }}>
@@ -1480,13 +1924,13 @@ export default function HomePage() {
               className="card-surface rounded-[28px] p-6 text-sm leading-7 text-slate-600"
             >
               <p className="section-label">Loading</p>
-              <h2 className="display-font mt-2 text-2xl font-semibold text-slate-950">
+              <h2 className="display-font mt-5 text-2xl font-semibold text-slate-950">
                 Agent chain 실행 중
               </h2>
               <p className="mt-3">
-                State Loader를 먼저 실행한 뒤 요청 특성에 맞춰 selective path를
-                결정하고 있습니다. 응답이 도착하면 실제 선택된 경로와 stage별
-                모델 계획이 함께 표시됩니다.
+                단계별 시작과 완료를 실시간으로 반영합니다. 현재 활성 단계는
+                강조되어 보이고, 경로가 확정되면 건너뛴 단계와 실행된 단계를
+                함께 구분해서 표시합니다.
               </p>
             </div>
           ) : null}

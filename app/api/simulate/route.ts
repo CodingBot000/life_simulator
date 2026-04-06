@@ -14,6 +14,7 @@ import type {
   MemoryDecisionRecord,
   MemoryState,
   RiskTolerance,
+  SimulationProgressEvent,
   SimulationRequest,
   StateHints,
   UserProfile,
@@ -73,10 +74,91 @@ function shouldReturnDegraded(errorCode: string): boolean {
   ].includes(errorCode);
 }
 
+function wantsProgressStream(request: Request): boolean {
+  return getHeader(request, "x-simulate-stream") === "ndjson";
+}
+
 function serializeHeaderPlan(plan: Record<string, string>): string {
   return Object.entries(plan)
     .map(([stage, model]) => `${stage}:${model}`)
     .join(",");
+}
+
+function createProgressStreamResponse(params: {
+  body: SimulationRequest;
+  identity: ReturnType<typeof resolveIdentity>;
+  startedAt: number;
+}): Response {
+  const encoder = new TextEncoder();
+  let closed = false;
+
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      const send = async (event: SimulationProgressEvent) => {
+        if (closed) {
+          return;
+        }
+
+        controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
+      };
+
+      try {
+        const result = await runSimulationRequest(
+          params.body.userProfile,
+          params.body.decision,
+          params.body.prior_memory,
+          params.body.state_hints,
+          {
+            userId: params.identity.userId,
+            sessionId: params.identity.sessionId,
+            traceId: params.identity.traceId,
+            onProgress: send,
+          },
+        );
+
+        await enqueueRequestLogJob(result.envelope);
+        recordRequestSuccess(ROUTE_NAME, Date.now() - params.startedAt);
+
+        await send({
+          type: "result",
+          request_id: result.executionContext.request_id,
+          response: result.response,
+        });
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Simulation failed due to an unknown server error.";
+        const errorCode = toErrorCode(error);
+
+        console.error("[simulate] error", error);
+        recordRequestFailure(ROUTE_NAME, Date.now() - params.startedAt, errorCode);
+
+        await send({
+          type: "error",
+          trace_id: params.identity.traceId,
+          error: message,
+          error_code: errorCode,
+        });
+      } finally {
+        if (!closed) {
+          closed = true;
+          controller.close();
+        }
+      }
+    },
+    cancel() {
+      closed = true;
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "application/x-ndjson; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      "x-trace-id": params.identity.traceId,
+    },
+  });
 }
 
 function isRiskTolerance(value: unknown): value is RiskTolerance {
@@ -391,6 +473,14 @@ export async function POST(request: Request) {
           },
         },
       );
+    }
+
+    if (wantsProgressStream(request)) {
+      return createProgressStreamResponse({
+        body,
+        identity,
+        startedAt,
+      });
     }
 
     const result = await runSimulationRequest(

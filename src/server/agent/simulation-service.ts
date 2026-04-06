@@ -26,8 +26,11 @@ import type {
   RiskResult,
   ScenarioResult,
   SimulationRequest,
+  SimulationProgressEvent,
   SimulationResponse,
   SimulationRoutingSummary,
+  SimulationStageExecutionKind,
+  SimulationStageName,
   StateContext,
   StateHints,
   UserProfile,
@@ -51,6 +54,18 @@ import { deriveReflectionResult } from "./derived-results.ts";
 
 const LOW_VARIANCE_TEMPERATURE = 0;
 const STABLE_TEMPERATURE = 0.1;
+const CONDITIONAL_STAGE_GROUPS: Record<
+  "scenario" | "risk" | "ab_reasoning",
+  SimulationStageName[]
+> = {
+  scenario: ["scenario_a", "scenario_b"],
+  risk: ["risk_a", "risk_b"],
+  ab_reasoning: ["ab_reasoning"],
+};
+
+export type SimulationProgressReporter = (
+  event: SimulationProgressEvent,
+) => void | Promise<void>;
 
 function formatPayload(payload: unknown): string {
   return JSON.stringify(payload, null, 2);
@@ -95,7 +110,7 @@ function buildCaseInput(
 }
 
 async function runStructuredStage<T>(params: {
-  stageName: string;
+  stageName: SimulationStageName;
   schemaName: string;
   schema: Record<string, unknown>;
   prompt: string;
@@ -104,7 +119,16 @@ async function runStructuredStage<T>(params: {
   temperature: number;
   context: ExecutionContext;
   fallbackModel?: string;
+  onProgress?: SimulationProgressReporter;
 }): Promise<{ output: T; stageLog: LLMStageLogEntry }> {
+  await emitProgress(params.onProgress, {
+    type: "stage_started",
+    request_id: params.context.request_id,
+    stage_name: params.stageName,
+    execution_kind: "llm",
+    model: params.model,
+  });
+
   const response = await invokeStructuredLLM<T>({
     schemaName: params.schemaName,
     schema: params.schema,
@@ -141,6 +165,14 @@ async function runStructuredStage<T>(params: {
     schemaFailureCount: response.schemaFailureCount,
   });
 
+  await emitProgress(params.onProgress, {
+    type: "stage_completed",
+    request_id: params.context.request_id,
+    stage_name: params.stageName,
+    execution_kind: "llm",
+    model: response.model,
+  });
+
   return {
     output: response.output,
     stageLog: {
@@ -172,8 +204,60 @@ async function runStructuredStage<T>(params: {
   };
 }
 
+async function emitProgress(
+  reporter: SimulationProgressReporter | undefined,
+  event: SimulationProgressEvent,
+): Promise<void> {
+  if (!reporter) {
+    return;
+  }
+
+  await reporter(event);
+}
+
+function resolveSkippedStages(selectedPath: string[]): SimulationStageName[] {
+  const skipped = new Set<SimulationStageName>();
+
+  for (const [stageGroup, stages] of Object.entries(CONDITIONAL_STAGE_GROUPS) as [
+    keyof typeof CONDITIONAL_STAGE_GROUPS,
+    SimulationStageName[],
+  ][]) {
+    if (!selectedPath.includes(stageGroup)) {
+      for (const stage of stages) {
+        skipped.add(stage);
+      }
+    }
+  }
+
+  return [...skipped];
+}
+
+async function emitDeterministicStageProgress(params: {
+  reporter?: SimulationProgressReporter;
+  requestId: string;
+  stageName: SimulationStageName;
+  executionKind: SimulationStageExecutionKind;
+  model: string;
+}): Promise<void> {
+  await emitProgress(params.reporter, {
+    type: "stage_started",
+    request_id: params.requestId,
+    stage_name: params.stageName,
+    execution_kind: params.executionKind,
+    model: params.model,
+  });
+
+  await emitProgress(params.reporter, {
+    type: "stage_completed",
+    request_id: params.requestId,
+    stage_name: params.stageName,
+    execution_kind: params.executionKind,
+    model: params.model,
+  });
+}
+
 function createDeterministicStageLog(params: {
-  stageName: string;
+  stageName: SimulationStageName;
   model?: string;
   context: ExecutionContext;
   requestPayload: unknown;
@@ -260,6 +344,7 @@ export interface SimulationRunOptions {
   userId?: string;
   sessionId?: string;
   traceId?: string;
+  onProgress?: SimulationProgressReporter;
 }
 
 export interface SimulationRunResult {
@@ -292,6 +377,12 @@ export async function runSimulationRequest(
   const stageLogs: LLMStageLogEntry[] = [];
   const caseId = executionContext.request_id;
 
+  await emitProgress(options?.onProgress, {
+    type: "request_started",
+    request_id: executionContext.request_id,
+    trace_id: executionContext.trace_id,
+  });
+
   const stateContextStage = await runStructuredStage<StateContext>({
     stageName: "state_loader",
     schemaName: "state_context",
@@ -306,6 +397,7 @@ export async function runSimulationRequest(
     temperature: STABLE_TEMPERATURE,
     context: executionContext,
     fallbackModel: executionContext.stage_fallback_plan.state_loader,
+    onProgress: options?.onProgress,
   });
   stageLogs.push(stateContextStage.stageLog);
   const stateContext = stateContextStage.output;
@@ -313,6 +405,14 @@ export async function runSimulationRequest(
   applyRoutingDecision(executionContext, routingDecision);
   stateContextStage.stageLog.execution_mode = executionContext.execution_mode;
   stateContextStage.stageLog.selected_path = [...executionContext.selected_path];
+
+  await emitProgress(options?.onProgress, {
+    type: "routing_resolved",
+    request_id: executionContext.request_id,
+    execution_mode: executionContext.execution_mode,
+    selected_path: [...executionContext.selected_path],
+    skipped_stages: resolveSkippedStages(executionContext.selected_path),
+  });
 
   const plannerStage = await runStructuredStage<PlannerResult>({
     stageName: "planner",
@@ -328,6 +428,7 @@ export async function runSimulationRequest(
     temperature: STABLE_TEMPERATURE,
     context: executionContext,
     fallbackModel: executionContext.stage_fallback_plan.planner,
+    onProgress: options?.onProgress,
   });
   stageLogs.push(plannerStage.stageLog);
   const planner = plannerStage.output;
@@ -360,6 +461,7 @@ export async function runSimulationRequest(
       temperature: LOW_VARIANCE_TEMPERATURE,
       context: executionContext,
       fallbackModel: executionContext.stage_fallback_plan.scenario_a,
+      onProgress: options?.onProgress,
     });
     stageLogs.push(scenarioAStage.stageLog);
     scenarioA = scenarioAStage.output;
@@ -383,6 +485,7 @@ export async function runSimulationRequest(
       temperature: LOW_VARIANCE_TEMPERATURE,
       context: executionContext,
       fallbackModel: executionContext.stage_fallback_plan.scenario_b,
+      onProgress: options?.onProgress,
     });
     stageLogs.push(scenarioBStage.stageLog);
     scenarioB = scenarioBStage.output;
@@ -413,6 +516,7 @@ export async function runSimulationRequest(
       temperature: LOW_VARIANCE_TEMPERATURE,
       context: executionContext,
       fallbackModel: executionContext.stage_fallback_plan.risk_a,
+      onProgress: options?.onProgress,
     });
     stageLogs.push(riskAStage.stageLog);
     riskA = riskAStage.output;
@@ -437,6 +541,7 @@ export async function runSimulationRequest(
       temperature: LOW_VARIANCE_TEMPERATURE,
       context: executionContext,
       fallbackModel: executionContext.stage_fallback_plan.risk_b,
+      onProgress: options?.onProgress,
     });
     stageLogs.push(riskBStage.stageLog);
     riskB = riskBStage.output;
@@ -468,6 +573,7 @@ export async function runSimulationRequest(
       temperature: LOW_VARIANCE_TEMPERATURE,
       context: executionContext,
       fallbackModel: executionContext.stage_fallback_plan.ab_reasoning,
+      onProgress: options?.onProgress,
     });
     stageLogs.push(reasoningStage.stageLog);
     reasoning = reasoningStage.output;
@@ -479,6 +585,13 @@ export async function runSimulationRequest(
     riskB &&
     reasoning
   ) {
+    await emitDeterministicStageProgress({
+      reporter: options?.onProgress,
+      requestId: executionContext.request_id,
+      stageName: "guardrail",
+      executionKind: "deterministic",
+      model: "deterministic-guardrail",
+    });
     guardrailEvaluation = await evaluateSimulationGuardrail({
       input: caseInput,
       stateContext,
@@ -530,11 +643,19 @@ export async function runSimulationRequest(
     temperature: STABLE_TEMPERATURE,
     context: executionContext,
     fallbackModel: executionContext.stage_fallback_plan.advisor,
+    onProgress: options?.onProgress,
   });
   stageLogs.push(advisorStage.stageLog);
   const advisor = advisorStage.output;
 
   if (!guardrailEvaluation) {
+    await emitDeterministicStageProgress({
+      reporter: options?.onProgress,
+      requestId: executionContext.request_id,
+      stageName: "guardrail",
+      executionKind: "derived",
+      model: "derived-guardrail",
+    });
     guardrailEvaluation = deriveSelectiveGuardrailEvaluation({
       input: caseInput,
       stateContext,
@@ -600,10 +721,18 @@ export async function runSimulationRequest(
       temperature: STABLE_TEMPERATURE,
       context: executionContext,
       fallbackModel: executionContext.stage_fallback_plan.reflection,
+      onProgress: options?.onProgress,
     });
     stageLogs.push(reflectionStage.stageLog);
     reflection = reflectionStage.output;
   } else {
+    await emitDeterministicStageProgress({
+      reporter: options?.onProgress,
+      requestId: executionContext.request_id,
+      stageName: "reflection",
+      executionKind: "derived",
+      model: "derived-reflection",
+    });
     reflection = deriveReflectionResult({
       executionMode: executionContext.execution_mode,
       advisor,

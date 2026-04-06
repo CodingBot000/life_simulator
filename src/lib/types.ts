@@ -584,6 +584,22 @@ export interface SimulationRoutingSummary {
   };
 }
 
+export const SIMULATION_STAGE_ORDER = [
+  "state_loader",
+  "planner",
+  "scenario_a",
+  "scenario_b",
+  "risk_a",
+  "risk_b",
+  "ab_reasoning",
+  "guardrail",
+  "advisor",
+  "reflection",
+] as const;
+
+export type SimulationStageName = (typeof SIMULATION_STAGE_ORDER)[number];
+export type SimulationStageExecutionKind = "llm" | "deterministic" | "derived";
+
 export interface SimulationResponse {
   request_id: string;
   routing: SimulationRoutingSummary;
@@ -598,3 +614,36 @@ export interface SimulationResponse {
   advisor: AdvisorResult;
   reflection: ReflectionResult;
 }
+
+export type SimulationProgressEvent =
+  | {
+      type: "request_started";
+      request_id: string;
+      trace_id: string;
+    }
+  | {
+      type: "routing_resolved";
+      request_id: string;
+      execution_mode: ExecutionMode;
+      selected_path: string[];
+      skipped_stages: SimulationStageName[];
+    }
+  | {
+      type: "stage_started" | "stage_completed";
+      request_id: string;
+      stage_name: SimulationStageName;
+      execution_kind: SimulationStageExecutionKind;
+      model?: string;
+    }
+  | {
+      type: "result";
+      request_id: string;
+      response: SimulationResponse;
+    }
+  | {
+      type: "error";
+      request_id?: string;
+      trace_id: string;
+      error: string;
+      error_code: string;
+    };
