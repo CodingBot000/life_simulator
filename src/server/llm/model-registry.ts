@@ -108,11 +108,17 @@ const codexModelAliases: Record<string, string> = {
 
 export function getModelDefinition(modelName: string): ModelDefinition {
   const mode = getProviderMode();
+  const scopedRegistry = modelRegistry[mode] as Partial<
+    Record<string, ModelDefinition>
+  >;
+  const scopedDefinition =
+    scopedRegistry[normalizeModelNameForMode(modelName, mode)];
   const definition =
-    modelRegistry[mode][modelName] ??
-    Object.values(modelRegistry)
+    scopedDefinition ??
+    (Object.values(modelRegistry)
       .map((providerRegistry) => providerRegistry[modelName])
-      .find(Boolean);
+      .find(Boolean) ??
+      null);
 
   if (!definition) {
     throw new Error(`Unknown model "${modelName}" in LLM registry.`);

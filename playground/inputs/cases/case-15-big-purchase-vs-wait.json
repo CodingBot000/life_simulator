@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 32,
+    "job": "office worker",
+    "risk_tolerance": "low",
+    "priority": [
+      "financial_stability",
+      "quality_of_life",
+      "future_flexibility"
+    ]
+  },
+  "decision": {
+    "optionA": "차를 지금 구매한다",
+    "optionB": "구매를 미루고 현금을 지킨다",
+    "context": "출퇴근과 주말 이동이 점점 힘들어져 차가 있으면 삶의 질이 확실히 나아질 것 같다. 하지만 아직 비상금이 아주 두텁지 않고, 앞으로 이사나 커리어 변화 가능성도 있어 지금 큰 지출을 하는 것이 맞는지 고민하고 있다."
+  }
+}

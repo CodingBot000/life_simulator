@@ -27,6 +27,17 @@ class ProviderInvalidJsonError extends Error {
   }
 }
 
+class CodexCliPanicError extends Error {
+  code = "codex_cli_panicked";
+
+  constructor(message: string) {
+    super(message);
+    this.name = "CodexCliPanicError";
+  }
+}
+
+let cachedFatalCodexFailure: string | null = null;
+
 function approximateTokens(value: string): number {
   return Math.max(1, Math.ceil(value.length / 4));
 }
@@ -54,6 +65,27 @@ function buildPrompt(request: ProviderStructuredRequest): string {
   ].join("\n");
 }
 
+function buildProviderExecutionError(message: string): Error {
+  const error = new Error(
+    message || "Codex CLI failed to produce a structured response.",
+  ) as Error & { code?: string };
+  error.code = "provider_execution_failed";
+  return error;
+}
+
+function isFatalCodexBootstrapFailure(message: string): boolean {
+  return (
+    message.includes("system-configuration-0.6.1") &&
+    message.includes("Attempted to create a NULL object.")
+  );
+}
+
+function buildCodexCliPanicError(): CodexCliPanicError {
+  return new CodexCliPanicError(
+    "Codex CLI panicked locally while initializing macOS system configuration (`Attempted to create a NULL object.`).",
+  );
+}
+
 function classifyCodexFailure(output: string): Error {
   const message = output.trim();
 
@@ -67,11 +99,11 @@ function classifyCodexFailure(output: string): Error {
     );
   }
 
-  const error = new Error(
-    message || "Codex CLI failed to produce a structured response.",
-  ) as Error & { code?: string };
-  error.code = "provider_execution_failed";
-  return error;
+  if (isFatalCodexBootstrapFailure(message)) {
+    return buildCodexCliPanicError();
+  }
+
+  return buildProviderExecutionError(message);
 }
 
 function runCodexCommand(params: {
@@ -128,6 +160,10 @@ export const codexCliProvider: LLMProvider = {
   async invokeStructured(
     request: ProviderStructuredRequest,
   ): Promise<ProviderStructuredResponse> {
+    if (cachedFatalCodexFailure) {
+      throw new CodexCliPanicError(cachedFatalCodexFailure);
+    }
+
     const startedAt = Date.now();
     const tempDir = await mkdtemp(join(tmpdir(), "life-simulator-codex-"));
     const schemaPath = join(tempDir, "schema.json");
@@ -161,9 +197,16 @@ export const codexCliProvider: LLMProvider = {
       });
 
       if (result.exitCode !== 0) {
-        throw classifyCodexFailure(
-          [result.stderr, result.stdout].filter(Boolean).join("\n"),
-        );
+        const failureOutput = [result.stderr, result.stdout]
+          .filter(Boolean)
+          .join("\n");
+        const error = classifyCodexFailure(failureOutput);
+
+        if (isFatalCodexBootstrapFailure(failureOutput)) {
+          cachedFatalCodexFailure = error.message;
+        }
+
+        throw error;
       }
 
       const rawText = (await readFile(outputPath, "utf8")).trim();

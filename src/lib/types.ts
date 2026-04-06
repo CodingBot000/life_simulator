@@ -1,3 +1,5 @@
+import type { PriorityId } from "./priorities";
+
 export type RiskTolerance = "low" | "medium" | "high";
 export type ExecutionMode = "light" | "standard" | "careful" | "full";
 
@@ -5,7 +7,7 @@ export interface UserProfile {
   age: number;
   job: string;
   risk_tolerance: RiskTolerance;
-  priority: string[];
+  priority: PriorityId[];
 }
 
 export interface DecisionInput {
@@ -23,7 +25,7 @@ export interface MemoryDecisionRecord {
 export interface ProfileState {
   risk_preference: string;
   decision_style: string;
-  top_priorities: string[];
+  top_priorities: PriorityId[];
 }
 
 export interface SituationalState {
@@ -67,6 +69,25 @@ export interface SimulationRequest {
   decision: DecisionInput;
   prior_memory?: Partial<MemoryState>;
   state_hints?: StateHints;
+}
+
+export type CasePresetCategory =
+  | "career"
+  | "relationship"
+  | "finance"
+  | "living"
+  | "education"
+  | "health"
+  | "other";
+
+export interface CasePreset {
+  id: string;
+  slug: string;
+  title: string;
+  category: CasePresetCategory;
+  categoryLabel: string;
+  summary: string;
+  request: SimulationRequest;
 }
 
 export interface PlannerResult {

@@ -1,56 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 
 import type {
   AbReasoningResult,
   AdvisorResult,
-  DecisionInput,
+  CasePreset,
+  CasePresetCategory,
   GuardrailResult,
   PlannerResult,
   ReflectionResult,
   RiskResult,
   RiskTolerance,
+  SimulationRequest,
   ScenarioResult,
   SimulationResponse,
   StateContext,
-  UserProfile,
 } from "@/lib/types";
+import {
+  getPriorityLabel,
+  MAX_PRIORITY_SELECTIONS,
+  PRIORITY_GROUP_LABELS,
+  PRIORITY_GROUP_ORDER,
+  type PriorityId,
+  type PriorityLocale,
+  listPriorityDefinitionsByGroup,
+  normalizePriorityIds,
+} from "@/lib/priorities";
 
+type PrioritySelection = PriorityId | "";
 type FormState = {
   age: string;
   job: string;
   risk_tolerance: RiskTolerance;
-  priority: string;
+  priority: PrioritySelection[];
   optionA: string;
   optionB: string;
   context: string;
 };
 
+const PRIORITY_LABEL_LOCALE: PriorityLocale = "ko";
+
 const initialForm: FormState = {
   age: "32",
   job: "developer",
   risk_tolerance: "medium",
-  priority: "stability,income,work_life_balance",
+  priority: ["stability", "income", "work_life_balance"],
   optionA: "현재 회사에 남는다",
   optionB: "스타트업으로 이직한다",
   context: "현재 연봉은 안정적이지만 성장 정체를 느끼고 있다.",
 };
 
-function buildPayload(form: FormState): {
-  userProfile: UserProfile;
-  decision: DecisionInput;
-} {
+const CASE_CATEGORY_ORDER: CasePresetCategory[] = [
+  "career",
+  "relationship",
+  "finance",
+  "living",
+  "education",
+  "health",
+  "other",
+];
+
+function buildPayload(form: FormState): SimulationRequest {
   return {
     userProfile: {
       age: Number(form.age),
       job: form.job.trim(),
       risk_tolerance: form.risk_tolerance,
-      priority: form.priority
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean),
+      priority: normalizePriorityIds(form.priority.filter(Boolean)),
     },
     decision: {
       optionA: form.optionA.trim(),
@@ -58,6 +76,51 @@ function buildPayload(form: FormState): {
       context: form.context.trim(),
     },
   };
+}
+
+function buildPrioritySlots(priorities: readonly PriorityId[]): PrioritySelection[] {
+  const normalized = normalizePriorityIds(priorities);
+  const slots: PrioritySelection[] = [...normalized];
+
+  while (slots.length < MAX_PRIORITY_SELECTIONS) {
+    slots.push("");
+  }
+
+  return slots;
+}
+
+function buildFormState(request: SimulationRequest): FormState {
+  return {
+    age: String(request.userProfile.age),
+    job: request.userProfile.job,
+    risk_tolerance: request.userProfile.risk_tolerance,
+    priority: buildPrioritySlots(request.userProfile.priority),
+    optionA: request.decision.optionA,
+    optionB: request.decision.optionB,
+    context: request.decision.context,
+  };
+}
+
+function listPresetCategories(presets: CasePreset[]) {
+  return CASE_CATEGORY_ORDER.map((category) => {
+    const items = presets.filter((preset) => preset.category === category);
+
+    if (items.length === 0) {
+      return null;
+    }
+
+    return {
+      category,
+      label: items[0].categoryLabel,
+    };
+  }).filter(
+    (
+      option,
+    ): option is {
+      category: CasePresetCategory;
+      label: string;
+    } => Boolean(option),
+  );
 }
 
 function InputField({
@@ -200,7 +263,9 @@ function StateContextCard({ stateContext }: { stateContext: StateContext }) {
                     key={priority}
                     className="rounded-full border border-amber-900/10 bg-amber-600/[0.08] px-3 py-1 text-sm font-medium text-amber-900"
                   >
-                    {priority}
+                    {priority === "none"
+                      ? "none"
+                      : getPriorityLabel(priority, PRIORITY_LABEL_LOCALE)}
                   </span>
                 ))}
               </div>
@@ -962,9 +1027,125 @@ function ReflectionCard({
 
 export default function HomePage() {
   const [form, setForm] = useState<FormState>(initialForm);
+  const [presets, setPresets] = useState<CasePreset[]>([]);
+  const [selectedCategory, setSelectedCategory] =
+    useState<CasePresetCategory | null>(null);
+  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
+  const [presetError, setPresetError] = useState<string | null>(null);
+  const [isPresetLoading, setIsPresetLoading] = useState(true);
   const [result, setResult] = useState<SimulationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const presetCategories = listPresetCategories(presets);
+  const visiblePresets = selectedCategory
+    ? presets.filter((preset) => preset.category === selectedCategory)
+    : presets;
+  const selectedPreset =
+    presets.find((preset) => preset.id === selectedPresetId) ?? null;
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadPresets() {
+      try {
+        setIsPresetLoading(true);
+        setPresetError(null);
+
+        const response = await fetch("/api/cases", {
+          signal: controller.signal,
+        });
+        const data = (await response.json()) as {
+          cases?: CasePreset[];
+          error?: string;
+        };
+
+        if (!response.ok || !data.cases) {
+          throw new Error(data.error ?? "케이스 목록을 불러오지 못했습니다.");
+        }
+
+        setPresets(data.cases);
+
+        if (data.cases.length > 0) {
+          setSelectedCategory(data.cases[0].category);
+          setSelectedPresetId(data.cases[0].id);
+          setForm(buildFormState(data.cases[0].request));
+          setResult(null);
+          setError(null);
+        }
+      } catch (loadError) {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        setPresetError(
+          loadError instanceof Error
+            ? loadError.message
+            : "케이스 목록을 불러오지 못했습니다.",
+        );
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsPresetLoading(false);
+        }
+      }
+    }
+
+    void loadPresets();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  function applyPreset(preset: CasePreset) {
+    setSelectedCategory(preset.category);
+    setSelectedPresetId(preset.id);
+    setForm(buildFormState(preset.request));
+    setResult(null);
+    setError(null);
+  }
+
+  function handleCategoryChange(category: CasePresetCategory) {
+    setSelectedCategory(category);
+
+    const nextPreset = presets.find((preset) => preset.category === category);
+
+    if (nextPreset) {
+      applyPreset(nextPreset);
+    } else {
+      setSelectedPresetId(null);
+      setResult(null);
+      setError(null);
+    }
+  }
+
+  function updateFormField<Key extends keyof FormState>(
+    key: Key,
+    value: FormState[Key],
+  ) {
+    setForm((current) => ({
+      ...current,
+      [key]: value,
+    }));
+    setResult(null);
+    setError(null);
+  }
+
+  function updatePrioritySlot(index: number, value: PrioritySelection) {
+    const nextPriority = [...form.priority];
+    nextPriority[index] = value;
+
+    const deduped = nextPriority.map((item, itemIndex) => {
+      if (!item) {
+        return item;
+      }
+
+      return nextPriority.findIndex((candidate) => candidate === item) === itemIndex
+        ? item
+        : "";
+    });
+
+    updateFormField("priority", deduped);
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1043,6 +1224,96 @@ export default function HomePage() {
           </div>
 
           <form className="mt-8 grid gap-8" onSubmit={handleSubmit}>
+            <section className="grid gap-5 rounded-[28px] border border-slate-900/8 bg-white/70 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="section-label">Case Presets</p>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                   예시를 고르면 아래 입력창에 케이스별로 자동으로 채워집니다. 사용방법 이해를 돕기위한 예시일뿐 자유롭게 수정할 수 있습니다.
+                  </p>
+                </div>
+
+                {selectedPreset ? (
+                  <button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => applyPreset(selectedPreset)}
+                    className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-900/20 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    다시 채우기
+                  </button>
+                ) : null}
+              </div>
+
+              {isPresetLoading ? (
+                <div className="rounded-[24px] border border-slate-900/8 bg-slate-50/80 px-4 py-4 text-sm leading-7 text-slate-600">
+                  케이스 목록을 불러오는 중입니다.
+                </div>
+              ) : null}
+
+              {presetError ? (
+                <div className="rounded-[24px] border border-rose-900/10 bg-rose-50/80 px-4 py-4 text-sm leading-7 text-rose-900">
+                  {presetError}
+                </div>
+              ) : null}
+
+              {!isPresetLoading && !presetError ? (
+                <div className="grid gap-3 lg:grid-cols-[180px_minmax(0,1fr)]">
+                  <InputField label="카테고리">
+                    <select
+                      value={selectedCategory ?? ""}
+                      disabled={isLoading || presetCategories.length === 0}
+                      onChange={(event) =>
+                        handleCategoryChange(
+                          event.target.value as CasePresetCategory,
+                        )
+                      }
+                      className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
+                    >
+                      {presetCategories.map((category) => (
+                        <option key={category.category} value={category.category}>
+                          {category.label}
+                        </option>
+                      ))}
+                    </select>
+                  </InputField>
+
+                  <InputField label="예시 케이스">
+                    <select
+                      value={selectedPresetId ?? ""}
+                      disabled={isLoading || visiblePresets.length === 0}
+                      onChange={(event) => {
+                        const nextPreset = visiblePresets.find(
+                          (preset) => preset.id === event.target.value,
+                        );
+
+                        if (nextPreset) {
+                          applyPreset(nextPreset);
+                        }
+                      }}
+                      className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
+                    >
+                      {visiblePresets.map((preset) => (
+                        <option key={preset.id} value={preset.id}>
+                          {preset.title}
+                        </option>
+                      ))}
+                    </select>
+                  </InputField>
+                </div>
+              ) : null}
+
+              {/* {selectedPreset ? (
+                <div className="rounded-[20px] border border-amber-900/10 bg-amber-50/70 px-4 py-3 text-sm leading-6 text-amber-950">
+                  <span className="font-semibold">{selectedPreset.title}</span>
+                  <span className="mx-2 text-amber-700/70">·</span>
+                  <span className="block truncate sm:inline">
+                    {selectedPreset.summary}
+                  </span>
+                </div>
+              ) : null} */}
+            </section>
+
             <section className="grid gap-4 rounded-[28px] border border-slate-900/8 bg-white/70 p-5 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <p className="section-label">User Profile</p>
@@ -1055,12 +1326,7 @@ export default function HomePage() {
                   max={120}
                   type="number"
                   value={form.age}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      age: event.target.value,
-                    }))
-                  }
+                  onChange={(event) => updateFormField("age", event.target.value)}
                   className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
                 />
               </InputField>
@@ -1070,12 +1336,7 @@ export default function HomePage() {
                   required
                   type="text"
                   value={form.job}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      job: event.target.value,
-                    }))
-                  }
+                  onChange={(event) => updateFormField("job", event.target.value)}
                   className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
                 />
               </InputField>
@@ -1084,10 +1345,10 @@ export default function HomePage() {
                 <select
                   value={form.risk_tolerance}
                   onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      risk_tolerance: event.target.value as RiskTolerance,
-                    }))
+                    updateFormField(
+                      "risk_tolerance",
+                      event.target.value as RiskTolerance,
+                    )
                   }
                   className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
                 >
@@ -1098,19 +1359,49 @@ export default function HomePage() {
               </InputField>
 
               <InputField label="우선순위">
-                <input
-                  required
-                  type="text"
-                  value={form.priority}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      priority: event.target.value,
-                    }))
-                  }
-                  placeholder="stability,income,work_life_balance"
-                  className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
-                />
+                <div className="grid gap-3">
+                  {form.priority.map((priority, index) => (
+                    <select
+                      key={`priority-${index}`}
+                      value={priority}
+                      onChange={(event) =>
+                        updatePrioritySlot(
+                          index,
+                          event.target.value as PrioritySelection,
+                        )
+                      }
+                      className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
+                    >
+                      <option value="">
+                        {index === 0 ? `${index + 1}순위 선택` : `${index + 1}순위 없음`}
+                      </option>
+                      {PRIORITY_GROUP_ORDER.map((group) => (
+                        <optgroup
+                          key={group}
+                          label={PRIORITY_GROUP_LABELS[group][PRIORITY_LABEL_LOCALE]}
+                        >
+                          {listPriorityDefinitionsByGroup(group).map((definition) => (
+                            <option
+                              key={definition.id}
+                              value={definition.id}
+                              disabled={form.priority.some(
+                                (selected, selectedIndex) =>
+                                  selectedIndex !== index &&
+                                  selected === definition.id,
+                              )}
+                            >
+                              {definition.labels[PRIORITY_LABEL_LOCALE]}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
+                  ))}
+                  <p className="text-xs leading-6 text-slate-500">
+                    고유 id는 내부적으로 `quality_of_life` 같은 형식으로 유지되고,
+                    화면에는 자연어 라벨만 표시됩니다.
+                  </p>
+                </div>
               </InputField>
             </section>
 
@@ -1123,10 +1414,7 @@ export default function HomePage() {
                   type="text"
                   value={form.optionA}
                   onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      optionA: event.target.value,
-                    }))
+                    updateFormField("optionA", event.target.value)
                   }
                   className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
                 />
@@ -1138,10 +1426,7 @@ export default function HomePage() {
                   type="text"
                   value={form.optionB}
                   onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      optionB: event.target.value,
-                    }))
+                    updateFormField("optionB", event.target.value)
                   }
                   className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
                 />
@@ -1153,10 +1438,7 @@ export default function HomePage() {
                   rows={5}
                   value={form.context}
                   onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      context: event.target.value,
-                    }))
+                    updateFormField("context", event.target.value)
                   }
                   className="rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm leading-7 text-slate-900 outline-none transition focus:border-amber-600 focus:ring-4 focus:ring-amber-500/10"
                 />

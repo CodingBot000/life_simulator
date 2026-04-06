@@ -18,6 +18,12 @@ import type {
   StateHints,
   UserProfile,
 } from "@/lib/types";
+import {
+  isPriorityId,
+  MAX_PRIORITY_SELECTIONS,
+  normalizePriorityIds,
+  type PriorityId,
+} from "@/lib/priorities";
 
 export const runtime = "nodejs";
 
@@ -62,8 +68,6 @@ function shouldReturnDegraded(errorCode: string): boolean {
   return [
     "stage_timeout",
     "deadline_exceeded",
-    "circuit_open",
-    "provider_not_configured",
     "schema_validation_failed",
     "empty_provider_response",
   ].includes(errorCode);
@@ -110,6 +114,34 @@ function ensureStringArray(value: unknown, fieldName: string): string[] {
   }
 
   return normalized;
+}
+
+function ensurePriorityArray(value: unknown, fieldName: string): PriorityId[] {
+  const normalized = ensureStringArray(value, fieldName);
+  const priorities = normalizePriorityIds(normalized);
+
+  if (priorities.length === 0) {
+    throw new Error(
+      `Invalid request: ${fieldName} must contain at least one valid priority id.`,
+    );
+  }
+
+  if (priorities.length > MAX_PRIORITY_SELECTIONS) {
+    throw new Error(
+      `Invalid request: ${fieldName} must contain at most ${MAX_PRIORITY_SELECTIONS} items.`,
+    );
+  }
+
+  if (
+    normalized.some((priority) => !isPriorityId(priority)) ||
+    priorities.length !== normalized.length
+  ) {
+    throw new Error(
+      `Invalid request: ${fieldName} must contain unique canonical priority ids only.`,
+    );
+  }
+
+  return priorities;
 }
 
 function ensureOptionalStringArray(
@@ -238,7 +270,12 @@ function validateStateHints(value: unknown): StateHints | undefined {
             top_priorities: ensureOptionalStringArray(
               profile.top_priorities,
               "state_hints.profile_state.top_priorities",
-            ),
+            )
+              ? ensurePriorityArray(
+                  profile.top_priorities,
+                  "state_hints.profile_state.top_priorities",
+                )
+              : undefined,
           },
     situational_state:
       typeof situationalState === "undefined"
@@ -294,7 +331,7 @@ function validateUserProfile(value: unknown): UserProfile {
     age: ensureAge(profile.age),
     job: ensureString(profile.job, "job"),
     risk_tolerance: riskTolerance,
-    priority: ensureStringArray(profile.priority, "priority"),
+    priority: ensurePriorityArray(profile.priority, "priority"),
   };
 }
 

@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 31,
+    "job": "backend developer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "safety_net",
+      "career_growth",
+      "income"
+    ]
+  },
+  "decision": {
+    "optionA": "비상금을 먼저 더 쌓는다",
+    "optionB": "교육과 자기계발에 먼저 투자한다",
+    "context": "현재 수입은 괜찮지만 팀 상황이 예전만큼 안정적이지 않고, 동시에 AI 관련 역량을 빠르게 키우지 않으면 커리어 정체가 길어질 것 같은 불안도 있다. 손에 쥔 현금은 많지 않아 어느 쪽을 먼저 챙겨야 할지 고민하고 있다."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 30,
+    "job": "data analyst",
+    "risk_tolerance": "medium",
+    "priority": [
+      "career_opportunity",
+      "cost_of_living",
+      "support_system"
+    ]
+  },
+  "decision": {
+    "optionA": "서울/수도권으로 이사한다",
+    "optionB": "현재 지역에 남는다",
+    "context": "원하는 직무와 네트워킹 기회는 서울에 훨씬 많지만, 월세와 생활비가 지금보다 크게 오를 가능성이 높다. 현재 지역에서는 가족과 친구 지원망이 있고 생활비도 안정적이지만, 커리어 확장 속도가 느리다는 답답함이 있다."
+  }
+}

@@ -154,7 +154,7 @@ async function invokeModel<T>(
   const provider = getProvider(model.provider);
   const validator = getValidator(request.schemaName, request.schema);
   const breaker = getCircuitBreaker(
-    `${provider.name}:${modelName}`,
+    `${provider.name}:${model.name}`,
     model.circuitBreaker,
   );
   const timeoutMs = resolveTimeoutMs({
@@ -175,7 +175,7 @@ async function invokeModel<T>(
               schema: request.schema,
               prompt: request.prompt,
               input: request.input,
-              model: modelName,
+              model: model.name,
               temperature: request.temperature ?? 0,
               timeoutMs,
               metadata: request.metadata,
@@ -205,7 +205,7 @@ async function invokeModel<T>(
         rawText: execution.value.rawText,
         latencyMs: execution.value.latencyMs,
         usage: execution.value.usage,
-        estimatedCostUsd: estimateCostForTokens(modelName, execution.value.usage),
+        estimatedCostUsd: estimateCostForTokens(model.name, execution.value.usage),
         retryCount: execution.retryCount,
         fallbackUsed: false,
         cacheHit: false,
@@ -218,6 +218,17 @@ async function invokeModel<T>(
     breaker.recordFailure();
     throw error;
   }
+}
+
+function shouldSkipFallbackModel(error: unknown): boolean {
+  const errorCode = readErrorCode(error);
+
+  return [
+    "provider_execution_failed",
+    "provider_not_configured",
+    "codex_cli_panicked",
+    "circuit_open",
+  ].includes(errorCode ?? "");
 }
 
 export async function invokeStructuredLLM<T>(
@@ -250,7 +261,11 @@ export async function invokeStructuredLLM<T>(
 
     return response;
   } catch (primaryError) {
-    if (!request.fallbackModel || request.fallbackModel === request.model) {
+    if (
+      shouldSkipFallbackModel(primaryError) ||
+      !request.fallbackModel ||
+      request.fallbackModel === request.model
+    ) {
       throw primaryError;
     }
 
