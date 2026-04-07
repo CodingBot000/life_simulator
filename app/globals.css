@@ -38,6 +38,12 @@ body {
     linear-gradient(180deg, var(--background) 0%, var(--background-deep) 100%);
 }
 
+@media (min-width: 1024px) {
+  body {
+    overflow-x: clip;
+  }
+}
+
 ::selection {
   background: rgba(180, 83, 9, 0.18);
 }

@@ -9,6 +9,11 @@
 ```json
 {
   "caseId": "case-001",
+  "outputLocale": "ko | en",
+  "outputGlossary": {
+    "workload": "업무 부담",
+    "future optionality": "미래 선택지"
+  },
   "caseInput": {
     "userProfile": {
       "age": 32,
@@ -62,6 +67,11 @@
 - `recent_similar_decisions`의 각 항목은 `topic`, `selected_option`, `outcome_note`를 모두 채운다.
 - `state_summary`는 새 사실을 만들어내지 말고, 주어진 정보와 명시적 상태를 요약한 문장만 작성한다.
 - `agent_guidance`는 downstream agent가 어떤 tradeoff를 설명해야 하는지 한 문장으로 적는다.
+- `outputLocale`가 `ko`면 `state_summary.decision_bias`, `current_constraint`, `agent_guidance`는 자연스러운 한국어로 작성한다.
+- `outputLocale`가 `en`면 위 문장 필드는 자연스러운 영어로 작성한다.
+- `outputLocale`가 `ko`일 때는 불필요한 영어 개념어를 섞지 않는다. `outputGlossary`에 있는 표현은 그대로 따른다.
+- 고유명사, 사용자가 원문 그대로 제공한 직함, 인용문이 아니라면 영어 단어를 새로 도입하지 않는다.
+- 한국어 출력에서는 snake_case id, dotted path, JSON key를 그대로 문장에 쓰지 않는다.
 - 추천, 결론, 정답 선택은 절대 하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.

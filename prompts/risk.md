@@ -10,6 +10,11 @@
 ```json
 {
   "caseId": "case-001",
+  "outputLocale": "ko | en",
+  "outputGlossary": {
+    "workload": "업무 부담",
+    "future optionality": "미래 선택지"
+  },
   "caseInput": {
     "userProfile": {
       "age": 32,
@@ -80,6 +85,11 @@
 - `structured_assessment.risk_score`는 0~1 숫자로 고정하고 같은 입력이면 같은 값을 유지한다.
 - `structured_assessment.missing_info`는 입력상 핵심 전제 정보가 부족하면 true로 둔다.
 - 막연한 공포 조장은 금지한다.
+- `outputLocale`가 `ko`면 `reasons`는 자연스러운 한국어 문장으로 작성한다.
+- `outputLocale`가 `en`면 `reasons`는 자연스러운 영어 문장으로 작성한다.
+- `outputLocale`가 `ko`일 때는 불필요한 영어 개념어를 섞지 않는다. `outputGlossary`에 있는 표현은 그대로 따른다.
+- 고유명사, 사용자가 원문 그대로 제공한 직함, 인용문이 아니라면 영어 단어를 새로 도입하지 않는다.
+- 한국어 출력에서는 `risk level`, `stress load`, `growth tradeoff`, `future optionality` 같은 영어 표현을 문장에 그대로 쓰지 않는다.
 - 입력에 없는 사실을 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.

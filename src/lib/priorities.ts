@@ -322,3 +322,9 @@ export function getPriorityLabel(
 
   return PRIORITY_MAP[value].labels[locale];
 }
+
+export function normalizePriorityLocale(
+  value: string | null | undefined,
+): PriorityLocale {
+  return value?.toLowerCase().startsWith("en") ? "en" : "ko";
+}

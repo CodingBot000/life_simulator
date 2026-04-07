@@ -651,9 +651,6 @@ export const reflectionSchema = {
   type: "object",
   additionalProperties: false,
   properties: {
-    evaluation: {
-      type: "string",
-    },
     scores: {
       type: "object",
       additionalProperties: false,
@@ -686,44 +683,91 @@ export const reflectionSchema = {
         "recommendation_clarity",
       ],
     },
-    issues: {
-      type: "array",
-      minItems: 1,
-      items: {
-        type: "object",
-        additionalProperties: false,
-        properties: {
-          type: {
-            type: "string",
-            enum: ["scenario", "risk", "reasoning", "advisor", "profile"],
+    internal_diagnostic: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        evaluation: {
+          type: "string",
+        },
+        issues: {
+          type: "array",
+          minItems: 1,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              type: {
+                type: "string",
+                enum: ["scenario", "risk", "reasoning", "advisor", "profile"],
+              },
+              description: {
+                type: "string",
+              },
+            },
+            required: ["type", "description"],
           },
-          description: {
+        },
+        improvement_suggestions: {
+          type: "array",
+          minItems: 1,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              target: {
+                type: "string",
+                enum: ["planner", "scenario", "risk", "reasoning", "advisor"],
+              },
+              suggestion: {
+                type: "string",
+              },
+            },
+            required: ["target", "suggestion"],
+          },
+        },
+        overall_comment: {
+          type: "string",
+        },
+      },
+      required: [
+        "evaluation",
+        "issues",
+        "improvement_suggestions",
+        "overall_comment",
+      ],
+    },
+    user_summary: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        headline: {
+          type: "string",
+        },
+        summary: {
+          type: "string",
+        },
+        cautions: {
+          type: "array",
+          minItems: 1,
+          items: {
             type: "string",
           },
         },
-        required: ["type", "description"],
-      },
-    },
-    improvement_suggestions: {
-      type: "array",
-      minItems: 1,
-      items: {
-        type: "object",
-        additionalProperties: false,
-        properties: {
-          target: {
-            type: "string",
-            enum: ["planner", "scenario", "risk", "reasoning", "advisor"],
-          },
-          suggestion: {
+        suggested_actions: {
+          type: "array",
+          minItems: 1,
+          items: {
             type: "string",
           },
         },
-        required: ["target", "suggestion"],
       },
-    },
-    overall_comment: {
-      type: "string",
+      required: [
+        "headline",
+        "summary",
+        "cautions",
+        "suggested_actions",
+      ],
     },
     guardrail_review: {
       type: "object",
@@ -744,11 +788,9 @@ export const reflectionSchema = {
     },
   },
   required: [
-    "evaluation",
     "scores",
-    "issues",
-    "improvement_suggestions",
-    "overall_comment",
+    "internal_diagnostic",
+    "user_summary",
     "guardrail_review",
   ],
 } as const;

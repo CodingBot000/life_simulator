@@ -26,6 +26,7 @@ import {
   hasAnomaly,
 } from "@/lib/monitoring/anomalyDetector";
 import { enqueueAnomaly } from "@/lib/monitoring/anomalyQueue";
+import type { PriorityLocale } from "@/lib/priorities";
 import type {
   AbReasoningResult,
   AdvisorResult,
@@ -352,6 +353,7 @@ export async function runReflection(
   reasoning: AbReasoningResult,
   guardrail: GuardrailResult,
   advisor: AdvisorResult,
+  outputLocale: PriorityLocale = "ko",
   onUsage?: UsageRecorder,
 ): Promise<ReflectionResult> {
   return generateStructuredOutput<ReflectionResult>({
@@ -359,6 +361,7 @@ export async function runReflection(
     schema: reflectionSchema,
     prompt: reflectionPrompt,
     input: formatPayload({
+      outputLocale,
       caseId,
       caseInput,
       stateContext,
@@ -380,6 +383,7 @@ export async function runSimulationChain(
   decision: DecisionInput,
   priorMemory?: Partial<MemoryState>,
   stateHints?: StateHints,
+  outputLocale: PriorityLocale = "ko",
 ): Promise<SimulationResponse> {
   const requestId = randomUUID();
   const sessionId = "interactive-session";
@@ -492,6 +496,7 @@ export async function runSimulationChain(
     reasoning,
     guardrail,
     advisor,
+    outputLocale,
     recordUsage,
   );
   logStep("reflection", reflection);

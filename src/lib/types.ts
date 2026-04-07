@@ -559,12 +559,24 @@ export interface ReflectionGuardrailReview {
   correctness: "good" | "over" | "missing";
 }
 
-export interface ReflectionResult {
+export interface ReflectionInternalDiagnostic {
   evaluation: string;
-  scores: ReflectionScores;
   issues: ReflectionIssue[];
   improvement_suggestions: ReflectionImprovementSuggestion[];
   overall_comment: string;
+}
+
+export interface ReflectionUserSummary {
+  headline: string;
+  summary: string;
+  cautions: string[];
+  suggested_actions: string[];
+}
+
+export interface ReflectionResult {
+  scores: ReflectionScores;
+  internal_diagnostic: ReflectionInternalDiagnostic;
+  user_summary: ReflectionUserSummary;
   guardrail_review: ReflectionGuardrailReview;
 }
 

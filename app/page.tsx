@@ -1,8 +1,9 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 
+import { useUiLocale } from "@/components/providers/ui-locale-provider";
 import type {
   AbReasoningResult,
   AdvisorResult,
@@ -26,6 +27,7 @@ import { SIMULATION_STAGE_ORDER } from "@/lib/types";
 import {
   getPriorityLabel,
   MAX_PRIORITY_SELECTIONS,
+  PRIORITY_DEFINITIONS,
   PRIORITY_GROUP_LABELS,
   PRIORITY_GROUP_ORDER,
   type PriorityId,
@@ -44,8 +46,6 @@ type FormState = {
   optionB: string;
   context: string;
 };
-
-const PRIORITY_LABEL_LOCALE: PriorityLocale = "ko";
 
 const initialForm: FormState = {
   age: "32",
@@ -156,6 +156,200 @@ const EXECUTION_KIND_LABELS: Record<SimulationStageExecutionKind, string> = {
   llm: "LLM",
   deterministic: "Rule",
   derived: "Derived",
+};
+
+const REFLECTION_COPY = {
+  ko: {
+    title: "결과 검증",
+    cautions: "유의할 점",
+    suggestedActions: "다음 제안",
+  },
+  en: {
+    title: "Result Review",
+    cautions: "Key Cautions",
+    suggestedActions: "Suggested Actions",
+  },
+} as const;
+
+const TEXT_TOKEN_REPLACEMENTS_BY_LOCALE: Record<
+  PriorityLocale,
+  Array<{
+    pattern: RegExp;
+    replacement: string;
+  }>
+> = {
+  ko: [
+    {
+      pattern: /stateContext\.state_summary의 current_constraint/g,
+      replacement: "상태 요약의 현재 제약",
+    },
+    {
+      pattern: /state_summary\.current_constraint/g,
+      replacement: "상태 요약의 현재 제약",
+    },
+    {
+      pattern: /profile_state\.top_priorities/g,
+      replacement: "핵심 우선순위",
+    },
+    {
+      pattern: /user_state\.situational_state/g,
+      replacement: "현재 상황",
+    },
+    {
+      pattern: /user_state\.profile_state/g,
+      replacement: "프로필 상태",
+    },
+    {
+      pattern: /user_state\.memory_state/g,
+      replacement: "기억 상태",
+    },
+    {
+      pattern: /\bstateContext\.state_summary\b/g,
+      replacement: "상태 요약",
+    },
+    {
+      pattern: /\bstate_summary\b/g,
+      replacement: "상태 요약",
+    },
+    {
+      pattern: /\bprofile_state\b/g,
+      replacement: "프로필 상태",
+    },
+    {
+      pattern: /\bsituational_state\b/g,
+      replacement: "현재 상황",
+    },
+    {
+      pattern: /\bmemory_state\b/g,
+      replacement: "기억 상태",
+    },
+    {
+      pattern: /\bcurrent_constraint\b/g,
+      replacement: "현재 제약",
+    },
+    {
+      pattern: /\bdecision_bias\b/g,
+      replacement: "판단 성향",
+    },
+    {
+      pattern: /\bagent_guidance\b/g,
+      replacement: "분석 가이드",
+    },
+    {
+      pattern: /\btop_priorities\b/g,
+      replacement: "핵심 우선순위",
+    },
+    {
+      pattern: /\brisk_preference\b/g,
+      replacement: "위험 선호도",
+    },
+    {
+      pattern: /\bdecision_style\b/g,
+      replacement: "의사결정 성향",
+    },
+    {
+      pattern: /\bcareer_stage\b/g,
+      replacement: "커리어 단계",
+    },
+    {
+      pattern: /\bfinancial_pressure\b/g,
+      replacement: "재정 압박",
+    },
+    {
+      pattern: /\btime_pressure\b/g,
+      replacement: "시간 압박",
+    },
+    {
+      pattern: /\bemotional_state\b/g,
+      replacement: "정서 상태",
+    },
+  ],
+  en: [
+    {
+      pattern: /stateContext\.state_summary의 current_constraint/g,
+      replacement: "the current constraint from the state summary",
+    },
+    {
+      pattern: /state_summary\.current_constraint/g,
+      replacement: "the current constraint from the state summary",
+    },
+    {
+      pattern: /profile_state\.top_priorities/g,
+      replacement: "core priorities",
+    },
+    {
+      pattern: /user_state\.situational_state/g,
+      replacement: "current situation",
+    },
+    {
+      pattern: /user_state\.profile_state/g,
+      replacement: "profile state",
+    },
+    {
+      pattern: /user_state\.memory_state/g,
+      replacement: "memory state",
+    },
+    {
+      pattern: /\bstateContext\.state_summary\b/g,
+      replacement: "state summary",
+    },
+    {
+      pattern: /\bstate_summary\b/g,
+      replacement: "state summary",
+    },
+    {
+      pattern: /\bprofile_state\b/g,
+      replacement: "profile state",
+    },
+    {
+      pattern: /\bsituational_state\b/g,
+      replacement: "current situation",
+    },
+    {
+      pattern: /\bmemory_state\b/g,
+      replacement: "memory state",
+    },
+    {
+      pattern: /\bcurrent_constraint\b/g,
+      replacement: "current constraint",
+    },
+    {
+      pattern: /\bdecision_bias\b/g,
+      replacement: "decision bias",
+    },
+    {
+      pattern: /\bagent_guidance\b/g,
+      replacement: "agent guidance",
+    },
+    {
+      pattern: /\btop_priorities\b/g,
+      replacement: "core priorities",
+    },
+    {
+      pattern: /\brisk_preference\b/g,
+      replacement: "risk preference",
+    },
+    {
+      pattern: /\bdecision_style\b/g,
+      replacement: "decision style",
+    },
+    {
+      pattern: /\bcareer_stage\b/g,
+      replacement: "career stage",
+    },
+    {
+      pattern: /\bfinancial_pressure\b/g,
+      replacement: "financial pressure",
+    },
+    {
+      pattern: /\btime_pressure\b/g,
+      replacement: "time pressure",
+    },
+    {
+      pattern: /\bemotional_state\b/g,
+      replacement: "emotional state",
+    },
+  ],
 };
 
 function createInitialProgressState(): SimulationProgressState {
@@ -356,6 +550,27 @@ async function readSimulationProgressStream(
   return streamResult;
 }
 
+function formatUserFacingNarrative(
+  text: string,
+  locale: PriorityLocale = "ko",
+): string {
+  let formatted = text;
+
+  for (const { pattern, replacement } of TEXT_TOKEN_REPLACEMENTS_BY_LOCALE[locale]) {
+    formatted = formatted.replace(pattern, replacement);
+  }
+
+  for (const definition of [...PRIORITY_DEFINITIONS].sort(
+    (left, right) => right.id.length - left.id.length,
+  )) {
+    const pattern = new RegExp(`\\b${definition.id}\\b`, "g");
+    const replacement = definition.labels[locale];
+    formatted = formatted.replace(pattern, replacement);
+  }
+
+  return formatted;
+}
+
 function buildPayload(form: FormState): SimulationRequest {
   return {
     userProfile: {
@@ -450,9 +665,18 @@ function TimelineCard({
         </div>
       </div>
       <div className="grid gap-4">
-        <ScenarioBlock label="3개월" value={scenario.three_months} />
-        <ScenarioBlock label="1년" value={scenario.one_year} />
-        <ScenarioBlock label="3년" value={scenario.three_years} />
+        <ScenarioBlock
+          label="3개월"
+          value={formatUserFacingNarrative(scenario.three_months)}
+        />
+        <ScenarioBlock
+          label="1년"
+          value={formatUserFacingNarrative(scenario.one_year)}
+        />
+        <ScenarioBlock
+          label="3년"
+          value={formatUserFacingNarrative(scenario.three_years)}
+        />
       </div>
     </section>
   );
@@ -494,7 +718,7 @@ function PlannerCard({ planner }: { planner: PlannerResult }) {
               key={factor}
               className="rounded-full border border-amber-900/10 bg-amber-600/[0.08] px-3 py-1 text-sm font-medium text-amber-900"
             >
-              {factor}
+              {formatUserFacingNarrative(factor)}
             </span>
           ))}
         </div>
@@ -503,7 +727,13 @@ function PlannerCard({ planner }: { planner: PlannerResult }) {
   );
 }
 
-function StateContextCard({ stateContext }: { stateContext: StateContext }) {
+function StateContextCard({
+  stateContext,
+  locale,
+}: {
+  stateContext: StateContext;
+  locale: PriorityLocale;
+}) {
   const { profile_state, situational_state, memory_state } =
     stateContext.user_state;
   const summary = stateContext.state_summary;
@@ -559,7 +789,7 @@ function StateContextCard({ stateContext }: { stateContext: StateContext }) {
                   >
                     {priority === "none"
                       ? "none"
-                      : getPriorityLabel(priority, PRIORITY_LABEL_LOCALE)}
+                      : getPriorityLabel(priority, locale)}
                   </span>
                 ))}
               </div>
@@ -672,7 +902,7 @@ function StateContextCard({ stateContext }: { stateContext: StateContext }) {
                 Decision Bias
               </p>
               <p className="mt-2 text-sm leading-7 text-white/90">
-                {summary.decision_bias}
+                {formatUserFacingNarrative(summary.decision_bias)}
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -680,7 +910,7 @@ function StateContextCard({ stateContext }: { stateContext: StateContext }) {
                 Current Constraint
               </p>
               <p className="mt-2 text-sm leading-7 text-white/90">
-                {summary.current_constraint}
+                {formatUserFacingNarrative(summary.current_constraint)}
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -688,7 +918,7 @@ function StateContextCard({ stateContext }: { stateContext: StateContext }) {
                 Agent Guidance
               </p>
               <p className="mt-2 text-sm leading-7 text-white/90">
-                {summary.agent_guidance}
+                {formatUserFacingNarrative(summary.agent_guidance)}
               </p>
             </div>
           </div>
@@ -833,7 +1063,7 @@ function RiskCard({
             key={reason}
             className="rounded-2xl border border-slate-900/8 bg-white/70 px-4 py-3 text-sm leading-7 text-slate-700"
           >
-            {reason}
+            {formatUserFacingNarrative(reason)}
           </li>
         ))}
       </ul>
@@ -875,7 +1105,9 @@ function ReasoningLensCard({
           Option {reasoning.recommended_option}
         </span>
       </div>
-      <p className="mt-4 text-sm leading-7 text-slate-700">{reasoning.summary}</p>
+      <p className="mt-4 text-sm leading-7 text-slate-700">
+        {formatUserFacingNarrative(reasoning.summary)}
+      </p>
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
@@ -892,7 +1124,7 @@ function ReasoningLensCard({
           <ul className="mt-2 grid gap-2">
             {reasoning.key_assumptions.map((item) => (
               <li key={item} className="text-sm leading-7 text-slate-700">
-                {item}
+                {formatUserFacingNarrative(item)}
               </li>
             ))}
           </ul>
@@ -906,7 +1138,7 @@ function ReasoningLensCard({
           <ul className="mt-2 grid gap-2">
             {reasoning.pros.map((item) => (
               <li key={item} className="text-sm leading-7 text-slate-700">
-                {item}
+                {formatUserFacingNarrative(item)}
               </li>
             ))}
           </ul>
@@ -918,7 +1150,7 @@ function ReasoningLensCard({
           <ul className="mt-2 grid gap-2">
             {reasoning.cons.map((item) => (
               <li key={item} className="text-sm leading-7 text-slate-700">
-                {item}
+                {formatUserFacingNarrative(item)}
               </li>
             ))}
           </ul>
@@ -965,7 +1197,7 @@ function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
             Comparison
           </p>
           <p className="mt-3 text-sm leading-7 text-slate-700">
-            {reasoning.reasoning.comparison.reason}
+            {formatUserFacingNarrative(reasoning.reasoning.comparison.reason)}
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/70 p-4">
@@ -975,7 +1207,7 @@ function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
               <ul className="mt-2 grid gap-2">
                 {reasoning.reasoning.comparison.agreements.map((item) => (
                   <li key={item} className="text-sm leading-7 text-slate-700">
-                    {item}
+                    {formatUserFacingNarrative(item)}
                   </li>
                 ))}
               </ul>
@@ -987,7 +1219,7 @@ function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
               <ul className="mt-2 grid gap-2">
                 {reasoning.reasoning.comparison.conflicts.map((item) => (
                   <li key={item} className="text-sm leading-7 text-slate-700">
-                    {item}
+                    {formatUserFacingNarrative(item)}
                   </li>
                 ))}
               </ul>
@@ -1031,7 +1263,9 @@ function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
             </div>
           </div>
           <p className="mt-4 text-sm leading-7 text-white/80">
-            {reasoning.reasoning.final_selection.why_selected}
+            {formatUserFacingNarrative(
+              reasoning.reasoning.final_selection.why_selected,
+            )}
           </p>
         </div>
       </div>
@@ -1082,9 +1316,11 @@ function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
           </p>
         </div>
       </div>
-      <p className="mt-4 text-sm leading-7 text-slate-700">{advisor.reason}</p>
+      <p className="mt-4 text-sm leading-7 text-slate-700">
+        {formatUserFacingNarrative(advisor.reason)}
+      </p>
       <p className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
-        {advisor.reasoning_basis.core_why}
+        {formatUserFacingNarrative(advisor.reasoning_basis.core_why)}
       </p>
     </section>
   );
@@ -1192,10 +1428,13 @@ function GuardrailCard({
 function ReflectionCard({
   reflection,
   derived = false,
+  locale,
 }: {
   reflection: ReflectionResult;
   derived?: boolean;
+  locale: PriorityLocale;
 }) {
+  const reflectionCopy = REFLECTION_COPY[locale];
   const scoreEntries: Array<{
     label: keyof ReflectionResult["scores"];
     value: number;
@@ -1217,7 +1456,7 @@ function ReflectionCard({
       <p className="section-label">Reflection</p>
       <div className="mt-2 flex items-start justify-between gap-4">
         <h3 className="display-font text-2xl font-semibold text-slate-950">
-          결과 검증
+          {reflectionCopy.title}
         </h3>
         {derived ? (
           <span className="rounded-full border border-slate-900/10 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
@@ -1226,10 +1465,10 @@ function ReflectionCard({
         ) : null}
       </div>
       <p className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
-        {reflection.evaluation}
+        {formatUserFacingNarrative(reflection.user_summary.headline, locale)}
       </p>
       <p className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
-        {reflection.overall_comment}
+        {formatUserFacingNarrative(reflection.user_summary.summary, locale)}
       </p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -1279,18 +1518,15 @@ function ReflectionCard({
       <div className="mt-6 grid gap-5">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-            Issues
+            {reflectionCopy.cautions}
           </p>
           <ul className="mt-3 grid gap-3">
-            {reflection.issues.map((issue, index) => (
+            {reflection.user_summary.cautions.map((item, index) => (
               <li
-                key={`${issue.type}-${index}`}
+                key={`caution-${index}`}
                 className="rounded-2xl border border-rose-900/10 bg-rose-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
               >
-                <span className="mr-2 rounded-full bg-rose-900 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
-                  {issue.type}
-                </span>
-                {issue.description}
+                {formatUserFacingNarrative(item, locale)}
               </li>
             ))}
           </ul>
@@ -1298,18 +1534,15 @@ function ReflectionCard({
 
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-            Improvements
+            {reflectionCopy.suggestedActions}
           </p>
           <ul className="mt-3 grid gap-3">
-            {reflection.improvement_suggestions.map((item, index) => (
+            {reflection.user_summary.suggested_actions.map((item, index) => (
               <li
-                key={`${item.target}-${index}`}
+                key={`action-${index}`}
                 className="rounded-2xl border border-amber-900/10 bg-amber-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
               >
-                <span className="mr-2 rounded-full bg-amber-700 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
-                  {item.target}
-                </span>
-                {item.suggestion}
+                {formatUserFacingNarrative(item, locale)}
               </li>
             ))}
           </ul>
@@ -1355,7 +1588,7 @@ function ProgressStageCard({
 
   return (
     <div
-      className={`min-w-[148px] rounded-[22px] border px-4 py-3 transition ${toneClass}`}
+      className={`w-full max-w-[240px] rounded-[22px] border px-4 py-3 transition ${toneClass}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div>
@@ -1424,29 +1657,22 @@ function LoadingStageStrip({ progress }: { progress: SimulationProgressState }) 
         </div>
       </div>
 
-      <div className="mt-4 overflow-x-auto pb-2">
-        <div className="flex min-w-max items-center gap-2">
-          {SIMULATION_STAGE_ORDER.map((stageName, index) => (
-            <Fragment key={stageName}>
-              <ProgressStageCard
-                stageName={stageName}
-                index={index}
-                entry={progress.stages[stageName]}
-              />
-              {index < SIMULATION_STAGE_ORDER.length - 1 ? (
-                <div className="flex items-center justify-center px-1 text-lg font-semibold text-slate-300">
-                  →
-                </div>
-              ) : null}
-            </Fragment>
-          ))}
-        </div>
+      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4">
+        {SIMULATION_STAGE_ORDER.map((stageName, index) => (
+          <ProgressStageCard
+            key={stageName}
+            stageName={stageName}
+            index={index}
+            entry={progress.stages[stageName]}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
 export default function HomePage() {
+  const { locale: uiLocale } = useUiLocale();
   const [form, setForm] = useState<FormState>(initialForm);
   const [presets, setPresets] = useState<CasePreset[]>([]);
   const [selectedCategory, setSelectedCategory] =
@@ -1585,6 +1811,7 @@ export default function HomePage() {
         headers: {
           "Content-Type": "application/json",
           "x-simulate-stream": "ndjson",
+          "x-ui-locale": uiLocale,
         },
         body: JSON.stringify(buildPayload(form)),
       });
@@ -1624,9 +1851,9 @@ export default function HomePage() {
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-      <div className="grid gap-8 xl:grid-cols-[1.04fr_0.96fr]">
-        <section className="card-surface-strong rounded-[36px] p-6 sm:p-8">
+    <main className="mx-auto min-h-screen w-full max-w-[1280px] px-4 py-8 sm:px-6 lg:min-w-[1120px] lg:px-8 lg:py-10 lg:[overflow-x:clip]">
+      <div className="grid gap-8">
+        <section className="card-surface-strong min-w-0 rounded-[36px] p-6 sm:p-8">
           <div className="max-w-3xl">
             <p className="section-label">Decision Simulator</p>
             <h1 className="display-font mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
@@ -1818,7 +2045,7 @@ export default function HomePage() {
                       {PRIORITY_GROUP_ORDER.map((group) => (
                         <optgroup
                           key={group}
-                          label={PRIORITY_GROUP_LABELS[group][PRIORITY_LABEL_LOCALE]}
+                          label={PRIORITY_GROUP_LABELS[group][uiLocale]}
                         >
                           {listPriorityDefinitionsByGroup(group).map((definition) => (
                             <option
@@ -1830,7 +2057,7 @@ export default function HomePage() {
                                   selected === definition.id,
                               )}
                             >
-                              {definition.labels[PRIORITY_LABEL_LOCALE]}
+                              {definition.labels[uiLocale]}
                             </option>
                           ))}
                         </optgroup>
@@ -1901,7 +2128,7 @@ export default function HomePage() {
           </form>
         </section>
 
-        <section className="grid content-start gap-5 xl:sticky xl:top-8 xl:self-start">
+        <section className="grid min-w-0 content-start gap-5">
           {hasProgressHistory(progress) ? (
             <LoadingStageStrip progress={progress} />
           ) : null}
@@ -1952,7 +2179,7 @@ export default function HomePage() {
           {result ? (
             <>
               <RoutingCard routing={result.routing} />
-              <StateContextCard stateContext={result.stateContext} />
+              <StateContextCard stateContext={result.stateContext} locale={uiLocale} />
               <PlannerCard planner={result.planner} />
               {result.scenarioA ? (
                 <TimelineCard title="선택지 A 시나리오" scenario={result.scenarioA} />
@@ -1971,6 +2198,7 @@ export default function HomePage() {
               <ReflectionCard
                 reflection={result.reflection}
                 derived={!result.routing.selected_path.includes("reflection")}
+                locale={uiLocale}
               />
             </>
           ) : null}

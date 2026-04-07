@@ -42,6 +42,8 @@ import {
   deriveSelectiveGuardrailEvaluation,
   evaluateSimulationGuardrail,
 } from "../guardrail/service.ts";
+import { getOutputGlossary } from "../../lib/output-locale.ts";
+import type { PriorityLocale } from "../../lib/priorities.ts";
 import type { GuardrailEvaluationActual } from "../../lib/guardrail-eval.ts";
 import type { LLMStageLogEntry, RequestExecutionEnvelope } from "../logging/types.ts";
 import {
@@ -344,6 +346,7 @@ export interface SimulationRunOptions {
   userId?: string;
   sessionId?: string;
   traceId?: string;
+  uiLocale?: PriorityLocale;
   onProgress?: SimulationProgressReporter;
 }
 
@@ -361,6 +364,8 @@ export async function runSimulationRequest(
   options?: SimulationRunOptions,
 ): Promise<SimulationRunResult> {
   const caseInput = buildCaseInput(userProfile, decision, priorMemory, stateHints);
+  const outputLocale = options?.uiLocale ?? "ko";
+  const outputGlossary = getOutputGlossary(outputLocale);
   const bootstrapRoutingDecision = buildRoutingDecision(caseInput);
   const executionContext = createExecutionContext({
     routeName: bootstrapRoutingDecision.routeName,
@@ -390,6 +395,8 @@ export async function runSimulationRequest(
     prompt: stateLoaderPrompt,
     inputPayload: {
       caseId,
+      outputLocale,
+      outputGlossary,
       caseInput,
     },
     model:
@@ -421,6 +428,8 @@ export async function runSimulationRequest(
     prompt: plannerPrompt,
     inputPayload: {
       caseId,
+      outputLocale,
+      outputGlossary,
       caseInput,
       stateContext,
     },
@@ -449,6 +458,8 @@ export async function runSimulationRequest(
       prompt: scenarioPrompt,
       inputPayload: {
         caseId,
+        outputLocale,
+        outputGlossary,
         caseInput,
         stateContext,
         optionLabel: "A",
@@ -473,6 +484,8 @@ export async function runSimulationRequest(
       prompt: scenarioPrompt,
       inputPayload: {
         caseId,
+        outputLocale,
+        outputGlossary,
         caseInput,
         stateContext,
         optionLabel: "B",
@@ -503,6 +516,8 @@ export async function runSimulationRequest(
       prompt: riskPrompt,
       inputPayload: {
         caseId,
+        outputLocale,
+        outputGlossary,
         caseInput,
         stateContext,
         optionLabel: "A",
@@ -528,6 +543,8 @@ export async function runSimulationRequest(
       prompt: riskPrompt,
       inputPayload: {
         caseId,
+        outputLocale,
+        outputGlossary,
         caseInput,
         stateContext,
         optionLabel: "B",
@@ -561,6 +578,8 @@ export async function runSimulationRequest(
       prompt: abReasoningPrompt,
       inputPayload: {
         caseId,
+        outputLocale,
+        outputGlossary,
         caseInput,
         stateContext,
         plannerResult: planner,
@@ -629,6 +648,8 @@ export async function runSimulationRequest(
         selected_path: routingDecision.selectedPath,
       },
       caseId,
+      outputLocale,
+      outputGlossary,
       caseInput,
       stateContext,
       plannerResult: planner,
@@ -706,6 +727,8 @@ export async function runSimulationRequest(
       prompt: reflectionPrompt,
       inputPayload: {
         caseId,
+        outputLocale,
+        outputGlossary,
         caseInput,
         stateContext,
         plannerResult: planner,
@@ -737,6 +760,7 @@ export async function runSimulationRequest(
       executionMode: executionContext.execution_mode,
       advisor,
       guardrailEvaluation,
+      locale: options?.uiLocale ?? "ko",
     });
     stageLogs.push(
       createDeterministicStageLog({

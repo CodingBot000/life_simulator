@@ -22,6 +22,7 @@ import type {
 import {
   isPriorityId,
   MAX_PRIORITY_SELECTIONS,
+  normalizePriorityLocale,
   normalizePriorityIds,
   type PriorityId,
 } from "@/lib/priorities";
@@ -88,6 +89,7 @@ function createProgressStreamResponse(params: {
   body: SimulationRequest;
   identity: ReturnType<typeof resolveIdentity>;
   startedAt: number;
+  uiLocale: "ko" | "en";
 }): Response {
   const encoder = new TextEncoder();
   let closed = false;
@@ -112,6 +114,7 @@ function createProgressStreamResponse(params: {
             userId: params.identity.userId,
             sessionId: params.identity.sessionId,
             traceId: params.identity.traceId,
+            uiLocale: params.uiLocale,
             onProgress: send,
           },
         );
@@ -454,6 +457,7 @@ export async function POST(request: Request) {
     const identity = resolveIdentity(request);
     traceId = identity.traceId;
     const body = validateRequestBody(await request.json());
+    const uiLocale = normalizePriorityLocale(getHeader(request, "x-ui-locale"));
     const rateLimit = checkRateLimit(identity.rateLimitKey);
 
     if (!rateLimit.allowed) {
@@ -480,6 +484,7 @@ export async function POST(request: Request) {
         body,
         identity,
         startedAt,
+        uiLocale,
       });
     }
 
@@ -492,6 +497,7 @@ export async function POST(request: Request) {
         userId: identity.userId,
         sessionId: identity.sessionId,
         traceId: identity.traceId,
+        uiLocale,
       },
     );
 

@@ -12,6 +12,11 @@
 ```json
 {
   "caseId": "case-001",
+  "outputLocale": "ko | en",
+  "outputGlossary": {
+    "workload": "업무 부담",
+    "future optionality": "미래 선택지"
+  },
   "caseInput": {
     "userProfile": {
       "age": 32,
@@ -113,6 +118,12 @@
 - `structured_signals.missing_info`는 입력상 핵심 전제가 비어 있거나 불확실하면 true다.
 - `structured_signals.low_confidence`는 최종 선택을 강하게 밀기 어렵거나 판단 전제가 부족하면 true다.
 - 표현 다양성보다 판단 일관성을 우선한다.
+- `outputLocale`가 `ko`면 `planner_goal`, `summary`, `key_assumptions`, `pros`, `cons`, `agreements`, `conflicts`, `comparison.reason`, `final_selection.why_selected`는 자연스러운 한국어로 작성한다.
+- `outputLocale`가 `en`면 위 자유 서술 필드는 자연스러운 영어로 작성한다.
+- `outputLocale`가 `ko`일 때는 불필요한 영어 개념어를 섞지 않는다. `outputGlossary`에 있는 표현은 그대로 따른다.
+- 고유명사, 사용자가 원문 그대로 제공한 직함, 인용문이 아니라면 영어 단어를 새로 도입하지 않는다.
+- 한국어 출력에서는 `future optionality`, `tradeoff`, `workload`, `top priorities`, `selected reasoning` 같은 영어 표현이나 내부 키 이름을 그대로 문장에 쓰지 않는다.
+- `recommended_option`, `which_fits_user_better`, `selected_reasoning`, `selected_option` 같은 enum 필드는 스키마대로 유지하되, 사용자용 서술 문장에서는 내부 필드명을 직접 언급하지 않는다.
 - 입력에 없는 사실을 새로 만들어 단정하지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.

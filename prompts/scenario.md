@@ -10,6 +10,11 @@
 ```json
 {
   "caseId": "case-001",
+  "outputLocale": "ko | en",
+  "outputGlossary": {
+    "workload": "업무 부담",
+    "future optionality": "미래 선택지"
+  },
   "caseInput": {
     "userProfile": {
       "age": 32,
@@ -69,6 +74,11 @@
 - `structured_assessment`는 반드시 아래 enum만 사용한다.
 - 서술 문장은 꾸미지 말고 간결한 사실형 표현을 우선한다.
 - 같은 입력이면 표현 다양성보다 판단 일관성을 우선한다.
+- `outputLocale`가 `ko`면 `three_months`, `one_year`, `three_years`는 자연스러운 한국어로 작성한다.
+- `outputLocale`가 `en`면 위 서술은 자연스러운 영어로 작성한다.
+- `outputLocale`가 `ko`일 때는 불필요한 영어 개념어를 섞지 않는다. `outputGlossary`에 있는 표현은 그대로 따른다.
+- 고유명사, 사용자가 원문 그대로 제공한 직함, 인용문이 아니라면 영어 단어를 새로 도입하지 않는다.
+- 한국어 출력에서는 `growth`, `stability`, `optionality`, `workload` 같은 영어 단어를 그대로 남기지 않는다.
 - 응답은 반드시 유효한 JSON만 반환한다.
 - 마크다운, 코드블록, 설명 문장, 여분 텍스트는 절대 포함하지 않는다.
 

@@ -11,6 +11,11 @@
 ```json
 {
   "executionMode": "light | standard | careful | full",
+  "outputLocale": "ko | en",
+  "outputGlossary": {
+    "workload": "업무 부담",
+    "future optionality": "미래 선택지"
+  },
   "routing": {
     "execution_mode": "light",
     "selected_path": ["planner", "advisor"]
@@ -147,6 +152,13 @@
 - 출력의 `decision`은 반드시 `A`, `B`, `undecided` 중 하나여야 한다.
 - `recommended_option`은 `decision`과 동일한 값을 넣는다.
 - 추천 사유는 `stateContext.state_summary`, `profile_state.top_priorities`, `situational_state`, `memory_state`에 직접 연결해야 한다.
+- 위 규칙은 내부 grounding 용도다. 사용자에게 보이는 `reason`, `reasoning_basis.core_why` 문장에는 `profile_state.top_priorities`, `current_constraint`, `risk_preference`, `financial_pressure` 같은 내부 필드명이나 dotted path를 그대로 쓰지 말고 자연어로 풀어쓴다.
+- 사용자에게 보이는 문장에는 `financial_stability`, `mental_space`, `work_life_balance` 같은 snake_case priority id를 그대로 쓰지 말고 `재정 안정성`, `마음의 여유`, `워라밸`처럼 자연어 라벨로 변환한다.
+- `outputLocale`가 `ko`면 `reason`, `reasoning_basis.core_why`는 자연스러운 한국어로 작성한다.
+- `outputLocale`가 `en`면 위 문장 필드는 자연스러운 영어로 작성한다.
+- `outputLocale`가 `ko`일 때는 불필요한 영어 개념어를 섞지 않는다. `outputGlossary`에 있는 표현은 그대로 따른다.
+- 고유명사, 사용자가 원문 그대로 제공한 직함, 인용문이 아니라면 영어 단어를 새로 도입하지 않는다.
+- 내부 키 이름, snake_case id, JSON 경로 표기는 사용자-facing 문장에서 금지한다.
 - `abReasoning`이 있으면 final_selection을 그대로 복붙하지 말고 state-aware 근거로 재구성한다.
 - `abReasoning`이 없으면 planner/scenario/risk를 직접 종합해 `reasoning_basis.selected_reasoning`에 최종 추천과 가장 가까운 축(`A` 또는 `B`)을 기록한다.
 - `guardrailResult.final_mode == "normal"`이면 기존처럼 추천한다.
