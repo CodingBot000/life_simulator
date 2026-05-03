@@ -29,7 +29,7 @@ export interface SeedCase {
 }
 
 export const DEFAULT_BASE_URL =
-  process.env.SIMULATE_BASE_URL?.trim() || "http://127.0.0.1:3000";
+  process.env.SIMULATE_BASE_URL?.trim() || "http://127.0.0.1:8080";
 export const DEFAULT_SEED_INPUT_PATH = path.join(
   process.cwd(),
   "scripts",

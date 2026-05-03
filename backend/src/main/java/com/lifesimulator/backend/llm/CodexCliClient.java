@@ -49,6 +49,7 @@ public class CodexCliClient {
         command.add(entry.getKey() + "=\"" + entry.getValue() + "\"");
       }
       command.add("--skip-git-repo-check");
+      command.add("--ephemeral");
       command.add("--sandbox");
       command.add("read-only");
       command.add("--color");
