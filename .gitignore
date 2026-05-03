@@ -20,7 +20,5 @@ npm-debug.log*
 /frontend/outputs/
 /frontend/playground/outputs/
 
-# Existing historical docs remain ignored unless intentionally added under refact.
+# Local and historical docs remain ignored.
 docs/*
-!docs/refact/
-!docs/refact/**
