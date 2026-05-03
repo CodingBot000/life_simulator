@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: life-simulator-backend
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+simulator:
+  frontend:
+    cases-dir: ../frontend/playground/inputs/cases
+  database:
+    enabled: ${BACKEND_DATABASE_ENABLED:false}
+    url: ${BACKEND_DATABASE_URL:jdbc:postgresql://localhost:5432/life_simulator_dev}
+    username: ${BACKEND_DATABASE_USERNAME:life_sim_user}
+    password: ${BACKEND_DATABASE_PASSWORD:life_sim_password}
+    migrate: ${BACKEND_DATABASE_MIGRATE:true}
+  codex:
+    enabled: true
+    fallback-on-error: true
+    command: codex
+    model: gpt-5.3-codex-spark
+    timeout: 75s
+    config:
+      model_reasoning_effort: low
+      model_verbosity: low
+      service_tier: fast

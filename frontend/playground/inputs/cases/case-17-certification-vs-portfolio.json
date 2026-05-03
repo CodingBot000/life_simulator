@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 28,
+    "job": "QA engineer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "employability",
+      "skill_depth",
+      "proof_of_ability"
+    ]
+  },
+  "decision": {
+    "optionA": "자격증 준비에 집중한다",
+    "optionB": "포트폴리오 프로젝트를 만든다",
+    "context": "커리어 전환이나 다음 이직을 준비하고 있는데, 자격증은 일정이 명확하고 공식적인 증명이 된다는 장점이 있다. 반면 포트폴리오는 시간이 더 들지만 실제 실무 역량을 보여주기 쉽다. 둘 다 병행하기에는 시간과 에너지가 부족해서 우선순위를 정해야 한다."
+  }
+}

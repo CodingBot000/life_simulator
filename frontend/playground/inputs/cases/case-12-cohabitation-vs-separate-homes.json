@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 29,
+    "job": "marketer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "compatibility",
+      "personal_space",
+      "financial_efficiency"
+    ]
+  },
+  "decision": {
+    "optionA": "동거를 시작한다",
+    "optionB": "각자 집을 유지하며 관계를 이어간다",
+    "context": "서로 자주 오가느라 시간과 비용이 많이 들고 있어 동거 이야기가 나왔다. 함께 살면 생활 리듬과 가치관이 더 잘 보일 것 같지만, 아직 혼자 있는 시간과 공간도 중요하게 느껴져 관계가 더 빨리 지치지는 않을지 걱정하고 있다."
+  }
+}

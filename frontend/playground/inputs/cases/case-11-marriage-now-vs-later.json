@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 33,
+    "job": "product designer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "relationship_stability",
+      "financial_readiness",
+      "family_planning"
+    ]
+  },
+  "decision": {
+    "optionA": "1~2년 안에 결혼을 추진한다",
+    "optionB": "결혼은 미루고 관계를 더 지켜본다",
+    "context": "오랜 연애로 서로에 대한 신뢰는 쌓였지만, 최근 이직과 주거비 부담 때문에 생활 기반이 아직 완전히 안정적이지 않다. 양가 부모의 기대는 커지고 있고, 지금 결정을 미루면 관계가 느슨해질까 걱정되지만 너무 서두르면 현실 문제로 갈등이 커질 것 같아 고민하고 있다."
+  }
+}

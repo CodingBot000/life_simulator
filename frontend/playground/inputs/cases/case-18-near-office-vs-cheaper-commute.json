@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 33,
+    "job": "product manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "time_efficiency",
+      "cost_of_living",
+      "energy_management"
+    ]
+  },
+  "decision": {
+    "optionA": "회사 근처로 이사해 월세를 높인다",
+    "optionB": "통근 시간을 감수하고 현재 집을 유지한다",
+    "context": "왕복 통근 시간이 길어 평일 에너지가 빠르게 소진되고 있지만, 지금 사는 집은 월세가 합리적이고 주변 생활 인프라도 익숙하다. 회사 근처로 옮기면 시간과 체력은 아낄 수 있지만, 월세와 고정비가 커져 생활 여유가 줄어들 수 있어 고민하고 있다."
+  }
+}

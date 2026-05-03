@@ -1,0 +1,17 @@
+{
+  "userProfile": {
+    "age": 27,
+    "job": "junior developer",
+    "risk_tolerance": "low",
+    "priority": [
+      "financial_stability",
+      "independence",
+      "mental_space"
+    ]
+  },
+  "decision": {
+    "optionA": "독립해서 혼자 산다",
+    "optionB": "본가에 더 머문다",
+    "context": "본가에 있으면 생활비를 크게 아낄 수 있고 부모의 지원도 안정적이지만, 출퇴근 시간이 길고 생활 간섭 때문에 피로가 누적되고 있다. 독립하면 자유와 회복감은 커질 것 같지만 월세와 고정비가 늘어나 저축 속도가 느려질까 걱정된다."
+  }
+}
