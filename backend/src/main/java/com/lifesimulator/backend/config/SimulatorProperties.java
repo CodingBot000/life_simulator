@@ -10,6 +10,7 @@ public class SimulatorProperties {
 
   private final Frontend frontend = new Frontend();
   private final Codex codex = new Codex();
+  private final Database database = new Database();
 
   public Frontend getFrontend() {
     return frontend;
@@ -17,6 +18,10 @@ public class SimulatorProperties {
 
   public Codex getCodex() {
     return codex;
+  }
+
+  public Database getDatabase() {
+    return database;
   }
 
   public static class Frontend {
@@ -94,6 +99,54 @@ public class SimulatorProperties {
 
     public void setConfig(Map<String, String> config) {
       this.config = new LinkedHashMap<>(config);
+    }
+  }
+
+  public static class Database {
+    private boolean enabled = false;
+    private String url = "jdbc:postgresql://localhost:5432/life_simulator_dev";
+    private String username = "life_sim_user";
+    private String password = "life_sim_password";
+    private boolean migrate = true;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public String getUrl() {
+      return url;
+    }
+
+    public void setUrl(String url) {
+      this.url = url;
+    }
+
+    public String getUsername() {
+      return username;
+    }
+
+    public void setUsername(String username) {
+      this.username = username;
+    }
+
+    public String getPassword() {
+      return password;
+    }
+
+    public void setPassword(String password) {
+      this.password = password;
+    }
+
+    public boolean isMigrate() {
+      return migrate;
+    }
+
+    public void setMigrate(boolean migrate) {
+      this.migrate = migrate;
     }
   }
 }
