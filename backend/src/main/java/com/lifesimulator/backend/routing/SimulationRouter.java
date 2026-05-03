@@ -52,13 +52,10 @@ public class SimulationRouter {
 
   private int stateUnknownCount(JsonNode request) {
     int unknown = 0;
-    if (request.path("prior_memory").isMissingNode()) {
-      unknown += 1;
-    }
-    if (request.path("state_hints").isMissingNode()) {
-      unknown += 1;
-    }
     if (request.at("/decision/context").asText("").length() < 80) {
+      unknown += 1;
+    }
+    if (request.at("/userProfile/priority").isEmpty()) {
       unknown += 1;
     }
     return unknown;
