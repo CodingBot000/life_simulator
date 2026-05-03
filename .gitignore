@@ -1,13 +1,26 @@
 node_modules
-.next
-out
-.env.local
+frontend/node_modules
+frontend/.next
+frontend/out
+frontend/tsconfig.tsbuildinfo
+backend/target
+backend/.mvn/apache-maven-*
+backend/.mvn/*.tar.gz
+
 .env
-next-env.d.ts
+.env.local
+frontend/.env
+frontend/.env.local
+
 npm-debug.log*
-docs/
 .DS_Store
-tsconfig.tsbuildinfo
 
 # Runtime/generated artifacts
-outputs/
+/outputs/
+/frontend/outputs/
+/frontend/playground/outputs/
+
+# Existing historical docs remain ignored unless intentionally added under refact.
+docs/*
+!docs/refact/
+!docs/refact/**

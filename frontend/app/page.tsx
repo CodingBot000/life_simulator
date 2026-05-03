@@ -57,6 +57,14 @@ const initialForm: FormState = {
   context: "현재 연봉은 안정적이지만 성장 정체를 느끼고 있다.",
 };
 
+const API_BASE_URL = (
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080"
+).replace(/\/$/u, "");
+
+function apiUrl(path: string) {
+  return `${API_BASE_URL}${path}`;
+}
+
 const CASE_CATEGORY_ORDER: CasePresetCategory[] = [
   "career",
   "relationship",
@@ -1701,7 +1709,7 @@ export default function HomePage() {
         setIsPresetLoading(true);
         setPresetError(null);
 
-        const response = await fetch("/api/cases", {
+        const response = await fetch(apiUrl("/api/cases"), {
           signal: controller.signal,
         });
         const data = (await response.json()) as {
@@ -1806,7 +1814,7 @@ export default function HomePage() {
     setProgress(createInitialProgressState());
 
     try {
-      const response = await fetch("/api/simulate", {
+      const response = await fetch(apiUrl("/api/simulate"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

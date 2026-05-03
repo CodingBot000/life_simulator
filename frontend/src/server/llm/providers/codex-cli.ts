@@ -42,12 +42,8 @@ function approximateTokens(value: string): number {
   return Math.max(1, Math.ceil(value.length / 4));
 }
 
-function resolveReasoningEffort(model: string): "low" | "medium" {
-  if (model.includes("mini") || model.includes("spark")) {
-    return "low";
-  }
-
-  return "medium";
+function resolveReasoningEffort(): "low" {
+  return "low";
 }
 
 function buildPrompt(request: ProviderStructuredRequest): string {
@@ -177,7 +173,11 @@ export const codexCliProvider: LLMProvider = {
         "-m",
         request.model,
         "-c",
-        `model_reasoning_effort="${resolveReasoningEffort(request.model)}"`,
+        `model_reasoning_effort="${resolveReasoningEffort()}"`,
+        "-c",
+        `model_verbosity="low"`,
+        "-c",
+        `service_tier="fast"`,
         "--skip-git-repo-check",
         "--sandbox",
         "read-only",

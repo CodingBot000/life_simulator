@@ -40,7 +40,7 @@ const modelRegistry: Record<ProviderMode, Record<string, ModelDefinition>> = {
       provider: "codex",
       inputCostPer1kTokens: 0,
       outputCostPer1kTokens: 0,
-      defaultTimeoutMs: 18_000,
+      defaultTimeoutMs: 12_000,
     },
   },
   openai: {
@@ -100,10 +100,10 @@ const modelRegistry: Record<ProviderMode, Record<string, ModelDefinition>> = {
 };
 
 const codexModelAliases: Record<string, string> = {
-  "gpt-5": "gpt-5.4",
-  "gpt-5-mini": "gpt-5.4-mini",
-  "gpt-5-codex": "gpt-5.3-codex",
-  "gpt-5-codex-mini": "gpt-5.4-mini",
+  "gpt-5": "gpt-5.3-codex-spark",
+  "gpt-5-mini": "gpt-5.3-codex-spark",
+  "gpt-5-codex": "gpt-5.3-codex-spark",
+  "gpt-5-codex-mini": "gpt-5.3-codex-spark",
 };
 
 export function getModelDefinition(modelName: string): ModelDefinition {
@@ -170,23 +170,23 @@ export function getRoutingModelCandidates(): {
   return {
     lowCost: normalizeModelNameForMode(
       process.env.LOW_COST_MODEL?.trim() ||
-        (mode === "codex" ? "gpt-5.4-mini" : "gpt-5-mini"),
+        (mode === "codex" ? "gpt-5.3-codex-spark" : "gpt-5-mini"),
       mode,
     ),
     premium: normalizeModelNameForMode(
       process.env.PREMIUM_MODEL?.trim() ||
         process.env.OPENAI_MODEL?.trim() ||
-        (mode === "codex" ? "gpt-5.4" : "gpt-5"),
+        (mode === "codex" ? "gpt-5.3-codex-spark" : "gpt-5"),
       mode,
     ),
     lowCostFallback: normalizeModelNameForMode(
       process.env.LOW_COST_FALLBACK_MODEL?.trim() ||
-        (mode === "codex" ? "gpt-5.4-mini" : "gpt-5-mini"),
+        (mode === "codex" ? "gpt-5.3-codex-spark" : "gpt-5-mini"),
       mode,
     ),
     premiumFallback: normalizeModelNameForMode(
       process.env.PREMIUM_FALLBACK_MODEL?.trim() ||
-        (mode === "codex" ? "gpt-5.4-mini" : "gpt-5-mini"),
+        (mode === "codex" ? "gpt-5.3-codex-spark" : "gpt-5-mini"),
       mode,
     ),
   };
