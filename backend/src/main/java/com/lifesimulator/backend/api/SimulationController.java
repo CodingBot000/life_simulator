@@ -2,7 +2,9 @@ package com.lifesimulator.backend.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lifesimulator.backend.logging.SimulationLogService;
 import com.lifesimulator.backend.simulation.SimulationProgressWriter;
+import com.lifesimulator.backend.simulation.SimulationRunResult;
 import com.lifesimulator.backend.simulation.SimulationService;
 import java.io.IOException;
 import java.util.List;
@@ -21,10 +23,16 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public class SimulationController {
 
   private final ObjectMapper objectMapper;
+  private final SimulationLogService simulationLogService;
   private final SimulationService simulationService;
 
-  public SimulationController(ObjectMapper objectMapper, SimulationService simulationService) {
+  public SimulationController(
+    ObjectMapper objectMapper,
+    SimulationLogService simulationLogService,
+    SimulationService simulationService
+  ) {
     this.objectMapper = objectMapper;
+    this.simulationLogService = simulationLogService;
     this.simulationService = simulationService;
   }
 
@@ -40,7 +48,9 @@ public class SimulationController {
       StreamingResponseBody stream = output -> {
         SimulationProgressWriter progress = new SimulationProgressWriter(objectMapper, output);
         try {
-          JsonNode response = simulationService.run(body, traceId, locale, progress);
+          SimulationRunResult result = simulationService.run(body, traceId, locale, progress);
+          JsonNode response = result.response();
+          simulationLogService.persistBestEffort(result.envelope());
           progress.write(Map.of("type", "result", "request_id", response.get("request_id").asText(), "response", response));
         } catch (Exception error) {
           progress.write(
@@ -65,7 +75,9 @@ public class SimulationController {
         .body(stream);
     }
 
-    JsonNode response = simulationService.run(body, traceId, locale, null);
+    SimulationRunResult result = simulationService.run(body, traceId, locale, null);
+    JsonNode response = result.response();
+    simulationLogService.persistBestEffort(result.envelope());
     return ResponseEntity
       .ok()
       .header("x-request-id", response.get("request_id").asText())

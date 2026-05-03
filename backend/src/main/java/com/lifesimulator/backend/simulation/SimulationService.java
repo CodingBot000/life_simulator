@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lifesimulator.backend.config.SimulatorProperties;
 import com.lifesimulator.backend.llm.CodexCliClient;
+import com.lifesimulator.backend.routing.BackendRoutingDecision;
+import com.lifesimulator.backend.routing.SimulationRouter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,31 +33,40 @@ public class SimulationService {
   private final SimulatorProperties properties;
   private final CodexCliClient codexCliClient;
   private final SimulationResponseFactory responseFactory;
+  private final SimulationEnvelopeFactory envelopeFactory;
+  private final SimulationRouter router;
 
   public SimulationService(
     ObjectMapper objectMapper,
     SimulatorProperties properties,
     CodexCliClient codexCliClient,
-    SimulationResponseFactory responseFactory
+    SimulationResponseFactory responseFactory,
+    SimulationEnvelopeFactory envelopeFactory,
+    SimulationRouter router
   ) {
     this.objectMapper = objectMapper;
     this.properties = properties;
     this.codexCliClient = codexCliClient;
     this.responseFactory = responseFactory;
+    this.envelopeFactory = envelopeFactory;
+    this.router = router;
   }
 
   public String model() {
     return properties.getCodex().getModel();
   }
 
-  public JsonNode run(
+  public SimulationRunResult run(
     JsonNode request,
     String traceId,
     String locale,
     SimulationProgressWriter progress
   ) throws IOException {
     String requestId = UUID.randomUUID().toString();
+    long startedAtMillis = System.currentTimeMillis();
     responseFactory.validateRequest(request);
+    BackendRoutingDecision routingDecision = router.route(request, model());
+    List<String> stages = stageNames(routingDecision);
 
     write(progress, Map.of("type", "request_started", "request_id", requestId, "trace_id", traceId));
     write(
@@ -65,34 +77,75 @@ public class SimulationService {
         "request_id",
         requestId,
         "execution_mode",
-        "full",
+        routingDecision.executionMode(),
         "selected_path",
-        List.of("state_loader", "planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"),
+        routingDecision.selectedPath(),
         "skipped_stages",
-        List.of()
+        skippedStages(routingDecision)
       )
     );
 
-    JsonNode deterministic = responseFactory.deterministicResponse(requestId, request, locale, model());
+    JsonNode deterministic = responseFactory.deterministicResponse(requestId, request, locale, routingDecision);
     JsonNode generated = null;
     if (properties.getCodex().isEnabled()) {
       try {
-        for (String stage : STAGES) {
+        for (String stage : stages) {
           write(progress, stageEvent("stage_started", requestId, stage));
         }
-        generated = codexCliClient.completeJson(buildPrompt(requestId, traceId, locale, request), responseFactory.outputSchema());
+        generated = codexCliClient.completeJson(
+          buildPrompt(requestId, traceId, locale, routingDecision, request),
+          responseFactory.outputSchema()
+        );
       } catch (RuntimeException error) {
         if (!properties.getCodex().isFallbackOnError()) {
           throw error;
         }
       } finally {
-        for (String stage : STAGES) {
+        for (String stage : stages) {
           write(progress, stageEvent("stage_completed", requestId, stage));
         }
       }
+    } else {
+      for (String stage : stages) {
+        write(progress, stageEvent("stage_started", requestId, stage));
+        write(progress, stageEvent("stage_completed", requestId, stage));
+      }
     }
 
-    return responseFactory.mergeGenerated(deterministic, generated, requestId);
+    JsonNode response = responseFactory.mergeGenerated(deterministic, generated, requestId);
+    return new SimulationRunResult(
+      response,
+      envelopeFactory.create(request, response, traceId, startedAtMillis, stages)
+    );
+  }
+
+  private List<String> stageNames(BackendRoutingDecision routingDecision) {
+    List<String> stages = new ArrayList<>();
+    stages.add("state_loader");
+    stages.add("planner");
+    if (routingDecision.selectedPath().contains("scenario")) {
+      stages.add("scenario_a");
+      stages.add("scenario_b");
+    }
+    if (routingDecision.selectedPath().contains("risk")) {
+      stages.add("risk_a");
+      stages.add("risk_b");
+    }
+    if (routingDecision.selectedPath().contains("ab_reasoning")) {
+      stages.add("ab_reasoning");
+    }
+    stages.add("guardrail");
+    stages.add("advisor");
+    if (routingDecision.selectedPath().contains("reflection")) {
+      stages.add("reflection");
+    }
+    return stages;
+  }
+
+  private List<String> skippedStages(BackendRoutingDecision routingDecision) {
+    return STAGES.stream()
+      .filter(stage -> !stageNames(routingDecision).contains(stage))
+      .toList();
   }
 
   private Map<String, Object> stageEvent(String type, String requestId, String stage) {
@@ -118,7 +171,13 @@ public class SimulationService {
     }
   }
 
-  private String buildPrompt(String requestId, String traceId, String locale, JsonNode request) throws IOException {
+  private String buildPrompt(
+    String requestId,
+    String traceId,
+    String locale,
+    BackendRoutingDecision routingDecision,
+    JsonNode request
+  ) throws IOException {
     return String.join(
       "\n",
       "You are the Spring Boot backend for Life Simulator.",
@@ -131,6 +190,8 @@ public class SimulationService {
       "trace_id: " + traceId,
       "ui_locale: " + locale,
       "model: " + model(),
+      "execution_mode: " + routingDecision.executionMode(),
+      "selected_path: " + objectMapper.writeValueAsString(routingDecision.selectedPath()),
       "Input JSON:",
       objectMapper.writeValueAsString(request)
     );

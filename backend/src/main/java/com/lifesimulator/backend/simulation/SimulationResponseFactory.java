@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.lifesimulator.backend.routing.BackendRoutingDecision;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,7 +36,12 @@ public class SimulationResponseFactory {
     }
   }
 
-  public JsonNode deterministicResponse(String requestId, JsonNode request, String locale, String model) {
+  public JsonNode deterministicResponse(
+    String requestId,
+    JsonNode request,
+    String locale,
+    BackendRoutingDecision routingDecision
+  ) {
     JsonNode profile = request.path("userProfile");
     JsonNode decision = request.path("decision");
     String optionA = decision.path("optionA").asText("Option A");
@@ -46,7 +53,7 @@ public class SimulationResponseFactory {
 
     ObjectNode root = objectMapper.createObjectNode();
     root.put("request_id", requestId);
-    root.set("routing", routing(model, risk));
+    root.set("routing", routing(routingDecision));
     root.set("stateContext", stateContext(requestId, request, priorities, risk, locale));
     root.set("planner", planner(priorities, decision));
     root.set("scenarioA", scenario(optionA, "A", locale));
@@ -85,24 +92,28 @@ public class SimulationResponseFactory {
     return schema;
   }
 
-  private ObjectNode routing(String model, String risk) {
+  private ObjectNode routing(BackendRoutingDecision decision) {
     ObjectNode routing = objectMapper.createObjectNode();
-    routing.put("execution_mode", "full");
-    routing.set("selected_path", array("state_loader", "planner", "scenario", "risk", "ab_reasoning", "guardrail", "advisor", "reflection"));
+    routing.put("execution_mode", decision.executionMode());
+    routing.set("selected_path", array(decision.selectedPath()));
     ObjectNode plan = objectMapper.createObjectNode();
-    for (String stage : List.of("state_loader", "planner", "scenario_a", "scenario_b", "risk_a", "risk_b", "ab_reasoning", "advisor", "reflection")) {
-      plan.put(stage, model);
+    for (Map.Entry<String, String> entry : decision.stageModelPlan().entrySet()) {
+      plan.put(entry.getKey(), entry.getValue());
+    }
+    ObjectNode fallbackPlan = objectMapper.createObjectNode();
+    for (Map.Entry<String, String> entry : decision.stageFallbackPlan().entrySet()) {
+      fallbackPlan.put(entry.getKey(), entry.getValue());
     }
     routing.set("stage_model_plan", plan);
-    routing.set("stage_fallback_plan", plan.deepCopy());
-    routing.set("reasons", array("Spring Boot backend route", "Codex CLI subscription model: " + model));
+    routing.set("stage_fallback_plan", fallbackPlan);
+    routing.set("reasons", array(decision.reasons()));
     ObjectNode profile = routing.putObject("risk_profile");
     profile.put("model_tier", "low_cost");
-    profile.put("risk_band", risk);
-    profile.put("complexity", "medium");
-    profile.put("ambiguity", "medium");
-    profile.put("state_unknown_count", 0);
-    profile.put("estimated_tokens", 1200);
+    profile.put("risk_band", decision.riskBand());
+    profile.put("complexity", decision.complexity());
+    profile.put("ambiguity", decision.ambiguity());
+    profile.put("state_unknown_count", decision.stateUnknownCount());
+    profile.put("estimated_tokens", decision.estimatedTokens());
     return routing;
   }
 
@@ -301,6 +312,14 @@ public class SimulationResponseFactory {
   }
 
   private ArrayNode array(String... values) {
+    ArrayNode array = objectMapper.createArrayNode();
+    for (String value : values) {
+      array.add(value);
+    }
+    return array;
+  }
+
+  private ArrayNode array(List<String> values) {
     ArrayNode array = objectMapper.createArrayNode();
     for (String value : values) {
       array.add(value);
