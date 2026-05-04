@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "해외 대학원 vs 실무 취업",
+      "en": "Overseas Study vs Work"
+    },
+    "summary": {
+      "ko": "해외 대학원 진학으로 전문성을 쌓을지 바로 실무 취업으로 수입과 경험을 얻을지 비교하는 케이스입니다.",
+      "en": "A case about comparing overseas graduate study for expertise with immediate work for income and experience."
+    }
+  },
   "userProfile": {
     "age": 28,
     "job": "research assistant",
     "risk_tolerance": "medium",
-    "priority": ["long_term_growth", "short_term_income", "expertise"]
+    "priority": [
+      "long_term_growth",
+      "short_term_income",
+      "expertise"
+    ]
   },
   "decision": {
     "optionA": "해외 대학원에 진학한다",

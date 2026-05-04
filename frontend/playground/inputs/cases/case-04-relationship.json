@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "관계 지속 vs 정리",
+      "en": "Continue vs End Relationship"
+    },
+    "summary": {
+      "ko": "장거리와 반복 갈등이 있는 관계를 계속 이어갈지 정리할지 고민하는 케이스입니다.",
+      "en": "A case about deciding whether to continue or end a relationship strained by distance and repeated conflict."
+    }
+  },
   "userProfile": {
     "age": 31,
     "job": "marketer",
     "risk_tolerance": "low",
-    "priority": ["emotional_stability", "trust", "long_term_compatibility"]
+    "priority": [
+      "emotional_stability",
+      "trust",
+      "long_term_compatibility"
+    ]
   },
   "decision": {
     "optionA": "현재 연애를 계속 이어간다",

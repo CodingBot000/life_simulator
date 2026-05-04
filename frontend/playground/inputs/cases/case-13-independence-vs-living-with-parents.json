@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "독립 vs 본가 거주",
+      "en": "Independence vs Living with Parents"
+    },
+    "summary": {
+      "ko": "독립으로 자유와 회복감을 얻을지 본가에 머물며 비용을 아낄지 고민하는 케이스입니다.",
+      "en": "A case about choosing between independence and recovery through living alone or saving money by staying with parents."
+    }
+  },
   "userProfile": {
     "age": 27,
     "job": "junior developer",

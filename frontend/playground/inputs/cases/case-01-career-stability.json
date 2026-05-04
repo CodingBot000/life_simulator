@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "커리어 안정성",
+      "en": "Career Stability"
+    },
+    "summary": {
+      "ko": "안정적인 현재 회사와 성장 가능성이 큰 스타트업 이직 사이에서 고민하는 케이스입니다.",
+      "en": "A case about choosing between a stable current company and a startup move with stronger growth potential."
+    }
+  },
   "userProfile": {
     "age": 32,
     "job": "developer",
     "risk_tolerance": "low",
-    "priority": ["stability", "income", "work_life_balance"]
+    "priority": [
+      "stability",
+      "income",
+      "work_life_balance"
+    ]
   },
   "decision": {
     "optionA": "현재 회사에 남는다",

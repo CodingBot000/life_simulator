@@ -1,4 +1,4 @@
-import type { PriorityId } from "./priorities";
+import type { PriorityId, PriorityLocale } from "./priorities";
 
 export type RiskTolerance = "low" | "medium" | "high";
 export type ExecutionMode = "light" | "standard" | "careful" | "full";
@@ -80,13 +80,18 @@ export type CasePresetCategory =
   | "health"
   | "other";
 
+export type LocalizedText = Record<PriorityLocale, string>;
+
 export interface CasePreset {
   id: string;
   slug: string;
   title: string;
+  titleLabels?: LocalizedText;
   category: CasePresetCategory;
   categoryLabel: string;
+  categoryLabels?: LocalizedText;
   summary: string;
+  summaryLabels?: LocalizedText;
   request: SimulationRequest;
 }
 

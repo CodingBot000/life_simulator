@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "회사 근처 이사 vs 긴 통근 유지",
+      "en": "Near Office vs Cheaper Commute"
+    },
+    "summary": {
+      "ko": "회사 근처로 이사해 시간과 체력을 아낄지 저렴한 현재 집을 유지할지 비교하는 케이스입니다.",
+      "en": "A case about comparing moving near the office to save time and energy with keeping a cheaper current home."
+    }
+  },
   "userProfile": {
     "age": 33,
     "job": "product manager",

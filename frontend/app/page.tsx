@@ -11,6 +11,7 @@ import type {
   CasePresetCategory,
   ExecutionMode,
   GuardrailResult,
+  LocalizedText,
   PlannerResult,
   ReflectionResult,
   RiskResult,
@@ -626,7 +627,15 @@ function buildFormState(request: SimulationRequest): FormState {
   };
 }
 
-function listPresetCategories(presets: CasePreset[]) {
+function getLocalizedText(
+  labels: Partial<LocalizedText> | undefined,
+  locale: PriorityLocale,
+  fallback: string,
+) {
+  return labels?.[locale]?.trim() || labels?.ko?.trim() || labels?.en?.trim() || fallback;
+}
+
+function listPresetCategories(presets: CasePreset[], locale: PriorityLocale) {
   return CASE_CATEGORY_ORDER.map((category) => {
     const items = presets.filter((preset) => preset.category === category);
 
@@ -636,7 +645,11 @@ function listPresetCategories(presets: CasePreset[]) {
 
     return {
       category,
-      label: items[0].categoryLabel,
+      label: getLocalizedText(
+        items[0].categoryLabels,
+        locale,
+        items[0].categoryLabel,
+      ),
     };
   }).filter(
     (
@@ -1702,7 +1715,7 @@ function LoadingStageStrip({ progress }: { progress: SimulationProgressState }) 
 }
 
 export default function HomePage() {
-  const { locale: uiLocale } = useUiLocale();
+  const { locale: uiLocale, setLocale: setUiLocale } = useUiLocale();
   const [form, setForm] = useState<FormState>(initialForm);
   const [presets, setPresets] = useState<CasePreset[]>([]);
   const [selectedCategory, setSelectedCategory] =
@@ -1716,7 +1729,7 @@ export default function HomePage() {
   const [progress, setProgress] = useState<SimulationProgressState>(() =>
     createInitialProgressState(),
   );
-  const presetCategories = listPresetCategories(presets);
+  const presetCategories = listPresetCategories(presets, uiLocale);
   const visiblePresets = selectedCategory
     ? presets.filter((preset) => preset.category === selectedCategory)
     : presets;
@@ -1884,18 +1897,49 @@ export default function HomePage() {
     <main className="mx-auto min-h-screen w-full max-w-[1280px] px-4 py-8 sm:px-6 lg:min-w-[1120px] lg:px-8 lg:py-10 lg:[overflow-x:clip]">
       <div className="grid gap-8">
         <section className="card-surface-strong min-w-0 rounded-[36px] p-6 sm:p-8">
-          <div className="max-w-3xl">
-            <p className="section-label">Decision Simulator</p>
-            <h1 className="display-font mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-              의사결정 시뮬레이션 Agent MVP
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
-              사용자 프로필과 두 가지 선택지를 입력하면 State Loader가 먼저
-              사용자 상태를 구조화하고, 이어서 Planner, Scenario, Risk, A/B
-              Reasoning, Guardrail, Advisor, Reflection 단계가 그 상태를
-              공통으로 사용합니다. 실제 실행 경로는 요청 위험도에 따라
-              `light`, `standard`, `careful`, `full` 중 하나로 선택됩니다.
-            </p>
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+            <div className="max-w-3xl">
+              <p className="section-label">Decision Simulator</p>
+              <h1 className="display-font mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+                의사결정 시뮬레이션 Agent MVP
+              </h1>
+              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
+                사용자 프로필과 두 가지 선택지를 입력하면 State Loader가 먼저
+                사용자 상태를 구조화하고, 이어서 Planner, Scenario, Risk, A/B
+                Reasoning, Guardrail, Advisor, Reflection 단계가 그 상태를
+                공통으로 사용합니다. 실제 실행 경로는 요청 위험도에 따라
+                `light`, `standard`, `careful`, `full` 중 하나로 선택됩니다.
+              </p>
+            </div>
+
+            <div
+              aria-label="표시 언어"
+              className="inline-flex w-fit shrink-0 rounded-full border border-slate-900/10 bg-white/80 p-1"
+            >
+              {[
+                { locale: "ko", label: "한국어" },
+                { locale: "en", label: "EN" },
+              ].map((option) => {
+                const isSelected = uiLocale === option.locale;
+
+                return (
+                  <button
+                    key={option.locale}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => setUiLocale(option.locale as PriorityLocale)}
+                    className={[
+                      "rounded-full px-3 py-1.5 text-sm font-semibold transition",
+                      isSelected
+                        ? "bg-slate-950 text-white"
+                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
+                    ].join(" ")}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -1992,7 +2036,11 @@ export default function HomePage() {
                     >
                       {visiblePresets.map((preset) => (
                         <option key={preset.id} value={preset.id}>
-                          {preset.title}
+                          {getLocalizedText(
+                            preset.titleLabels,
+                            uiLocale,
+                            preset.title,
+                          )}
                         </option>
                       ))}
                     </select>

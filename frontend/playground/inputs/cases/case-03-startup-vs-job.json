@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "창업 vs 취업",
+      "en": "Startup vs Job"
+    },
+    "summary": {
+      "ko": "작은 SaaS 창업과 안정적인 IT 회사 취업 사이에서 수입 안정성과 주도권을 비교하는 케이스입니다.",
+      "en": "A case about comparing income stability and ownership between starting a small SaaS and taking a stable IT job."
+    }
+  },
   "userProfile": {
     "age": 34,
     "job": "product manager",
     "risk_tolerance": "medium",
-    "priority": ["independence", "growth", "income"]
+    "priority": [
+      "independence",
+      "growth",
+      "income"
+    ]
   },
   "decision": {
     "optionA": "작은 SaaS를 창업한다",

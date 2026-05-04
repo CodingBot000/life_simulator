@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "프리랜서 vs 정규직",
+      "en": "Freelance vs Full-time"
+    },
+    "summary": {
+      "ko": "프리랜서 전환의 독립성과 정규직 유지의 안정감을 비교하는 케이스입니다.",
+      "en": "A case about comparing the independence of freelancing with the stability of a full-time role."
+    }
+  },
   "userProfile": {
     "age": 33,
     "job": "product designer",
     "risk_tolerance": "medium",
-    "priority": ["freedom", "income", "stability"]
+    "priority": [
+      "freedom",
+      "income",
+      "stability"
+    ]
   },
   "decision": {
     "optionA": "프리랜서로 전환한다",

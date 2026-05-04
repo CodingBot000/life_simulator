@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "비상금 vs 역량 투자",
+      "en": "Emergency Fund vs Upskilling"
+    },
+    "summary": {
+      "ko": "비상금을 먼저 쌓을지 AI 관련 교육과 자기계발에 먼저 투자할지 비교하는 케이스입니다.",
+      "en": "A case about comparing building an emergency fund first with investing in AI-related education and upskilling."
+    }
+  },
   "userProfile": {
     "age": 31,
     "job": "backend developer",

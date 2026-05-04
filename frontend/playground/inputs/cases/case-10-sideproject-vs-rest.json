@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "사이드프로젝트 vs 휴식",
+      "en": "Side Project vs Rest"
+    },
+    "summary": {
+      "ko": "퇴근 후 사이드프로젝트를 계속할지 번아웃을 막기 위해 회복에 집중할지 고민하는 케이스입니다.",
+      "en": "A case about deciding whether to continue a side project after work or focus on recovery to avoid burnout."
+    }
+  },
   "userProfile": {
     "age": 34,
     "job": "product manager",
     "risk_tolerance": "low",
-    "priority": ["health", "sustainability", "future_optionality"]
+    "priority": [
+      "health",
+      "sustainability",
+      "future_optionality"
+    ]
   },
   "decision": {
     "optionA": "퇴근 후 사이드프로젝트를 계속한다",

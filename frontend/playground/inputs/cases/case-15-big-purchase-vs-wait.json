@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "차량 구매 vs 현금 유지",
+      "en": "Car Purchase vs Keeping Cash"
+    },
+    "summary": {
+      "ko": "차를 지금 사서 삶의 질을 높일지 큰 지출을 미루고 현금을 지킬지 고민하는 케이스입니다.",
+      "en": "A case about deciding whether to buy a car now for quality of life or delay the purchase to preserve cash."
+    }
+  },
   "userProfile": {
     "age": 32,
     "job": "office worker",

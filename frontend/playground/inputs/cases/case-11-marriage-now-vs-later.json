@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "지금 결혼 vs 나중에 결혼",
+      "en": "Marriage Now vs Later"
+    },
+    "summary": {
+      "ko": "결혼을 1~2년 안에 추진할지 생활 기반이 더 안정될 때까지 미룰지 고민하는 케이스입니다.",
+      "en": "A case about deciding whether to pursue marriage within one to two years or wait for a more stable foundation."
+    }
+  },
   "userProfile": {
     "age": 33,
     "job": "product designer",

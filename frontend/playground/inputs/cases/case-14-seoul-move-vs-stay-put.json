@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "서울 이사 vs 현재 지역 유지",
+      "en": "Seoul Move vs Staying Put"
+    },
+    "summary": {
+      "ko": "서울/수도권의 커리어 기회와 현재 지역의 낮은 생활비 및 지원망을 비교하는 케이스입니다.",
+      "en": "A case about comparing career opportunities in Seoul or the capital area with lower living costs and support where you are."
+    }
+  },
   "userProfile": {
     "age": 30,
     "job": "data analyst",

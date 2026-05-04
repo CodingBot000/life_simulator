@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "매니저 vs IC 트랙",
+      "en": "Manager vs IC Track"
+    },
+    "summary": {
+      "ko": "조직 관리 역할로 전환할지 기술 전문가 트랙에 남을지 고민하는 케이스입니다.",
+      "en": "A case about choosing between moving into management and staying on an individual contributor track."
+    }
+  },
   "userProfile": {
     "age": 37,
     "job": "senior developer",
     "risk_tolerance": "low",
-    "priority": ["growth", "stress_management", "compensation"]
+    "priority": [
+      "growth",
+      "stress_management",
+      "compensation"
+    ]
   },
   "decision": {
     "optionA": "매니저 트랙으로 전환한다",

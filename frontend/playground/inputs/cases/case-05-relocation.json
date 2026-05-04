@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "해외 이주 vs 국내 유지",
+      "en": "Relocation vs Staying Put"
+    },
+    "summary": {
+      "ko": "한국에서 안정적인 커리어를 유지할지 일본으로 이주해 새 직장을 찾을지 비교하는 케이스입니다.",
+      "en": "A case about comparing a stable career in Korea with relocating to Japan for a new job."
+    }
+  },
   "userProfile": {
     "age": 30,
     "job": "backend developer",
     "risk_tolerance": "medium",
-    "priority": ["stability", "experience", "future_opportunity"]
+    "priority": [
+      "stability",
+      "experience",
+      "future_opportunity"
+    ]
   },
   "decision": {
     "optionA": "한국에 남아 현재 커리어를 이어간다",

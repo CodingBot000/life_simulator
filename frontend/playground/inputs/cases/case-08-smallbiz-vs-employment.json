@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "카페 창업 vs 취업",
+      "en": "Small Business vs Employment"
+    },
+    "summary": {
+      "ko": "소규모 카페 창업의 꿈과 안정적인 취업 사이에서 현실성을 따지는 케이스입니다.",
+      "en": "A case about weighing the dream of opening a small cafe against the stability of employment."
+    }
+  },
   "userProfile": {
     "age": 35,
     "job": "office worker",
     "risk_tolerance": "high",
-    "priority": ["independence", "income", "stability"]
+    "priority": [
+      "independence",
+      "income",
+      "stability"
+    ]
   },
   "decision": {
     "optionA": "소규모 카페를 창업한다",

@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "자격증 vs 포트폴리오",
+      "en": "Certification vs Portfolio"
+    },
+    "summary": {
+      "ko": "공식 증명이 되는 자격증과 실무 역량을 보여주는 포트폴리오 중 무엇에 집중할지 고민하는 케이스입니다.",
+      "en": "A case about deciding whether to focus on a formal certification or a portfolio that demonstrates practical ability."
+    }
+  },
   "userProfile": {
     "age": 28,
     "job": "QA engineer",

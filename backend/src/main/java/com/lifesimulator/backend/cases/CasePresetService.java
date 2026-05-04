@@ -14,21 +14,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class CasePresetService {
 
-  private static final Map<String, String> CATEGORY_LABELS = Map.of(
+  private static final Map<String, Map<String, String>> CATEGORY_LABELS = Map.of(
     "career",
-    "커리어",
+    labels("커리어", "Career"),
     "relationship",
-    "관계",
+    labels("관계", "Relationship"),
     "finance",
-    "재무",
+    labels("재무", "Finance"),
     "living",
-    "거주",
+    labels("거주", "Living"),
     "education",
-    "교육",
+    labels("교육", "Education"),
     "health",
-    "건강",
+    labels("건강", "Health"),
     "other",
-    "기타"
+    labels("기타", "Other")
   );
 
   private final ObjectMapper objectMapper;
@@ -58,21 +58,44 @@ public class CasePresetService {
     try {
       JsonNode request = objectMapper.readTree(file.toFile());
       JsonNode decision = request.path("decision");
+      JsonNode metadata = request.path("metadata");
       String slug = file.getFileName().toString().replaceFirst("\\.json$", "");
       String category = inferCategory(slug);
+      String fallbackTitle = titleFromSlug(slug);
+      String fallbackSummary = decision.path("context").asText("");
+      Map<String, String> titleLabels = localizedLabels(
+        metadata.path("title"),
+        fallbackTitle,
+        fallbackTitle
+      );
+      Map<String, String> summaryLabels = localizedLabels(
+        metadata.path("summary"),
+        fallbackSummary,
+        fallbackSummary
+      );
+      Map<String, String> categoryLabels = CATEGORY_LABELS.getOrDefault(
+        category,
+        CATEGORY_LABELS.get("other")
+      );
       return Map.of(
         "id",
         slug,
         "slug",
         slug,
         "title",
-        titleFromSlug(slug),
+        titleLabels.get("ko"),
+        "titleLabels",
+        titleLabels,
         "category",
         category,
         "categoryLabel",
-        CATEGORY_LABELS.getOrDefault(category, "기타"),
+        categoryLabels.get("ko"),
+        "categoryLabels",
+        categoryLabels,
         "summary",
-        decision.path("context").asText(""),
+        summaryLabels.get("ko"),
+        "summaryLabels",
+        summaryLabels,
         "request",
         request
       );
@@ -93,6 +116,24 @@ public class CasePresetService {
       }
     }
     return String.join(" ", parts);
+  }
+
+  private static Map<String, String> labels(String ko, String en) {
+    return Map.of("ko", ko, "en", en);
+  }
+
+  private Map<String, String> localizedLabels(JsonNode node, String fallbackKo, String fallbackEn) {
+    return labels(
+      localizedText(node.path("ko"), fallbackKo),
+      localizedText(node.path("en"), fallbackEn)
+    );
+  }
+
+  private String localizedText(JsonNode node, String fallback) {
+    if (node.isTextual() && !node.asText().isBlank()) {
+      return node.asText();
+    }
+    return fallback;
   }
 
   private String inferCategory(String slug) {

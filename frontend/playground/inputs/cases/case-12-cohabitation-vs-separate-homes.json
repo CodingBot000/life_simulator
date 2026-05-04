@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "동거 vs 각자 거주",
+      "en": "Cohabitation vs Separate Homes"
+    },
+    "summary": {
+      "ko": "동거로 시간과 비용을 줄일지 각자의 공간을 유지하며 관계를 이어갈지 비교하는 케이스입니다.",
+      "en": "A case about comparing cohabitation for time and cost savings with keeping separate homes and personal space."
+    }
+  },
   "userProfile": {
     "age": 29,
     "job": "marketer",

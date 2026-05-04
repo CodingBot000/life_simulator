@@ -9,10 +9,7 @@ import {
   type ReactNode,
 } from "react";
 
-import {
-  normalizePriorityLocale,
-  type PriorityLocale,
-} from "@/lib/priorities";
+import type { PriorityLocale } from "@/lib/priorities";
 
 const UI_LOCALE_STORAGE_KEY = "life-simulator.ui-locale";
 
@@ -43,10 +40,7 @@ function resolveInitialLocale(): PriorityLocale {
     return "ko";
   }
 
-  return (
-    readStoredLocale() ??
-    normalizePriorityLocale(window.navigator.language)
-  );
+  return readStoredLocale() ?? "ko";
 }
 
 export function UiLocaleProvider({ children }: { children: ReactNode }) {

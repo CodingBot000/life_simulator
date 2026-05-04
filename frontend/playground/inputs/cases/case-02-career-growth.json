@@ -1,9 +1,23 @@
 {
+  "metadata": {
+    "title": {
+      "ko": "커리어 성장",
+      "en": "Career Growth"
+    },
+    "summary": {
+      "ko": "대기업 플랫폼팀의 안정성과 AI 스타트업의 제품 영향력 사이에서 고민하는 케이스입니다.",
+      "en": "A case about weighing the stability of a large-company platform team against the product impact of an AI startup."
+    }
+  },
   "userProfile": {
     "age": 29,
     "job": "developer",
     "risk_tolerance": "high",
-    "priority": ["growth", "ownership", "learning"]
+    "priority": [
+      "growth",
+      "ownership",
+      "learning"
+    ]
   },
   "decision": {
     "optionA": "대기업 플랫폼팀에 남는다",
