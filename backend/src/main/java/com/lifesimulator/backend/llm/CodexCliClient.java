@@ -61,6 +61,12 @@ public class CodexCliClient {
       command.add("-");
 
       ProcessBuilder builder = new ProcessBuilder(command);
+      builder.directory(tempDir.toFile());
+      copyAllowedEnvironment(
+        builder.environment(),
+        System.getenv(),
+        codex.getEnvironmentAllowlist()
+      );
       builder.redirectOutput(stdoutPath.toFile());
       builder.redirectError(stderrPath.toFile());
       process = builder.start();
@@ -116,6 +122,23 @@ public class CodexCliClient {
       return second.trim();
     }
     return "unknown error";
+  }
+
+  static void copyAllowedEnvironment(
+    Map<String, String> target,
+    Map<String, String> source,
+    List<String> allowlist
+  ) {
+    target.clear();
+    for (String name : allowlist) {
+      if (name == null || name.isBlank()) {
+        continue;
+      }
+      String value = source.get(name.trim());
+      if (value != null) {
+        target.put(name.trim(), value);
+      }
+    }
   }
 
   private void deleteRecursively(Path root) {

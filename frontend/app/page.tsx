@@ -62,8 +62,33 @@ const API_BASE_URL = (
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080"
 ).replace(/\/$/u, "");
 
+const SIMULATOR_SESSION_ID_KEY = "life-simulator-session-id";
+
 function apiUrl(path: string) {
   return `${API_BASE_URL}${path}`;
+}
+
+function getSimulatorSessionId() {
+  const fallbackId = () =>
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+  if (typeof window === "undefined") {
+    return fallbackId();
+  }
+
+  try {
+    const existing = window.localStorage.getItem(SIMULATOR_SESSION_ID_KEY);
+    if (existing) {
+      return existing;
+    }
+    const next = fallbackId();
+    window.localStorage.setItem(SIMULATOR_SESSION_ID_KEY, next);
+    return next;
+  } catch {
+    return fallbackId();
+  }
 }
 
 const CASE_CATEGORY_ORDER: CasePresetCategory[] = [
@@ -1854,6 +1879,7 @@ export default function HomePage() {
         headers: {
           "Content-Type": "application/json",
           "x-simulate-stream": "ndjson",
+          "x-session-id": getSimulatorSessionId(),
           "x-ui-locale": uiLocale,
         },
         body: JSON.stringify(buildPayload(form)),

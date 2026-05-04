@@ -23,12 +23,34 @@ simulator:
     username: ${BACKEND_DATABASE_USERNAME:life_sim_user}
     password: ${BACKEND_DATABASE_PASSWORD:life_sim_password}
     migrate: ${BACKEND_DATABASE_MIGRATE:true}
+  security:
+    rate-limit:
+      enabled: ${SIMULATOR_RATE_LIMIT_ENABLED:true}
+      use-forwarded-headers: ${SIMULATOR_RATE_LIMIT_USE_FORWARDED_HEADERS:false}
+      ip-minute-limit: ${SIMULATOR_RATE_LIMIT_IP_MINUTE:5}
+      ip-hour-limit: ${SIMULATOR_RATE_LIMIT_IP_HOUR:30}
+      session-hour-limit: ${SIMULATOR_RATE_LIMIT_SESSION_HOUR:10}
+      minute-window: ${SIMULATOR_RATE_LIMIT_MINUTE_WINDOW:60s}
+      hour-window: ${SIMULATOR_RATE_LIMIT_HOUR_WINDOW:1h}
   codex:
     enabled: ${SIMULATOR_CODEX_ENABLED:true}
     fallback-on-error: ${SIMULATOR_CODEX_FALLBACK_ON_ERROR:true}
     command: ${SIMULATOR_CODEX_COMMAND:codex}
     model: ${SIMULATOR_CODEX_MODEL:gpt-5.3-codex-spark}
     timeout: ${SIMULATOR_CODEX_TIMEOUT:75s}
+    environment-allowlist:
+      - PATH
+      - HOME
+      - USER
+      - LOGNAME
+      - SHELL
+      - TMPDIR
+      - LANG
+      - LC_ALL
+      - CODEX_HOME
+      - XDG_CONFIG_HOME
+      - XDG_DATA_HOME
+      - XDG_CACHE_HOME
     config:
       model_reasoning_effort: low
       model_verbosity: low

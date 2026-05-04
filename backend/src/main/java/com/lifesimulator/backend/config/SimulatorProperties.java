@@ -1,7 +1,9 @@
 package com.lifesimulator.backend.config;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -11,6 +13,7 @@ public class SimulatorProperties {
   private final Frontend frontend = new Frontend();
   private final Codex codex = new Codex();
   private final Database database = new Database();
+  private final Security security = new Security();
 
   public Frontend getFrontend() {
     return frontend;
@@ -22,6 +25,10 @@ public class SimulatorProperties {
 
   public Database getDatabase() {
     return database;
+  }
+
+  public Security getSecurity() {
+    return security;
   }
 
   public static class Frontend {
@@ -42,6 +49,22 @@ public class SimulatorProperties {
     private String command = "codex";
     private String model = "gpt-5.3-codex-spark";
     private Duration timeout = Duration.ofSeconds(75);
+    private List<String> environmentAllowlist = new ArrayList<>(
+      List.of(
+        "PATH",
+        "HOME",
+        "USER",
+        "LOGNAME",
+        "SHELL",
+        "TMPDIR",
+        "LANG",
+        "LC_ALL",
+        "CODEX_HOME",
+        "XDG_CONFIG_HOME",
+        "XDG_DATA_HOME",
+        "XDG_CACHE_HOME"
+      )
+    );
     private Map<String, String> config = new LinkedHashMap<>(
       Map.of(
         "model_reasoning_effort",
@@ -93,12 +116,94 @@ public class SimulatorProperties {
       this.timeout = timeout;
     }
 
+    public List<String> getEnvironmentAllowlist() {
+      return environmentAllowlist;
+    }
+
+    public void setEnvironmentAllowlist(List<String> environmentAllowlist) {
+      this.environmentAllowlist = new ArrayList<>(environmentAllowlist);
+    }
+
     public Map<String, String> getConfig() {
       return config;
     }
 
     public void setConfig(Map<String, String> config) {
       this.config = new LinkedHashMap<>(config);
+    }
+  }
+
+  public static class Security {
+    private final RateLimit rateLimit = new RateLimit();
+
+    public RateLimit getRateLimit() {
+      return rateLimit;
+    }
+  }
+
+  public static class RateLimit {
+    private boolean enabled = true;
+    private boolean useForwardedHeaders = false;
+    private int ipMinuteLimit = 5;
+    private int ipHourLimit = 30;
+    private int sessionHourLimit = 10;
+    private Duration minuteWindow = Duration.ofMinutes(1);
+    private Duration hourWindow = Duration.ofHours(1);
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public boolean isUseForwardedHeaders() {
+      return useForwardedHeaders;
+    }
+
+    public void setUseForwardedHeaders(boolean useForwardedHeaders) {
+      this.useForwardedHeaders = useForwardedHeaders;
+    }
+
+    public int getIpMinuteLimit() {
+      return ipMinuteLimit;
+    }
+
+    public void setIpMinuteLimit(int ipMinuteLimit) {
+      this.ipMinuteLimit = ipMinuteLimit;
+    }
+
+    public int getIpHourLimit() {
+      return ipHourLimit;
+    }
+
+    public void setIpHourLimit(int ipHourLimit) {
+      this.ipHourLimit = ipHourLimit;
+    }
+
+    public int getSessionHourLimit() {
+      return sessionHourLimit;
+    }
+
+    public void setSessionHourLimit(int sessionHourLimit) {
+      this.sessionHourLimit = sessionHourLimit;
+    }
+
+    public Duration getMinuteWindow() {
+      return minuteWindow;
+    }
+
+    public void setMinuteWindow(Duration minuteWindow) {
+      this.minuteWindow = minuteWindow;
+    }
+
+    public Duration getHourWindow() {
+      return hourWindow;
+    }
+
+    public void setHourWindow(Duration hourWindow) {
+      this.hourWindow = hourWindow;
     }
   }
 
