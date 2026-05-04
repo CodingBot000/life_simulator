@@ -86,6 +86,8 @@ type StageProgressEntry = {
   status: StageProgressStatus;
   executionKind: SimulationStageExecutionKind | null;
   model: string | null;
+  fallbackUsed: boolean;
+  fallbackReason: string | null;
 };
 
 type SimulationProgressState = {
@@ -373,6 +375,8 @@ function createInitialProgressState(): SimulationProgressState {
           status: "pending",
           executionKind: null,
           model: null,
+          fallbackUsed: false,
+          fallbackReason: null,
         },
       ]),
     ) as Record<SimulationStageName, StageProgressEntry>,
@@ -416,6 +420,8 @@ function applyProgressEvent(
         status: "active",
         executionKind: event.execution_kind,
         model: event.model ?? next.stages[event.stage_name].model,
+        fallbackUsed: false,
+        fallbackReason: null,
       };
       return next;
     }
@@ -425,6 +431,8 @@ function applyProgressEvent(
         status: "completed",
         executionKind: event.execution_kind,
         model: event.model ?? next.stages[event.stage_name].model,
+        fallbackUsed: event.fallback_used ?? false,
+        fallbackReason: event.fallback_reason ?? null,
       };
       return next;
     }
@@ -1571,11 +1579,16 @@ function ProgressStageCard({
 }) {
   const metadata = STAGE_METADATA[stageName];
   const isActive = entry.status === "active";
-  const badgeLabel =
-    entry.model ?? (entry.executionKind ? EXECUTION_KIND_LABELS[entry.executionKind] : null);
+  const isFallback = entry.fallbackUsed;
+  const badgeLabel = isFallback
+    ? "Fallback"
+    : entry.model ?? (entry.executionKind ? EXECUTION_KIND_LABELS[entry.executionKind] : null);
+  const displayStatusLabel = isFallback ? "Fallback 사용" : STAGE_STATUS_LABELS[entry.status];
 
   const toneClass =
-    entry.status === "completed"
+    isFallback
+      ? "border-orange-300 bg-orange-50 text-orange-950 shadow-[0_18px_40px_rgba(234,88,12,0.12)]"
+      : entry.status === "completed"
       ? "border-slate-950 bg-slate-950 text-white shadow-[0_18px_40px_rgba(15,23,42,0.18)]"
       : entry.status === "active"
         ? "animate-pulse border-amber-500/60 bg-amber-100 text-amber-950 shadow-[0_20px_44px_rgba(217,119,6,0.18)]"
@@ -1586,7 +1599,9 @@ function ProgressStageCard({
             : "border-slate-200 bg-white/90 text-slate-600";
 
   const metaToneClass =
-    entry.status === "completed"
+    isFallback
+      ? "text-orange-900/70"
+      : entry.status === "completed"
       ? "text-white/70"
       : entry.status === "active"
         ? "text-amber-900/70"
@@ -1608,7 +1623,9 @@ function ProgressStageCard({
         {badgeLabel ? (
           <span
             className={`max-w-[112px] break-all rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold leading-4 ${
-              entry.status === "completed"
+              isFallback
+                ? "border-orange-900/10 bg-white/80 text-orange-900"
+                : entry.status === "completed"
                 ? "border-white/20 bg-white/10 text-white"
                 : entry.status === "active"
                   ? "border-amber-900/10 bg-white/70 text-amber-950"
@@ -1622,11 +1639,16 @@ function ProgressStageCard({
         ) : null}
       </div>
       <p className={`mt-3 text-[11px] font-semibold uppercase tracking-[0.16em] ${metaToneClass}`}>
-        {STAGE_STATUS_LABELS[entry.status]}
+        {displayStatusLabel}
       </p>
-      <p className={`mt-2 text-xs leading-6 ${isActive ? "text-amber-950/90" : entry.status === "completed" ? "text-white/80" : entry.status === "failed" ? "text-rose-900/90" : "text-slate-500"}`}>
+      <p className={`mt-2 text-xs leading-6 ${isActive ? "text-amber-950/90" : isFallback ? "text-orange-950/80" : entry.status === "completed" ? "text-white/80" : entry.status === "failed" ? "text-rose-900/90" : "text-slate-500"}`}>
         {metadata.summary}
       </p>
+      {entry.fallbackReason ? (
+        <p className="mt-2 line-clamp-2 text-[11px] leading-5 text-orange-900/80">
+          {entry.fallbackReason}
+        </p>
+      ) : null}
     </div>
   );
 }
