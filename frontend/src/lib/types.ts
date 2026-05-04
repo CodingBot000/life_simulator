@@ -646,6 +646,8 @@ export type SimulationProgressEvent =
       stage_name: SimulationStageName;
       execution_kind: SimulationStageExecutionKind;
       model?: string;
+      fallback_used?: boolean;
+      fallback_reason?: string;
     }
   | {
       type: "result";
