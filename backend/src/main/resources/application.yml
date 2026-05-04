@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: life-simulator-backend
+  mvc:
+    async:
+      request-timeout: ${BACKEND_ASYNC_REQUEST_TIMEOUT:300s}
 
 management:
   endpoints:
@@ -21,11 +24,11 @@ simulator:
     password: ${BACKEND_DATABASE_PASSWORD:life_sim_password}
     migrate: ${BACKEND_DATABASE_MIGRATE:true}
   codex:
-    enabled: true
-    fallback-on-error: true
-    command: codex
-    model: gpt-5.3-codex-spark
-    timeout: 75s
+    enabled: ${SIMULATOR_CODEX_ENABLED:true}
+    fallback-on-error: ${SIMULATOR_CODEX_FALLBACK_ON_ERROR:true}
+    command: ${SIMULATOR_CODEX_COMMAND:codex}
+    model: ${SIMULATOR_CODEX_MODEL:gpt-5.3-codex-spark}
+    timeout: ${SIMULATOR_CODEX_TIMEOUT:75s}
     config:
       model_reasoning_effort: low
       model_verbosity: low
