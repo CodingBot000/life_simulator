@@ -1,11 +1,57 @@
-import {
-  DEFAULT_BASE_URL,
-  DEFAULT_SEED_INPUT_PATH,
-  randomInt,
-  readSeedCases,
-  sleep,
-  toSimulationRequest,
-} from "./monitoringScriptUtils.ts";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
+import type { SimulationRequest } from "../src/lib/types.ts";
+
+type SeedCaseCategory =
+  | "normal"
+  | "low_confidence"
+  | "conflict"
+  | "edge";
+
+type SeedCaseInput = SimulationRequest & {
+  user_query: string;
+};
+
+type SeedCase = {
+  id: string;
+  category: SeedCaseCategory;
+  input: SeedCaseInput;
+};
+
+const DEFAULT_BASE_URL =
+  process.env.SIMULATE_BASE_URL?.trim() || "http://127.0.0.1:8080";
+const DEFAULT_SEED_INPUT_PATH = path.join(
+  process.cwd(),
+  "scripts",
+  "seed-inputs.json",
+);
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+async function readSeedCases(filePath = DEFAULT_SEED_INPUT_PATH): Promise<SeedCase[]> {
+  const raw = await readFile(filePath, "utf8");
+  const parsed = JSON.parse(raw) as unknown;
+
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    throw new Error(`No seed cases found in ${filePath}.`);
+  }
+
+  return parsed as SeedCase[];
+}
+
+function toSimulationRequest(input: SeedCaseInput): SimulationRequest {
+  const { user_query: _userQuery, ...request } = input;
+  return request;
+}
 
 function readOptionalInt(value: string | undefined): number | undefined {
   if (!value) {

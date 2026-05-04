@@ -1,8 +1,0 @@
-{
-  "decision_type": "pending_model_inference",
-  "factors": [
-    "growth",
-    "stress_management",
-    "compensation"
-  ]
-}
