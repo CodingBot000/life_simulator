@@ -37,43 +37,12 @@ public class SimulationController {
   }
 
   @PostMapping("/api/simulate")
-  public ResponseEntity<?> simulate(
+  public ResponseEntity<JsonNode> simulate(
     @RequestBody JsonNode body,
     @RequestHeader HttpHeaders headers
   ) throws IOException {
     String traceId = firstHeader(headers, "x-trace-id", UUID.randomUUID().toString());
     String locale = firstHeader(headers, "x-ui-locale", "ko");
-
-    if ("ndjson".equals(firstHeader(headers, "x-simulate-stream", ""))) {
-      StreamingResponseBody stream = output -> {
-        SimulationProgressWriter progress = new SimulationProgressWriter(objectMapper, output);
-        try {
-          SimulationRunResult result = simulationService.run(body, traceId, locale, progress);
-          JsonNode response = result.response();
-          simulationLogService.persistBestEffort(result.envelope());
-          progress.write(Map.of("type", "result", "request_id", response.get("request_id").asText(), "response", response));
-        } catch (Exception error) {
-          progress.write(
-            Map.of(
-              "type",
-              "error",
-              "trace_id",
-              traceId,
-              "error",
-              error.getMessage(),
-              "error_code",
-              "backend_simulation_failed"
-            )
-          );
-        }
-      };
-
-      return ResponseEntity
-        .ok()
-        .header("x-trace-id", traceId)
-        .contentType(MediaType.parseMediaType("application/x-ndjson; charset=utf-8"))
-        .body(stream);
-    }
 
     SimulationRunResult result = simulationService.run(body, traceId, locale, null);
     JsonNode response = result.response();
@@ -89,9 +58,51 @@ public class SimulationController {
       .body(response);
   }
 
+  @PostMapping(value = "/api/simulate", headers = "x-simulate-stream=ndjson")
+  public ResponseEntity<StreamingResponseBody> simulateStream(
+    @RequestBody JsonNode body,
+    @RequestHeader HttpHeaders headers
+  ) {
+    String traceId = firstHeader(headers, "x-trace-id", UUID.randomUUID().toString());
+    String locale = firstHeader(headers, "x-ui-locale", "ko");
+    StreamingResponseBody stream = output -> {
+      SimulationProgressWriter progress = new SimulationProgressWriter(objectMapper, output);
+      try {
+        SimulationRunResult result = simulationService.run(body, traceId, locale, progress);
+        JsonNode response = result.response();
+        simulationLogService.persistBestEffort(result.envelope());
+        progress.write(Map.of("type", "result", "request_id", response.get("request_id").asText(), "response", response));
+      } catch (Exception error) {
+        progress.write(
+          Map.of(
+            "type",
+            "error",
+            "trace_id",
+            traceId,
+            "error",
+            message(error),
+            "error_code",
+            "backend_simulation_failed"
+          )
+        );
+      }
+    };
+
+    return ResponseEntity
+      .ok()
+      .header("x-trace-id", traceId)
+      .contentType(MediaType.parseMediaType("application/x-ndjson; charset=utf-8"))
+      .body(stream);
+  }
+
   private String firstHeader(HttpHeaders headers, String name, String fallback) {
     String value = headers.getFirst(name);
     return value == null || value.isBlank() ? fallback : value.trim();
+  }
+
+  private String message(Exception error) {
+    String message = error.getMessage();
+    return message == null || message.isBlank() ? error.getClass().getSimpleName() : message;
   }
 
   private List<String> selectedPath(JsonNode response) {

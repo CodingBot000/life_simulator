@@ -13,13 +13,18 @@ public class ApiExceptionHandler {
   public ResponseEntity<Map<String, Object>> handleBadRequest(IllegalArgumentException error) {
     return ResponseEntity
       .status(HttpStatus.BAD_REQUEST)
-      .body(Map.of("error", error.getMessage()));
+      .body(Map.of("error", message(error)));
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Map<String, Object>> handleUnexpected(Exception error) {
     return ResponseEntity
       .status(HttpStatus.INTERNAL_SERVER_ERROR)
-      .body(Map.of("error", error.getMessage()));
+      .body(Map.of("error", message(error)));
+  }
+
+  private String message(Exception error) {
+    String message = error.getMessage();
+    return message == null || message.isBlank() ? error.getClass().getSimpleName() : message;
   }
 }
