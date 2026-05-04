@@ -52,7 +52,9 @@ async function main() {
         },
         body: JSON.stringify(toSimulationRequest(seedCase.input)),
       });
-      const payload = await response.json().catch(() => null);
+      const payload = (await response.json().catch(() => null)) as {
+        request_id?: string;
+      } | null;
 
       if (!response.ok) {
         throw new Error(

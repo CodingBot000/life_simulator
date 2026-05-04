@@ -2,7 +2,7 @@ package com.lifesimulator.backend.simulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.lifesimulator.backend.config.SimulatorProperties;
+import com.lifesimulator.backend.llm.LlmJsonClient;
 import com.lifesimulator.backend.routing.BackendRoutingDecision;
 import com.lifesimulator.backend.routing.SimulationRouter;
 import java.io.IOException;
@@ -28,20 +28,20 @@ public class SimulationService {
     SimulationStage.REFLECTION
   );
 
-  private final SimulatorProperties properties;
+  private final LlmJsonClient llmJsonClient;
   private final SimulationResponseFactory responseFactory;
   private final SimulationEnvelopeFactory envelopeFactory;
   private final SimulationRouter router;
   private final StageExecutionService stageExecutionService;
 
   public SimulationService(
-    SimulatorProperties properties,
+    LlmJsonClient llmJsonClient,
     SimulationResponseFactory responseFactory,
     SimulationEnvelopeFactory envelopeFactory,
     SimulationRouter router,
     StageExecutionService stageExecutionService
   ) {
-    this.properties = properties;
+    this.llmJsonClient = llmJsonClient;
     this.responseFactory = responseFactory;
     this.envelopeFactory = envelopeFactory;
     this.router = router;
@@ -49,7 +49,7 @@ public class SimulationService {
   }
 
   public String model() {
-    return properties.getCodex().getModel();
+    return llmJsonClient.modelName();
   }
 
   public SimulationRunResult run(

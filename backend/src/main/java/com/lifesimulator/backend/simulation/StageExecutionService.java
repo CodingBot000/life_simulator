@@ -3,9 +3,9 @@ package com.lifesimulator.backend.simulation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.lifesimulator.backend.config.SimulatorProperties;
 import com.lifesimulator.backend.guardrail.GuardrailEvaluationService;
-import com.lifesimulator.backend.llm.CodexCliClient;
+import com.lifesimulator.backend.llm.LlmClientException;
+import com.lifesimulator.backend.llm.LlmJsonClient;
 import com.lifesimulator.backend.routing.BackendRoutingDecision;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -16,28 +16,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class StageExecutionService {
 
-  private final CodexCliClient codexCliClient;
   private final GuardrailEvaluationService guardrailEvaluationService;
   private final JsonSchemaBuilder schemaBuilder;
+  private final LlmJsonClient llmJsonClient;
   private final ObjectMapper objectMapper;
-  private final SimulatorProperties properties;
   private final StageInputFactory inputFactory;
   private final StagePromptRepository promptRepository;
 
   public StageExecutionService(
-    CodexCliClient codexCliClient,
     GuardrailEvaluationService guardrailEvaluationService,
     JsonSchemaBuilder schemaBuilder,
+    LlmJsonClient llmJsonClient,
     ObjectMapper objectMapper,
-    SimulatorProperties properties,
     StageInputFactory inputFactory,
     StagePromptRepository promptRepository
   ) {
-    this.codexCliClient = codexCliClient;
     this.guardrailEvaluationService = guardrailEvaluationService;
     this.schemaBuilder = schemaBuilder;
+    this.llmJsonClient = llmJsonClient;
     this.objectMapper = objectMapper;
-    this.properties = properties;
     this.inputFactory = inputFactory;
     this.promptRepository = promptRepository;
   }
@@ -74,18 +71,19 @@ public class StageExecutionService {
     if (stage.isDerivedOnly()) {
       return StageRunResult.derived(guardrailEvaluationService.evaluate(response, routingDecision));
     }
-    if (!properties.getCodex().isEnabled()) {
-      return StageRunResult.fallback(fallback, "codex_disabled");
+    if (!llmJsonClient.enabled()) {
+      return StageRunResult.fallback(fallback, llmJsonClient.providerName() + "_disabled");
     }
 
     try {
-      JsonNode output = codexCliClient.completeJson(
+      JsonNode output = llmJsonClient.completeJson(
         buildPrompt(request, response, requestId, traceId, locale, routingDecision, stage),
-        schemaBuilder.schemaFor(fallback)
+        schemaBuilder.schemaFor(fallback),
+        fallback
       );
-      return StageRunResult.llm(output, properties.getCodex().getModel());
+      return StageRunResult.llm(output, llmJsonClient.modelName());
     } catch (RuntimeException error) {
-      if (!properties.getCodex().isFallbackOnError()) {
+      if (!shouldFallback(error)) {
         throw error;
       }
       return StageRunResult.fallback(fallback, fallbackReason(error));
@@ -105,8 +103,8 @@ public class StageExecutionService {
     return String.join(
       "\n\n",
       "You are running one Life Simulator backend stage.",
-      "Use Codex CLI subscription authentication only. Do not ask for OPENAI_API_KEY.",
-      "Return exactly one JSON object for the requested stage, not the full response.",
+      "Return exactly one JSON object that matches the requested stage schema.",
+      "Return the requested stage output only, not the full response.",
       "Stage: " + stage.stageName(),
       "Request ID: " + requestId,
       "Trace ID: " + traceId,
@@ -121,7 +119,7 @@ public class StageExecutionService {
 
   private Map<String, Object> stageEvent(String type, String requestId, SimulationStage stage) {
     String executionKind = stage.isDerivedOnly() ? "derived" : "llm";
-    String stageModel = "llm".equals(executionKind) ? properties.getCodex().getModel() : "spring-derived";
+    String stageModel = "llm".equals(executionKind) ? llmJsonClient.modelName() : "spring-derived";
     return Map.of(
       "type",
       type,
@@ -160,6 +158,18 @@ public class StageExecutionService {
       return error.getClass().getSimpleName();
     }
     return message.length() > 180 ? message.substring(0, 180) + "..." : message;
+  }
+
+  private boolean shouldFallback(RuntimeException error) {
+    if (error instanceof LlmClientException && isMissingProviderCredential(error)) {
+      return false;
+    }
+    return llmJsonClient.fallbackOnError();
+  }
+
+  private boolean isMissingProviderCredential(RuntimeException error) {
+    String message = error.getMessage();
+    return message != null && message.contains("API key is required");
   }
 
   private void write(SimulationProgressWriter progress, Object event) throws IOException {

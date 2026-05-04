@@ -6,11 +6,13 @@
     "node": ">=22.18.0"
   },
   "scripts": {
-    "dev": "WATCHPACK_POLLING=true next dev --webpack",
-    "dev:turbo": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "typecheck": "tsc --noEmit",
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -p tsconfig.app.json --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "start": "vite preview --host 0.0.0.0",
+    "typecheck": "npm run typecheck:app && npm run typecheck:legacy",
+    "typecheck:app": "tsc -p tsconfig.app.json --noEmit",
+    "typecheck:legacy": "tsc -p tsconfig.legacy.json --noEmit",
     "worker:log": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types workers/log-worker/index.ts",
     "worker:drift": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types workers/drift-worker/index.ts",
     "worker:eval": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types workers/eval-worker/index.ts",
@@ -36,13 +38,11 @@
   },
   "dependencies": {
     "ajv": "^8.18.0",
-    "next": "16.2.1",
     "openai": "6.32.0",
     "pg": "^8.20.0",
     "prom-client": "^15.1.3",
     "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "server-only": "^0.0.1"
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.2.2",
@@ -50,8 +50,10 @@
     "@types/pg": "^8.20.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
     "postcss": "8.5.8",
     "tailwindcss": "4.2.2",
-    "typescript": "6.0.2"
+    "typescript": "6.0.2",
+    "vite": "^8.0.10"
   }
 }

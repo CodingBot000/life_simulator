@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "types": [
+      "vite/client"
+    ],
+    "tsBuildInfoFile": "./node_modules/.cache/tsconfig.app.tsbuildinfo"
+  },
+  "include": [
+    "src/main.tsx",
+    "src/App.tsx",
+    "src/components/**/*.tsx",
+    "src/hooks/**/*.ts",
+    "src/lib/api/**/*.ts",
+    "src/lib/types.ts",
+    "src/lib/priorities.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,7 +1,6 @@
 node_modules
 frontend/node_modules
-frontend/.next
-frontend/out
+frontend/dist
 frontend/tsconfig.tsbuildinfo
 backend/target
 backend/.mvn/apache-maven-*

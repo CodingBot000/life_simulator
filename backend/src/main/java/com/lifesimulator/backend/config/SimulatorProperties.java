@@ -11,16 +11,41 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SimulatorProperties {
 
   private final Frontend frontend = new Frontend();
+  private LlmProvider llmProvider = LlmProvider.CODEX;
   private final Codex codex = new Codex();
+  private final OpenAi openai = new OpenAi();
+  private final Mock mock = new Mock();
   private final Database database = new Database();
   private final Security security = new Security();
+
+  public enum LlmProvider {
+    CODEX,
+    OPENAI,
+    MOCK
+  }
 
   public Frontend getFrontend() {
     return frontend;
   }
 
+  public LlmProvider getLlmProvider() {
+    return llmProvider;
+  }
+
+  public void setLlmProvider(LlmProvider llmProvider) {
+    this.llmProvider = llmProvider;
+  }
+
   public Codex getCodex() {
     return codex;
+  }
+
+  public OpenAi getOpenai() {
+    return openai;
+  }
+
+  public Mock getMock() {
+    return mock;
   }
 
   public Database getDatabase() {
@@ -130,6 +155,57 @@ public class SimulatorProperties {
 
     public void setConfig(Map<String, String> config) {
       this.config = new LinkedHashMap<>(config);
+    }
+  }
+
+  public static class OpenAi {
+    private String apiKey = "";
+    private String model = "gpt-5.3";
+    private Duration timeout = Duration.ofSeconds(75);
+    private boolean fallbackOnError = true;
+
+    public String getApiKey() {
+      return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+      this.apiKey = apiKey;
+    }
+
+    public String getModel() {
+      return model;
+    }
+
+    public void setModel(String model) {
+      this.model = model;
+    }
+
+    public Duration getTimeout() {
+      return timeout;
+    }
+
+    public void setTimeout(Duration timeout) {
+      this.timeout = timeout;
+    }
+
+    public boolean isFallbackOnError() {
+      return fallbackOnError;
+    }
+
+    public void setFallbackOnError(boolean fallbackOnError) {
+      this.fallbackOnError = fallbackOnError;
+    }
+  }
+
+  public static class Mock {
+    private String model = "spring-mock";
+
+    public String getModel() {
+      return model;
+    }
+
+    public void setModel(String model) {
+      this.model = model;
     }
   }
 

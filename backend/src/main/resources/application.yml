@@ -15,6 +15,7 @@ management:
         include: health,info,metrics
 
 simulator:
+  llm-provider: ${SIMULATOR_LLM_PROVIDER:codex}
   frontend:
     cases-dir: ../frontend/playground/inputs/cases
   database:
@@ -55,3 +56,10 @@ simulator:
       model_reasoning_effort: low
       model_verbosity: low
       service_tier: fast
+  openai:
+    api-key: ${OPENAI_API_KEY:}
+    model: ${SIMULATOR_OPENAI_MODEL:gpt-5.3}
+    timeout: ${SIMULATOR_OPENAI_TIMEOUT:75s}
+    fallback-on-error: ${SIMULATOR_OPENAI_FALLBACK_ON_ERROR:true}
+  mock:
+    model: ${SIMULATOR_MOCK_MODEL:spring-mock}
