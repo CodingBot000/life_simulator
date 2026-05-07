@@ -45,7 +45,7 @@ public class BackendWorkerService {
           COUNT(*) FILTER (
             WHERE COALESCE((guardrail_flags->>'guardrail_triggered')::boolean, false)
           )::int AS anomaly_count
-        FROM llm_request_logs
+        FROM life_simul_request_logs
         WHERE created_at BETWEEN ? AND ?
         """,
       Timestamp.from(from),
@@ -54,7 +54,7 @@ public class BackendWorkerService {
     String bucketLabel = "last_" + bucketHours + "h";
     jdbc.update(
       """
-        INSERT INTO llm_drift_daily_metrics (
+        INSERT INTO life_simul_drift_daily_metrics (
           metric_date, bucket_label, route_name, guardrail_flags, latency_ms,
           total_tokens, estimated_cost_usd, schema_valid, created_at
         )
@@ -85,7 +85,7 @@ public class BackendWorkerService {
 
     int persisted = jdbc.update(
       """
-        INSERT INTO llm_eval_samples (
+        INSERT INTO life_simul_eval_samples (
           request_id, trace_id, route_name, model, decision, confidence,
           guardrail_flags, expected_payload, actual_payload, created_at
         )
@@ -106,8 +106,8 @@ public class BackendWorkerService {
             'response_payload', logs.response_payload
           ),
           logs.created_at
-        FROM llm_anomaly_events anomaly
-        JOIN llm_request_logs logs ON logs.request_id = anomaly.request_id
+        FROM life_simul_anomaly_events anomaly
+        JOIN life_simul_request_logs logs ON logs.request_id = anomaly.request_id
         ORDER BY anomaly.created_at DESC
         LIMIT ?
         ON CONFLICT (request_id) DO UPDATE SET

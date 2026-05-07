@@ -30,6 +30,9 @@ public class DatabaseMigrationRunner implements ApplicationRunner {
       .configure()
       .dataSource(dataSource)
       .locations("classpath:db/migration")
+      .table("life_simul_flyway_schema_history")
+      // Shared databases may already contain unrelated tables; baseline at 0 keeps V1 runnable.
+      .baselineVersion("0")
       .baselineOnMigrate(true)
       .load()
       .migrate();

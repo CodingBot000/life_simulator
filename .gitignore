@@ -21,3 +21,5 @@ npm-debug.log*
 
 # Local and historical docs remain ignored.
 docs/*
+!docs/deployment/
+!docs/deployment/*.md

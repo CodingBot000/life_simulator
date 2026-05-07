@@ -44,14 +44,14 @@ public class MonitoringRepository {
             WHERE COALESCE((guardrail_flags->>'guardrail_triggered')::boolean, false)
                OR COALESCE(guardrail_flags->>'final_mode', 'normal') <> 'normal'
           )::int AS critical_count
-        FROM llm_request_logs
+        FROM life_simul_request_logs
         WHERE created_at BETWEEN ? AND ?
         """,
       Timestamp.from(from),
       Timestamp.from(to)
     );
     int anomalyCount = jdbcTemplate.queryForObject(
-      "SELECT COUNT(*)::int FROM llm_anomaly_events WHERE created_at BETWEEN ? AND ?",
+      "SELECT COUNT(*)::int FROM life_simul_anomaly_events WHERE created_at BETWEEN ? AND ?",
       Integer.class,
       Timestamp.from(from),
       Timestamp.from(to)
@@ -81,7 +81,7 @@ public class MonitoringRepository {
           COALESCE(AVG(CASE WHEN COALESCE(guardrail_flags->>'final_mode', 'normal') IN ('cautious', 'careful', 'review') THEN 1 ELSE 0 END), 0) AS review_rate,
           COALESCE(AVG(CASE WHEN COALESCE((guardrail_flags->>'guardrail_triggered')::boolean, false) THEN 1 ELSE 0 END), 0) AS anomaly_rate,
           COALESCE(AVG(CASE WHEN COALESCE(NULLIF(guardrail_flags->>'confidence_score', '')::double precision, 1) < 0.62 THEN 1 ELSE 0 END), 0) AS low_confidence_rate
-        FROM llm_request_logs
+        FROM life_simul_request_logs
         WHERE created_at BETWEEN ? AND ?
         GROUP BY bucket_start
         ORDER BY bucket_start
@@ -101,7 +101,7 @@ public class MonitoringRepository {
           confidence,
           COALESCE(guardrail_flags->>'final_mode', 'normal') AS final_mode,
           COALESCE(guardrail_flags->>'triggers', '[]') AS triggers
-        FROM llm_request_logs
+        FROM life_simul_request_logs
         WHERE created_at BETWEEN ? AND ?
           AND (
             COALESCE((guardrail_flags->>'guardrail_triggered')::boolean, false)

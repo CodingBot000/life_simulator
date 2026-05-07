@@ -32,7 +32,7 @@ public class SimulationLogRepository {
   private void upsertRequestLog(SimulationExecutionEnvelope envelope) {
     jdbcTemplate.update(
       """
-        INSERT INTO llm_request_logs (
+        INSERT INTO life_simul_request_logs (
           request_id, trace_id, route_name, path, model, prompt_version,
           context_version, decision, confidence, guardrail_flags, latency_ms,
           total_tokens, estimated_cost_usd, fallback_used, retry_count, cache_hit,
@@ -88,7 +88,7 @@ public class SimulationLogRepository {
     for (SimulationStageLog stage : envelope.stageLogs()) {
       jdbcTemplate.update(
         """
-          INSERT INTO llm_stage_logs (
+          INSERT INTO life_simul_stage_logs (
             request_id, trace_id, route_name, path, stage_name, model, decision,
             confidence, guardrail_flags, latency_ms, input_tokens, output_tokens,
             total_tokens, estimated_cost_usd, fallback_used, retry_count, cache_hit,
@@ -144,7 +144,7 @@ public class SimulationLogRepository {
   private void upsertGuardrailEvent(SimulationExecutionEnvelope envelope) {
     jdbcTemplate.update(
       """
-        INSERT INTO llm_guardrail_events (
+        INSERT INTO life_simul_guardrail_events (
           request_id, trace_id, route_name, path, model, decision, confidence,
           guardrail_flags, latency_ms, total_tokens, estimated_cost_usd,
           fallback_used, retry_count, cache_hit, schema_valid, error_code, created_at
@@ -187,7 +187,7 @@ public class SimulationLogRepository {
 
     jdbcTemplate.update(
       """
-        INSERT INTO llm_anomaly_events (
+        INSERT INTO life_simul_anomaly_events (
           request_id, trace_id, route_name, path, model, decision, confidence,
           guardrail_flags, latency_ms, total_tokens, estimated_cost_usd,
           fallback_used, retry_count, cache_hit, schema_valid, error_code, created_at
@@ -220,19 +220,19 @@ public class SimulationLogRepository {
   private void upsertDailyUsage(SimulationExecutionEnvelope envelope) {
     jdbcTemplate.update(
       """
-        INSERT INTO llm_model_usage_daily (
+        INSERT INTO life_simul_model_usage_daily (
           metric_date, route_name, model, request_count, input_tokens, output_tokens,
           total_tokens, estimated_cost_usd, fallback_count, retry_count,
           cache_hit_count, created_at
         )
         VALUES (CAST(? AS date), ?, ?, 1, 0, 0, ?, ?, ?, ?, ?, ?)
         ON CONFLICT (metric_date, route_name, model) DO UPDATE SET
-          request_count = llm_model_usage_daily.request_count + 1,
-          total_tokens = llm_model_usage_daily.total_tokens + EXCLUDED.total_tokens,
-          estimated_cost_usd = llm_model_usage_daily.estimated_cost_usd + EXCLUDED.estimated_cost_usd,
-          fallback_count = llm_model_usage_daily.fallback_count + EXCLUDED.fallback_count,
-          retry_count = llm_model_usage_daily.retry_count + EXCLUDED.retry_count,
-          cache_hit_count = llm_model_usage_daily.cache_hit_count + EXCLUDED.cache_hit_count
+          request_count = life_simul_model_usage_daily.request_count + 1,
+          total_tokens = life_simul_model_usage_daily.total_tokens + EXCLUDED.total_tokens,
+          estimated_cost_usd = life_simul_model_usage_daily.estimated_cost_usd + EXCLUDED.estimated_cost_usd,
+          fallback_count = life_simul_model_usage_daily.fallback_count + EXCLUDED.fallback_count,
+          retry_count = life_simul_model_usage_daily.retry_count + EXCLUDED.retry_count,
+          cache_hit_count = life_simul_model_usage_daily.cache_hit_count + EXCLUDED.cache_hit_count
         """,
       envelope.createdAt().toString().substring(0, 10),
       envelope.routeName(),

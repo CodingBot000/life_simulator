@@ -29,8 +29,21 @@ export class ApiError extends Error {
   }
 }
 
+function defaultApiBaseUrl() {
+  if (typeof window === "undefined") {
+    return "http://localhost:8080";
+  }
+
+  const { hostname, origin } = window.location;
+  if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") {
+    return "http://localhost:8080";
+  }
+
+  return origin;
+}
+
 const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080"
+  import.meta.env.VITE_API_BASE_URL ?? defaultApiBaseUrl()
 ).replace(/\/$/u, "");
 
 export function apiUrl(path: string) {

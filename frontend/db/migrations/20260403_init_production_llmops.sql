@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS llm_request_logs (
+CREATE TABLE IF NOT EXISTS life_simul_request_logs (
   id BIGSERIAL PRIMARY KEY,
   request_id TEXT NOT NULL UNIQUE,
   trace_id TEXT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS llm_request_logs (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS llm_stage_logs (
+CREATE TABLE IF NOT EXISTS life_simul_stage_logs (
   id BIGSERIAL PRIMARY KEY,
   request_id TEXT NOT NULL,
   trace_id TEXT NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS llm_stage_logs (
   UNIQUE (request_id, stage_name)
 );
 
-CREATE TABLE IF NOT EXISTS llm_guardrail_events (
+CREATE TABLE IF NOT EXISTS life_simul_guardrail_events (
   id BIGSERIAL PRIMARY KEY,
   request_id TEXT NOT NULL UNIQUE,
   trace_id TEXT NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS llm_guardrail_events (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS llm_anomaly_events (
+CREATE TABLE IF NOT EXISTS life_simul_anomaly_events (
   id BIGSERIAL PRIMARY KEY,
   request_id TEXT,
   trace_id TEXT,
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS llm_anomaly_events (
   UNIQUE (request_id, created_at)
 );
 
-CREATE TABLE IF NOT EXISTS llm_drift_daily_metrics (
+CREATE TABLE IF NOT EXISTS life_simul_drift_daily_metrics (
   id BIGSERIAL PRIMARY KEY,
   metric_date DATE NOT NULL,
   bucket_label TEXT NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS llm_drift_daily_metrics (
   UNIQUE (metric_date, bucket_label, route_name)
 );
 
-CREATE TABLE IF NOT EXISTS llm_model_usage_daily (
+CREATE TABLE IF NOT EXISTS life_simul_model_usage_daily (
   id BIGSERIAL PRIMARY KEY,
   metric_date DATE NOT NULL,
   route_name TEXT NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS llm_model_usage_daily (
   UNIQUE (metric_date, route_name, model)
 );
 
-CREATE TABLE IF NOT EXISTS llm_eval_samples (
+CREATE TABLE IF NOT EXISTS life_simul_eval_samples (
   id BIGSERIAL PRIMARY KEY,
   request_id TEXT NOT NULL UNIQUE,
   trace_id TEXT NOT NULL,
@@ -158,17 +158,17 @@ CREATE TABLE IF NOT EXISTS llm_eval_samples (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_llm_request_logs_created_at
-  ON llm_request_logs (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_life_simul_request_logs_created_at
+  ON life_simul_request_logs (created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_llm_stage_logs_created_at
-  ON llm_stage_logs (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_life_simul_stage_logs_created_at
+  ON life_simul_stage_logs (created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_llm_guardrail_events_created_at
-  ON llm_guardrail_events (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_life_simul_guardrail_events_created_at
+  ON life_simul_guardrail_events (created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_llm_anomaly_events_created_at
-  ON llm_anomaly_events (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_life_simul_anomaly_events_created_at
+  ON life_simul_anomaly_events (created_at DESC);
 
-CREATE INDEX IF NOT EXISTS idx_llm_model_usage_daily_metric_date
-  ON llm_model_usage_daily (metric_date DESC);
+CREATE INDEX IF NOT EXISTS idx_life_simul_model_usage_daily_metric_date
+  ON life_simul_model_usage_daily (metric_date DESC);
