@@ -16,6 +16,7 @@ public class SimulatorProperties {
   private final OpenAi openai = new OpenAi();
   private final Mock mock = new Mock();
   private final Database database = new Database();
+  private final Cors cors = new Cors();
   private final Security security = new Security();
 
   public enum LlmProvider {
@@ -50,6 +51,10 @@ public class SimulatorProperties {
 
   public Database getDatabase() {
     return database;
+  }
+
+  public Cors getCors() {
+    return cors;
   }
 
   public Security getSecurity() {
@@ -214,6 +219,30 @@ public class SimulatorProperties {
 
     public RateLimit getRateLimit() {
       return rateLimit;
+    }
+  }
+
+  public static class Cors {
+    private List<String> allowedOrigins = new ArrayList<>(
+      List.of(
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://ai-miracle.cloud",
+        "https://www.ai-miracle.cloud",
+        "http://ai-miracle.cloud",
+        "http://www.ai-miracle.cloud",
+        "http://35.164.88.121"
+      )
+    );
+
+    public List<String> getAllowedOrigins() {
+      return allowedOrigins;
+    }
+
+    public void setAllowedOrigins(List<String> allowedOrigins) {
+      this.allowedOrigins = new ArrayList<>(allowedOrigins);
     }
   }
 

@@ -24,6 +24,8 @@ simulator:
     username: ${BACKEND_DATABASE_USERNAME:life_sim_user}
     password: ${BACKEND_DATABASE_PASSWORD:life_sim_password}
     migrate: ${BACKEND_DATABASE_MIGRATE:true}
+  cors:
+    allowed-origins: ${SIMULATOR_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,https://ai-miracle.cloud,https://www.ai-miracle.cloud,http://ai-miracle.cloud,http://www.ai-miracle.cloud,http://35.164.88.121}
   security:
     rate-limit:
       enabled: ${SIMULATOR_RATE_LIMIT_ENABLED:true}
