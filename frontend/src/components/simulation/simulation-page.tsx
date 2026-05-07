@@ -16,16 +16,18 @@ import {
 } from "@/components/simulation/result-cards";
 import { InputField } from "@/components/simulation/shared";
 import { getLocalizedText, useCasePresets } from "@/hooks/use-case-presets";
+import { usePriorityCatalog } from "@/hooks/use-priority-catalog";
 import { useSimulationSubmit } from "@/hooks/use-simulation-submit";
 import type {
   CasePresetCategory,
   RiskTolerance,
 } from "@/lib/types";
 import {
-  PRIORITY_GROUP_LABELS,
-  PRIORITY_GROUP_ORDER,
-  type PriorityLocale,
+  FALLBACK_MAX_PRIORITY_SELECTIONS,
+  getPriorityGroupLabel,
   listPriorityDefinitionsByGroup,
+  listPriorityGroupsForCategory,
+  type PriorityLocale,
 } from "@/lib/priorities";
 import {
   initialForm,
@@ -38,6 +40,13 @@ export default function SimulationPage() {
   const { locale: uiLocale, setLocale: setUiLocale } = useUiLocale();
   const [form, setForm] = useState<FormState>(initialForm);
   const simulation = useSimulationSubmit();
+  const {
+    catalog: priorityCatalog,
+    priorityError,
+    isPriorityLoading,
+  } = usePriorityCatalog();
+  const maxPrioritySelections =
+    priorityCatalog?.maxSelections ?? FALLBACK_MAX_PRIORITY_SELECTIONS;
   const {
     result,
     error,
@@ -58,9 +67,13 @@ export default function SimulationPage() {
     handleCategoryChange,
   } = useCasePresets({
     locale: uiLocale,
+    maxPrioritySelections,
     onApplyFormState: setForm,
     onClearSimulation: resetOutput,
   });
+  const priorityGroups = priorityCatalog
+    ? listPriorityGroupsForCategory(priorityCatalog, selectedCategory)
+    : [];
 
   function updateFormField<Key extends keyof FormState>(
     key: Key,
@@ -92,7 +105,7 @@ export default function SimulationPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await submit(form, uiLocale);
+    await submit(form, uiLocale, priorityCatalog);
   }
 
   return (
@@ -298,10 +311,23 @@ export default function SimulationPage() {
 
               <InputField label="우선순위">
                 <div className="grid gap-3">
+                  {isPriorityLoading ? (
+                    <p className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm text-slate-600">
+                      우선순위 목록을 불러오는 중입니다.
+                    </p>
+                  ) : null}
+
+                  {priorityError ? (
+                    <p className="rounded-2xl border border-rose-900/10 bg-rose-50/80 px-4 py-3 text-sm text-rose-900">
+                      {priorityError}
+                    </p>
+                  ) : null}
+
                   {form.priority.map((priority, index) => (
                     <select
                       key={`priority-${index}`}
                       value={priority}
+                      disabled={isPriorityLoading || Boolean(priorityError) || !priorityCatalog}
                       onChange={(event) =>
                         updatePrioritySlot(
                           index,
@@ -313,12 +339,15 @@ export default function SimulationPage() {
                       <option value="">
                         {index === 0 ? `${index + 1}순위 선택` : `${index + 1}순위 없음`}
                       </option>
-                      {PRIORITY_GROUP_ORDER.map((group) => (
+                      {priorityGroups.map((group) => (
                         <optgroup
-                          key={group}
-                          label={PRIORITY_GROUP_LABELS[group][uiLocale]}
+                          key={group.id}
+                          label={getPriorityGroupLabel(group, uiLocale)}
                         >
-                          {listPriorityDefinitionsByGroup(group).map((definition) => (
+                          {(priorityCatalog
+                            ? listPriorityDefinitionsByGroup(priorityCatalog, group.id)
+                            : []
+                          ).map((definition) => (
                             <option
                               key={definition.id}
                               value={definition.id}
@@ -385,7 +414,7 @@ export default function SimulationPage() {
               </p>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || isPriorityLoading || Boolean(priorityError) || !priorityCatalog}
                 className="inline-flex min-w-[220px] items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
               >
                 {isLoading ? "시뮬레이션 실행 중..." : "시뮬레이션 실행"}
@@ -445,7 +474,11 @@ export default function SimulationPage() {
           {result ? (
             <>
               <RoutingCard routing={result.routing} />
-              <StateContextCard stateContext={result.stateContext} locale={uiLocale} />
+              <StateContextCard
+                stateContext={result.stateContext}
+                locale={uiLocale}
+                priorityCatalog={priorityCatalog}
+              />
               <PlannerCard planner={result.planner} />
               {result.scenarioA ? (
                 <TimelineCard title="선택지 A 시나리오" scenario={result.scenarioA} />

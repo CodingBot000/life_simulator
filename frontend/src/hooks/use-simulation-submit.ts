@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { runSimulation } from "@/lib/api/simulation";
-import type { PriorityLocale } from "@/lib/priorities";
+import type { PriorityCatalog, PriorityLocale } from "@/lib/priorities";
 import type { FormState } from "@/lib/simulation/form";
 import { buildPayload } from "@/lib/simulation/form";
 import {
@@ -29,7 +29,11 @@ export function useSimulationSubmit() {
     setProgress(createInitialProgressState());
   }, []);
 
-  const submit = useCallback(async (form: FormState, locale: PriorityLocale) => {
+  const submit = useCallback(async (
+    form: FormState,
+    locale: PriorityLocale,
+    priorityCatalog?: PriorityCatalog | null,
+  ) => {
     abortControllerRef.current?.abort();
 
     const controller = new AbortController();
@@ -41,7 +45,7 @@ export function useSimulationSubmit() {
     setProgress(createInitialProgressState());
 
     try {
-      const nextResult = await runSimulation(buildPayload(form), {
+      const nextResult = await runSimulation(buildPayload(form, priorityCatalog), {
         locale,
         signal: controller.signal,
         onProgressEvent: (progressEvent) => {

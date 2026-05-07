@@ -56,10 +56,12 @@ function listPresetCategories(presets: CasePreset[], locale: PriorityLocale) {
 
 export function useCasePresets({
   locale,
+  maxPrioritySelections,
   onApplyFormState,
   onClearSimulation,
 }: {
   locale: PriorityLocale;
+  maxPrioritySelections: number;
   onApplyFormState: (form: FormState) => void;
   onClearSimulation: () => void;
 }) {
@@ -89,7 +91,7 @@ export function useCasePresets({
   function applyPreset(preset: CasePreset) {
     setSelectedCategory(preset.category);
     setSelectedPresetId(preset.id);
-    onApplyFormState(buildFormState(preset.request));
+    onApplyFormState(buildFormState(preset.request, maxPrioritySelections));
     onClearSimulation();
   }
 
@@ -121,7 +123,7 @@ export function useCasePresets({
           const firstPreset = nextPresets[0];
           setSelectedCategory(firstPreset.category);
           setSelectedPresetId(firstPreset.id);
-          onApplyFormState(buildFormState(firstPreset.request));
+          onApplyFormState(buildFormState(firstPreset.request, maxPrioritySelections));
           onClearSimulation();
         }
       } catch (loadError) {
@@ -146,7 +148,7 @@ export function useCasePresets({
     return () => {
       controller.abort();
     };
-  }, [onApplyFormState, onClearSimulation]);
+  }, [maxPrioritySelections, onApplyFormState, onClearSimulation]);
 
   return {
     presets,

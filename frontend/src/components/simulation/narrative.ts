@@ -1,4 +1,4 @@
-import { PRIORITY_DEFINITIONS, type PriorityLocale } from "@/lib/priorities";
+import type { PriorityCatalog, PriorityLocale } from "@/lib/priorities";
 
 export const REFLECTION_COPY = {
   ko: {
@@ -197,6 +197,7 @@ const TEXT_TOKEN_REPLACEMENTS_BY_LOCALE: Record<
 export function formatUserFacingNarrative(
   text: string,
   locale: PriorityLocale = "ko",
+  priorityCatalog?: PriorityCatalog | null,
 ): string {
   let formatted = text;
 
@@ -204,7 +205,7 @@ export function formatUserFacingNarrative(
     formatted = formatted.replace(pattern, replacement);
   }
 
-  for (const definition of [...PRIORITY_DEFINITIONS].sort(
+  for (const definition of [...(priorityCatalog?.definitions ?? [])].sort(
     (left, right) => right.id.length - left.id.length,
   )) {
     const pattern = new RegExp(`\\b${definition.id}\\b`, "g");

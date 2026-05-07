@@ -1,5 +1,5 @@
 import { getPriorityLabel } from "@/lib/priorities";
-import type { PriorityLocale } from "@/lib/priorities";
+import type { PriorityCatalog, PriorityLocale } from "@/lib/priorities";
 import { EXECUTION_MODE_LABELS } from "@/lib/simulation/progress";
 import type {
   PlannerResult,
@@ -93,9 +93,11 @@ export function PlannerCard({ planner }: { planner: PlannerResult }) {
 export function StateContextCard({
   stateContext,
   locale,
+  priorityCatalog,
 }: {
   stateContext: StateContext;
   locale: PriorityLocale;
+  priorityCatalog?: PriorityCatalog | null;
 }) {
   const { profile_state, situational_state, memory_state } =
     stateContext.user_state;
@@ -152,7 +154,7 @@ export function StateContextCard({
                   >
                     {priority === "none"
                       ? "none"
-                      : getPriorityLabel(priority, locale)}
+                      : getPriorityLabel(priority, locale, priorityCatalog)}
                   </span>
                 ))}
               </div>
@@ -265,7 +267,7 @@ export function StateContextCard({
                 Decision Bias
               </p>
               <p className="mt-2 text-sm leading-7 text-white/90">
-                {formatUserFacingNarrative(summary.decision_bias)}
+                {formatUserFacingNarrative(summary.decision_bias, locale, priorityCatalog)}
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -273,7 +275,7 @@ export function StateContextCard({
                 Current Constraint
               </p>
               <p className="mt-2 text-sm leading-7 text-white/90">
-                {formatUserFacingNarrative(summary.current_constraint)}
+                {formatUserFacingNarrative(summary.current_constraint, locale, priorityCatalog)}
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -281,7 +283,7 @@ export function StateContextCard({
                 Agent Guidance
               </p>
               <p className="mt-2 text-sm leading-7 text-white/90">
-                {formatUserFacingNarrative(summary.agent_guidance)}
+                {formatUserFacingNarrative(summary.agent_guidance, locale, priorityCatalog)}
               </p>
             </div>
           </div>
