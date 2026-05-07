@@ -45,7 +45,14 @@ class LlmClientConfigTests {
 
     assertThat(client.providerName()).isEqualTo("openai");
     assertThatThrownBy(() ->
-      client.completeJson("Return JSON.", objectMapper.createObjectNode(), objectMapper.createObjectNode())
+      client.completeJson(
+        new LlmJsonRequest(
+          "planner",
+          "Return JSON.",
+          objectMapper.createObjectNode(),
+          objectMapper.createObjectNode()
+        )
+      )
     )
       .isInstanceOf(LlmClientException.class)
       .hasMessageContaining("OpenAI API key is required");

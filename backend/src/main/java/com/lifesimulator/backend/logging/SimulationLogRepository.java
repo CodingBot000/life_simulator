@@ -89,14 +89,14 @@ public class SimulationLogRepository {
       jdbcTemplate.update(
         """
           INSERT INTO life_simul_stage_logs (
-            request_id, trace_id, route_name, path, stage_name, model, decision,
-            confidence, guardrail_flags, latency_ms, input_tokens, output_tokens,
-            total_tokens, estimated_cost_usd, fallback_used, retry_count, cache_hit,
-            schema_valid, error_code, request_payload, response_payload, created_at
+          request_id, trace_id, route_name, path, stage_name, model, decision,
+            confidence, guardrail_flags, latency_ms, input_tokens, cached_input_tokens,
+            output_tokens, total_tokens, estimated_cost_usd, fallback_used, retry_count,
+            cache_hit, schema_valid, error_code, request_payload, response_payload, created_at
           )
           VALUES (
             ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?, ?,
-            ?, ?, ?::jsonb, ?::jsonb, ?
+            ?, ?, ?, ?::jsonb, ?::jsonb, ?
           )
           ON CONFLICT (request_id, stage_name) DO UPDATE SET
             model = EXCLUDED.model,
@@ -105,6 +105,7 @@ public class SimulationLogRepository {
             guardrail_flags = EXCLUDED.guardrail_flags,
             latency_ms = EXCLUDED.latency_ms,
             input_tokens = EXCLUDED.input_tokens,
+            cached_input_tokens = EXCLUDED.cached_input_tokens,
             output_tokens = EXCLUDED.output_tokens,
             total_tokens = EXCLUDED.total_tokens,
             estimated_cost_usd = EXCLUDED.estimated_cost_usd,
@@ -112,6 +113,7 @@ public class SimulationLogRepository {
             retry_count = EXCLUDED.retry_count,
             cache_hit = EXCLUDED.cache_hit,
             schema_valid = EXCLUDED.schema_valid,
+            error_code = EXCLUDED.error_code,
             request_payload = EXCLUDED.request_payload,
             response_payload = EXCLUDED.response_payload
           """,
@@ -126,6 +128,7 @@ public class SimulationLogRepository {
         json(envelope.guardrailFlags()),
         stage.latencyMs(),
         stage.inputTokens(),
+        stage.cachedInputTokens(),
         stage.outputTokens(),
         stage.totalTokens(),
         BigDecimal.valueOf(stage.estimatedCostUsd()),
@@ -133,7 +136,7 @@ public class SimulationLogRepository {
         stage.retryCount(),
         stage.cacheHit(),
         stage.schemaValid(),
-        null,
+        stage.errorCode(),
         json(stage.requestPayload()),
         json(stage.responsePayload()),
         Timestamp.from(stage.createdAt())
@@ -221,13 +224,16 @@ public class SimulationLogRepository {
     jdbcTemplate.update(
       """
         INSERT INTO life_simul_model_usage_daily (
-          metric_date, route_name, model, request_count, input_tokens, output_tokens,
-          total_tokens, estimated_cost_usd, fallback_count, retry_count,
+          metric_date, route_name, model, request_count, input_tokens, cached_input_tokens,
+          output_tokens, total_tokens, estimated_cost_usd, fallback_count, retry_count,
           cache_hit_count, created_at
         )
-        VALUES (CAST(? AS date), ?, ?, 1, 0, 0, ?, ?, ?, ?, ?, ?)
+        VALUES (CAST(? AS date), ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT (metric_date, route_name, model) DO UPDATE SET
           request_count = life_simul_model_usage_daily.request_count + 1,
+          input_tokens = life_simul_model_usage_daily.input_tokens + EXCLUDED.input_tokens,
+          cached_input_tokens = life_simul_model_usage_daily.cached_input_tokens + EXCLUDED.cached_input_tokens,
+          output_tokens = life_simul_model_usage_daily.output_tokens + EXCLUDED.output_tokens,
           total_tokens = life_simul_model_usage_daily.total_tokens + EXCLUDED.total_tokens,
           estimated_cost_usd = life_simul_model_usage_daily.estimated_cost_usd + EXCLUDED.estimated_cost_usd,
           fallback_count = life_simul_model_usage_daily.fallback_count + EXCLUDED.fallback_count,
@@ -237,6 +243,9 @@ public class SimulationLogRepository {
       envelope.createdAt().toString().substring(0, 10),
       envelope.routeName(),
       envelope.selectedModel(),
+      inputTokens(envelope),
+      cachedInputTokens(envelope),
+      outputTokens(envelope),
       envelope.totalTokens(),
       BigDecimal.valueOf(envelope.estimatedCostUsd()),
       envelope.fallbackUsed() ? 1 : 0,
@@ -249,6 +258,18 @@ public class SimulationLogRepository {
   private boolean isAnomaly(JsonNode guardrail) {
     return guardrail.path("guardrail_triggered").asBoolean(false) ||
       guardrail.path("final_mode").asText("").equals("blocked");
+  }
+
+  private int inputTokens(SimulationExecutionEnvelope envelope) {
+    return envelope.stageLogs().stream().mapToInt(SimulationStageLog::inputTokens).sum();
+  }
+
+  private int cachedInputTokens(SimulationExecutionEnvelope envelope) {
+    return envelope.stageLogs().stream().mapToInt(SimulationStageLog::cachedInputTokens).sum();
+  }
+
+  private int outputTokens(SimulationExecutionEnvelope envelope) {
+    return envelope.stageLogs().stream().mapToInt(SimulationStageLog::outputTokens).sum();
   }
 
   private String json(Object value) {

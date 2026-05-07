@@ -12,8 +12,8 @@ public class MockJsonClient implements LlmJsonClient {
   }
 
   @Override
-  public JsonNode completeJson(String prompt, JsonNode outputSchema, JsonNode fallback) {
-    return fallback.deepCopy();
+  public LlmJsonResult completeJson(LlmJsonRequest request) {
+    return LlmJsonResult.of(request.fallback().deepCopy(), modelName());
   }
 
   @Override

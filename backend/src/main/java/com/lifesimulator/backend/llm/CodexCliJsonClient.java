@@ -14,8 +14,10 @@ public class CodexCliJsonClient implements LlmJsonClient {
   }
 
   @Override
-  public JsonNode completeJson(String prompt, JsonNode outputSchema, JsonNode fallback) {
-    return codexCliClient.completeJson(prompt, outputSchema);
+  public LlmJsonResult completeJson(LlmJsonRequest request) {
+    long startedAt = System.nanoTime();
+    JsonNode output = codexCliClient.completeJson(request.prompt(), request.outputSchema());
+    return new LlmJsonResult(output, modelName(), LlmUsage.empty(), elapsedMillis(startedAt), 0);
   }
 
   @Override
@@ -36,5 +38,9 @@ public class CodexCliJsonClient implements LlmJsonClient {
   @Override
   public boolean fallbackOnError() {
     return properties.getCodex().isFallbackOnError();
+  }
+
+  private int elapsedMillis(long startedAt) {
+    return Math.max(0, (int) ((System.nanoTime() - startedAt) / 1_000_000));
   }
 }

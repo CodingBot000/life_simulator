@@ -87,7 +87,7 @@ public class SimulationService {
       locale,
       routingDecision
     );
-    stageExecutionService.runStages(
+    List<StageExecutionRecord> stageRecords = stageExecutionService.runStages(
       request,
       response,
       requestId,
@@ -100,7 +100,7 @@ public class SimulationService {
     response.put("request_id", requestId);
     return new SimulationRunResult(
       response,
-      envelopeFactory.create(request, response, traceId, startedAtMillis, stageNames(stages))
+      envelopeFactory.create(request, response, traceId, startedAtMillis, stageRecords)
     );
   }
 

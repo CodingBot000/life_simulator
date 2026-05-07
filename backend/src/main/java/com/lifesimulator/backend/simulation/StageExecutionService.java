@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lifesimulator.backend.guardrail.GuardrailEvaluationService;
 import com.lifesimulator.backend.llm.LlmClientException;
 import com.lifesimulator.backend.llm.LlmJsonClient;
+import com.lifesimulator.backend.llm.LlmJsonRequest;
+import com.lifesimulator.backend.llm.LlmJsonResult;
 import com.lifesimulator.backend.routing.BackendRoutingDecision;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +42,7 @@ public class StageExecutionService {
     this.promptRepository = promptRepository;
   }
 
-  public JsonNode runStages(
+  public List<StageExecutionRecord> runStages(
     JsonNode request,
     ObjectNode response,
     String requestId,
@@ -49,13 +52,15 @@ public class StageExecutionService {
     List<SimulationStage> stages,
     SimulationProgressWriter progress
   ) throws IOException {
+    List<StageExecutionRecord> records = new ArrayList<>();
     for (SimulationStage stage : stages) {
       write(progress, stageEvent("stage_started", requestId, stage));
       StageRunResult result = runStage(request, response, requestId, traceId, locale, routingDecision, stage);
       response.set(stage.responseField(), result.output());
       write(progress, stageCompletedEvent(requestId, stage, result));
+      records.add(result.executionRecord());
     }
-    return response;
+    return records;
   }
 
   private StageRunResult runStage(
@@ -69,24 +74,34 @@ public class StageExecutionService {
   ) throws IOException {
     JsonNode fallback = response.path(stage.responseField()).deepCopy();
     if (stage.isDerivedOnly()) {
-      return StageRunResult.derived(guardrailEvaluationService.evaluate(response, routingDecision));
+      return StageRunResult.derived(
+        stage.stageName(),
+        guardrailEvaluationService.evaluate(response, routingDecision)
+      );
     }
     if (!llmJsonClient.enabled()) {
-      return StageRunResult.fallback(fallback, llmJsonClient.providerName() + "_disabled");
+      return StageRunResult.fallback(
+        stage.stageName(),
+        fallback,
+        llmJsonClient.providerName() + "_disabled"
+      );
     }
 
     try {
-      JsonNode output = llmJsonClient.completeJson(
-        buildPrompt(request, response, requestId, traceId, locale, routingDecision, stage),
-        schemaBuilder.schemaFor(fallback),
-        fallback
+      LlmJsonResult result = llmJsonClient.completeJson(
+        new LlmJsonRequest(
+          stage.stageName(),
+          buildPrompt(request, response, requestId, traceId, locale, routingDecision, stage),
+          schemaBuilder.schemaFor(fallback),
+          fallback
+        )
       );
-      return StageRunResult.llm(output, llmJsonClient.modelName());
+      return StageRunResult.llm(stage.stageName(), result);
     } catch (RuntimeException error) {
       if (!shouldFallback(error)) {
         throw error;
       }
-      return StageRunResult.fallback(fallback, fallbackReason(error));
+      return StageRunResult.fallback(stage.stageName(), fallback, fallbackReason(error));
     }
   }
 
@@ -106,12 +121,21 @@ public class StageExecutionService {
       "Return exactly one JSON object that matches the requested stage schema.",
       "Return the requested stage output only, not the full response.",
       "Stage: " + stage.stageName(),
-      "Request ID: " + requestId,
-      "Trace ID: " + traceId,
-      "UI locale: " + locale,
-      "Execution mode: " + routingDecision.executionMode(),
       "Stage prompt:",
       promptRepository.promptFor(stage),
+      "Runtime metadata:",
+      objectMapper.writeValueAsString(
+        Map.of(
+          "request_id",
+          requestId,
+          "trace_id",
+          traceId,
+          "ui_locale",
+          locale,
+          "execution_mode",
+          routingDecision.executionMode()
+        )
+      ),
       "Stage input JSON:",
       objectMapper.writeValueAsString(stageInput)
     );
@@ -143,11 +167,14 @@ public class StageExecutionService {
     event.put("type", "stage_completed");
     event.put("request_id", requestId);
     event.put("stage_name", stage.stageName());
-    event.put("execution_kind", result.executionKind());
-    event.put("model", result.model());
-    event.put("fallback_used", result.fallbackUsed());
-    if (result.fallbackReason() != null) {
-      event.put("fallback_reason", result.fallbackReason());
+    event.put("execution_kind", result.executionRecord().executionKind());
+    event.put("model", result.executionRecord().model());
+    event.put("fallback_used", result.executionRecord().fallbackUsed());
+    event.put("latency_ms", result.executionRecord().latencyMs());
+    event.put("total_tokens", result.executionRecord().totalTokens());
+    event.put("cache_hit", result.executionRecord().cacheHit());
+    if (result.executionRecord().errorCode() != null) {
+      event.put("fallback_reason", result.executionRecord().errorCode());
     }
     return event;
   }
@@ -180,21 +207,24 @@ public class StageExecutionService {
 
   private record StageRunResult(
     JsonNode output,
-    String executionKind,
-    String model,
-    boolean fallbackUsed,
-    String fallbackReason
+    StageExecutionRecord executionRecord
   ) {
-    private static StageRunResult llm(JsonNode output, String model) {
-      return new StageRunResult(output, "llm", model, false, null);
+    private static StageRunResult llm(String stageName, LlmJsonResult result) {
+      return new StageRunResult(
+        result.output(),
+        StageExecutionRecord.llm(stageName, "llm", result.model(), result)
+      );
     }
 
-    private static StageRunResult derived(JsonNode output) {
-      return new StageRunResult(output, "derived", "spring-derived", false, null);
+    private static StageRunResult derived(String stageName, JsonNode output) {
+      return new StageRunResult(
+        output,
+        StageExecutionRecord.derived(stageName)
+      );
     }
 
-    private static StageRunResult fallback(JsonNode output, String fallbackReason) {
-      return new StageRunResult(output, "deterministic", "fallback", true, fallbackReason);
+    private static StageRunResult fallback(String stageName, JsonNode output, String fallbackReason) {
+      return new StageRunResult(output, StageExecutionRecord.fallback(stageName, fallbackReason));
     }
   }
 }

@@ -10,7 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lifesimulator.backend.guardrail.GuardrailEvaluationService;
 import com.lifesimulator.backend.llm.LlmClientException;
+import com.lifesimulator.backend.llm.LlmJsonRequest;
 import com.lifesimulator.backend.llm.LlmJsonClient;
+import com.lifesimulator.backend.llm.LlmJsonResult;
 import com.lifesimulator.backend.routing.BackendRoutingDecision;
 import java.io.IOException;
 import java.util.List;
@@ -106,7 +108,7 @@ class StageExecutionServiceTests {
 
   private static class MissingCredentialClient implements LlmJsonClient {
     @Override
-    public JsonNode completeJson(String prompt, JsonNode outputSchema, JsonNode fallback) {
+    public LlmJsonResult completeJson(LlmJsonRequest request) {
       throw new LlmClientException(
         "OpenAI API key is required when SIMULATOR_LLM_PROVIDER=openai."
       );
@@ -119,7 +121,7 @@ class StageExecutionServiceTests {
 
     @Override
     public String modelName() {
-      return "gpt-5.3";
+      return "gpt-5-nano";
     }
 
     @Override
@@ -135,7 +137,7 @@ class StageExecutionServiceTests {
 
   private static class FallbackEnabledFailureClient implements LlmJsonClient {
     @Override
-    public JsonNode completeJson(String prompt, JsonNode outputSchema, JsonNode fallback) {
+    public LlmJsonResult completeJson(LlmJsonRequest request) {
       throw new LlmClientException("Temporary provider outage.");
     }
 
@@ -146,7 +148,7 @@ class StageExecutionServiceTests {
 
     @Override
     public String modelName() {
-      return "gpt-5.3";
+      return "gpt-5-nano";
     }
 
     @Override

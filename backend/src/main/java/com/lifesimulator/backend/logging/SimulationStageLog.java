@@ -15,6 +15,7 @@ public record SimulationStageLog(
   String executionKind,
   int latencyMs,
   int inputTokens,
+  int cachedInputTokens,
   int outputTokens,
   int totalTokens,
   double estimatedCostUsd,
@@ -23,6 +24,7 @@ public record SimulationStageLog(
   boolean cacheHit,
   boolean schemaValid,
   int schemaFailureCount,
+  String errorCode,
   JsonNode requestPayload,
   JsonNode responsePayload,
   Instant createdAt

@@ -165,9 +165,11 @@ public class SimulatorProperties {
 
   public static class OpenAi {
     private String apiKey = "";
-    private String model = "gpt-5.3";
+    private String model = "gpt-5-nano";
     private Duration timeout = Duration.ofSeconds(75);
     private boolean fallbackOnError = true;
+    private String promptCacheRetention = "in_memory";
+    private Map<String, StageProfile> stageProfiles = defaultStageProfiles();
 
     public String getApiKey() {
       return apiKey;
@@ -199,6 +201,124 @@ public class SimulatorProperties {
 
     public void setFallbackOnError(boolean fallbackOnError) {
       this.fallbackOnError = fallbackOnError;
+    }
+
+    public String getPromptCacheRetention() {
+      return promptCacheRetention;
+    }
+
+    public void setPromptCacheRetention(String promptCacheRetention) {
+      this.promptCacheRetention = promptCacheRetention;
+    }
+
+    public Map<String, StageProfile> getStageProfiles() {
+      return stageProfiles;
+    }
+
+    public void setStageProfiles(Map<String, StageProfile> stageProfiles) {
+      this.stageProfiles = new LinkedHashMap<>(stageProfiles);
+    }
+
+    public StageProfile profileFor(String stageName) {
+      StageProfile profile = stageProfiles.get(stageName);
+      return profile == null ? StageProfile.standard(stageName) : profile.withFallbacks(stageName);
+    }
+
+    private static Map<String, StageProfile> defaultStageProfiles() {
+      Map<String, StageProfile> profiles = new LinkedHashMap<>();
+      profiles.put("state_loader", StageProfile.of("state-loader", "minimal", "low", 900));
+      profiles.put("planner", StageProfile.of("planner", "minimal", "low", 900));
+      profiles.put("scenario_a", StageProfile.of("scenario", "low", "medium", 1400));
+      profiles.put("scenario_b", StageProfile.of("scenario", "low", "medium", 1400));
+      profiles.put("risk_a", StageProfile.of("risk", "minimal", "low", 900));
+      profiles.put("risk_b", StageProfile.of("risk", "minimal", "low", 900));
+      profiles.put("ab_reasoning", StageProfile.of("ab-reasoning", "low", "low", 1200));
+      profiles.put("advisor", StageProfile.of("advisor", "low", "medium", 1800));
+      profiles.put("reflection", StageProfile.of("reflection", "minimal", "low", 1200));
+      return profiles;
+    }
+
+    public static class StageProfile {
+      private String model = "";
+      private String reasoningEffort = "minimal";
+      private String verbosity = "low";
+      private int maxOutputTokens = 900;
+      private String promptCacheKey = "";
+
+      public static StageProfile of(
+        String cacheKeySuffix,
+        String reasoningEffort,
+        String verbosity,
+        int maxOutputTokens
+      ) {
+        StageProfile profile = new StageProfile();
+        profile.reasoningEffort = reasoningEffort;
+        profile.verbosity = verbosity;
+        profile.maxOutputTokens = maxOutputTokens;
+        profile.promptCacheKey = "life-sim:v1:" + cacheKeySuffix;
+        return profile;
+      }
+
+      public static StageProfile standard(String stageName) {
+        return of(stageName.replace('_', '-'), "minimal", "low", 900);
+      }
+
+      public StageProfile withFallbacks(String stageName) {
+        StageProfile profile = new StageProfile();
+        profile.model = model == null ? "" : model;
+        profile.reasoningEffort = blankToDefault(reasoningEffort, "minimal");
+        profile.verbosity = blankToDefault(verbosity, "low");
+        profile.maxOutputTokens = maxOutputTokens > 0 ? maxOutputTokens : 900;
+        profile.promptCacheKey = blankToDefault(
+          promptCacheKey,
+          "life-sim:v1:" + stageName.replace('_', '-')
+        );
+        return profile;
+      }
+
+      public String getModel() {
+        return model;
+      }
+
+      public void setModel(String model) {
+        this.model = model;
+      }
+
+      public String getReasoningEffort() {
+        return reasoningEffort;
+      }
+
+      public void setReasoningEffort(String reasoningEffort) {
+        this.reasoningEffort = reasoningEffort;
+      }
+
+      public String getVerbosity() {
+        return verbosity;
+      }
+
+      public void setVerbosity(String verbosity) {
+        this.verbosity = verbosity;
+      }
+
+      public int getMaxOutputTokens() {
+        return maxOutputTokens;
+      }
+
+      public void setMaxOutputTokens(int maxOutputTokens) {
+        this.maxOutputTokens = maxOutputTokens;
+      }
+
+      public String getPromptCacheKey() {
+        return promptCacheKey;
+      }
+
+      public void setPromptCacheKey(String promptCacheKey) {
+        this.promptCacheKey = promptCacheKey;
+      }
+
+      private static String blankToDefault(String value, String defaultValue) {
+        return value == null || value.isBlank() ? defaultValue : value;
+      }
     }
   }
 

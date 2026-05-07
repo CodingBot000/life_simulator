@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lifesimulator.backend.llm.LlmJsonRequest;
 import com.lifesimulator.backend.llm.LlmJsonClient;
+import com.lifesimulator.backend.llm.LlmJsonResult;
 import org.junit.jupiter.api.Test;
 
 class MetricsControllerTests {
@@ -15,13 +17,13 @@ class MetricsControllerTests {
 
     assertThat(controller.metrics())
       .contains("provider=\"openai\"")
-      .contains("model=\"gpt-5.3\"");
+      .contains("model=\"gpt-5-nano\"");
   }
 
   private static class StaticLlmClient implements LlmJsonClient {
     @Override
-    public JsonNode completeJson(String prompt, JsonNode outputSchema, JsonNode fallback) {
-      return new ObjectMapper().createObjectNode();
+    public LlmJsonResult completeJson(LlmJsonRequest request) {
+      return LlmJsonResult.of(new ObjectMapper().createObjectNode(), modelName());
     }
 
     @Override
@@ -31,7 +33,7 @@ class MetricsControllerTests {
 
     @Override
     public String modelName() {
-      return "gpt-5.3";
+      return "gpt-5-nano";
     }
 
     @Override

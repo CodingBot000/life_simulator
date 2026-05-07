@@ -23,13 +23,13 @@ public class SimulationEnvelopeFactory {
     JsonNode response,
     String traceId,
     long startedAtMillis,
-    List<String> stageNames
+    List<StageExecutionRecord> stageRecords
   ) {
     Instant createdAt = Instant.now();
     String requestId = response.path("request_id").asText();
     String executionMode = response.at("/routing/execution_mode").asText("full");
     List<String> selectedPath = stringList(response.at("/routing/selected_path"));
-    String selectedModel = response.at("/routing/stage_model_plan/advisor").asText("unknown");
+    String selectedModel = selectedModel(response, stageRecords);
     List<SimulationStageLog> stageLogs = stageLogs(
       requestId,
       traceId,
@@ -38,10 +38,22 @@ public class SimulationEnvelopeFactory {
       selectedModel,
       request,
       response,
-      stageNames,
+      stageRecords,
       createdAt
     );
-
+    int totalTokens = stageRecords.stream().mapToInt(StageExecutionRecord::totalTokens).sum();
+    double estimatedCostUsd = stageRecords
+      .stream()
+      .mapToDouble(StageExecutionRecord::estimatedCostUsd)
+      .sum();
+    boolean fallbackUsed = stageRecords.stream().anyMatch(StageExecutionRecord::fallbackUsed);
+    int retryCount = stageRecords.stream().mapToInt(StageExecutionRecord::retryCount).sum();
+    boolean cacheHit = stageRecords.stream().anyMatch(StageExecutionRecord::cacheHit);
+    boolean schemaValid = stageRecords.stream().allMatch(StageExecutionRecord::schemaValid);
+    int schemaFailureCount = (int) stageRecords
+      .stream()
+      .filter(stage -> !stage.schemaValid())
+      .count();
     return new SimulationExecutionEnvelope(
       requestId,
       traceId,
@@ -53,13 +65,13 @@ public class SimulationEnvelopeFactory {
       response.at("/advisor/confidence").asDouble(0),
       response.path("guardrail"),
       Math.max(0, (int) (System.currentTimeMillis() - startedAtMillis)),
-      0,
-      0,
-      false,
-      0,
-      false,
-      true,
-      0,
+      totalTokens,
+      estimatedCostUsd,
+      fallbackUsed,
+      retryCount,
+      cacheHit,
+      schemaValid,
+      schemaFailureCount,
       request.deepCopy(),
       response.deepCopy(),
       stageLogs,
@@ -75,11 +87,11 @@ public class SimulationEnvelopeFactory {
     String selectedModel,
     JsonNode request,
     JsonNode response,
-    List<String> stageNames,
+    List<StageExecutionRecord> stageRecords,
     Instant createdAt
   ) {
     List<SimulationStageLog> logs = new ArrayList<>();
-    for (String stageName : stageNames) {
+    for (StageExecutionRecord stage : stageRecords) {
       logs.add(
         new SimulationStageLog(
           requestId,
@@ -87,21 +99,23 @@ public class SimulationEnvelopeFactory {
           "simulate",
           executionMode,
           selectedPath,
-          stageName,
-          modelForStage(response, stageName, selectedModel),
-          executionKind(stageName),
-          0,
-          0,
-          0,
-          0,
-          0,
-          false,
-          0,
-          false,
-          true,
-          0,
+          stage.stageName(),
+          stageModel(response, stage, selectedModel),
+          stage.executionKind(),
+          stage.latencyMs(),
+          stage.inputTokens(),
+          stage.cachedInputTokens(),
+          stage.outputTokens(),
+          stage.totalTokens(),
+          stage.estimatedCostUsd(),
+          stage.fallbackUsed(),
+          stage.retryCount(),
+          stage.cacheHit(),
+          stage.schemaValid(),
+          stage.schemaValid() ? 0 : 1,
+          stage.errorCode(),
           request.deepCopy(),
-          responseForStage(response, stageName),
+          responseForStage(response, stage.stageName()),
           createdAt
         )
       );
@@ -127,8 +141,24 @@ public class SimulationEnvelopeFactory {
     return response.at("/routing/stage_model_plan/" + stageName).asText(selectedModel);
   }
 
-  private String executionKind(String stageName) {
-    return "guardrail".equals(stageName) ? "derived" : "llm";
+  private String selectedModel(JsonNode response, List<StageExecutionRecord> stageRecords) {
+    return stageRecords
+      .stream()
+      .filter(stage -> "advisor".equals(stage.stageName()))
+      .map(StageExecutionRecord::model)
+      .filter(model -> model != null && !model.isBlank())
+      .findFirst()
+      .orElse(response.at("/routing/stage_model_plan/advisor").asText("unknown"));
+  }
+
+  private String stageModel(
+    JsonNode response,
+    StageExecutionRecord stage,
+    String selectedModel
+  ) {
+    return stage.model().isBlank()
+      ? modelForStage(response, stage.stageName(), selectedModel)
+      : stage.model();
   }
 
   private List<String> stringList(JsonNode value) {
