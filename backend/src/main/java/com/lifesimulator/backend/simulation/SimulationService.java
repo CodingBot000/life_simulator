@@ -6,7 +6,7 @@ import com.lifesimulator.backend.engine.DecisionEngine;
 import com.lifesimulator.backend.engine.contract.DecisionEngineOptions;
 import com.lifesimulator.backend.engine.contract.DecisionEngineRequest;
 import com.lifesimulator.backend.engine.contract.DecisionEngineResult;
-import com.lifesimulator.backend.llm.LlmJsonClient;
+import com.lifesimulator.backend.engine.llm.LlmJsonClient;
 import com.lifesimulator.backend.routing.BackendRoutingDecision;
 import com.lifesimulator.backend.routing.SimulationRouter;
 import java.io.IOException;

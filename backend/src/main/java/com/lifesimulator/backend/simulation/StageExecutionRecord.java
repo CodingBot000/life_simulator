@@ -1,6 +1,6 @@
 package com.lifesimulator.backend.simulation;
 
-import com.lifesimulator.backend.llm.LlmJsonResult;
+import com.lifesimulator.backend.engine.llm.LlmJsonResult;
 
 public record StageExecutionRecord(
   String stageName,

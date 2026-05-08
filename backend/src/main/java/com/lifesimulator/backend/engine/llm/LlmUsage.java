@@ -1,4 +1,4 @@
-package com.lifesimulator.backend.llm;
+package com.lifesimulator.backend.engine.llm;
 
 public record LlmUsage(
   int inputTokens,

@@ -1,4 +1,4 @@
-package com.lifesimulator.backend.llm;
+package com.lifesimulator.backend.engine.llm;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;

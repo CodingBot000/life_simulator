@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lifesimulator.backend.llm.LlmJsonRequest;
-import com.lifesimulator.backend.llm.LlmJsonClient;
-import com.lifesimulator.backend.llm.LlmJsonResult;
+import com.lifesimulator.backend.engine.llm.LlmJsonRequest;
+import com.lifesimulator.backend.engine.llm.LlmJsonClient;
+import com.lifesimulator.backend.engine.llm.LlmJsonResult;
 import org.junit.jupiter.api.Test;
 
 class MetricsControllerTests {

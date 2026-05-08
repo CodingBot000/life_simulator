@@ -1,4 +1,4 @@
-package com.lifesimulator.backend.llm;
+package com.lifesimulator.backend.engine.llm;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

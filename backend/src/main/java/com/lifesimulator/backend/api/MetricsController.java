@@ -1,6 +1,6 @@
 package com.lifesimulator.backend.api;
 
-import com.lifesimulator.backend.llm.LlmJsonClient;
+import com.lifesimulator.backend.engine.llm.LlmJsonClient;
 import java.time.Instant;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
