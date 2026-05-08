@@ -56,6 +56,7 @@ class LifeDecisionMappingTests {
     assertThat(mapped.path("advisor").path("recommended_option").asText()).isEqualTo("B");
     assertThat(mapped.path("advisor").path("confidence").asDouble()).isEqualTo(0.74);
     assertThat(mapped.path("advisor").path("reason").asText()).isEqualTo("Better fit.");
+    assertThat(mapped.path("advisor").path("guardrail_applied").asBoolean()).isFalse();
     assertThat(mapped.path("advisor").path("reasoning_basis").path("selected_reasoning").asText())
       .isEqualTo("B");
   }

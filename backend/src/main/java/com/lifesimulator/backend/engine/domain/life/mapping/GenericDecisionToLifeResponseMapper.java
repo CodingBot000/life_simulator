@@ -48,6 +48,7 @@ public class GenericDecisionToLifeResponseMapper {
     advisor.put("recommended_option", decision);
     advisor.put("confidence", result.confidence());
     advisor.put("reason", result.rationale());
+    advisor.put("guardrail_applied", result.guardrails() != null && !result.guardrails().isEmpty());
     ObjectNode basis = advisor.path("reasoning_basis").isObject()
       ? (ObjectNode) advisor.path("reasoning_basis")
       : advisor.putObject("reasoning_basis");
