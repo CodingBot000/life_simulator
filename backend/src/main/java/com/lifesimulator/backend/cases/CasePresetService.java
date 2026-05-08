@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
+/**
+ * App adapter for loading sample Life UI case presets from the frontend playground.
+ * The decision engine receives request payloads and does not depend on this catalog source.
+ */
 @Service
 public class CasePresetService {
 

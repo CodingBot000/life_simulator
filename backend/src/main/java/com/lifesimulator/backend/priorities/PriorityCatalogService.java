@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
+/**
+ * Life UI catalog provider for priority choices shown before simulation.
+ * These labels and groups are presentation inputs, not engine-core routing policy.
+ */
 @Service
 public class PriorityCatalogService {
 

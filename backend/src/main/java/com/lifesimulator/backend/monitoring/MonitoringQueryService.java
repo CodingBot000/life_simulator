@@ -9,6 +9,10 @@ import java.util.Map;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
+/**
+ * Operations read model for metrics, alerts, critical cases, and reports.
+ * This service observes engine outputs but is not part of the decision execution path.
+ */
 @Service
 public class MonitoringQueryService {
 

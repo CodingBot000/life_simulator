@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
+/**
+ * App adapter that persists engine execution envelopes for audit and monitoring.
+ * Persistence remains best-effort so engine execution is not coupled to database availability.
+ */
 @Service
 public class SimulationLogService {
 

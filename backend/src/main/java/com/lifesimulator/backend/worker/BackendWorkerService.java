@@ -12,6 +12,10 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+/**
+ * App operations worker for log, drift, and eval maintenance over life_simul_* tables.
+ * Table names stay stable while the decision engine boundary is refactored.
+ */
 @Service
 public class BackendWorkerService {
 
