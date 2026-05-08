@@ -3,6 +3,7 @@ package com.lifesimulator.backend.simulation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.lifesimulator.backend.engine.prompt.StageInputMapper;
 import com.lifesimulator.backend.guardrail.GuardrailEvaluationService;
 import com.lifesimulator.backend.llm.LlmClientException;
 import com.lifesimulator.backend.llm.LlmJsonClient;
@@ -23,7 +24,7 @@ public class StageExecutionService {
   private final JsonSchemaBuilder schemaBuilder;
   private final LlmJsonClient llmJsonClient;
   private final ObjectMapper objectMapper;
-  private final StageInputFactory inputFactory;
+  private final StageInputMapper inputMapper;
   private final StagePromptRepository promptRepository;
 
   public StageExecutionService(
@@ -31,14 +32,14 @@ public class StageExecutionService {
     JsonSchemaBuilder schemaBuilder,
     LlmJsonClient llmJsonClient,
     ObjectMapper objectMapper,
-    StageInputFactory inputFactory,
+    StageInputMapper inputMapper,
     StagePromptRepository promptRepository
   ) {
     this.guardrailEvaluationService = guardrailEvaluationService;
     this.schemaBuilder = schemaBuilder;
     this.llmJsonClient = llmJsonClient;
     this.objectMapper = objectMapper;
-    this.inputFactory = inputFactory;
+    this.inputMapper = inputMapper;
     this.promptRepository = promptRepository;
   }
 
@@ -114,7 +115,7 @@ public class StageExecutionService {
     BackendRoutingDecision routingDecision,
     SimulationStage stage
   ) throws IOException {
-    JsonNode stageInput = inputFactory.inputFor(stage, requestId, locale, request, response, routingDecision);
+    JsonNode stageInput = inputMapper.inputFor(stage, requestId, locale, request, response, routingDecision);
     return String.join(
       "\n\n",
       "You are running one Life Simulator backend stage.",
