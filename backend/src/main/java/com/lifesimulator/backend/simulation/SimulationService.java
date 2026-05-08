@@ -2,6 +2,10 @@ package com.lifesimulator.backend.simulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.lifesimulator.backend.engine.DecisionEngine;
+import com.lifesimulator.backend.engine.contract.DecisionEngineOptions;
+import com.lifesimulator.backend.engine.contract.DecisionEngineRequest;
+import com.lifesimulator.backend.engine.contract.DecisionEngineResult;
 import com.lifesimulator.backend.llm.LlmJsonClient;
 import com.lifesimulator.backend.routing.BackendRoutingDecision;
 import com.lifesimulator.backend.routing.SimulationRouter;
@@ -13,7 +17,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SimulationService {
+public class SimulationService implements DecisionEngine {
 
   private static final List<SimulationStage> STAGES = List.of(
     SimulationStage.STATE_LOADER,
@@ -58,7 +62,24 @@ public class SimulationService {
     String locale,
     SimulationProgressWriter progress
   ) throws IOException {
-    String requestId = UUID.randomUUID().toString();
+    DecisionEngineResult result = run(
+      new DecisionEngineRequest(request, UUID.randomUUID().toString(), traceId, locale),
+      new DecisionEngineOptions(progress != null),
+      progress
+    );
+    return new SimulationRunResult(result.response(), result.envelope());
+  }
+
+  @Override
+  public DecisionEngineResult run(
+    DecisionEngineRequest engineRequest,
+    DecisionEngineOptions options,
+    SimulationProgressWriter progress
+  ) throws IOException {
+    JsonNode request = engineRequest.payload();
+    String requestId = engineRequest.requestId();
+    String traceId = engineRequest.traceId();
+    String locale = engineRequest.locale();
     long startedAtMillis = System.currentTimeMillis();
     responseFactory.validateRequest(request);
     BackendRoutingDecision routingDecision = router.route(request, model());
@@ -98,7 +119,7 @@ public class SimulationService {
       progress
     );
     response.put("request_id", requestId);
-    return new SimulationRunResult(
+    return new DecisionEngineResult(
       response,
       envelopeFactory.create(request, response, traceId, startedAtMillis, stageRecords)
     );
