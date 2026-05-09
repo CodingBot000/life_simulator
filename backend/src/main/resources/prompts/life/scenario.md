@@ -25,9 +25,28 @@
     "decision": {
       "optionA": "현재 회사에 남는다",
       "optionB": "스타트업으로 이직한다",
-      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+      "optionDetails": {
+        "A": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        }
+      }
     }
   },
+  "genericDecision": {
+    "options": [
+      {
+        "id": "A",
+        "label": "현재 회사에 남는다",
+        "attributes": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        }
+      }
+    ]
+  },
+  "hasOptionFollowup": true,
   "stateContext": {
     "user_state": {
       "profile_state": {
@@ -55,6 +74,10 @@
   },
   "optionLabel": "A",
   "selectedOption": "현재 회사에 남는다",
+  "selectedOptionDetails": {
+    "worstCase": "성장 정체가 더 심해진다",
+    "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+  },
   "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
   "factors": ["stability", "income", "growth", "work_life_balance"],
   "plannerResult": {
@@ -66,6 +89,8 @@
 
 작성 규칙:
 - 반드시 현재 입력으로 주어진 `selectedOption` 하나만 기준으로 분석한다.
+- `selectedOptionDetails.worstCase`가 있으면 해당 선택의 현실적 하방 시나리오를 시간 축에 반영한다.
+- `selectedOptionDetails.rollbackCondition`이 있으면 되돌릴 수 있는 조건이 시나리오의 손실 제한에 어떤 영향을 주는지 반영한다.
 - `stateContext.user_state.profile_state`, `situational_state`, `state_summary`를 시나리오 전개에 반영한다.
 - `factors`를 무시하지 말고 각 시점의 전개에 연결한다.
 - `three_months`, `one_year`, `three_years`는 각각 서로 다른 시간 축의 변화를 보여줘야 한다.

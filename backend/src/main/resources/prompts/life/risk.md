@@ -25,9 +25,28 @@
     "decision": {
       "optionA": "현재 회사에 남는다",
       "optionB": "스타트업으로 이직한다",
-      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+      "optionDetails": {
+        "A": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        }
+      }
     }
   },
+  "genericDecision": {
+    "options": [
+      {
+        "id": "A",
+        "label": "현재 회사에 남는다",
+        "attributes": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        }
+      }
+    ]
+  },
+  "hasOptionFollowup": true,
   "stateContext": {
     "user_state": {
       "profile_state": {
@@ -55,6 +74,10 @@
   },
   "optionLabel": "A",
   "selectedOption": "현재 회사에 남는다",
+  "selectedOptionDetails": {
+    "worstCase": "성장 정체가 더 심해진다",
+    "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+  },
   "decisionContext": "현재 연봉은 안정적이지만 성장 정체를 느낌",
   "factors": ["stability", "income", "growth", "work_life_balance"],
   "plannerResult": {
@@ -78,6 +101,8 @@
 판단 규칙:
 - `risk_level`은 반드시 `low`, `medium`, `high` 중 하나만 사용한다.
 - `reasons`는 2~4개 정도의 구체적인 문자열 배열로 작성한다.
+- `selectedOptionDetails.worstCase`가 있으면 위험 이유와 `risk_score`에 반영한다.
+- `selectedOptionDetails.rollbackCondition`이 있으면 회복 가능성 또는 손실 제한 요소로 반영하되, 조건이 모호하면 그 자체를 위험으로 본다.
 - `scenario`의 시간 축 전개와 `stateContext.user_state`, `state_summary`를 함께 고려한다.
 - `profile_state.top_priorities`, `risk_preference`, `situational_state` 때문에 더 커지는 위험이 있으면 명시한다.
 - `memory_state.repeated_patterns`가 현재 선택에서 다시 반복될 가능성이 있으면 반영한다.

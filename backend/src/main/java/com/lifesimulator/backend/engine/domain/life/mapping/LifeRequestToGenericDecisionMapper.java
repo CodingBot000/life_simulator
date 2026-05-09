@@ -30,7 +30,7 @@ public class LifeRequestToGenericDecisionMapper {
     JsonNode profile = request.path("userProfile");
     JsonNode decision = request.path("decision");
     Map<String, Object> memory = objectMap(request.path("prior_memory"));
-    Map<String, Object> hints = objectMap(request.path("state_hints"));
+    Map<String, Object> hints = hints(request);
 
     return new GenericDecisionRequest(
       subject(profile, decision),
@@ -93,16 +93,49 @@ public class LifeRequestToGenericDecisionMapper {
 
   private List<DecisionOption> options(JsonNode decision) {
     return List.of(
-      option("A", "optionA", decision.path("optionA").asText("")),
-      option("B", "optionB", decision.path("optionB").asText(""))
+      option("A", "optionA", decision),
+      option("B", "optionB", decision)
     );
   }
 
-  private DecisionOption option(String id, String sourceField, String label) {
+  private DecisionOption option(String id, String sourceField, JsonNode decision) {
     Map<String, Object> attributes = new LinkedHashMap<>();
     attributes.put("source_field", sourceField);
     attributes.put("display_label", id);
-    return new DecisionOption(id, label, attributes);
+    copyTextAttribute(decision.path("optionDetails").path(id), attributes, "worstCase");
+    copyTextAttribute(decision.path("optionDetails").path(id), attributes, "rollbackCondition");
+    return new DecisionOption(id, decision.path(sourceField).asText(""), attributes);
+  }
+
+  private Map<String, Object> hints(JsonNode request) {
+    Map<String, Object> hints = new LinkedHashMap<>(objectMap(request.path("state_hints")));
+    JsonNode reevaluation = request.path("reevaluation");
+    if (reevaluation.isObject()) {
+      hints.put("reevaluation", objectMap(reevaluation));
+      copyTextAttribute(reevaluation, hints, "reason", "reevaluationReason");
+      JsonNode iteration = reevaluation.path("iteration");
+      if (iteration.isIntegralNumber()) {
+        hints.put("iteration", iteration.asInt());
+      }
+      copyTextAttribute(reevaluation, hints, "previousRequestId");
+    }
+    return hints;
+  }
+
+  private void copyTextAttribute(JsonNode source, Map<String, Object> target, String field) {
+    copyTextAttribute(source, target, field, field);
+  }
+
+  private void copyTextAttribute(
+    JsonNode source,
+    Map<String, Object> target,
+    String sourceField,
+    String targetField
+  ) {
+    JsonNode value = source.path(sourceField);
+    if (value.isTextual() && !value.asText().isBlank()) {
+      target.put(targetField, value.asText().trim());
+    }
   }
 
   private List<String> stringList(JsonNode node) {

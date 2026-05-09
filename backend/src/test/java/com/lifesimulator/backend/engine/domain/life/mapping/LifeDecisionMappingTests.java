@@ -23,6 +23,17 @@ class LifeDecisionMappingTests {
     decision.put("optionA", "Stay");
     decision.put("optionB", "Move");
     decision.put("context", "Career decision context");
+    ObjectNode optionDetails = decision.putObject("optionDetails");
+    optionDetails.putObject("A")
+      .put("worstCase", "Growth stalls")
+      .put("rollbackCondition", "Switch after six months without scope expansion");
+    optionDetails.putObject("B")
+      .put("worstCase", "New role does not fit")
+      .put("rollbackCondition", "Restart search during probation");
+    ObjectNode reevaluation = request.putObject("reevaluation");
+    reevaluation.put("reason", "option_followup");
+    reevaluation.put("iteration", 2);
+    reevaluation.put("previousRequestId", "request-1");
 
     var generic = new LifeRequestToGenericDecisionMapper(objectMapper).map(request, "en");
 
@@ -33,8 +44,18 @@ class LifeDecisionMappingTests {
     assertThat(generic.options()).hasSize(2);
     assertThat(generic.options().get(0).id()).isEqualTo("A");
     assertThat(generic.options().get(0).label()).isEqualTo("Stay");
+    assertThat(generic.options().get(0).attributes())
+      .containsEntry("worstCase", "Growth stalls")
+      .containsEntry("rollbackCondition", "Switch after six months without scope expansion");
     assertThat(generic.options().get(1).id()).isEqualTo("B");
     assertThat(generic.options().get(1).label()).isEqualTo("Move");
+    assertThat(generic.options().get(1).attributes())
+      .containsEntry("worstCase", "New role does not fit")
+      .containsEntry("rollbackCondition", "Restart search during probation");
+    assertThat(generic.hints())
+      .containsEntry("reevaluationReason", "option_followup")
+      .containsEntry("iteration", 2)
+      .containsEntry("previousRequestId", "request-1");
   }
 
   @Test

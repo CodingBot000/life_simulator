@@ -24,9 +24,32 @@
     "decision": {
       "optionA": "현재 회사에 남는다",
       "optionB": "스타트업으로 이직한다",
-      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+      "optionDetails": {
+        "A": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        },
+        "B": {
+          "worstCase": "업무 강도와 문화가 맞지 않는다",
+          "rollbackCondition": "수습 기간 안에 적합성이 낮으면 재탐색한다"
+        }
+      }
     }
   },
+  "genericDecision": {
+    "options": [
+      {
+        "id": "A",
+        "label": "현재 회사에 남는다",
+        "attributes": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        }
+      }
+    ]
+  },
+  "hasOptionFollowup": true,
   "stateContext": {
     "user_state": {
       "profile_state": {
@@ -60,6 +83,8 @@
 - `factors`는 실제 비교 기준이 되는 문자열 배열이어야 한다.
 - `caseInput.userProfile.priority`, `risk_tolerance`, `decision.context`를 반드시 반영한다.
 - `stateContext.user_state.profile_state`, `stateContext.user_state.situational_state`를 반드시 반영한다.
+- `hasOptionFollowup`가 true이면 각 선택지의 `worstCase`, `rollbackCondition`을 factors에 반영한다.
+- `genericDecision.options[].attributes`에 있는 선택지별 속성은 도메인이 바뀌어도 유지되는 공통 의사결정 속성으로 간주한다.
 - `memory_state.consistency_notes`가 있으면 factors 또는 decision_type 해석에 반영한다.
 - `outputLocale`가 `ko`면 `factors`는 자연스러운 한국어 표현으로 작성한다.
 - `outputLocale`가 `en`면 `factors`는 자연스러운 영어 표현으로 작성한다.

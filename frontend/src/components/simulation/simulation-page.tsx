@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 
 import { useUiLocale } from "@/components/providers/ui-locale-provider";
+import { FollowupReevaluationPanel } from "@/components/simulation/followup-reevaluation-panel";
 import { LoadingStageStrip } from "@/components/simulation/progress";
 import {
   AdvisorCard,
@@ -14,6 +15,7 @@ import {
   StateContextCard,
   TimelineCard,
 } from "@/components/simulation/result-cards";
+import { ResultVersionSummary } from "@/components/simulation/result-version-summary";
 import { InputField } from "@/components/simulation/shared";
 import { getLocalizedText, useCasePresets } from "@/hooks/use-case-presets";
 import { usePriorityCatalog } from "@/hooks/use-priority-catalog";
@@ -31,6 +33,7 @@ import {
 } from "@/lib/priorities";
 import {
   initialForm,
+  type OptionFollowupState,
   type FormState,
   type PrioritySelection,
 } from "@/lib/simulation/form";
@@ -51,9 +54,12 @@ export default function SimulationPage() {
     result,
     error,
     isLoading,
+    latestVersion,
     progress,
     submit,
+    submitReevaluation,
     resetOutput,
+    versions,
   } = simulation;
   const {
     selectedCategory,
@@ -106,6 +112,13 @@ export default function SimulationPage() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     await submit(form, uiLocale, priorityCatalog);
+  }
+
+  async function handleFollowupSubmit(followup: OptionFollowupState) {
+    if (!latestVersion) {
+      return;
+    }
+    await submitReevaluation(latestVersion, followup, uiLocale);
   }
 
   return (
@@ -499,6 +512,15 @@ export default function SimulationPage() {
                 derived={!result.routing.selected_path.includes("reflection")}
                 locale={uiLocale}
               />
+              <ResultVersionSummary locale={uiLocale} versions={versions} />
+              {latestVersion ? (
+                <FollowupReevaluationPanel
+                  request={latestVersion.request}
+                  versionLabel={latestVersion.label}
+                  disabled={isLoading}
+                  onSubmit={handleFollowupSubmit}
+                />
+              ) : null}
             </>
           ) : null}
         </section>

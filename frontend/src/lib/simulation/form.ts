@@ -4,7 +4,12 @@ import {
   type PriorityCatalog,
   type PriorityId,
 } from "@/lib/priorities";
-import type { RiskTolerance, SimulationRequest } from "@/lib/types";
+import type {
+  DecisionOptionDetails,
+  DecisionOptionFollowup,
+  RiskTolerance,
+  SimulationRequest,
+} from "@/lib/types";
 
 export type PrioritySelection = PriorityId | "";
 
@@ -18,6 +23,11 @@ export type FormState = {
   context: string;
 };
 
+export type OptionFollowupState = {
+  A: Required<DecisionOptionFollowup>;
+  B: Required<DecisionOptionFollowup>;
+};
+
 export const initialForm: FormState = {
   age: "32",
   job: "developer",
@@ -26,6 +36,17 @@ export const initialForm: FormState = {
   optionA: "현재 회사에 남는다",
   optionB: "스타트업으로 이직한다",
   context: "현재 연봉은 안정적이지만 성장 정체를 느끼고 있다.",
+};
+
+export const initialOptionFollowup: OptionFollowupState = {
+  A: {
+    worstCase: "",
+    rollbackCondition: "",
+  },
+  B: {
+    worstCase: "",
+    rollbackCondition: "",
+  },
 };
 
 export function buildPayload(
@@ -43,6 +64,26 @@ export function buildPayload(
       optionA: form.optionA.trim(),
       optionB: form.optionB.trim(),
       context: form.context.trim(),
+    },
+  };
+}
+
+export function buildReevaluationPayload(
+  previousRequest: SimulationRequest,
+  followup: OptionFollowupState,
+  iteration: number,
+  previousRequestId?: string,
+): SimulationRequest {
+  return {
+    ...previousRequest,
+    decision: {
+      ...previousRequest.decision,
+      optionDetails: buildOptionDetails(followup),
+    },
+    reevaluation: {
+      reason: "option_followup",
+      iteration,
+      ...(previousRequestId ? { previousRequestId } : {}),
     },
   };
 }
@@ -74,4 +115,28 @@ export function buildFormState(
     optionB: request.decision.optionB,
     context: request.decision.context,
   };
+}
+
+function buildOptionDetails(followup: OptionFollowupState): DecisionOptionDetails {
+  return {
+    A: compactFollowup(followup.A),
+    B: compactFollowup(followup.B),
+  };
+}
+
+function compactFollowup(
+  followup: Required<DecisionOptionFollowup>,
+): DecisionOptionFollowup {
+  const worstCase = trimmedOrUndefined(followup.worstCase);
+  const rollbackCondition = trimmedOrUndefined(followup.rollbackCondition);
+
+  return {
+    ...(worstCase ? { worstCase } : {}),
+    ...(rollbackCondition ? { rollbackCondition } : {}),
+  };
+}
+
+function trimmedOrUndefined(value: string): string | undefined {
+  const trimmed = value.trim();
+  return trimmed ? trimmed : undefined;
 }

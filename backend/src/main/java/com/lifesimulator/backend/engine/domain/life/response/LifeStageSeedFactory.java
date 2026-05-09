@@ -112,7 +112,8 @@ public class LifeStageSeedFactory {
     return advisor;
   }
 
-  public ObjectNode reflection(boolean guardrailNeeded, String locale) {
+  public ObjectNode reflection(boolean guardrailNeeded, String locale, JsonNode request) {
+    boolean hasOptionFollowup = hasOptionFollowup(request);
     ObjectNode reflection = objectMapper.createObjectNode();
     ObjectNode scores = reflection.putObject("scores");
     scores.put("realism", 4);
@@ -125,10 +126,27 @@ public class LifeStageSeedFactory {
     diagnostic.set("improvement_suggestions", json.array());
     diagnostic.put("overall_comment", "Initial Spring Boot migration response.");
     ObjectNode user = reflection.putObject("user_summary");
-    user.put("headline", json.text(locale, "우선순위 기준의 1차 판단입니다.", "This is a first-pass priority-based decision."));
-    user.put("summary", json.text(locale, "실제 결정 전에는 비용, 시간, 회복 가능성을 한 번 더 확인하세요.", "Before deciding, verify cost, time, and reversibility once more."));
+    user.put(
+      "headline",
+      hasOptionFollowup
+        ? json.text(locale, "추가 조건을 반영한 재판단입니다.", "This rerun reflects the additional option conditions.")
+        : json.text(locale, "우선순위 기준의 1차 판단입니다.", "This is a first-pass priority-based decision.")
+    );
+    user.put(
+      "summary",
+      hasOptionFollowup
+        ? json.text(locale, "실행 전에는 각 선택지의 중단 기준과 확인 기간을 구체화하세요.", "Before acting, define each option's stop rule and review window.")
+        : json.text(locale, "실제 결정 전에는 비용, 시간, 회복 가능성을 한 번 더 확인하세요.", "Before deciding, verify cost, time, and reversibility once more.")
+    );
     user.set("cautions", json.array(json.text(locale, "정보가 부족한 항목은 결론의 신뢰도를 낮춥니다.", "Missing information lowers confidence.")));
-    user.set("suggested_actions", json.array(json.text(locale, "각 선택지의 최악의 경우와 되돌릴 수 있는 조건을 적어보세요.", "Write down worst cases and rollback conditions for each option.")));
+    user.set(
+      "suggested_actions",
+      json.array(
+        hasOptionFollowup
+          ? json.text(locale, "정한 되돌림 조건을 실행 전 체크리스트와 일정표에 옮기세요.", "Move the rollback conditions into a pre-action checklist and calendar.")
+          : json.text(locale, "각 선택지의 최악의 경우와 되돌릴 수 있는 조건을 적어보세요.", "Write down worst cases and rollback conditions for each option.")
+      )
+    );
     ObjectNode review = reflection.putObject("guardrail_review");
     review.put("was_needed", guardrailNeeded);
     review.put("was_triggered", guardrailNeeded);
@@ -146,5 +164,18 @@ public class LifeStageSeedFactory {
     lens.put("recommended_option", option);
     lens.put("confidence", confidence);
     return lens;
+  }
+
+  private boolean hasOptionFollowup(JsonNode request) {
+    JsonNode optionDetails = request.at("/decision/optionDetails");
+    return hasAnyFollowupText(optionDetails.path("A")) || hasAnyFollowupText(optionDetails.path("B"));
+  }
+
+  private boolean hasAnyFollowupText(JsonNode detail) {
+    return hasText(detail.path("worstCase")) || hasText(detail.path("rollbackCondition"));
+  }
+
+  private boolean hasText(JsonNode value) {
+    return value.isTextual() && !value.asText().isBlank();
   }
 }

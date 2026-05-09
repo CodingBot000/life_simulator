@@ -38,9 +38,32 @@
     "decision": {
       "optionA": "현재 회사에 남는다",
       "optionB": "스타트업으로 이직한다",
-      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+      "optionDetails": {
+        "A": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        },
+        "B": {
+          "worstCase": "업무 강도와 문화가 맞지 않는다",
+          "rollbackCondition": "수습 기간 안에 적합성이 낮으면 재탐색한다"
+        }
+      }
     }
   },
+  "genericDecision": {
+    "options": [
+      {
+        "id": "A",
+        "label": "현재 회사에 남는다",
+        "attributes": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        }
+      }
+    ]
+  },
+  "hasOptionFollowup": true,
   "stateContext": {
     "case_id": "case-001",
     "user_state": {
@@ -180,6 +203,9 @@
 - `internal_diagnostic.evaluation`, `internal_diagnostic.overall_comment`, `internal_diagnostic.issues[].description`, `internal_diagnostic.improvement_suggestions[].suggestion`은 항상 영어로 작성한다.
 - `internal_diagnostic`는 내부 품질 진단용이므로 필요하면 `final_selection`, `selected_reasoning`, `advisorResult.reasoning_basis`, `scenarioA` 같은 구조명을 직접 언급해도 된다.
 - `user_summary.headline`, `user_summary.summary`, `user_summary.cautions[]`, `user_summary.suggested_actions[]`는 반드시 `outputLocale` 언어로 작성한다.
+- `hasOptionFollowup`가 true이면 `user_summary.suggested_actions[]`에서 이미 받은 최악의 경우와 되돌림 조건을 다시 입력하라고 반복하지 않는다.
+- `hasOptionFollowup`가 true이면 다음 제안은 실행 전 체크포인트, 검증 기간, 중단 기준처럼 후속 행동으로 전환한다.
+- `hasOptionFollowup`가 false이면 필요한 경우 각 선택지의 최악의 경우와 되돌릴 수 있는 조건을 적어보라는 제안을 할 수 있다.
 - `user_summary`는 최종 사용자에게 직접 보여주는 텍스트다. dotted path, snake_case id, schema field name, enum label, JSON key, 내부 객체명(`final_selection`, `advisorResult`, `profile_state`, `which_fits_user_better` 등)을 절대 그대로 쓰지 않는다.
 - `user_summary`에서는 `financial_stability`, `future_optionality`, `mental_space` 같은 priority id를 자연어 라벨로 풀어쓴다.
 - `outputLocale`가 `ko`일 때는 불필요한 영어 개념어를 섞지 않는다. `outputGlossary`에 있는 표현은 그대로 따른다.

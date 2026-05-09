@@ -2,6 +2,7 @@ import type { PriorityId, PriorityLocale } from "./priorities";
 
 export type RiskTolerance = "low" | "medium" | "high";
 export type ExecutionMode = "light" | "standard" | "careful" | "full";
+export type DecisionOptionLabel = "A" | "B";
 
 export interface UserProfile {
   age: number;
@@ -10,10 +11,28 @@ export interface UserProfile {
   priority: PriorityId[];
 }
 
+export interface DecisionOptionFollowup {
+  worstCase?: string;
+  rollbackCondition?: string;
+}
+
+export type DecisionOptionDetails = Partial<
+  Record<DecisionOptionLabel, DecisionOptionFollowup>
+>;
+
 export interface DecisionInput {
   optionA: string;
   optionB: string;
   context: string;
+  optionDetails?: DecisionOptionDetails;
+}
+
+export type SimulationReevaluationReason = "option_followup";
+
+export interface SimulationReevaluationMetadata {
+  reason: SimulationReevaluationReason;
+  iteration: number;
+  previousRequestId?: string;
 }
 
 export interface MemoryDecisionRecord {
@@ -69,6 +88,7 @@ export interface SimulationRequest {
   decision: DecisionInput;
   prior_memory?: Partial<MemoryState>;
   state_hints?: StateHints;
+  reevaluation?: SimulationReevaluationMetadata;
 }
 
 export type CasePresetCategory =
@@ -144,7 +164,6 @@ export interface ReasoningStructuredSignals {
   low_confidence: boolean;
 }
 
-export type DecisionOptionLabel = "A" | "B";
 export type AdvisorDecision = DecisionOptionLabel | "undecided";
 export type GuardrailTrigger =
   | "ambiguity_high"

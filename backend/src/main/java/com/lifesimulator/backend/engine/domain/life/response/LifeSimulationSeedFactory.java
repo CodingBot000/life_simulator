@@ -54,7 +54,7 @@ public class LifeSimulationSeedFactory {
     root.set("reasoning", stageSeedFactory.reasoning(requestId, request, selected, locale));
     root.set("guardrail", stageSeedFactory.guardrail(risk));
     root.set("advisor", stageSeedFactory.advisor(selected, selectedOption, locale));
-    root.set("reflection", stageSeedFactory.reflection("high".equals(risk), locale));
+    root.set("reflection", stageSeedFactory.reflection("high".equals(risk), locale, request));
     return root;
   }
 

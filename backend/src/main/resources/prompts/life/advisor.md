@@ -31,9 +31,32 @@
     "decision": {
       "optionA": "현재 회사에 남는다",
       "optionB": "스타트업으로 이직한다",
-      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌"
+      "context": "현재 연봉은 안정적이지만 성장 정체를 느낌",
+      "optionDetails": {
+        "A": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        },
+        "B": {
+          "worstCase": "업무 강도와 문화가 맞지 않는다",
+          "rollbackCondition": "수습 기간 안에 적합성이 낮으면 재탐색한다"
+        }
+      }
     }
   },
+  "genericDecision": {
+    "options": [
+      {
+        "id": "A",
+        "label": "현재 회사에 남는다",
+        "attributes": {
+          "worstCase": "성장 정체가 더 심해진다",
+          "rollbackCondition": "6개월 안에 역할 확장이 없으면 이직 준비로 전환한다"
+        }
+      }
+    ]
+  },
+  "hasOptionFollowup": true,
   "stateContext": {
     "case_id": "case-001",
     "user_state": {
@@ -152,6 +175,8 @@
 - 출력의 `decision`은 반드시 `A`, `B`, `undecided` 중 하나여야 한다.
 - `recommended_option`은 `decision`과 동일한 값을 넣는다.
 - 추천 사유는 `stateContext.state_summary`, `profile_state.top_priorities`, `situational_state`, `memory_state`에 직접 연결해야 한다.
+- `hasOptionFollowup`가 true이면 각 선택지의 최악의 경우와 되돌릴 수 있는 조건을 최종 추천 근거에 반영한다.
+- 되돌릴 수 있는 조건이 명확한 선택지는 실행 가능성과 손실 제한 측면에서 긍정적으로 평가하되, 최악의 경우가 사용자 우선순위와 충돌하면 그 위험을 낮게 보지 않는다.
 - 위 규칙은 내부 grounding 용도다. 사용자에게 보이는 `reason`, `reasoning_basis.core_why` 문장에는 `profile_state.top_priorities`, `current_constraint`, `risk_preference`, `financial_pressure` 같은 내부 필드명이나 dotted path를 그대로 쓰지 말고 자연어로 풀어쓴다.
 - 사용자에게 보이는 문장에는 `financial_stability`, `mental_space`, `work_life_balance` 같은 snake_case priority id를 그대로 쓰지 말고 `재정 안정성`, `마음의 여유`, `워라밸`처럼 자연어 라벨로 변환한다.
 - `outputLocale`가 `ko`면 `reason`, `reasoning_basis.core_why`는 자연스러운 한국어로 작성한다.
