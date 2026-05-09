@@ -116,7 +116,7 @@ export default function SimulationPage() {
             <div className="max-w-3xl">
               <p className="section-label">Decision Simulator</p>
               <h1 className="display-font mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-                의사결정 시뮬레이션 Agent MVP
+                의사결정 시뮬레이션 Agent
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
                 사용자 프로필과 두 가지 선택지를 입력하면 State Loader가 먼저
