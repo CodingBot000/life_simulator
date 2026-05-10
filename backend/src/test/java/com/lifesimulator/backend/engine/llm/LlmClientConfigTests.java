@@ -28,24 +28,6 @@ class LlmClientConfigTests {
   }
 
   @Test
-  void selectsMockProvider() {
-    SimulatorProperties properties = new SimulatorProperties();
-    properties.setLlmProvider(SimulatorProperties.LlmProvider.MOCK);
-    properties.getMock().setModel("test-mock");
-
-    LlmJsonClient client = new LlmClientConfig()
-      .llmJsonClient(
-        new CodexCliClient(objectMapper, properties),
-        objectMapper,
-        properties,
-        environment()
-      );
-
-    assertThat(client.providerName()).isEqualTo("mock");
-    assertThat(client.modelName()).isEqualTo("test-mock");
-  }
-
-  @Test
   void selectsOpenAiProviderAndFailsClearlyWithoutApiKey() {
     SimulatorProperties properties = new SimulatorProperties();
     properties.setLlmProvider(SimulatorProperties.LlmProvider.OPENAI);
@@ -77,8 +59,7 @@ class LlmClientConfigTests {
   @Test
   void remoteProfileForcesOpenAiProvider() {
     SimulatorProperties properties = new SimulatorProperties();
-    properties.setLlmProvider(SimulatorProperties.LlmProvider.MOCK);
-    properties.getMock().setModel("test-mock");
+    properties.setLlmProvider(SimulatorProperties.LlmProvider.CODEX);
 
     LlmJsonClient client = new LlmClientConfig()
       .llmJsonClient(
