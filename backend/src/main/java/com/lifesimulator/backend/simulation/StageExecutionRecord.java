@@ -1,5 +1,6 @@
 package com.lifesimulator.backend.simulation;
 
+import com.lifesimulator.backend.engine.ExecutionEngineNames;
 import com.lifesimulator.backend.engine.llm.LlmJsonResult;
 
 public record StageExecutionRecord(
@@ -43,7 +44,7 @@ public record StageExecutionRecord(
   }
 
   public static StageExecutionRecord derived(String stageName) {
-    return zero(stageName, "derived", "spring-derived", false, null);
+    return zero(stageName, "derived", ExecutionEngineNames.BACKEND_RULE, false, null);
   }
 
   public static StageExecutionRecord fallback(String stageName, String reason) {
