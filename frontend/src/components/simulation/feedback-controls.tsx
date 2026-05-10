@@ -8,11 +8,15 @@ import {
 } from "@/lib/api/feedback";
 
 type SubmitState = "idle" | "saving" | "saved" | "error";
+type GuardrailReviewLabel = "good" | "over" | "missing";
 
 const baseButtonClass =
   "inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-60";
 const tagButtonClass =
   "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition";
+const inactiveChoiceButtonClass =
+  "border-slate-900/10 bg-white text-slate-700 hover:border-slate-900/20 hover:bg-slate-50";
+const selectedChoiceButtonClass = "border-slate-950 bg-slate-950 text-white shadow-sm";
 
 export function FeedbackControls({
   requestId,
@@ -29,6 +33,7 @@ export function FeedbackControls({
   const [message, setMessage] = useState<string>("");
   const [reasonTags, setReasonTags] = useState<string[]>([]);
   const [comment, setComment] = useState("");
+  const [selectedSignal, setSelectedSignal] = useState<FeedbackSignal | null>(null);
   const tagOptions = feedbackTagOptionsFor(targetType);
 
   async function handleSignal(signal: FeedbackSignal) {
@@ -47,6 +52,7 @@ export function FeedbackControls({
         comment: trimmedComment || undefined,
         metadata: { source: "simulation_result_card" },
       });
+      setSelectedSignal(signal);
       setStatus("saved");
       setMessage("저장됨");
     } catch (error) {
@@ -58,17 +64,25 @@ export function FeedbackControls({
   return (
     <div className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-3">
       <div className="flex flex-wrap gap-2">
-        {signals.map((signal) => (
-          <button
-            key={signal}
-            type="button"
-            disabled={status === "saving"}
-            onClick={() => void handleSignal(signal)}
-            className={`${baseButtonClass} border-slate-900/10 bg-white text-slate-700 hover:border-slate-900/20 hover:bg-slate-50`}
-          >
-            {labelForSignal(signal)}
-          </button>
-        ))}
+        {signals.map((signal) => {
+          const isSelected = selectedSignal === signal;
+
+          return (
+            <button
+              key={signal}
+              type="button"
+              aria-pressed={isSelected}
+              disabled={status === "saving"}
+              onClick={() => void handleSignal(signal)}
+              className={[
+                baseButtonClass,
+                isSelected ? selectedChoiceButtonClass : inactiveChoiceButtonClass,
+              ].join(" ")}
+            >
+              {labelForSignal(signal)}
+            </button>
+          );
+        })}
       </div>
       <div className="mt-3 grid gap-3 border-t border-slate-900/8 pt-3">
         <div className="flex flex-wrap gap-2" aria-label="피드백 태그">
@@ -123,8 +137,10 @@ export function GuardrailReviewControls({ requestId }: { requestId: string }) {
   const [message, setMessage] = useState<string>("");
   const [reasonTags, setReasonTags] = useState<string[]>([]);
   const [comment, setComment] = useState("");
+  const [selectedReviewLabel, setSelectedReviewLabel] =
+    useState<GuardrailReviewLabel | null>(null);
 
-  async function handleReview(reviewLabel: "good" | "over" | "missing") {
+  async function handleReview(reviewLabel: GuardrailReviewLabel) {
     setStatus("saving");
     setMessage("");
     const trimmedComment = comment.trim();
@@ -137,6 +153,7 @@ export function GuardrailReviewControls({ requestId }: { requestId: string }) {
         reasonTags: reasonTags.length > 0 ? reasonTags : undefined,
         comment: trimmedComment || undefined,
       });
+      setSelectedReviewLabel(reviewLabel);
       setStatus("saved");
       setMessage("저장됨");
     } catch (error) {
@@ -148,21 +165,25 @@ export function GuardrailReviewControls({ requestId }: { requestId: string }) {
   return (
     <div className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-3">
       <div className="flex flex-wrap gap-2">
-        {[
-          ["good", "적절"],
-          ["over", "과도함"],
-          ["missing", "부족함"],
-        ].map(([value, label]) => (
-          <button
-            key={value}
-            type="button"
-            disabled={status === "saving"}
-            onClick={() => void handleReview(value as "good" | "over" | "missing")}
-            className={`${baseButtonClass} border-slate-900/10 bg-white text-slate-700 hover:border-slate-900/20 hover:bg-slate-50`}
-          >
-            {label}
-          </button>
-        ))}
+        {guardrailReviewOptions.map((option) => {
+          const isSelected = selectedReviewLabel === option.value;
+
+          return (
+            <button
+              key={option.value}
+              type="button"
+              aria-pressed={isSelected}
+              disabled={status === "saving"}
+              onClick={() => void handleReview(option.value)}
+              className={[
+                baseButtonClass,
+                isSelected ? selectedChoiceButtonClass : inactiveChoiceButtonClass,
+              ].join(" ")}
+            >
+              {option.label}
+            </button>
+          );
+        })}
       </div>
       <div className="mt-3 grid gap-3 border-t border-slate-900/8 pt-3">
         <div className="flex flex-wrap gap-2" aria-label="가드레일 리뷰 태그">
@@ -251,6 +272,12 @@ const guardrailReviewTagOptions = [
   { value: "needs_more_caution", label: "주의 부족" },
   { value: "weak_evidence", label: "근거 약함" },
   { value: "missing_context", label: "정보 부족" },
+];
+
+const guardrailReviewOptions: { value: GuardrailReviewLabel; label: string }[] = [
+  { value: "good", label: "적절" },
+  { value: "over", label: "과도함" },
+  { value: "missing", label: "부족함" },
 ];
 
 function labelForSignal(signal: FeedbackSignal) {
