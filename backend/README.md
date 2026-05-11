@@ -24,10 +24,34 @@ export BACKEND_DATABASE_PASSWORD=life_sim_password
 
 When `BACKEND_DATABASE_ENABLED=true`, Flyway applies migrations from `src/main/resources/db/migration`.
 
-## Codex CLI
+## LLM Provider Mode
 
-The backend defaults to Codex CLI subscription authentication. It does not require `OPENAI_API_KEY`.
+Choose the backend model runner with `SIMULATOR_LLM_PROVIDER`.
+
+### Mock smoke test
+
+```sh
+SIMULATOR_LLM_PROVIDER=mock ./mvnw spring-boot:run
+```
+
+This requires no model credentials and is the fastest public-repo smoke path.
+
+### Codex CLI
+
+```sh
+SIMULATOR_LLM_PROVIDER=codex ./mvnw spring-boot:run
+```
+
+Codex mode uses local Codex CLI subscription authentication and does not require `OPENAI_API_KEY`.
 Stage calls use `gpt-5.3-codex-spark`, low reasoning/verbosity, fast service tier, read-only sandboxing, and ephemeral CLI sessions by default.
+
+### OpenAI API
+
+```sh
+SIMULATOR_LLM_PROVIDER=openai OPENAI_API_KEY=... ./mvnw spring-boot:run
+```
+
+Use OpenAI mode for AWS/cloud deployments. Inject `OPENAI_API_KEY` into the backend runtime environment through your deployment secret mechanism. Do not expose it through frontend `VITE_*` variables.
 
 ## Worker Jobs
 

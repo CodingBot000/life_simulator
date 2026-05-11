@@ -3,15 +3,15 @@ description: Define scope, identify impacted files, and break work into concrete
 
 ## Use When
 
-- The task spans multiple areas such as `app/api`, `src/server`, `src/lib`, `workers`, `scripts`, or `db/migrations`.
+- The task spans multiple areas such as backend API controllers, `src/server`, `src/lib`, `workers`, `scripts`, or `db/migrations`.
 - The owning path is not obvious.
 - The request can affect contracts, observability, guardrails, queues, or workers.
 
 ## Repo-Specific Planning Checklist
 
 1. Find the entrypoint.
-   - UI route: `app/page.tsx` or `src/components/*`
-   - API route: `app/api/*/route.ts`
+   - UI entrypoint: `src/App.tsx` or `src/components/*`
+   - API route: `backend/src/main/java/com/lifesimulator/backend/api/*`
    - Server logic: `src/server/*`
    - Shared prompt/type code: `src/lib/*` or `prompts/*`
    - Worker path: `workers/*`
@@ -33,7 +33,7 @@ description: Define scope, identify impacted files, and break work into concrete
 ## Validation Mapping
 
 - Always consider `npm run typecheck`
-- Use `npm run build` when App Router, route handlers, or framework boundaries changed
+- Use `npm run build` when frontend entrypoints, route handlers, or framework boundaries changed
 - Use `npm run verify:monitoring` when monitoring or metrics behavior changed
 - Use guardrail eval scripts only when guardrail logic, thresholds, or calibration changed
 - Use worker commands only when worker code or queue behavior changed

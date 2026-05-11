@@ -494,14 +494,32 @@ export default function SimulationPage() {
                 priorityCatalog={priorityCatalog}
               />
               <PlannerCard planner={result.planner} />
-              {result.scenarioA ? (
-                <TimelineCard title="선택지 A 시나리오" scenario={result.scenarioA} />
+              {result.scenarioA || result.scenarioB ? (
+                <div className="grid gap-5 lg:grid-cols-2">
+                  {result.scenarioA ? (
+                    <TimelineCard
+                      title="선택지 A 시나리오"
+                      scenario={result.scenarioA}
+                    />
+                  ) : null}
+                  {result.scenarioB ? (
+                    <TimelineCard
+                      title="선택지 B 시나리오"
+                      scenario={result.scenarioB}
+                    />
+                  ) : null}
+                </div>
               ) : null}
-              {result.scenarioB ? (
-                <TimelineCard title="선택지 B 시나리오" scenario={result.scenarioB} />
+              {result.riskA || result.riskB ? (
+                <div className="grid gap-5 lg:grid-cols-2">
+                  {result.riskA ? (
+                    <RiskCard title="Risk A" risk={result.riskA} />
+                  ) : null}
+                  {result.riskB ? (
+                    <RiskCard title="Risk B" risk={result.riskB} />
+                  ) : null}
+                </div>
               ) : null}
-              {result.riskA ? <RiskCard title="Risk A" risk={result.riskA} /> : null}
-              {result.riskB ? <RiskCard title="Risk B" risk={result.riskB} /> : null}
               {result.reasoning ? (
                 <ReasoningCard
                   reasoning={result.reasoning}
