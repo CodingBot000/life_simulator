@@ -18,6 +18,7 @@ public class SimulatorProperties {
   private final Database database = new Database();
   private final Cors cors = new Cors();
   private final Security security = new Security();
+  private final Recommendations recommendations = new Recommendations();
 
   public enum LlmProvider {
     CODEX,
@@ -58,6 +59,10 @@ public class SimulatorProperties {
 
   public Security getSecurity() {
     return security;
+  }
+
+  public Recommendations getRecommendations() {
+    return recommendations;
   }
 
   public static class Frontend {
@@ -338,6 +343,47 @@ public class SimulatorProperties {
 
     public RateLimit getRateLimit() {
       return rateLimit;
+    }
+  }
+
+  public static class Recommendations {
+    private boolean enabled = true;
+    private int defaultMaxItems = 6;
+    private int maxItems = 12;
+    private List<String> defaultProviders = new ArrayList<>(List.of("catalog"));
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public int getDefaultMaxItems() {
+      return defaultMaxItems;
+    }
+
+    public void setDefaultMaxItems(int defaultMaxItems) {
+      this.defaultMaxItems = defaultMaxItems;
+    }
+
+    public int getMaxItems() {
+      return maxItems;
+    }
+
+    public void setMaxItems(int maxItems) {
+      this.maxItems = maxItems;
+    }
+
+    public List<String> getDefaultProviders() {
+      return defaultProviders;
+    }
+
+    public void setDefaultProviders(List<String> defaultProviders) {
+      this.defaultProviders = defaultProviders == null
+        ? new ArrayList<>(List.of("catalog"))
+        : new ArrayList<>(defaultProviders);
     }
   }
 

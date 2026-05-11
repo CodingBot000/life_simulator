@@ -5,6 +5,7 @@ import { useUiLocale } from "@/components/providers/ui-locale-provider";
 import { FollowupReevaluationPanel } from "@/components/simulation/followup-reevaluation-panel";
 import { OutcomeFollowupPanel } from "@/components/simulation/outcome-followup-panel";
 import { LoadingStageStrip } from "@/components/simulation/progress";
+import { RecommendationPanel } from "@/components/simulation/recommendation-panel";
 import {
   AdvisorCard,
   GuardrailCard,
@@ -538,6 +539,13 @@ export default function SimulationPage() {
                 locale={uiLocale}
                 requestId={result.request_id}
               />
+              {latestVersion ? (
+                <RecommendationPanel
+                  request={latestVersion.request}
+                  response={latestVersion.response}
+                  locale={uiLocale}
+                />
+              ) : null}
               <ResultVersionSummary locale={uiLocale} versions={versions} />
               <OutcomeFollowupPanel requestId={result.request_id} />
               {latestVersion ? (

@@ -35,6 +35,12 @@ simulator:
       session-hour-limit: ${SIMULATOR_RATE_LIMIT_SESSION_HOUR:10}
       minute-window: ${SIMULATOR_RATE_LIMIT_MINUTE_WINDOW:60s}
       hour-window: ${SIMULATOR_RATE_LIMIT_HOUR_WINDOW:1h}
+  recommendations:
+    enabled: ${SIMULATOR_RECOMMENDATIONS_ENABLED:true}
+    default-max-items: ${SIMULATOR_RECOMMENDATIONS_DEFAULT_MAX_ITEMS:6}
+    max-items: ${SIMULATOR_RECOMMENDATIONS_MAX_ITEMS:12}
+    default-providers:
+      - catalog
   codex:
     enabled: ${SIMULATOR_CODEX_ENABLED:true}
     fallback-on-error: ${SIMULATOR_CODEX_FALLBACK_ON_ERROR:false}
