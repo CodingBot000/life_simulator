@@ -225,15 +225,15 @@ public class SimulatorProperties {
 
     private static Map<String, StageProfile> defaultStageProfiles() {
       Map<String, StageProfile> profiles = new LinkedHashMap<>();
-      profiles.put("state_loader", StageProfile.of("state-loader", "low", "low", 900));
-      profiles.put("planner", StageProfile.of("planner", "low", "low", 900));
-      profiles.put("scenario_a", StageProfile.of("scenario", "low", "medium", 1400));
-      profiles.put("scenario_b", StageProfile.of("scenario", "low", "medium", 1400));
-      profiles.put("risk_a", StageProfile.of("risk", "low", "low", 900));
-      profiles.put("risk_b", StageProfile.of("risk", "low", "low", 900));
-      profiles.put("ab_reasoning", StageProfile.of("ab-reasoning", "low", "low", 1200));
-      profiles.put("advisor", StageProfile.of("advisor", "low", "medium", 1800));
-      profiles.put("reflection", StageProfile.of("reflection", "low", "low", 1200));
+      profiles.put("state_loader", StageProfile.of("state-loader", "low", "low", 1600));
+      profiles.put("planner", StageProfile.of("planner", "low", "low", 1600));
+      profiles.put("scenario_a", StageProfile.of("scenario", "low", "medium", 2600));
+      profiles.put("scenario_b", StageProfile.of("scenario", "low", "medium", 2600));
+      profiles.put("risk_a", StageProfile.of("risk", "low", "low", 1600));
+      profiles.put("risk_b", StageProfile.of("risk", "low", "low", 1600));
+      profiles.put("ab_reasoning", StageProfile.of("ab-reasoning", "low", "low", 2200));
+      profiles.put("advisor", StageProfile.of("advisor", "low", "medium", 3200));
+      profiles.put("reflection", StageProfile.of("reflection", "low", "low", 2200));
       return profiles;
     }
 

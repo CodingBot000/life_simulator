@@ -68,47 +68,47 @@ simulator:
       state_loader:
         reasoning-effort: low
         verbosity: low
-        max-output-tokens: 900
+        max-output-tokens: 1600
         prompt-cache-key: life-sim:v1:state-loader
       planner:
         reasoning-effort: low
         verbosity: low
-        max-output-tokens: 900
+        max-output-tokens: 1600
         prompt-cache-key: life-sim:v1:planner
       scenario_a:
         reasoning-effort: low
         verbosity: medium
-        max-output-tokens: 1400
+        max-output-tokens: 2600
         prompt-cache-key: life-sim:v1:scenario
       scenario_b:
         reasoning-effort: low
         verbosity: medium
-        max-output-tokens: 1400
+        max-output-tokens: 2600
         prompt-cache-key: life-sim:v1:scenario
       risk_a:
         reasoning-effort: low
         verbosity: low
-        max-output-tokens: 900
+        max-output-tokens: 1600
         prompt-cache-key: life-sim:v1:risk
       risk_b:
         reasoning-effort: low
         verbosity: low
-        max-output-tokens: 900
+        max-output-tokens: 1600
         prompt-cache-key: life-sim:v1:risk
       ab_reasoning:
         reasoning-effort: low
         verbosity: low
-        max-output-tokens: 1200
+        max-output-tokens: 2200
         prompt-cache-key: life-sim:v1:ab-reasoning
       advisor:
         reasoning-effort: low
         verbosity: medium
-        max-output-tokens: 1800
+        max-output-tokens: 3200
         prompt-cache-key: life-sim:v1:advisor
       reflection:
         reasoning-effort: low
         verbosity: low
-        max-output-tokens: 1200
+        max-output-tokens: 2200
         prompt-cache-key: life-sim:v1:reflection
   mock:
     model: ${SIMULATOR_MOCK_MODEL:spring-mock}

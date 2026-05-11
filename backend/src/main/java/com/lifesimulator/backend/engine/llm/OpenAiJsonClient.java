@@ -18,6 +18,8 @@ public class OpenAiJsonClient implements LlmJsonClient {
 
   private static final URI RESPONSES_URI = URI.create("https://api.openai.com/v1/responses");
   private static final int MAX_RETRIES = 2;
+  private static final int MAX_OUTPUT_TOKEN_PARSE_ATTEMPTS = 2;
+  private static final int MAX_OUTPUT_TOKEN_RETRY_CEILING = 8_000;
 
   private final HttpClient httpClient;
   private final ObjectMapper objectMapper;
@@ -48,32 +50,57 @@ public class OpenAiJsonClient implements LlmJsonClient {
 
     long startedAt = System.nanoTime();
     try {
-      HttpRequest httpRequest = HttpRequest
-        .newBuilder(RESPONSES_URI)
-        .timeout(timeout())
-        .header("Authorization", "Bearer " + apiKey.trim())
-        .header("Content-Type", "application/json")
-        .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(payload(llmRequest))))
-        .build();
-      OpenAiHttpResult httpResult = sendWithRetry(httpRequest);
-      HttpResponse<String> response = httpResult.response();
-      if (response.statusCode() < 200 || response.statusCode() >= 300) {
-        throw new LlmClientException("OpenAI API failed: " + errorMessage(response.body()));
-      }
+      int maxOutputTokens = maxOutputTokensForStage(llmRequest.stageName());
+      int totalHttpRetries = 0;
+      for (int attempt = 1; attempt <= MAX_OUTPUT_TOKEN_PARSE_ATTEMPTS; attempt += 1) {
+        HttpRequest httpRequest = httpRequest(apiKey, llmRequest, maxOutputTokens);
+        OpenAiHttpResult httpResult = sendWithRetry(httpRequest);
+        totalHttpRetries += httpResult.retryCount();
+        HttpResponse<String> response = httpResult.response();
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+          throw new LlmClientException("OpenAI API failed: " + errorMessage(response.body()));
+        }
 
-      JsonNode responseBody = objectMapper.readTree(response.body());
-      String outputText = outputText(responseBody);
-      if (outputText.isBlank()) {
-        throw new LlmClientException("OpenAI API returned an empty JSON response.");
+        JsonNode responseBody = objectMapper.readTree(response.body());
+        if (isMaxOutputIncomplete(responseBody)) {
+          if (attempt < MAX_OUTPUT_TOKEN_PARSE_ATTEMPTS && canIncreaseMaxOutput(maxOutputTokens)) {
+            maxOutputTokens = increasedMaxOutputTokens(maxOutputTokens);
+            continue;
+          }
+          throw new LlmClientException(
+            "OpenAI API response was incomplete because max_output_tokens was reached."
+          );
+        }
+
+        String outputText = outputText(responseBody);
+        if (outputText.isBlank()) {
+          throw new LlmClientException("OpenAI API returned an empty JSON response.");
+        }
+        String model = modelForStage(llmRequest.stageName());
+        try {
+          return new LlmJsonResult(
+            objectMapper.readTree(outputText),
+            model,
+            usage(responseBody, model),
+            elapsedMillis(startedAt),
+            totalHttpRetries
+          );
+        } catch (IOException error) {
+          if (
+            attempt < MAX_OUTPUT_TOKEN_PARSE_ATTEMPTS &&
+            canIncreaseMaxOutput(maxOutputTokens) &&
+            looksLikeTruncatedJson(error)
+          ) {
+            maxOutputTokens = increasedMaxOutputTokens(maxOutputTokens);
+            continue;
+          }
+          throw new LlmClientException(
+            "OpenAI API returned invalid JSON output: " + error.getMessage(),
+            error
+          );
+        }
       }
-      String model = modelForStage(llmRequest.stageName());
-      return new LlmJsonResult(
-        objectMapper.readTree(outputText),
-        model,
-        usage(responseBody, model),
-        elapsedMillis(startedAt),
-        httpResult.retryCount()
-      );
+      throw new LlmClientException("OpenAI API JSON retry loop exited without a response.");
     } catch (IOException error) {
       throw new LlmClientException("OpenAI API I/O failed: " + error.getMessage(), error);
     } catch (InterruptedException error) {
@@ -108,6 +135,10 @@ public class OpenAiJsonClient implements LlmJsonClient {
   }
 
   ObjectNode payload(LlmJsonRequest request) {
+    return payload(request, maxOutputTokensForStage(request.stageName()));
+  }
+
+  ObjectNode payload(LlmJsonRequest request, int maxOutputTokens) {
     SimulatorProperties.OpenAi.StageProfile profile = properties
       .getOpenai()
       .profileFor(request.stageName());
@@ -115,7 +146,7 @@ public class OpenAiJsonClient implements LlmJsonClient {
     payload.put("model", modelForStage(request.stageName()));
     payload.put("input", request.prompt());
     payload.put("store", false);
-    payload.put("max_output_tokens", profile.getMaxOutputTokens());
+    payload.put("max_output_tokens", maxOutputTokens);
 
     ObjectNode reasoning = payload.putObject("reasoning");
     reasoning.put("effort", profile.getReasoningEffort());
@@ -136,6 +167,43 @@ public class OpenAiJsonClient implements LlmJsonClient {
       payload.put("prompt_cache_retention", retention);
     }
     return payload;
+  }
+
+  private HttpRequest httpRequest(
+    String apiKey,
+    LlmJsonRequest llmRequest,
+    int maxOutputTokens
+  ) throws IOException {
+    return HttpRequest
+      .newBuilder(RESPONSES_URI)
+      .timeout(timeout())
+      .header("Authorization", "Bearer " + apiKey.trim())
+      .header("Content-Type", "application/json")
+      .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(payload(llmRequest, maxOutputTokens))))
+      .build();
+  }
+
+  private int maxOutputTokensForStage(String stageName) {
+    return properties.getOpenai().profileFor(stageName).getMaxOutputTokens();
+  }
+
+  private boolean isMaxOutputIncomplete(JsonNode responseBody) {
+    String status = responseBody.path("status").asText("");
+    String reason = responseBody.path("incomplete_details").path("reason").asText("");
+    return "incomplete".equals(status) && "max_output_tokens".equals(reason);
+  }
+
+  private boolean canIncreaseMaxOutput(int maxOutputTokens) {
+    return maxOutputTokens < MAX_OUTPUT_TOKEN_RETRY_CEILING;
+  }
+
+  private int increasedMaxOutputTokens(int maxOutputTokens) {
+    return Math.min(MAX_OUTPUT_TOKEN_RETRY_CEILING, Math.max(maxOutputTokens * 2, maxOutputTokens + 1_000));
+  }
+
+  private boolean looksLikeTruncatedJson(IOException error) {
+    String message = error.getMessage();
+    return message != null && message.contains("Unexpected end-of-input");
   }
 
   private String modelForStage(String stageName) {
