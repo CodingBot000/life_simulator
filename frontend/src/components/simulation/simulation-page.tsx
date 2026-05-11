@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 
 import { useUiLocale } from "@/components/providers/ui-locale-provider";
@@ -40,6 +40,27 @@ import {
   type PrioritySelection,
 } from "@/lib/simulation/form";
 import { hasProgressHistory } from "@/lib/simulation/progress";
+
+function LoadingLabel() {
+  const [dotCount, setDotCount] = useState(1);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setDotCount((current) => (current >= 3 ? 1 : current + 1));
+    }, 500);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  return (
+    <p className="section-label">
+      Loading
+      <span aria-hidden="true" className="inline-block w-5 text-left">
+        {".".repeat(dotCount)}
+      </span>
+    </p>
+  );
+}
 
 export default function SimulationPage() {
   const { locale: uiLocale, setLocale: setUiLocale } = useUiLocale();
@@ -460,7 +481,7 @@ export default function SimulationPage() {
               aria-busy="true"
               className="card-surface rounded-[28px] p-6 text-sm leading-7 text-slate-600"
             >
-              <p className="section-label">Loading</p>
+              <LoadingLabel />
               <h2 className="display-font mt-5 text-2xl font-semibold text-slate-950">
                 Agent chain 실행 중
               </h2>
