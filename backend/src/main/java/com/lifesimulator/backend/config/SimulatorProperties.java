@@ -348,6 +348,7 @@ public class SimulatorProperties {
 
   public static class Recommendations {
     private boolean enabled = true;
+    private boolean llmIntentEnabled = false;
     private int defaultMaxItems = 6;
     private int maxItems = 12;
     private List<String> defaultProviders = new ArrayList<>(List.of("catalog"));
@@ -358,6 +359,14 @@ public class SimulatorProperties {
 
     public void setEnabled(boolean enabled) {
       this.enabled = enabled;
+    }
+
+    public boolean isLlmIntentEnabled() {
+      return llmIntentEnabled;
+    }
+
+    public void setLlmIntentEnabled(boolean llmIntentEnabled) {
+      this.llmIntentEnabled = llmIntentEnabled;
     }
 
     public int getDefaultMaxItems() {

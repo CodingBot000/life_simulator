@@ -4,12 +4,62 @@ import com.lifesimulator.backend.recommendation.core.RecommendationContext;
 import com.lifesimulator.backend.recommendation.core.RecommendationIntent;
 import com.lifesimulator.backend.recommendation.core.RecommendationIntentExtractor;
 import com.lifesimulator.backend.recommendation.core.RecommendationQuery;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import org.springframework.stereotype.Component;
+import java.util.Map;
+import java.util.Set;
 
-@Component
 public class DeterministicRecommendationIntentExtractor implements RecommendationIntentExtractor {
+
+  private static final List<TopicDefinition> TOPICS = List.of(
+    new TopicDefinition(
+      "career_change",
+      List.of("career", "job", "회사", "연봉", "이직", "커리어", "직무", "퇴사", "면접", "포트폴리오"),
+      List.of("growth", "성장", "일", "업무", "developer", "개발자")
+    ),
+    new TopicDefinition(
+      "financial_planning",
+      List.of("money", "income", "finance", "budget", "재정", "저축", "투자", "소득", "수입", "예산", "지출", "생활비", "비상금"),
+      List.of("비용", "안정", "현금", "소비")
+    ),
+    new TopicDefinition(
+      "relationship",
+      List.of("relationship", "연애", "결혼", "가족", "친구", "관계", "갈등", "대화", "이별", "파트너"),
+      List.of("신뢰", "감정", "소통", "외로움")
+    ),
+    new TopicDefinition(
+      "learning",
+      List.of("study", "learning", "시험", "학습", "대학원", "자격증", "공부", "강의", "수업", "입시"),
+      List.of("성적", "역량", "스킬", "지식")
+    ),
+    new TopicDefinition(
+      "wellbeing",
+      List.of("burnout", "stress", "health", "스트레스", "번아웃", "마음", "건강", "수면", "휴식", "회복"),
+      List.of("피곤", "부담", "불안", "생활", "에너지")
+    )
+  );
+
+  private static final Map<String, Double> SOURCE_WEIGHTS = Map.of(
+    "decision",
+    3.0,
+    "options",
+    2.0,
+    "advisor",
+    2.0,
+    "planner",
+    1.4,
+    "actions",
+    1.4,
+    "job",
+    0.9,
+    "priorities",
+    0.6
+  );
+
+  private static final double MIN_TOPIC_SCORE = 2.5;
 
   @Override
   public RecommendationIntent extract(RecommendationContext context) {
@@ -19,42 +69,30 @@ public class DeterministicRecommendationIntentExtractor implements Recommendatio
       topic,
       audienceContext(topic, korean),
       productTypes(topic),
-      queries(topic, korean),
+      queries(topic, korean, context),
       negativeFilters(topic),
       safetyLevel(topic)
     );
   }
 
   private String topicFor(RecommendationContext context) {
-    String text = normalize(
-      String.join(
-        " ",
-        context.user().job(),
-        String.join(" ", context.user().priorities()),
-        context.decision().topicText(),
-        String.join(" ", context.decision().optionLabels()),
-        context.result().advisorReason(),
-        String.join(" ", context.result().plannerFactors()),
-        String.join(" ", context.result().suggestedActions())
-      )
+    List<SourceText> sources = List.of(
+      new SourceText("decision", context.decision().topicText()),
+      new SourceText("options", String.join(" ", context.decision().optionLabels())),
+      new SourceText("advisor", context.result().advisorReason()),
+      new SourceText("planner", String.join(" ", context.result().plannerFactors())),
+      new SourceText("actions", String.join(" ", context.result().suggestedActions())),
+      new SourceText("job", context.user().job()),
+      new SourceText("priorities", String.join(" ", context.user().priorities()))
     );
 
-    if (containsAny(text, "career", "job", "회사", "연봉", "이직", "커리어", "직무", "성장")) {
-      return "career_change";
-    }
-    if (containsAny(text, "money", "income", "finance", "재정", "저축", "투자", "소득", "수입")) {
-      return "financial_planning";
-    }
-    if (containsAny(text, "relationship", "연애", "결혼", "가족", "친구", "관계")) {
-      return "relationship";
-    }
-    if (containsAny(text, "study", "learning", "시험", "학습", "대학원", "자격증", "공부")) {
-      return "learning";
-    }
-    if (containsAny(text, "burnout", "stress", "health", "스트레스", "번아웃", "마음", "건강")) {
-      return "wellbeing";
-    }
-    return "general_decision_support";
+    TopicScore best = TOPICS
+      .stream()
+      .map(topic -> new TopicScore(topic.name(), score(topic, sources)))
+      .max(Comparator.comparingDouble(TopicScore::score))
+      .orElse(new TopicScore("general_decision_support", 0));
+
+    return best.score() >= MIN_TOPIC_SCORE ? best.topic() : "general_decision_support";
   }
 
   private String audienceContext(String topic, boolean korean) {
@@ -89,29 +127,74 @@ public class DeterministicRecommendationIntentExtractor implements Recommendatio
     };
   }
 
-  private List<RecommendationQuery> queries(String topic, boolean korean) {
+  private List<RecommendationQuery> queries(
+    String topic,
+    boolean korean,
+    RecommendationContext context
+  ) {
+    List<RecommendationQuery> queries = new ArrayList<>();
     if (!korean) {
-      return switch (topic) {
-        case "career_change" -> List.of(query("career change guide"), query("job transition checklist"));
-        case "financial_planning" -> List.of(query("personal finance planning"), query("budget decision template"));
-        case "relationship" -> List.of(query("relationship conversation guide"), query("conflict communication"));
-        case "learning" -> List.of(query("study planning template"), query("learning strategy"));
-        case "wellbeing" -> List.of(query("burnout recovery habits"), query("stress management"));
-        default -> List.of(query("decision making book"), query("goal planning template"));
-      };
+      queries.addAll(
+        switch (topic) {
+          case "career_change" -> List.of(query("career change guide"), query("job transition checklist"));
+          case "financial_planning" -> List.of(query("personal finance planning"), query("budget decision template"));
+          case "relationship" -> List.of(query("relationship conversation guide"), query("conflict communication"));
+          case "learning" -> List.of(query("study planning template"), query("learning strategy"));
+          case "wellbeing" -> List.of(query("burnout recovery habits"), query("stress management"));
+          default -> List.of(query("decision making book"), query("goal planning template"));
+        }
+      );
+      return dedupe(queries);
     }
-    return switch (topic) {
-      case "career_change" -> List.of(query("커리어 전환"), query("이직 준비"), query("성장 정체"));
-      case "financial_planning" -> List.of(query("재정 계획"), query("예산 관리"), query("선택 비용"));
-      case "relationship" -> List.of(query("관계 대화"), query("갈등 대화"), query("관계 회복"));
-      case "learning" -> List.of(query("학습 계획"), query("공부 습관"), query("자격증 준비"));
-      case "wellbeing" -> List.of(query("번아웃 회복"), query("스트레스 관리"), query("생활 루틴"));
-      default -> List.of(query("의사결정 책"), query("목표 설정"), query("습관 관리"));
-    };
+    queries.addAll(
+      switch (topic) {
+        case "career_change" -> List.of(query("커리어 전환"), query("이직 준비"), query("직무 전환"));
+        case "financial_planning" -> List.of(query("재정 계획"), query("예산 관리"), query("선택 비용"));
+        case "relationship" -> List.of(query("관계 대화"), query("갈등 대화"), query("관계 회복"));
+        case "learning" -> List.of(query("학습 계획"), query("공부 습관"), query("자격증 준비"));
+        case "wellbeing" -> List.of(query("번아웃 회복"), query("스트레스 관리"), query("생활 루틴"));
+        default -> List.of(query("의사결정 책"), query("목표 설정"), query("습관 관리"));
+      }
+    );
+
+    String text = contextText(context);
+    if ("career_change".equals(topic)) {
+      if (contains(text, "연봉", "소득", "보상")) {
+        queries.add(query("연봉 리스크"));
+      }
+      if (contains(text, "면접", "포트폴리오", "직무")) {
+        queries.add(query("면접 포트폴리오"));
+      }
+    }
+    if ("financial_planning".equals(topic) && contains(text, "비상금", "저축", "생활비")) {
+      queries.add(query("비상금 저축"));
+    }
+    if ("relationship".equals(topic) && contains(text, "경계", "거절", "갈등")) {
+      queries.add(query("갈등 대화"));
+    }
+    if ("learning".equals(topic) && contains(text, "자격증", "시험", "복습")) {
+      queries.add(query("자격증 시험"));
+    }
+    if ("wellbeing".equals(topic) && contains(text, "수면", "회복", "부담")) {
+      queries.add(query("회복 루틴"));
+    }
+
+    return dedupe(queries);
   }
 
   private RecommendationQuery query(String query) {
     return new RecommendationQuery("catalog", query, "deterministic intent match");
+  }
+
+  private List<RecommendationQuery> dedupe(List<RecommendationQuery> queries) {
+    Set<String> seen = new LinkedHashSet<>();
+    List<RecommendationQuery> deduped = new ArrayList<>();
+    for (RecommendationQuery query : queries) {
+      if (seen.add(normalize(query.query()))) {
+        deduped.add(query);
+      }
+    }
+    return deduped;
   }
 
   private List<String> negativeFilters(String topic) {
@@ -131,16 +214,65 @@ public class DeterministicRecommendationIntentExtractor implements Recommendatio
     };
   }
 
-  private boolean containsAny(String text, String... needles) {
-    for (String needle : needles) {
-      if (text.contains(needle.toLowerCase(Locale.ROOT))) {
+  private double score(TopicDefinition topic, List<SourceText> sources) {
+    double score = 0;
+    for (SourceText source : sources) {
+      String text = normalize(source.text());
+      if (text.isBlank()) {
+        continue;
+      }
+      double weight = SOURCE_WEIGHTS.getOrDefault(source.name(), 1.0);
+      score += countMatches(text, topic.strongKeywords()) * weight;
+      score += countMatches(text, topic.weakKeywords()) * weight * 0.35;
+    }
+    return score;
+  }
+
+  private String contextText(RecommendationContext context) {
+    return normalize(
+      String.join(
+        " ",
+        context.user().job(),
+        String.join(" ", context.user().priorities()),
+        context.decision().topicText(),
+        String.join(" ", context.decision().optionLabels()),
+        context.result().advisorReason(),
+        String.join(" ", context.result().plannerFactors()),
+        String.join(" ", context.result().suggestedActions())
+      )
+    );
+  }
+
+  private boolean contains(String text, String... keywords) {
+    String normalized = normalize(text);
+    for (String keyword : keywords) {
+      if (normalized.contains(normalize(keyword))) {
         return true;
       }
     }
     return false;
   }
 
+  private long countMatches(String text, List<String> keywords) {
+    return keywords
+      .stream()
+      .map(this::normalize)
+      .filter(keyword -> !keyword.isBlank())
+      .filter(text::contains)
+      .count();
+  }
+
   private String normalize(String text) {
     return text == null ? "" : text.toLowerCase(Locale.ROOT);
   }
+
+  private record TopicDefinition(
+    String name,
+    List<String> strongKeywords,
+    List<String> weakKeywords
+  ) {}
+
+  private record SourceText(String name, String text) {}
+
+  private record TopicScore(String topic, double score) {}
 }

@@ -37,6 +37,7 @@ simulator:
       hour-window: ${SIMULATOR_RATE_LIMIT_HOUR_WINDOW:1h}
   recommendations:
     enabled: ${SIMULATOR_RECOMMENDATIONS_ENABLED:true}
+    llm-intent-enabled: ${SIMULATOR_RECOMMENDATIONS_LLM_INTENT_ENABLED:false}
     default-max-items: ${SIMULATOR_RECOMMENDATIONS_DEFAULT_MAX_ITEMS:6}
     max-items: ${SIMULATOR_RECOMMENDATIONS_MAX_ITEMS:12}
     default-providers:

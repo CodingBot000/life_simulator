@@ -23,7 +23,7 @@ export function RecommendationPanel({
   }
 
   return (
-    <section className="card-surface rounded-[28px] p-6">
+    <section className="recommendation-surface rounded-[28px] p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="section-label">Recommendations</p>

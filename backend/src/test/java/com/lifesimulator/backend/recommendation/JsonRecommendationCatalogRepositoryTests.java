@@ -25,6 +25,39 @@ class JsonRecommendationCatalogRepositoryTests {
   }
 
   @Test
+  void hasEnoughKoreanDemoItemsForEachPrimaryTopic() {
+    List<String> topics = List.of(
+      "career_change",
+      "financial_planning",
+      "relationship",
+      "learning",
+      "wellbeing",
+      "general_decision_support"
+    );
+
+    for (String topic : topics) {
+      var items = repository.findCandidates(
+        new RecommendationCatalogQuery("ko", topic, List.of(), 20)
+      );
+
+      assertThat(items)
+        .as("topic %s should have at least four active catalog items", topic)
+        .hasSizeGreaterThanOrEqualTo(4);
+      assertThat(items).allMatch(item -> item.eligibleTopics().contains(topic));
+    }
+  }
+
+  @Test
+  void supportsEnglishLocaleWithNonEmptyCatalog() {
+    var items = repository.findCandidates(
+      new RecommendationCatalogQuery("en", "career_change", List.of("career"), 5)
+    );
+
+    assertThat(items).hasSizeGreaterThanOrEqualTo(2);
+    assertThat(items).extracting("id").contains("en-career-book-001");
+  }
+
+  @Test
   void fallsBackToGeneralDecisionSupportWhenTopicDoesNotMatch() {
     var items = repository.findCandidates(
       new RecommendationCatalogQuery("ko", "unknown_topic", List.of("없는검색어"), 5)

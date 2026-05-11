@@ -46,4 +46,30 @@ class RecommendationEngineTests {
     assertThat(result.disclosure().text()).isNotBlank();
     assertThat(result.providerStatus()).extracting("status").contains("ok");
   }
+
+  @Test
+  void diversifiesCatalogItemTypesWithinTheSameTopic() {
+    RecommendationEngine engine = new RecommendationEngine(
+      new DeterministicRecommendationIntentExtractor(),
+      List.of(new CatalogRecommendationProvider(new JsonRecommendationCatalogRepository(new ObjectMapper()))),
+      new RecommendationRanker(),
+      new RecommendationSafetyPolicy()
+    );
+
+    var result = engine.recommend(
+      new RecommendationContext(
+        "request-2",
+        "ko",
+        new UserContext("developer", List.of("stability"), "low"),
+        new DecisionContext("직무 전환과 면접 포트폴리오를 준비해야 합니다", List.of("준비", "이직"), "B"),
+        new ResultContext("면접과 포트폴리오 준비가 다음 실행의 핵심입니다.", List.of("interview"), List.of("포트폴리오 설명을 정리하세요"), ""),
+        List.of("catalog"),
+        4
+      )
+    );
+
+    assertThat(result.intent().topic()).isEqualTo("career_change");
+    assertThat(result.items()).hasSize(4);
+    assertThat(result.items()).extracting("type").contains("book", "template", "youtube_channel", "course");
+  }
 }
