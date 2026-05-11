@@ -11,8 +11,15 @@ import {
   formatReasoningSignal,
   formatUserFacingNarrative,
 } from "./narrative";
+import { FeedbackControls, GuardrailReviewControls } from "./feedback-controls";
 
-export function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
+export function AdvisorCard({
+  advisor,
+  requestId,
+}: {
+  advisor: AdvisorResult;
+  requestId?: string;
+}) {
   const decisionLabel =
     advisor.decision === "undecided"
       ? "Undecided"
@@ -61,6 +68,14 @@ export function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
       <p className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
         {formatUserFacingNarrative(advisor.reasoning_basis.core_why)}
       </p>
+      {requestId ? (
+        <FeedbackControls
+          requestId={requestId}
+          targetType="advisor"
+          targetOption={advisor.decision}
+          signals={["agree", "disagree", "would_choose", "missing_context"]}
+        />
+      ) : null}
     </section>
   );
 }
@@ -68,9 +83,11 @@ export function AdvisorCard({ advisor }: { advisor: AdvisorResult }) {
 export function GuardrailCard({
   guardrail,
   derived = false,
+  requestId,
 }: {
   guardrail: GuardrailResult;
   derived?: boolean;
+  requestId?: string;
 }) {
   const activeReasoningSignals = Object.entries(guardrail.reasoning_signals)
     .filter(([, enabled]) => enabled)
@@ -160,6 +177,16 @@ export function GuardrailCard({
             : "none"}
         </p>
       </div>
+      {requestId ? (
+        <>
+          <FeedbackControls
+            requestId={requestId}
+            targetType="guardrail"
+            signals={["helpful", "not_helpful", "missing_context"]}
+          />
+          <GuardrailReviewControls requestId={requestId} />
+        </>
+      ) : null}
     </section>
   );
 }
@@ -168,10 +195,12 @@ export function ReflectionCard({
   reflection,
   derived = false,
   locale,
+  requestId,
 }: {
   reflection: ReflectionResult;
   derived?: boolean;
   locale: PriorityLocale;
+  requestId?: string;
 }) {
   const reflectionCopy = REFLECTION_COPY[locale];
   const scoreEntries: Array<{
@@ -287,6 +316,13 @@ export function ReflectionCard({
           </ul>
         </div>
       </div>
+      {requestId ? (
+        <FeedbackControls
+          requestId={requestId}
+          targetType="reflection"
+          signals={["helpful", "not_helpful", "missing_context"]}
+        />
+      ) : null}
     </section>
   );
 }

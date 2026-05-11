@@ -37,7 +37,7 @@ simulator:
       hour-window: ${SIMULATOR_RATE_LIMIT_HOUR_WINDOW:1h}
   codex:
     enabled: ${SIMULATOR_CODEX_ENABLED:true}
-    fallback-on-error: ${SIMULATOR_CODEX_FALLBACK_ON_ERROR:true}
+    fallback-on-error: ${SIMULATOR_CODEX_FALLBACK_ON_ERROR:false}
     command: ${SIMULATOR_CODEX_COMMAND:codex}
     model: ${SIMULATOR_CODEX_MODEL:gpt-5.3-codex-spark}
     timeout: ${SIMULATOR_CODEX_TIMEOUT:75s}
@@ -62,16 +62,16 @@ simulator:
     api-key: ${OPENAI_API_KEY:}
     model: ${SIMULATOR_OPENAI_MODEL:gpt-5-nano}
     timeout: ${SIMULATOR_OPENAI_TIMEOUT:75s}
-    fallback-on-error: ${SIMULATOR_OPENAI_FALLBACK_ON_ERROR:true}
+    fallback-on-error: ${SIMULATOR_OPENAI_FALLBACK_ON_ERROR:false}
     prompt-cache-retention: ${SIMULATOR_OPENAI_PROMPT_CACHE_RETENTION:in_memory}
     stage-profiles:
       state_loader:
-        reasoning-effort: minimal
+        reasoning-effort: low
         verbosity: low
         max-output-tokens: 900
         prompt-cache-key: life-sim:v1:state-loader
       planner:
-        reasoning-effort: minimal
+        reasoning-effort: low
         verbosity: low
         max-output-tokens: 900
         prompt-cache-key: life-sim:v1:planner
@@ -86,12 +86,12 @@ simulator:
         max-output-tokens: 1400
         prompt-cache-key: life-sim:v1:scenario
       risk_a:
-        reasoning-effort: minimal
+        reasoning-effort: low
         verbosity: low
         max-output-tokens: 900
         prompt-cache-key: life-sim:v1:risk
       risk_b:
-        reasoning-effort: minimal
+        reasoning-effort: low
         verbosity: low
         max-output-tokens: 900
         prompt-cache-key: life-sim:v1:risk
@@ -106,7 +106,7 @@ simulator:
         max-output-tokens: 1800
         prompt-cache-key: life-sim:v1:advisor
       reflection:
-        reasoning-effort: minimal
+        reasoning-effort: low
         verbosity: low
         max-output-tokens: 1200
         prompt-cache-key: life-sim:v1:reflection

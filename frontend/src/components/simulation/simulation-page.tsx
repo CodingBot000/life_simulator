@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 
 import { useUiLocale } from "@/components/providers/ui-locale-provider";
 import { FollowupReevaluationPanel } from "@/components/simulation/followup-reevaluation-panel";
+import { OutcomeFollowupPanel } from "@/components/simulation/outcome-followup-panel";
 import { LoadingStageStrip } from "@/components/simulation/progress";
 import {
   AdvisorCard,
@@ -493,26 +494,52 @@ export default function SimulationPage() {
                 priorityCatalog={priorityCatalog}
               />
               <PlannerCard planner={result.planner} />
-              {result.scenarioA ? (
-                <TimelineCard title="선택지 A 시나리오" scenario={result.scenarioA} />
+              {result.scenarioA || result.scenarioB ? (
+                <div className="grid gap-5 lg:grid-cols-2">
+                  {result.scenarioA ? (
+                    <TimelineCard
+                      title="선택지 A 시나리오"
+                      scenario={result.scenarioA}
+                    />
+                  ) : null}
+                  {result.scenarioB ? (
+                    <TimelineCard
+                      title="선택지 B 시나리오"
+                      scenario={result.scenarioB}
+                    />
+                  ) : null}
+                </div>
               ) : null}
-              {result.scenarioB ? (
-                <TimelineCard title="선택지 B 시나리오" scenario={result.scenarioB} />
+              {result.riskA || result.riskB ? (
+                <div className="grid gap-5 lg:grid-cols-2">
+                  {result.riskA ? (
+                    <RiskCard title="Risk A" risk={result.riskA} />
+                  ) : null}
+                  {result.riskB ? (
+                    <RiskCard title="Risk B" risk={result.riskB} />
+                  ) : null}
+                </div>
               ) : null}
-              {result.riskA ? <RiskCard title="Risk A" risk={result.riskA} /> : null}
-              {result.riskB ? <RiskCard title="Risk B" risk={result.riskB} /> : null}
-              {result.reasoning ? <ReasoningCard reasoning={result.reasoning} /> : null}
+              {result.reasoning ? (
+                <ReasoningCard
+                  reasoning={result.reasoning}
+                  requestId={result.request_id}
+                />
+              ) : null}
               <GuardrailCard
                 guardrail={result.guardrail}
                 derived={!result.routing.selected_path.includes("guardrail")}
+                requestId={result.request_id}
               />
-              <AdvisorCard advisor={result.advisor} />
+              <AdvisorCard advisor={result.advisor} requestId={result.request_id} />
               <ReflectionCard
                 reflection={result.reflection}
                 derived={!result.routing.selected_path.includes("reflection")}
                 locale={uiLocale}
+                requestId={result.request_id}
               />
               <ResultVersionSummary locale={uiLocale} versions={versions} />
+              <OutcomeFollowupPanel requestId={result.request_id} />
               {latestVersion ? (
                 <FollowupReevaluationPanel
                   request={latestVersion.request}

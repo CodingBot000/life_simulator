@@ -3,6 +3,7 @@ package com.lifesimulator.backend.simulation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.lifesimulator.backend.engine.ExecutionEngineNames;
 import com.lifesimulator.backend.engine.prompt.StageInputMapper;
 import com.lifesimulator.backend.guardrail.GuardrailEvaluationService;
 import com.lifesimulator.backend.engine.llm.LlmClientException;
@@ -144,7 +145,9 @@ public class StageExecutionService {
 
   private Map<String, Object> stageEvent(String type, String requestId, SimulationStage stage) {
     String executionKind = stage.isDerivedOnly() ? "derived" : "llm";
-    String stageModel = "llm".equals(executionKind) ? llmJsonClient.modelName() : "spring-derived";
+    String stageModel = "llm".equals(executionKind)
+      ? llmJsonClient.modelName()
+      : ExecutionEngineNames.BACKEND_RULE;
     return Map.of(
       "type",
       type,

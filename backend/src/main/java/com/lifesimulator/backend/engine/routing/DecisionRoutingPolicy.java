@@ -1,5 +1,6 @@
 package com.lifesimulator.backend.engine.routing;
 
+import com.lifesimulator.backend.engine.ExecutionEngineNames;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -79,7 +80,7 @@ public class DecisionRoutingPolicy {
       plan.put("ab_reasoning", model);
     }
     if (selectedPath.contains("guardrail")) {
-      plan.put("guardrail", "spring-derived");
+      plan.put("guardrail", ExecutionEngineNames.BACKEND_RULE);
     }
     plan.put("advisor", model);
     if (selectedPath.contains("reflection")) {

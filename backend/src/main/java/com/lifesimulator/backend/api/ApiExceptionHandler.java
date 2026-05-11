@@ -3,6 +3,7 @@ package com.lifesimulator.backend.api;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,6 +17,13 @@ public class ApiExceptionHandler {
       .body(Map.of("error", message(error)));
   }
 
+  @ExceptionHandler(ResponseStatusException.class)
+  public ResponseEntity<Map<String, Object>> handleResponseStatus(ResponseStatusException error) {
+    return ResponseEntity
+      .status(error.getStatusCode())
+      .body(Map.of("error", message(error)));
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Map<String, Object>> handleUnexpected(Exception error) {
     return ResponseEntity
@@ -24,6 +32,10 @@ public class ApiExceptionHandler {
   }
 
   private String message(Exception error) {
+    if (error instanceof ResponseStatusException responseStatusException) {
+      String reason = responseStatusException.getReason();
+      return reason == null || reason.isBlank() ? responseStatusException.getStatusCode().toString() : reason;
+    }
     String message = error.getMessage();
     return message == null || message.isBlank() ? error.getClass().getSimpleName() : message;
   }

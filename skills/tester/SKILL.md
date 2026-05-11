@@ -22,7 +22,7 @@ description: Choose and run the smallest executable validation set that matches 
 ### Add when relevant
 
 - `npm run build`
-  - for `app/*`, `src/components/*`, route handlers, or Next.js boundary changes
+  - for `src/App.tsx`, `src/components/*`, route handlers, or frontend framework boundary changes
 - `npm run verify:monitoring`
   - for monitoring or metric emission changes
 - `npm run eval:guardrail`
@@ -40,7 +40,7 @@ description: Choose and run the smallest executable validation set that matches 
 
 - `POST /api/simulate` for end-to-end simulation behavior
 - `GET /api/metrics` for metrics exposure
-- browser check of `app/page.tsx` flows for UI work
+- browser check of `src/App.tsx` flows for UI work
 
 ## Output
 

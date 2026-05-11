@@ -663,6 +663,7 @@ export type SimulationProgressEvent =
       execution_mode: ExecutionMode;
       selected_path: string[];
       skipped_stages: SimulationStageName[];
+      skip_reasons?: Partial<Record<SimulationStageName, string>>;
     }
   | {
       type: "stage_started" | "stage_completed";

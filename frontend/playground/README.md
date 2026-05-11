@@ -222,6 +222,6 @@ stub 결과 파일도 함께 생성될 수 있다.
 
 - 프롬프트 원본은 모두 루트 `prompts/*.md`에 있다.
 - Playground의 `*-request.json` 구조는 향후 CLI 호출이나 API 호출 어댑터의 입력으로 재사용할 수 있다.
-- Next.js 앱에서는 [`src/lib/prompts.ts`](/Users/switch/Development/Web/life_simulator/src/lib/prompts.ts)가 루트 `prompts/*.md`를 읽도록 되어 있다.
+- 레거시 TypeScript 파이프라인에서는 [`src/lib/prompts.ts`](/Users/switch/Development/Web/life_simulator/frontend/src/lib/prompts.ts)가 루트 `prompts/*.md`를 읽도록 되어 있다.
 - 실제 모델 호출을 붙일 때는 [`src/lib/openai.ts`](/Users/switch/Development/Web/life_simulator/src/lib/openai.ts) 또는 별도 CLI 실행부만 바꾸면 된다.
 - 수동 또는 외부 모델 결과를 끼워 넣고 싶다면 각 케이스 폴더 안의 `*-result.json` 파일을 만들면 스크립트가 stub보다 실제 결과를 우선 사용한다.

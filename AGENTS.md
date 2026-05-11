@@ -2,8 +2,8 @@
 
 ## Project Structure
 
-- `frontend/`: current Next.js App Router application. It keeps the previous `app/`, `src/`, `workers/`, `scripts/`, `prompts/`, `db/`, `playground/`, and generated output layout until the later React+Vite migration.
-- `frontend/app/`: Next.js pages and legacy API routes. During migration, UI calls should prefer the Spring Boot backend through `NEXT_PUBLIC_API_BASE_URL`.
+- `frontend/`: React + Vite SPA. It keeps the previous `src/`, `workers/`, `scripts/`, `prompts/`, `db/`, `playground/`, and generated output layout while legacy TypeScript pipeline code is phased out.
+- `frontend/src/main.tsx` and `frontend/src/App.tsx`: Vite React entrypoint and current single-page UI. UI calls should use the Spring Boot backend through `VITE_API_BASE_URL`.
 - `frontend/src/server/`: legacy TypeScript simulation pipeline, routing, guardrails, LLM providers, logging, monitoring, resilience, drift, and queue logic.
 - `frontend/src/lib/`: shared frontend/legacy types, prompts, monitoring helpers, locale/output helpers, and logger utilities.
 - `frontend/src/components/`: UI-only shared React components.
@@ -15,9 +15,8 @@
 
 - Frontend install: `cd frontend && npm install`
 - Frontend dev server: `cd frontend && npm run dev`
-- Frontend dev server (Turbopack): `cd frontend && npm run dev:turbo`
 - Frontend build: `cd frontend && npm run build`
-- Frontend production build: `cd frontend && npm run start`
+- Frontend preview server: `cd frontend && npm run preview`
 - Frontend typecheck: `cd frontend && npm run typecheck`
 - Backend dev server: `cd backend && ./mvnw spring-boot:run`
 - Backend build/test: `cd backend && ./mvnw test`
@@ -43,7 +42,7 @@
 ## Code Change Principles
 
 - Keep diffs small and local to the owning path.
-- Preserve API route contracts unless the task explicitly changes them.
+- Preserve backend API route contracts unless the task explicitly changes them.
 - For changes in `frontend/src/server/` or backend simulation paths, keep logging, metrics, guardrail, retry/timeout, and queue side effects intact unless the task is specifically about changing them.
 - Reuse existing types and prompt contracts instead of adding parallel shapes.
 - Treat `frontend/outputs/` as generated/runtime data, not source of truth for code changes.
@@ -60,9 +59,9 @@
 
 ## Skill Usage
 
-- Use `skills/planner` for complex or cross-cutting work: when the request spans API routes, `frontend/src/server/`, `backend/`, prompts, workers, or DB/monitoring side effects.
+- Use `skills/planner` for complex or cross-cutting work: when the request spans backend API routes, `frontend/src/server/`, `backend/`, prompts, workers, or DB/monitoring side effects.
 - Use `skills/reviewer` before closing risky changes or when a request explicitly asks for review.
 - Use `skills/tester` when the changed path needs an explicit verification plan or targeted script selection.
 - Use `skills/implementer` for normal code changes after the owning files and validation path are clear.
-- For UI implementation work in `frontend/app/*` or `frontend/src/components/*`, default to `skills/implementer` for the change and `skills/tester` for validation.
+- For UI implementation work in `frontend/src/App.tsx` or `frontend/src/components/*`, default to `skills/implementer` for the change and `skills/tester` for validation.
 - When a request is design- or UX-heavy rather than a narrow implementation fix, first propose using the `ui-designer` agent from `.codex/agents` before making broader visual or interaction changes.

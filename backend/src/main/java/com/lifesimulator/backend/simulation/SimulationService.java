@@ -37,19 +37,22 @@ public class SimulationService implements DecisionEngine {
   private final SimulationEnvelopeFactory envelopeFactory;
   private final SimulationRouter router;
   private final StageExecutionService stageExecutionService;
+  private final SimulationStageSkipReasonResolver skipReasonResolver;
 
   public SimulationService(
     LlmJsonClient llmJsonClient,
     SimulationResponseFactory responseFactory,
     SimulationEnvelopeFactory envelopeFactory,
     SimulationRouter router,
-    StageExecutionService stageExecutionService
+    StageExecutionService stageExecutionService,
+    SimulationStageSkipReasonResolver skipReasonResolver
   ) {
     this.llmJsonClient = llmJsonClient;
     this.responseFactory = responseFactory;
     this.envelopeFactory = envelopeFactory;
     this.router = router;
     this.stageExecutionService = stageExecutionService;
+    this.skipReasonResolver = skipReasonResolver;
   }
 
   public String model() {
@@ -84,6 +87,7 @@ public class SimulationService implements DecisionEngine {
     responseFactory.validateRequest(request);
     BackendRoutingDecision routingDecision = router.route(request, model());
     List<SimulationStage> stages = stageNames(routingDecision);
+    List<String> skippedStageNames = skippedStages(stages);
 
     write(progress, Map.of("type", "request_started", "request_id", requestId, "trace_id", traceId));
     write(
@@ -98,7 +102,9 @@ public class SimulationService implements DecisionEngine {
         "selected_path",
         routingDecision.selectedPath(),
         "skipped_stages",
-        skippedStages(routingDecision)
+        skippedStageNames,
+        "skip_reasons",
+        skipReasonResolver.reasonsFor(routingDecision, skippedStageNames)
       )
     );
 
@@ -153,8 +159,8 @@ public class SimulationService implements DecisionEngine {
     return stages;
   }
 
-  private List<String> skippedStages(BackendRoutingDecision routingDecision) {
-    List<String> selectedStageNames = stageNames(stageNames(routingDecision));
+  private List<String> skippedStages(List<SimulationStage> selectedStages) {
+    List<String> selectedStageNames = stageNames(selectedStages);
     return STAGES.stream()
       .map(SimulationStage::stageName)
       .filter(stage -> !selectedStageNames.contains(stage))

@@ -95,7 +95,25 @@ function ProgressStageCard({
   );
 }
 
+function getSkippedReasonItems(progress: SimulationProgressState) {
+  return SIMULATION_STAGE_ORDER.flatMap((stageName) => {
+    const entry = progress.stages[stageName];
+    if (entry.status !== "skipped" || !entry.skipReason) {
+      return [];
+    }
+    return [
+      {
+        stageName,
+        label: STAGE_METADATA[stageName].label,
+        reason: entry.skipReason,
+      },
+    ];
+  });
+}
+
 export function LoadingStageStrip({ progress }: { progress: SimulationProgressState }) {
+  const skippedReasonItems = getSkippedReasonItems(progress);
+
   return (
     <div className="rounded-[24px] border border-slate-900/8 bg-white/70 p-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -139,7 +157,25 @@ export function LoadingStageStrip({ progress }: { progress: SimulationProgressSt
           />
         ))}
       </div>
+
+      {skippedReasonItems.length > 0 ? (
+        <div className="mt-4 border-t border-slate-900/8 pt-4">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+            생략 사유
+          </p>
+          <div className="mt-3 space-y-3">
+            {skippedReasonItems.map((item) => (
+              <div
+                key={item.stageName}
+                className="grid gap-1 text-sm leading-6 sm:grid-cols-[150px_1fr]"
+              >
+                <span className="font-semibold text-slate-800">{item.label}</span>
+                <p className="text-slate-600">{item.reason}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
-

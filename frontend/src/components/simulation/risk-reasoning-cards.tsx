@@ -1,5 +1,6 @@
 import type { AbReasoningResult, RiskResult } from "@/lib/types";
 
+import { FeedbackControls } from "./feedback-controls";
 import { formatUserFacingNarrative } from "./narrative";
 
 export function RiskCard({
@@ -57,10 +58,14 @@ function ReasoningLensCard({
   title,
   accentClass,
   reasoning,
+  requestId,
+  targetType,
 }: {
   title: string;
   accentClass: string;
   reasoning: AbReasoningResult["reasoning"]["a_reasoning"];
+  requestId?: string;
+  targetType: "reasoning_a" | "reasoning_b";
 }) {
   return (
     <div className="rounded-[24px] border border-slate-900/8 bg-white/75 p-5">
@@ -130,11 +135,25 @@ function ReasoningLensCard({
           </ul>
         </div>
       </div>
+      {requestId ? (
+        <FeedbackControls
+          requestId={requestId}
+          targetType={targetType}
+          targetOption={reasoning.recommended_option}
+          signals={["agree", "disagree", "would_choose", "missing_context"]}
+        />
+      ) : null}
     </div>
   );
 }
 
-export function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
+export function ReasoningCard({
+  reasoning,
+  requestId,
+}: {
+  reasoning: AbReasoningResult;
+  requestId?: string;
+}) {
   return (
     <section className="card-surface rounded-[28px] p-6">
       <p className="section-label">A/B Reasoning</p>
@@ -157,11 +176,15 @@ export function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
           title="Reasoning A"
           accentClass="border-emerald-900/10 bg-emerald-600/[0.12] text-emerald-900"
           reasoning={reasoning.reasoning.a_reasoning}
+          requestId={requestId}
+          targetType="reasoning_a"
         />
         <ReasoningLensCard
           title="Reasoning B"
           accentClass="border-amber-900/10 bg-amber-500/[0.14] text-amber-950"
           reasoning={reasoning.reasoning.b_reasoning}
+          requestId={requestId}
+          targetType="reasoning_b"
         />
       </div>
 
@@ -202,6 +225,14 @@ export function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
           <p className="mt-4 text-sm font-semibold text-slate-950">
             사용자 적합 옵션: {reasoning.reasoning.comparison.which_fits_user_better}
           </p>
+          {requestId ? (
+            <FeedbackControls
+              requestId={requestId}
+              targetType="comparison"
+              targetOption={reasoning.reasoning.comparison.which_fits_user_better}
+              signals={["agree", "disagree", "missing_context"]}
+            />
+          ) : null}
         </div>
 
         <div className="rounded-[24px] border border-slate-900/8 bg-slate-950 p-5 text-white">
@@ -241,9 +272,16 @@ export function ReasoningCard({ reasoning }: { reasoning: AbReasoningResult }) {
               reasoning.reasoning.final_selection.why_selected,
             )}
           </p>
+          {requestId ? (
+            <FeedbackControls
+              requestId={requestId}
+              targetType="final_selection"
+              targetOption={reasoning.reasoning.final_selection.selected_option}
+              signals={["agree", "disagree", "would_choose", "missing_context"]}
+            />
+          ) : null}
         </div>
       </div>
     </section>
   );
 }
-

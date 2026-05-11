@@ -20,7 +20,6 @@ public class LlmClientConfig {
     return switch (resolveProvider(properties, environment)) {
       case CODEX -> new CodexCliJsonClient(codexCliClient, properties);
       case OPENAI -> new OpenAiJsonClient(objectMapper, properties);
-      case MOCK -> new MockJsonClient(properties);
     };
   }
 

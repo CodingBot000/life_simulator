@@ -1,11 +1,11 @@
 # life_simulator frontend
 
-This folder contains the current Next.js UI. Server ownership is moving to `../backend`.
+This folder contains the React + Vite UI. Server ownership lives in `../backend`.
 
 ## Current role
 
 - Render the Life Simulator UI.
-- Call the Spring Boot backend through `NEXT_PUBLIC_API_BASE_URL`.
+- Call the Spring Boot backend through `VITE_API_BASE_URL`.
 - Keep the legacy TypeScript server pipeline only as migration reference until it is fully deleted.
 
 ## Environment
@@ -14,10 +14,10 @@ Copy `.env.local.example` into `.env.local` and set only the fields you need.
 
 Key variables:
 
-- `NEXT_PUBLIC_API_BASE_URL`: backend base URL, default `http://localhost:8080`.
+- `VITE_API_BASE_URL`: backend base URL, default `http://localhost:8080`.
 - `SIMULATE_BASE_URL`: backend base URL for legacy monitoring scripts, default `http://127.0.0.1:8080`.
-- `LLM_PROVIDER_MODE`: retained for legacy scripts only. UI traffic should use the backend.
-- `OPENAI_API_KEY`: leave empty unless you intentionally run old TypeScript OpenAI-mode scripts.
+
+Do not put `OPENAI_API_KEY` in frontend `VITE_*` variables. LLM provider mode is selected by the backend.
 
 ## Local run
 
@@ -35,6 +35,8 @@ npm install
 npm run dev
 ```
 
+The Vite dev server runs on `http://localhost:5173` by default.
+
 Verify the frontend:
 
 ```bash
@@ -44,7 +46,7 @@ npm run build
 
 ## API
 
-The frontend no longer owns Next.js API routes. These endpoints are served by the backend:
+The frontend does not own API routes. These endpoints are served by the backend:
 
 - `GET /api/cases`
 - `POST /api/simulate`

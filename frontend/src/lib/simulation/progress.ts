@@ -19,6 +19,7 @@ export type StageProgressEntry = {
   model: string | null;
   fallbackUsed: boolean;
   fallbackReason: string | null;
+  skipReason: string | null;
 };
 
 export type SimulationProgressState = {
@@ -114,6 +115,7 @@ export function createInitialProgressState(): SimulationProgressState {
           model: null,
           fallbackUsed: false,
           fallbackReason: null,
+          skipReason: null,
         },
       ]),
     ) as Record<SimulationStageName, StageProgressEntry>,
@@ -146,6 +148,7 @@ export function applyProgressEvent(
         next.stages[stageName] = {
           ...next.stages[stageName],
           status: "skipped",
+          skipReason: event.skip_reasons?.[stageName] ?? null,
         };
       }
 
@@ -159,6 +162,7 @@ export function applyProgressEvent(
         model: event.model ?? next.stages[event.stage_name].model,
         fallbackUsed: false,
         fallbackReason: null,
+        skipReason: null,
       };
       return next;
     }
@@ -170,6 +174,7 @@ export function applyProgressEvent(
         model: event.model ?? next.stages[event.stage_name].model,
         fallbackUsed: event.fallback_used ?? false,
         fallbackReason: event.fallback_reason ?? null,
+        skipReason: null,
       };
       return next;
     }

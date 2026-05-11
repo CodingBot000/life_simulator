@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.lifesimulator.backend.engine.ExecutionEngineNames;
 import com.lifesimulator.backend.engine.domain.life.routing.LifeRoutingSignalExtractor;
 import com.lifesimulator.backend.engine.routing.DecisionRoutingPolicy;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ class SimulationRouterTests {
         "advisor",
         "reflection"
       );
-    assertThat(decision.stageModelPlan()).containsEntry("guardrail", "spring-derived");
+    assertThat(decision.stageModelPlan()).containsEntry("guardrail", ExecutionEngineNames.BACKEND_RULE);
     assertThat(decision.reasons()).contains("ambiguity=high", "execution_mode=full");
   }
 

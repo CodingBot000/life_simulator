@@ -21,8 +21,7 @@ public class SimulatorProperties {
 
   public enum LlmProvider {
     CODEX,
-    OPENAI,
-    MOCK
+    OPENAI
   }
 
   public Frontend getFrontend() {
@@ -75,7 +74,7 @@ public class SimulatorProperties {
 
   public static class Codex {
     private boolean enabled = true;
-    private boolean fallbackOnError = true;
+    private boolean fallbackOnError = false;
     private String command = "codex";
     private String model = "gpt-5.3-codex-spark";
     private Duration timeout = Duration.ofSeconds(75);
@@ -167,7 +166,7 @@ public class SimulatorProperties {
     private String apiKey = "";
     private String model = "gpt-5-nano";
     private Duration timeout = Duration.ofSeconds(75);
-    private boolean fallbackOnError = true;
+    private boolean fallbackOnError = false;
     private String promptCacheRetention = "in_memory";
     private Map<String, StageProfile> stageProfiles = defaultStageProfiles();
 
@@ -226,21 +225,21 @@ public class SimulatorProperties {
 
     private static Map<String, StageProfile> defaultStageProfiles() {
       Map<String, StageProfile> profiles = new LinkedHashMap<>();
-      profiles.put("state_loader", StageProfile.of("state-loader", "minimal", "low", 900));
-      profiles.put("planner", StageProfile.of("planner", "minimal", "low", 900));
+      profiles.put("state_loader", StageProfile.of("state-loader", "low", "low", 900));
+      profiles.put("planner", StageProfile.of("planner", "low", "low", 900));
       profiles.put("scenario_a", StageProfile.of("scenario", "low", "medium", 1400));
       profiles.put("scenario_b", StageProfile.of("scenario", "low", "medium", 1400));
-      profiles.put("risk_a", StageProfile.of("risk", "minimal", "low", 900));
-      profiles.put("risk_b", StageProfile.of("risk", "minimal", "low", 900));
+      profiles.put("risk_a", StageProfile.of("risk", "low", "low", 900));
+      profiles.put("risk_b", StageProfile.of("risk", "low", "low", 900));
       profiles.put("ab_reasoning", StageProfile.of("ab-reasoning", "low", "low", 1200));
       profiles.put("advisor", StageProfile.of("advisor", "low", "medium", 1800));
-      profiles.put("reflection", StageProfile.of("reflection", "minimal", "low", 1200));
+      profiles.put("reflection", StageProfile.of("reflection", "low", "low", 1200));
       return profiles;
     }
 
     public static class StageProfile {
       private String model = "";
-      private String reasoningEffort = "minimal";
+      private String reasoningEffort = "low";
       private String verbosity = "low";
       private int maxOutputTokens = 900;
       private String promptCacheKey = "";
@@ -260,13 +259,13 @@ public class SimulatorProperties {
       }
 
       public static StageProfile standard(String stageName) {
-        return of(stageName.replace('_', '-'), "minimal", "low", 900);
+        return of(stageName.replace('_', '-'), "low", "low", 900);
       }
 
       public StageProfile withFallbacks(String stageName) {
         StageProfile profile = new StageProfile();
         profile.model = model == null ? "" : model;
-        profile.reasoningEffort = blankToDefault(reasoningEffort, "minimal");
+        profile.reasoningEffort = blankToDefault(reasoningEffort, "low");
         profile.verbosity = blankToDefault(verbosity, "low");
         profile.maxOutputTokens = maxOutputTokens > 0 ? maxOutputTokens : 900;
         profile.promptCacheKey = blankToDefault(
