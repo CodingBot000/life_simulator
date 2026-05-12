@@ -11,13 +11,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SimulatorProperties {
 
   private final Frontend frontend = new Frontend();
-  private LlmProvider llmProvider = LlmProvider.CODEX;
+  private LlmProvider llmProvider = LlmProvider.OPENAI;
   private final Codex codex = new Codex();
   private final OpenAi openai = new OpenAi();
   private final Mock mock = new Mock();
   private final Database database = new Database();
   private final Cors cors = new Cors();
   private final Security security = new Security();
+  private final Recommendations recommendations = new Recommendations();
 
   public enum LlmProvider {
     CODEX,
@@ -58,6 +59,10 @@ public class SimulatorProperties {
 
   public Security getSecurity() {
     return security;
+  }
+
+  public Recommendations getRecommendations() {
+    return recommendations;
   }
 
   public static class Frontend {
@@ -338,6 +343,197 @@ public class SimulatorProperties {
 
     public RateLimit getRateLimit() {
       return rateLimit;
+    }
+  }
+
+  public static class Recommendations {
+    private boolean enabled = true;
+    private boolean llmIntentEnabled = false;
+    private int defaultMaxItems = 6;
+    private int maxItems = 12;
+    private List<String> defaultProviders = new ArrayList<>(List.of("catalog"));
+    private final Naver naver = new Naver();
+    private final Youtube youtube = new Youtube();
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public boolean isLlmIntentEnabled() {
+      return llmIntentEnabled;
+    }
+
+    public void setLlmIntentEnabled(boolean llmIntentEnabled) {
+      this.llmIntentEnabled = llmIntentEnabled;
+    }
+
+    public int getDefaultMaxItems() {
+      return defaultMaxItems;
+    }
+
+    public void setDefaultMaxItems(int defaultMaxItems) {
+      this.defaultMaxItems = defaultMaxItems;
+    }
+
+    public int getMaxItems() {
+      return maxItems;
+    }
+
+    public void setMaxItems(int maxItems) {
+      this.maxItems = maxItems;
+    }
+
+    public List<String> getDefaultProviders() {
+      return defaultProviders;
+    }
+
+    public void setDefaultProviders(List<String> defaultProviders) {
+      this.defaultProviders = defaultProviders == null
+        ? new ArrayList<>(List.of("catalog"))
+        : new ArrayList<>(defaultProviders);
+    }
+
+    public Naver getNaver() {
+      return naver;
+    }
+
+    public Youtube getYoutube() {
+      return youtube;
+    }
+
+    public static class Naver {
+      private boolean enabled = true;
+      private String clientId = "";
+      private String clientSecret = "";
+      private Duration timeout = Duration.ofSeconds(3);
+      private int display = 3;
+      private int maxQueries = 2;
+      private boolean shoppingEnabled = true;
+
+      public boolean isEnabled() {
+        return enabled;
+      }
+
+      public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+      }
+
+      public String getClientId() {
+        return clientId;
+      }
+
+      public void setClientId(String clientId) {
+        this.clientId = clientId;
+      }
+
+      public String getClientSecret() {
+        return clientSecret;
+      }
+
+      public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+      }
+
+      public Duration getTimeout() {
+        return timeout;
+      }
+
+      public void setTimeout(Duration timeout) {
+        this.timeout = timeout;
+      }
+
+      public int getDisplay() {
+        return display;
+      }
+
+      public void setDisplay(int display) {
+        this.display = display;
+      }
+
+      public int getMaxQueries() {
+        return maxQueries;
+      }
+
+      public void setMaxQueries(int maxQueries) {
+        this.maxQueries = maxQueries;
+      }
+
+      public boolean isShoppingEnabled() {
+        return shoppingEnabled;
+      }
+
+      public void setShoppingEnabled(boolean shoppingEnabled) {
+        this.shoppingEnabled = shoppingEnabled;
+      }
+
+      public boolean hasCredentials() {
+        return clientId != null && !clientId.isBlank() && clientSecret != null && !clientSecret.isBlank();
+      }
+    }
+
+    public static class Youtube {
+      private boolean enabled = true;
+      private String apiKey = "";
+      private Duration timeout = Duration.ofSeconds(3);
+      private int maxItems = 4;
+      private int maxQueries = 1;
+      private String seedResource = "/recommendations/youtube.videos.ko.json";
+
+      public boolean isEnabled() {
+        return enabled;
+      }
+
+      public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+      }
+
+      public String getApiKey() {
+        return apiKey;
+      }
+
+      public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+      }
+
+      public Duration getTimeout() {
+        return timeout;
+      }
+
+      public void setTimeout(Duration timeout) {
+        this.timeout = timeout;
+      }
+
+      public int getMaxItems() {
+        return maxItems;
+      }
+
+      public void setMaxItems(int maxItems) {
+        this.maxItems = maxItems;
+      }
+
+      public int getMaxQueries() {
+        return maxQueries;
+      }
+
+      public void setMaxQueries(int maxQueries) {
+        this.maxQueries = maxQueries;
+      }
+
+      public String getSeedResource() {
+        return seedResource;
+      }
+
+      public void setSeedResource(String seedResource) {
+        this.seedResource = seedResource;
+      }
+
+      public boolean hasApiKey() {
+        return apiKey != null && !apiKey.isBlank();
+      }
     }
   }
 

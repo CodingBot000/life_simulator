@@ -1,6 +1,5 @@
 import { getPriorityLabel } from "@/lib/priorities";
 import type { PriorityCatalog, PriorityLocale } from "@/lib/priorities";
-import { EXECUTION_MODE_LABELS } from "@/lib/simulation/progress";
 import type {
   PlannerResult,
   ScenarioResult,
@@ -298,53 +297,33 @@ export function RoutingCard({
 }: {
   routing: SimulationResponse["routing"];
 }) {
+  const routingSummaryRows: Array<[string, string | number]> = [
+    ["risk_band", routing.risk_profile.risk_band],
+    ["complexity", routing.risk_profile.complexity],
+    ["ambiguity", routing.risk_profile.ambiguity],
+    ["state_unknown_count", routing.risk_profile.state_unknown_count],
+    ["model_tier", routing.risk_profile.model_tier],
+    ["execution_mode", routing.execution_mode],
+  ];
+
   return (
     <section className="card-surface rounded-[28px] p-6">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start gap-3">
         <div>
           <p className="section-label">Routing</p>
           <h3 className="display-font mt-2 text-xl font-semibold text-slate-900">
             실행 경로 요약
           </h3>
         </div>
-        <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold uppercase text-white">
-          {routing.execution_mode}
-        </span>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-4">
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-            Risk Band
+      <div className="mt-5 rounded-2xl border border-slate-900/8 bg-white/70 p-4 font-mono text-sm leading-7 text-slate-700">
+        {routingSummaryRows.map(([label, value]) => (
+          <p key={label}>
+            <span>{label}=</span>
+            <span className="font-bold text-blue-700">{value}</span>
           </p>
-          <p className="mt-2 text-xl font-semibold text-slate-950">
-            {routing.risk_profile.risk_band}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-            Complexity
-          </p>
-          <p className="mt-2 text-xl font-semibold text-slate-950">
-            {routing.risk_profile.complexity}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-            Ambiguity
-          </p>
-          <p className="mt-2 text-xl font-semibold text-slate-950">
-            {routing.risk_profile.ambiguity}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-            Model Tier
-          </p>
-          <p className="mt-2 text-xl font-semibold text-slate-950">
-            {routing.risk_profile.model_tier}
-          </p>
-        </div>
+        ))}
       </div>
 
       <div className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
@@ -379,7 +358,7 @@ export function RoutingCard({
         </div>
       </div>
 
-      <ul className="mt-4 grid gap-3">
+      {/* <ul className="mt-4 grid gap-3">
         {routing.reasons.map((reason, index) => (
           <li
             key={`${reason}-${index}`}
@@ -388,7 +367,7 @@ export function RoutingCard({
             {reason}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </section>
   );
 }

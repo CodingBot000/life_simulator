@@ -13,8 +13,25 @@ class LlmClientConfigTests {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
-  void selectsCodexProviderByDefault() {
+  void selectsOpenAiProviderByDefault() {
     SimulatorProperties properties = new SimulatorProperties();
+    LlmJsonClient client = new LlmClientConfig()
+      .llmJsonClient(
+        new CodexCliClient(objectMapper, properties),
+        objectMapper,
+        properties,
+        environment()
+      );
+
+    assertThat(client.providerName()).isEqualTo("openai");
+    assertThat(client.modelName()).isEqualTo(properties.getOpenai().getModel());
+  }
+
+  @Test
+  void canStillSelectCodexProviderExplicitly() {
+    SimulatorProperties properties = new SimulatorProperties();
+    properties.setLlmProvider(SimulatorProperties.LlmProvider.CODEX);
+
     LlmJsonClient client = new LlmClientConfig()
       .llmJsonClient(
         new CodexCliClient(objectMapper, properties),
