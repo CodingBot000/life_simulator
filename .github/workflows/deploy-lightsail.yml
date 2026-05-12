@@ -1,0 +1,112 @@
+name: Deploy Lightsail
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-lightsail
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      DEPLOY_HOST: 35.164.88.121
+      DEPLOY_USER: ubuntu
+      VITE_API_BASE_URL: https://ai-miracle.cloud
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+      NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.18.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build backend
+        working-directory: backend
+        run: ./mvnw package -DskipTests
+
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare SSH
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s' "${{ secrets.LIGHTSAIL_SSH_KEY }}" > ~/.ssh/lightsail_key
+          chmod 600 ~/.ssh/lightsail_key
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      - name: Prepare artifacts
+        run: |
+          cp backend/target/backend-0.1.0.jar /tmp/life-simulator-backend.jar
+          tar -C frontend/dist -czf /tmp/life-simulator-frontend.tar.gz .
+          python3 - <<'PY' > /tmp/life-simulator-extra.env
+          import os
+
+          for key in ("YOUTUBE_API_KEY", "NAVER_CLIENT_ID", "NAVER_CLIENT_SECRET"):
+              value = os.environ.get(key, "").strip()
+              if value:
+                  if "\n" in value:
+                      raise SystemExit(f"{key} must not contain newlines")
+                  print(f"{key}={value}")
+          PY
+
+      - name: Upload artifacts
+        run: |
+          scp -i ~/.ssh/lightsail_key /tmp/life-simulator-backend.jar "$DEPLOY_USER@$DEPLOY_HOST:/tmp/life-simulator-backend.jar"
+          scp -i ~/.ssh/lightsail_key /tmp/life-simulator-frontend.tar.gz "$DEPLOY_USER@$DEPLOY_HOST:/tmp/life-simulator-frontend.tar.gz"
+          scp -i ~/.ssh/lightsail_key /tmp/life-simulator-extra.env "$DEPLOY_USER@$DEPLOY_HOST:/tmp/life-simulator-extra.env"
+
+      - name: Deploy on server
+        run: |
+          ssh -i ~/.ssh/lightsail_key "$DEPLOY_USER@$DEPLOY_HOST" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+
+          sudo install -d -m 755 /opt/life-simulator/backend
+          sudo install -d -m 755 /var/www/life-simulator
+          sudo install -m 644 /tmp/life-simulator-backend.jar /opt/life-simulator/backend/life-simulator-backend.jar
+
+          sudo rm -rf /var/www/life-simulator/*
+          sudo tar -xzf /tmp/life-simulator-frontend.tar.gz -C /var/www/life-simulator
+          sudo chown -R www-data:www-data /var/www/life-simulator || true
+
+          sudo install -d -m 755 /etc/life-simulator
+          sudo touch /etc/life-simulator/backend.env
+          sudo cp /etc/life-simulator/backend.env "/etc/life-simulator/backend.env.$(date +%Y%m%d%H%M%S).bak"
+          while IFS='=' read -r key value; do
+            if [ -n "$key" ]; then
+              sudo sed -i "/^${key}=/d" /etc/life-simulator/backend.env
+              printf '%s=%s\n' "$key" "$value" | sudo tee -a /etc/life-simulator/backend.env >/dev/null
+            fi
+          done < /tmp/life-simulator-extra.env
+
+          sudo systemctl daemon-reload
+          sudo systemctl restart life-simulator-backend
+          sudo nginx -t
+          sudo systemctl reload nginx
+          sleep 5
+          curl -fsS http://127.0.0.1:8080/actuator/health
+
+          rm -f /tmp/life-simulator-backend.jar /tmp/life-simulator-frontend.tar.gz /tmp/life-simulator-extra.env
+          REMOTE
