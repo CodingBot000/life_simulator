@@ -22,15 +22,16 @@ class RecommendationControllerTests {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
-  void recommendationsReturnCatalogItemsWithoutExternalKeys() throws Exception {
+  void recommendationsHideCatalogItemsWithoutExternalKeys() throws Exception {
     RecommendationController controller = controller(new SimulatorProperties());
     var response = controller.recommendations(request());
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().requestId()).isEqualTo("request-1");
-    assertThat(response.getBody().items()).isNotEmpty();
+    assertThat(response.getBody().items()).isEmpty();
     assertThat(response.getBody().providerStatus()).extracting("provider").contains("catalog");
+    assertThat(response.getBody().providerStatus()).extracting("itemCount").contains(0);
   }
 
   @Test

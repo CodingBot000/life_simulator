@@ -15,7 +15,7 @@ management:
         include: health,info,metrics
 
 simulator:
-  llm-provider: ${SIMULATOR_LLM_PROVIDER:codex}
+  llm-provider: ${SIMULATOR_LLM_PROVIDER:openai}
   frontend:
     cases-dir: ../frontend/playground/inputs/cases
   database:
@@ -40,9 +40,9 @@ simulator:
     llm-intent-enabled: ${SIMULATOR_RECOMMENDATIONS_LLM_INTENT_ENABLED:false}
     default-max-items: ${SIMULATOR_RECOMMENDATIONS_DEFAULT_MAX_ITEMS:6}
     max-items: ${SIMULATOR_RECOMMENDATIONS_MAX_ITEMS:12}
-    default-providers: ${SIMULATOR_RECOMMENDATIONS_DEFAULT_PROVIDERS:catalog}
+    default-providers: ${SIMULATOR_RECOMMENDATIONS_DEFAULT_PROVIDERS:catalog,naver,youtube}
     naver:
-      enabled: ${SIMULATOR_RECOMMENDATIONS_NAVER_ENABLED:false}
+      enabled: ${SIMULATOR_RECOMMENDATIONS_NAVER_ENABLED:true}
       client-id: ${NAVER_CLIENT_ID:}
       client-secret: ${NAVER_CLIENT_SECRET:}
       timeout: ${SIMULATOR_RECOMMENDATIONS_NAVER_TIMEOUT:3s}
@@ -50,9 +50,11 @@ simulator:
       max-queries: ${SIMULATOR_RECOMMENDATIONS_NAVER_MAX_QUERIES:2}
       shopping-enabled: ${SIMULATOR_RECOMMENDATIONS_NAVER_SHOPPING_ENABLED:true}
     youtube:
-      enabled: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_ENABLED:false}
+      enabled: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_ENABLED:true}
+      api-key: ${YOUTUBE_API_KEY:}
       timeout: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_TIMEOUT:3s}
-      max-items: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_MAX_ITEMS:2}
+      max-items: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_MAX_ITEMS:4}
+      max-queries: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_MAX_QUERIES:1}
       seed-resource: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_SEED_RESOURCE:/recommendations/youtube.videos.ko.json}
   codex:
     enabled: ${SIMULATOR_CODEX_ENABLED:true}

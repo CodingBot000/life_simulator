@@ -5,11 +5,22 @@ import java.util.List;
 public class CatalogRecommendationProvider implements RecommendationProvider {
 
   public static final String PROVIDER_NAME = "catalog";
+  // 임시 숨김: 하드코딩 catalog 카드는 삭제하지 않는다. 재노출 시 이 값을 true로 전환한다.
+  private static final boolean SHOW_HARDCODED_CATALOG_CARDS = false;
 
   private final RecommendationCatalogRepository catalogRepository;
+  private final boolean showHardcodedCatalogCards;
 
   public CatalogRecommendationProvider(RecommendationCatalogRepository catalogRepository) {
+    this(catalogRepository, SHOW_HARDCODED_CATALOG_CARDS);
+  }
+
+  public CatalogRecommendationProvider(
+    RecommendationCatalogRepository catalogRepository,
+    boolean showHardcodedCatalogCards
+  ) {
     this.catalogRepository = catalogRepository;
+    this.showHardcodedCatalogCards = showHardcodedCatalogCards;
   }
 
   @Override
@@ -22,6 +33,10 @@ public class CatalogRecommendationProvider implements RecommendationProvider {
     RecommendationContext context,
     RecommendationIntent intent
   ) {
+    if (!showHardcodedCatalogCards) {
+      return new RecommendationProviderResult(name(), List.of(), ProviderStatus.ok(name(), 0));
+    }
+
     List<String> keywords = intent
       .queries()
       .stream()

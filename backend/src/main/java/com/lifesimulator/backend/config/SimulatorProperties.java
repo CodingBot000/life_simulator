@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SimulatorProperties {
 
   private final Frontend frontend = new Frontend();
-  private LlmProvider llmProvider = LlmProvider.CODEX;
+  private LlmProvider llmProvider = LlmProvider.OPENAI;
   private final Codex codex = new Codex();
   private final OpenAi openai = new OpenAi();
   private final Mock mock = new Mock();
@@ -406,7 +406,7 @@ public class SimulatorProperties {
     }
 
     public static class Naver {
-      private boolean enabled = false;
+      private boolean enabled = true;
       private String clientId = "";
       private String clientSecret = "";
       private Duration timeout = Duration.ofSeconds(3);
@@ -476,9 +476,11 @@ public class SimulatorProperties {
     }
 
     public static class Youtube {
-      private boolean enabled = false;
+      private boolean enabled = true;
+      private String apiKey = "";
       private Duration timeout = Duration.ofSeconds(3);
-      private int maxItems = 2;
+      private int maxItems = 4;
+      private int maxQueries = 1;
       private String seedResource = "/recommendations/youtube.videos.ko.json";
 
       public boolean isEnabled() {
@@ -487,6 +489,14 @@ public class SimulatorProperties {
 
       public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+      }
+
+      public String getApiKey() {
+        return apiKey;
+      }
+
+      public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
       }
 
       public Duration getTimeout() {
@@ -505,12 +515,24 @@ public class SimulatorProperties {
         this.maxItems = maxItems;
       }
 
+      public int getMaxQueries() {
+        return maxQueries;
+      }
+
+      public void setMaxQueries(int maxQueries) {
+        this.maxQueries = maxQueries;
+      }
+
       public String getSeedResource() {
         return seedResource;
       }
 
       public void setSeedResource(String seedResource) {
         this.seedResource = seedResource;
+      }
+
+      public boolean hasApiKey() {
+        return apiKey != null && !apiKey.isBlank();
       }
     }
   }

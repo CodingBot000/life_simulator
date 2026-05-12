@@ -1,12 +1,8 @@
 package com.lifesimulator.backend.recommendation.core;
 
 import java.util.Comparator;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class RecommendationRanker {
 
@@ -15,12 +11,16 @@ public class RecommendationRanker {
     RecommendationIntent intent,
     List<RecommendationItem> items
   ) {
-    List<RecommendationItem> ranked = items
+    return items
       .stream()
       .map(item -> item.withRank(score(context, intent, item), why(context, intent, item)))
-      .sorted(Comparator.comparingDouble(RecommendationItem::rankScore).reversed())
+      .sorted(
+        Comparator
+          .comparingInt(this::recommendationScore)
+          .reversed()
+          .thenComparingInt(this::sameScoreProviderRank)
+      )
       .toList();
-    return diversifyTypes(ranked);
   }
 
   private double score(
@@ -86,26 +86,26 @@ public class RecommendationRanker {
       .anyMatch(itemText::contains);
   }
 
-  private List<RecommendationItem> diversifyTypes(List<RecommendationItem> ranked) {
-    List<RecommendationItem> diversified = new ArrayList<>();
-    Set<String> usedTypes = new LinkedHashSet<>();
-    Set<String> usedIds = new HashSet<>();
-
-    for (RecommendationItem item : ranked) {
-      String type = normalize(item.type());
-      if (usedTypes.add(type)) {
-        diversified.add(item);
-        usedIds.add(item.id());
-      }
+  private int sameScoreProviderRank(RecommendationItem item) {
+    String provider = normalize(item.provider());
+    String type = normalize(item.type());
+    if ("naver".equals(provider) && "product".equals(type)) {
+      return 0;
     }
-
-    for (RecommendationItem item : ranked) {
-      if (usedIds.add(item.id())) {
-        diversified.add(item);
-      }
+    if ("naver".equals(provider) && "book".equals(type)) {
+      return 1;
     }
+    if ("youtube".equals(provider)) {
+      return 2;
+    }
+    if ("catalog".equals(provider)) {
+      return 4;
+    }
+    return 3;
+  }
 
-    return diversified;
+  private int recommendationScore(RecommendationItem item) {
+    return (int) Math.round(item.rankScore() * 100);
   }
 
   private List<String> meaningfulTokens(String value) {

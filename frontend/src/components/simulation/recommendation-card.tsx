@@ -4,6 +4,7 @@ import type { RecommendationItem } from "@/lib/recommendations/types";
 
 export function RecommendationCard({ item }: { item: RecommendationItem }) {
   const youtubeVideoId = youtubeVideoIdFromUrl(item.url);
+  const recommendationScore = Math.round(item.rank_score * 100);
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
@@ -33,8 +34,11 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
                 {item.title}
               </h4>
             </div>
-            <span className="shrink-0 rounded-full bg-slate-950 px-2.5 py-1 text-[11px] font-semibold text-white">
-              {Math.round(item.rank_score * 100)}
+            <span
+              className="shrink-0 whitespace-nowrap rounded-full bg-slate-950 px-2.5 py-1 text-[11px] font-semibold text-white"
+              aria-label={`추천지수 ${recommendationScore}`}
+            >
+              추천도 {recommendationScore}
             </span>
           </div>
         </div>
@@ -43,8 +47,8 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
         {item.description}
       </p>
       <p className="mt-3 text-sm leading-6 text-slate-700">{item.why}</p>
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="min-w-0 text-xs text-slate-500">
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="min-w-0 flex-1 text-xs text-slate-500">
           {item.creator_name ? <span>{item.creator_name}</span> : null}
           {item.price_label ? (
             <span className={item.creator_name ? "before:px-1 before:content-['/']" : ""}>
@@ -52,23 +56,25 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
             </span>
           ) : null}
         </div>
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
-        >
-          열기
-        </a>
-        {youtubeVideoId ? (
-          <button
-            type="button"
-            className="inline-flex shrink-0 items-center justify-center rounded-full border border-slate-900/10 bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-slate-50"
-            onClick={() => setPlaying((current) => !current)}
+        <div className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-2">
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
           >
-            {playing ? "Close" : "Play"}
-          </button>
-        ) : null}
+            링크바로가기
+          </a>
+          {youtubeVideoId ? (
+            <button
+              type="button"
+              className="inline-flex shrink-0 items-center justify-center rounded-full border border-slate-900/10 bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-slate-50"
+              onClick={() => setPlaying((current) => !current)}
+            >
+              {playing ? "Close" : "Play"}
+            </button>
+          ) : null}
+        </div>
       </div>
       {youtubeVideoId && playing ? (
         <div className="mt-4 aspect-video min-h-[200px] overflow-hidden rounded-lg border border-slate-900/10 bg-slate-950">

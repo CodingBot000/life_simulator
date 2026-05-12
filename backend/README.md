@@ -9,6 +9,14 @@ Spring Boot backend for the Life Simulator migration.
 ```
 
 This keeps the API usable with in-memory/fallback behavior.
+YouTube search reads `YOUTUBE_API_KEY` from the process environment or from `backend/.env`.
+Naver search reads `NAVER_CLIENT_ID` and `NAVER_CLIENT_SECRET` the same way.
+
+For YouTube recommendation search, set:
+
+```sh
+YOUTUBE_API_KEY=...
+```
 
 ## Run With Local Postgres
 
@@ -26,7 +34,7 @@ When `BACKEND_DATABASE_ENABLED=true`, Flyway applies migrations from `src/main/r
 
 ## LLM Provider Mode
 
-Choose the backend model runner with `SIMULATOR_LLM_PROVIDER`.
+The backend uses OpenAI API mode by default. Choose a different model runner with `SIMULATOR_LLM_PROVIDER`.
 
 ### Mock smoke test
 

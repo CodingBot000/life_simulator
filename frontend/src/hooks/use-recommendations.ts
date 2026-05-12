@@ -14,7 +14,7 @@ export function recommendationsEnabled() {
 }
 
 function recommendationProviders() {
-  return String(import.meta.env.VITE_RECOMMENDATION_PROVIDERS ?? "catalog")
+  return String(import.meta.env.VITE_RECOMMENDATION_PROVIDERS ?? "catalog,naver,youtube")
     .split(",")
     .map((provider) => provider.trim())
     .filter(Boolean);
@@ -44,7 +44,6 @@ export function useRecommendations(params: {
           locale: params.locale,
           case_input: params.request,
           simulation_response: params.response,
-          max_items: 6,
           enabled_providers: recommendationProviders(),
         },
         { signal: controller.signal },

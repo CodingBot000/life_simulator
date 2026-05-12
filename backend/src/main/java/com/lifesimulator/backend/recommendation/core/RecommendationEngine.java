@@ -44,11 +44,7 @@ public class RecommendationEngine {
     }
 
     List<RecommendationItem> filtered = safetyPolicy.filter(intent, items);
-    List<RecommendationItem> ranked = ranker
-      .rank(context, intent, filtered)
-      .stream()
-      .limit(context.maxItems())
-      .toList();
+    List<RecommendationItem> ranked = ranker.rank(context, intent, filtered);
 
     return new RecommendationResult(
       context.requestId(),
