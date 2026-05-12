@@ -105,8 +105,18 @@ jobs:
           sudo systemctl restart life-simulator-backend
           sudo nginx -t
           sudo systemctl reload nginx
-          sleep 5
-          curl -fsS http://127.0.0.1:8080/actuator/health
+
+          for attempt in $(seq 1 36); do
+            if curl -fsS http://127.0.0.1:8080/actuator/health; then
+              break
+            fi
+            if [ "$attempt" = "36" ]; then
+              sudo systemctl --no-pager --full status life-simulator-backend || true
+              sudo journalctl -u life-simulator-backend -n 120 --no-pager || true
+              exit 1
+            fi
+            sleep 5
+          done
 
           rm -f /tmp/life-simulator-backend.jar /tmp/life-simulator-frontend.tar.gz /tmp/life-simulator-extra.env
           REMOTE
