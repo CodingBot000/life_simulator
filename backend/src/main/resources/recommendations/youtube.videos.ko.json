@@ -1,0 +1,92 @@
+[
+  {
+    "id": "youtube-career-hard-choices",
+    "locale": "ko",
+    "topic": "career_change",
+    "video_id": "8GQZuzIdeQQ",
+    "title": "How to make hard choices | Ruth Chang",
+    "description": "커리어 선택처럼 정답이 하나로 좁혀지지 않는 결정을 다룰 때 참고하기 좋은 강연입니다.",
+    "tags": ["career_change", "decision", "career", "choice"],
+    "priority_score": 0.78
+  },
+  {
+    "id": "youtube-career-work",
+    "locale": "ko",
+    "topic": "career_change",
+    "video_id": "fLJsdqxnZb0",
+    "title": "The happy secret to better work | Shawn Achor",
+    "description": "일과 성장의 균형을 다시 바라볼 때 참고할 수 있는 짧은 강연입니다.",
+    "tags": ["career_change", "work", "growth", "wellbeing"],
+    "priority_score": 0.7
+  },
+  {
+    "id": "youtube-finance-hard-choices",
+    "locale": "ko",
+    "topic": "financial_planning",
+    "video_id": "8GQZuzIdeQQ",
+    "title": "How to make hard choices | Ruth Chang",
+    "description": "재정 선택에서 가치와 비용이 충돌할 때 의사결정 기준을 세우는 데 도움이 됩니다.",
+    "tags": ["financial_planning", "decision", "tradeoff", "choice"],
+    "priority_score": 0.68
+  },
+  {
+    "id": "youtube-relationship-vulnerability",
+    "locale": "ko",
+    "topic": "relationship",
+    "video_id": "iCvmsMzlF7o",
+    "title": "The Power of Vulnerability | Brené Brown | TED",
+    "description": "관계에서 대화와 신뢰를 다시 점검할 때 참고하기 좋은 강연입니다.",
+    "tags": ["relationship", "conversation", "trust", "emotion"],
+    "priority_score": 0.76
+  },
+  {
+    "id": "youtube-learning-grit",
+    "locale": "ko",
+    "topic": "learning",
+    "video_id": "H14bBuluwB8",
+    "title": "Grit: The Power of Passion and Perseverance | Angela Lee Duckworth | TED",
+    "description": "장기 학습과 자격증 준비처럼 꾸준함이 필요한 선택에 참고할 수 있습니다.",
+    "tags": ["learning", "study", "grit", "habit"],
+    "priority_score": 0.78
+  },
+  {
+    "id": "youtube-learning-growth-mindset",
+    "locale": "ko",
+    "topic": "learning",
+    "video_id": "_X0mgOOSpLU",
+    "title": "The power of believing that you can improve | Carol Dweck | TED",
+    "description": "학습 방향을 정할 때 성장 가능성을 중심으로 계획을 세우는 데 도움이 됩니다.",
+    "tags": ["learning", "growth", "mindset", "study"],
+    "priority_score": 0.73
+  },
+  {
+    "id": "youtube-wellbeing-stress",
+    "locale": "ko",
+    "topic": "wellbeing",
+    "video_id": "RcGyVTAoXEU",
+    "title": "How to Make Stress Your Friend | Kelly McGonigal | TED",
+    "description": "스트레스와 회복 루틴을 다시 설계해야 할 때 참고하기 좋은 강연입니다.",
+    "tags": ["wellbeing", "stress", "recovery", "routine"],
+    "priority_score": 0.79
+  },
+  {
+    "id": "youtube-general-procrastination",
+    "locale": "ko",
+    "topic": "general_decision_support",
+    "video_id": "arj7oStGLkU",
+    "title": "Inside the Mind of a Master Procrastinator | Tim Urban | TED",
+    "description": "결정을 실행으로 옮기지 못하고 미룰 때 행동 전환을 점검하는 데 도움이 됩니다.",
+    "tags": ["general_decision_support", "execution", "habit", "planning"],
+    "priority_score": 0.74
+  },
+  {
+    "id": "youtube-general-hard-choices",
+    "locale": "ko",
+    "topic": "general_decision_support",
+    "video_id": "8GQZuzIdeQQ",
+    "title": "How to make hard choices | Ruth Chang",
+    "description": "가치가 충돌하는 선택 이후 후속 행동의 기준을 세울 때 참고할 수 있습니다.",
+    "tags": ["general_decision_support", "decision", "choice", "values"],
+    "priority_score": 0.72
+  }
+]

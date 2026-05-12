@@ -353,6 +353,7 @@ public class SimulatorProperties {
     private int maxItems = 12;
     private List<String> defaultProviders = new ArrayList<>(List.of("catalog"));
     private final Naver naver = new Naver();
+    private final Youtube youtube = new Youtube();
 
     public boolean isEnabled() {
       return enabled;
@@ -398,6 +399,10 @@ public class SimulatorProperties {
 
     public Naver getNaver() {
       return naver;
+    }
+
+    public Youtube getYoutube() {
+      return youtube;
     }
 
     public static class Naver {
@@ -467,6 +472,45 @@ public class SimulatorProperties {
 
       public boolean hasCredentials() {
         return clientId != null && !clientId.isBlank() && clientSecret != null && !clientSecret.isBlank();
+      }
+    }
+
+    public static class Youtube {
+      private boolean enabled = false;
+      private Duration timeout = Duration.ofSeconds(3);
+      private int maxItems = 2;
+      private String seedResource = "/recommendations/youtube.videos.ko.json";
+
+      public boolean isEnabled() {
+        return enabled;
+      }
+
+      public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+      }
+
+      public Duration getTimeout() {
+        return timeout;
+      }
+
+      public void setTimeout(Duration timeout) {
+        this.timeout = timeout;
+      }
+
+      public int getMaxItems() {
+        return maxItems;
+      }
+
+      public void setMaxItems(int maxItems) {
+        this.maxItems = maxItems;
+      }
+
+      public String getSeedResource() {
+        return seedResource;
+      }
+
+      public void setSeedResource(String seedResource) {
+        this.seedResource = seedResource;
       }
     }
   }

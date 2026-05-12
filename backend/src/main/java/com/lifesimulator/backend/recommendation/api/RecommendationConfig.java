@@ -17,6 +17,11 @@ import com.lifesimulator.backend.recommendation.intent.RecommendationIntentSchem
 import com.lifesimulator.backend.recommendation.naver.NaverSearchApiClient;
 import com.lifesimulator.backend.recommendation.naver.NaverSearchClient;
 import com.lifesimulator.backend.recommendation.naver.NaverSearchProvider;
+import com.lifesimulator.backend.recommendation.youtube.JsonYoutubeVideoSeedRepository;
+import com.lifesimulator.backend.recommendation.youtube.YoutubeOembedApiClient;
+import com.lifesimulator.backend.recommendation.youtube.YoutubeOembedClient;
+import com.lifesimulator.backend.recommendation.youtube.YoutubeRecommendationProvider;
+import com.lifesimulator.backend.recommendation.youtube.YoutubeVideoSeedRepository;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -79,6 +84,32 @@ public class RecommendationConfig {
     SimulatorProperties properties
   ) {
     return new NaverSearchProvider(naverSearchClient, properties.getRecommendations().getNaver());
+  }
+
+  @Bean
+  YoutubeVideoSeedRepository youtubeVideoSeedRepository(
+    ObjectMapper objectMapper,
+    SimulatorProperties properties
+  ) {
+    return new JsonYoutubeVideoSeedRepository(objectMapper, properties.getRecommendations().getYoutube());
+  }
+
+  @Bean
+  YoutubeOembedClient youtubeOembedClient(ObjectMapper objectMapper, SimulatorProperties properties) {
+    return new YoutubeOembedApiClient(objectMapper, properties.getRecommendations().getYoutube());
+  }
+
+  @Bean
+  YoutubeRecommendationProvider youtubeRecommendationProvider(
+    YoutubeVideoSeedRepository youtubeVideoSeedRepository,
+    YoutubeOembedClient youtubeOembedClient,
+    SimulatorProperties properties
+  ) {
+    return new YoutubeRecommendationProvider(
+      youtubeVideoSeedRepository,
+      youtubeOembedClient,
+      properties.getRecommendations().getYoutube()
+    );
   }
 
   @Bean

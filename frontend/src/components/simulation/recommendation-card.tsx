@@ -3,6 +3,13 @@ import { useEffect, useState } from "react";
 import type { RecommendationItem } from "@/lib/recommendations/types";
 
 export function RecommendationCard({ item }: { item: RecommendationItem }) {
+  const youtubeVideoId = youtubeVideoIdFromUrl(item.url);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    setPlaying(false);
+  }, [item.url]);
+
   return (
     <article className="rounded-2xl border border-slate-900/10 bg-white p-4 shadow-sm">
       <div className="flex items-start gap-3">
@@ -53,7 +60,28 @@ export function RecommendationCard({ item }: { item: RecommendationItem }) {
         >
           열기
         </a>
+        {youtubeVideoId ? (
+          <button
+            type="button"
+            className="inline-flex shrink-0 items-center justify-center rounded-full border border-slate-900/10 bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-slate-50"
+            onClick={() => setPlaying((current) => !current)}
+          >
+            {playing ? "Close" : "Play"}
+          </button>
+        ) : null}
       </div>
+      {youtubeVideoId && playing ? (
+        <div className="mt-4 aspect-video min-h-[200px] overflow-hidden rounded-lg border border-slate-900/10 bg-slate-950">
+          <iframe
+            src={youtubeEmbedUrl(youtubeVideoId)}
+            title={`${item.title} video player`}
+            className="h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+      ) : null}
     </article>
   );
 }
@@ -107,4 +135,31 @@ function labelForType(type: string) {
     default:
       return type || "Item";
   }
+}
+
+function youtubeVideoIdFromUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    if (host.endsWith("youtu.be")) {
+      return validVideoId(parsed.pathname.replace(/^\/+/, "").split("/")[0]);
+    }
+    if (host.endsWith("youtube.com") || host.endsWith("youtube-nocookie.com")) {
+      if (parsed.pathname.startsWith("/embed/")) {
+        return validVideoId(parsed.pathname.replace("/embed/", "").split("/")[0]);
+      }
+      return validVideoId(parsed.searchParams.get("v") ?? "");
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function validVideoId(value: string) {
+  return /^[A-Za-z0-9_-]{11}$/.test(value) ? value : null;
+}
+
+function youtubeEmbedUrl(videoId: string) {
+  return `https://www.youtube.com/embed/${videoId}`;
 }

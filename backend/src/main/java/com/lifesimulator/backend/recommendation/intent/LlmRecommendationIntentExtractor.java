@@ -114,7 +114,7 @@ public class LlmRecommendationIntentExtractor implements RecommendationIntentExt
       Extract a recommendation intent for an in-app recommendation catalog.
       Return only JSON that satisfies the schema.
       Do not recommend medical, legal, or speculative financial products.
-      Prefer educational product types: book, template, course, youtube_channel.
+      Prefer educational product types: book, template, course, youtube_channel, youtube_video.
 
       Allowed topics:
       - career_change

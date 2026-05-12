@@ -118,12 +118,12 @@ public class DeterministicRecommendationIntentExtractor implements Recommendatio
 
   private List<String> productTypes(String topic) {
     return switch (topic) {
-      case "career_change" -> List.of("book", "youtube_channel", "course", "template");
-      case "financial_planning" -> List.of("book", "template", "course");
-      case "relationship" -> List.of("book", "youtube_channel", "template");
-      case "learning" -> List.of("book", "course", "template", "youtube_channel");
-      case "wellbeing" -> List.of("book", "youtube_channel", "template");
-      default -> List.of("book", "template", "youtube_channel");
+      case "career_change" -> List.of("book", "youtube_channel", "youtube_video", "course", "template");
+      case "financial_planning" -> List.of("book", "template", "course", "youtube_video");
+      case "relationship" -> List.of("book", "youtube_channel", "youtube_video", "template");
+      case "learning" -> List.of("book", "course", "template", "youtube_channel", "youtube_video");
+      case "wellbeing" -> List.of("book", "youtube_channel", "youtube_video", "template");
+      default -> List.of("book", "template", "youtube_channel", "youtube_video");
     };
   }
 

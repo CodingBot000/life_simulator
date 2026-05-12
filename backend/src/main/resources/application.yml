@@ -49,6 +49,11 @@ simulator:
       display: ${SIMULATOR_RECOMMENDATIONS_NAVER_DISPLAY:3}
       max-queries: ${SIMULATOR_RECOMMENDATIONS_NAVER_MAX_QUERIES:2}
       shopping-enabled: ${SIMULATOR_RECOMMENDATIONS_NAVER_SHOPPING_ENABLED:true}
+    youtube:
+      enabled: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_ENABLED:false}
+      timeout: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_TIMEOUT:3s}
+      max-items: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_MAX_ITEMS:2}
+      seed-resource: ${SIMULATOR_RECOMMENDATIONS_YOUTUBE_SEED_RESOURCE:/recommendations/youtube.videos.ko.json}
   codex:
     enabled: ${SIMULATOR_CODEX_ENABLED:true}
     fallback-on-error: ${SIMULATOR_CODEX_FALLBACK_ON_ERROR:false}
