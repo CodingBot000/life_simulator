@@ -352,6 +352,7 @@ public class SimulatorProperties {
     private int defaultMaxItems = 6;
     private int maxItems = 12;
     private List<String> defaultProviders = new ArrayList<>(List.of("catalog"));
+    private final Naver naver = new Naver();
 
     public boolean isEnabled() {
       return enabled;
@@ -393,6 +394,80 @@ public class SimulatorProperties {
       this.defaultProviders = defaultProviders == null
         ? new ArrayList<>(List.of("catalog"))
         : new ArrayList<>(defaultProviders);
+    }
+
+    public Naver getNaver() {
+      return naver;
+    }
+
+    public static class Naver {
+      private boolean enabled = false;
+      private String clientId = "";
+      private String clientSecret = "";
+      private Duration timeout = Duration.ofSeconds(3);
+      private int display = 3;
+      private int maxQueries = 2;
+      private boolean shoppingEnabled = true;
+
+      public boolean isEnabled() {
+        return enabled;
+      }
+
+      public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+      }
+
+      public String getClientId() {
+        return clientId;
+      }
+
+      public void setClientId(String clientId) {
+        this.clientId = clientId;
+      }
+
+      public String getClientSecret() {
+        return clientSecret;
+      }
+
+      public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+      }
+
+      public Duration getTimeout() {
+        return timeout;
+      }
+
+      public void setTimeout(Duration timeout) {
+        this.timeout = timeout;
+      }
+
+      public int getDisplay() {
+        return display;
+      }
+
+      public void setDisplay(int display) {
+        this.display = display;
+      }
+
+      public int getMaxQueries() {
+        return maxQueries;
+      }
+
+      public void setMaxQueries(int maxQueries) {
+        this.maxQueries = maxQueries;
+      }
+
+      public boolean isShoppingEnabled() {
+        return shoppingEnabled;
+      }
+
+      public void setShoppingEnabled(boolean shoppingEnabled) {
+        this.shoppingEnabled = shoppingEnabled;
+      }
+
+      public boolean hasCredentials() {
+        return clientId != null && !clientId.isBlank() && clientSecret != null && !clientSecret.isBlank();
+      }
     }
   }
 

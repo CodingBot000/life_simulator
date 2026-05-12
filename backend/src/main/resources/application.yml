@@ -40,8 +40,15 @@ simulator:
     llm-intent-enabled: ${SIMULATOR_RECOMMENDATIONS_LLM_INTENT_ENABLED:false}
     default-max-items: ${SIMULATOR_RECOMMENDATIONS_DEFAULT_MAX_ITEMS:6}
     max-items: ${SIMULATOR_RECOMMENDATIONS_MAX_ITEMS:12}
-    default-providers:
-      - catalog
+    default-providers: ${SIMULATOR_RECOMMENDATIONS_DEFAULT_PROVIDERS:catalog}
+    naver:
+      enabled: ${SIMULATOR_RECOMMENDATIONS_NAVER_ENABLED:false}
+      client-id: ${NAVER_CLIENT_ID:}
+      client-secret: ${NAVER_CLIENT_SECRET:}
+      timeout: ${SIMULATOR_RECOMMENDATIONS_NAVER_TIMEOUT:3s}
+      display: ${SIMULATOR_RECOMMENDATIONS_NAVER_DISPLAY:3}
+      max-queries: ${SIMULATOR_RECOMMENDATIONS_NAVER_MAX_QUERIES:2}
+      shopping-enabled: ${SIMULATOR_RECOMMENDATIONS_NAVER_SHOPPING_ENABLED:true}
   codex:
     enabled: ${SIMULATOR_CODEX_ENABLED:true}
     fallback-on-error: ${SIMULATOR_CODEX_FALLBACK_ON_ERROR:false}

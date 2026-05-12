@@ -14,6 +14,9 @@ import com.lifesimulator.backend.recommendation.intent.DeterministicRecommendati
 import com.lifesimulator.backend.recommendation.intent.FallbackRecommendationIntentExtractor;
 import com.lifesimulator.backend.recommendation.intent.LlmRecommendationIntentExtractor;
 import com.lifesimulator.backend.recommendation.intent.RecommendationIntentSchemaFactory;
+import com.lifesimulator.backend.recommendation.naver.NaverSearchApiClient;
+import com.lifesimulator.backend.recommendation.naver.NaverSearchClient;
+import com.lifesimulator.backend.recommendation.naver.NaverSearchProvider;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,6 +66,19 @@ public class RecommendationConfig {
     RecommendationCatalogRepository catalogRepository
   ) {
     return new CatalogRecommendationProvider(catalogRepository);
+  }
+
+  @Bean
+  NaverSearchClient naverSearchClient(ObjectMapper objectMapper, SimulatorProperties properties) {
+    return new NaverSearchApiClient(objectMapper, properties.getRecommendations().getNaver());
+  }
+
+  @Bean
+  NaverSearchProvider naverSearchProvider(
+    NaverSearchClient naverSearchClient,
+    SimulatorProperties properties
+  ) {
+    return new NaverSearchProvider(naverSearchClient, properties.getRecommendations().getNaver());
   }
 
   @Bean

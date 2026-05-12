@@ -13,6 +13,13 @@ export function recommendationsEnabled() {
   return import.meta.env.VITE_RECOMMENDATIONS_ENABLED !== "false";
 }
 
+function recommendationProviders() {
+  return String(import.meta.env.VITE_RECOMMENDATION_PROVIDERS ?? "catalog")
+    .split(",")
+    .map((provider) => provider.trim())
+    .filter(Boolean);
+}
+
 export function useRecommendations(params: {
   request: SimulationRequest;
   response: SimulationResponse;
@@ -38,7 +45,7 @@ export function useRecommendations(params: {
           case_input: params.request,
           simulation_response: params.response,
           max_items: 6,
-          enabled_providers: ["catalog"],
+          enabled_providers: recommendationProviders(),
         },
         { signal: controller.signal },
       );
