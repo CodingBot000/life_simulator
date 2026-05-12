@@ -1,6 +1,7 @@
 import { getPriorityLabel } from "@/lib/priorities";
 import type { PriorityCatalog, PriorityLocale } from "@/lib/priorities";
 import type {
+  MemoryDecisionRecord,
   PlannerResult,
   ScenarioResult,
   SimulationResponse,
@@ -55,6 +56,24 @@ function ScenarioBlock({ label, value }: { label: string; value: string }) {
   );
 }
 
+function hasCompleteRecentDecision(item: unknown): item is MemoryDecisionRecord {
+  if (!item || typeof item !== "object") {
+    return false;
+  }
+
+  const record = item as Record<string, unknown>;
+
+  return (
+    isNonBlankText(record.topic) &&
+    isNonBlankText(record.selected_option) &&
+    isNonBlankText(record.outcome_note)
+  );
+}
+
+function isNonBlankText(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
 export function PlannerCard({ planner }: { planner: PlannerResult }) {
   return (
     <section className="card-surface rounded-[28px] p-6">
@@ -101,6 +120,9 @@ export function StateContextCard({
   const { profile_state, situational_state, memory_state } =
     stateContext.user_state;
   const summary = stateContext.state_summary;
+  const recentSimilarDecisions = memory_state.recent_similar_decisions.filter(
+    hasCompleteRecentDecision,
+  );
 
   return (
     <section className="card-surface rounded-[28px] p-6">
@@ -199,13 +221,14 @@ export function StateContextCard({
                 Recent Similar Decisions
               </p>
               <ul className="mt-2 grid gap-2">
-                {memory_state.recent_similar_decisions.length > 0 ? (
-                  memory_state.recent_similar_decisions.map((item, index) => (
+                {recentSimilarDecisions.length > 0 ? (
+                  recentSimilarDecisions.map((item, index) => (
                     <li
                       key={`${item.topic}-${item.selected_option}-${index}`}
                       className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm leading-7 text-slate-700"
                     >
-                      {item.topic} / {item.selected_option} / {item.outcome_note}
+                      {item.topic.trim()} / {item.selected_option.trim()} /{" "}
+                      {item.outcome_note.trim()}
                     </li>
                   ))
                 ) : (
