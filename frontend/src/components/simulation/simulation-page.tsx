@@ -18,9 +18,11 @@ import {
   TimelineCard,
 } from "@/components/simulation/result-cards";
 import { ResultVersionSummary } from "@/components/simulation/result-version-summary";
+import { SessionMemoryPanel } from "@/components/simulation/session-memory-panel";
 import { InputField } from "@/components/simulation/shared";
 import { getLocalizedText, useCasePresets } from "@/hooks/use-case-presets";
 import { usePriorityCatalog } from "@/hooks/use-priority-catalog";
+import { useSessionMemory } from "@/hooks/use-session-memory";
 import { useSimulationSubmit } from "@/hooks/use-simulation-submit";
 import type {
   CasePresetCategory,
@@ -66,6 +68,7 @@ export default function SimulationPage() {
   const { locale: uiLocale, setLocale: setUiLocale } = useUiLocale();
   const [form, setForm] = useState<FormState>(initialForm);
   const simulation = useSimulationSubmit();
+  const sessionMemory = useSessionMemory();
   const {
     catalog: priorityCatalog,
     priorityError,
@@ -134,7 +137,9 @@ export default function SimulationPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await submit(form, uiLocale, priorityCatalog);
+    await submit(form, uiLocale, priorityCatalog, {
+      priorMemory: sessionMemory.priorMemory,
+    });
   }
 
   async function handleFollowupSubmit(followup: OptionFollowupState) {
@@ -565,6 +570,16 @@ export default function SimulationPage() {
                   request={latestVersion.request}
                   response={latestVersion.response}
                   locale={uiLocale}
+                />
+              ) : null}
+              {latestVersion ? (
+                <SessionMemoryPanel
+                  request={latestVersion.request}
+                  response={latestVersion.response}
+                  decisions={sessionMemory.decisions}
+                  onSave={sessionMemory.saveDecision}
+                  onDelete={sessionMemory.deleteDecision}
+                  onClear={sessionMemory.clearDecisions}
                 />
               ) : null}
               <ResultVersionSummary locale={uiLocale} versions={versions} />

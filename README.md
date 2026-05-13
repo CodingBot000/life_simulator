@@ -10,6 +10,9 @@ This repository is split into a React + Vite frontend and a Spring Boot backend.
 
 ## Local Development
 
+For normal local execution, set `OPENAI_API_KEY` in `backend/.env` and keep `SIMULATOR_LLM_PROVIDER=openai`.
+The API key belongs only in the backend environment.
+
 For a quick smoke test without model credentials, start the backend in mock mode:
 
 ```sh
@@ -17,8 +20,7 @@ cd backend
 SIMULATOR_LLM_PROVIDER=mock ./mvnw spring-boot:run
 ```
 
-For local model execution with Codex CLI subscription auth, use `SIMULATOR_LLM_PROVIDER=codex`.
-For OpenAI API execution, including AWS deployments, use `SIMULATOR_LLM_PROVIDER=openai` and provide `OPENAI_API_KEY` to the backend environment.
+For Codex CLI subscription auth instead of OpenAI API billing, explicitly use `SIMULATOR_LLM_PROVIDER=codex`.
 
 Start the frontend:
 

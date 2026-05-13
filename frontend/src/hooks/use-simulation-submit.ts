@@ -2,7 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { runSimulation } from "@/lib/api/simulation";
 import type { PriorityCatalog, PriorityLocale } from "@/lib/priorities";
-import type { FormState, OptionFollowupState } from "@/lib/simulation/form";
+import type {
+  BuildPayloadOptions,
+  FormState,
+  OptionFollowupState,
+} from "@/lib/simulation/form";
 import { buildPayload, buildReevaluationPayload } from "@/lib/simulation/form";
 import {
   applyProgressEvent,
@@ -15,6 +19,8 @@ import {
   type SimulationResultVersion,
 } from "@/lib/simulation/result-version";
 import type { SimulationResponse } from "@/lib/types";
+
+export type SimulationSubmitOptions = BuildPayloadOptions;
 
 export function useSimulationSubmit() {
   const [result, setResult] = useState<SimulationResponse | null>(null);
@@ -40,6 +46,7 @@ export function useSimulationSubmit() {
     form: FormState,
     locale: PriorityLocale,
     priorityCatalog?: PriorityCatalog | null,
+    options?: SimulationSubmitOptions,
   ) => {
     abortControllerRef.current?.abort();
 
@@ -53,7 +60,7 @@ export function useSimulationSubmit() {
     setProgress(createInitialProgressState());
 
     try {
-      const request = buildPayload(form, priorityCatalog);
+      const request = buildPayload(form, priorityCatalog, options);
       const nextResult = await runSimulation(request, {
         locale,
         signal: controller.signal,

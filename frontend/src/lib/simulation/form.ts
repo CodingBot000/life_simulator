@@ -7,6 +7,8 @@ import {
 import type {
   DecisionOptionDetails,
   DecisionOptionFollowup,
+  MemoryDecisionRecord,
+  MemoryState,
   RiskTolerance,
   SimulationRequest,
 } from "@/lib/types";
@@ -26,6 +28,10 @@ export type FormState = {
 export type OptionFollowupState = {
   A: Required<DecisionOptionFollowup>;
   B: Required<DecisionOptionFollowup>;
+};
+
+export type BuildPayloadOptions = {
+  priorMemory?: Partial<MemoryState>;
 };
 
 export const initialForm: FormState = {
@@ -52,7 +58,10 @@ export const initialOptionFollowup: OptionFollowupState = {
 export function buildPayload(
   form: FormState,
   priorityCatalog?: PriorityCatalog | null,
+  options?: BuildPayloadOptions,
 ): SimulationRequest {
+  const priorMemory = compactPriorMemory(options?.priorMemory);
+
   return {
     userProfile: {
       age: Number(form.age),
@@ -65,6 +74,7 @@ export function buildPayload(
       optionB: form.optionB.trim(),
       context: form.context.trim(),
     },
+    ...(priorMemory ? { prior_memory: priorMemory } : {}),
   };
 }
 
@@ -139,4 +149,51 @@ function compactFollowup(
 function trimmedOrUndefined(value: string): string | undefined {
   const trimmed = value.trim();
   return trimmed ? trimmed : undefined;
+}
+
+function compactPriorMemory(
+  priorMemory: Partial<MemoryState> | undefined,
+): Partial<MemoryState> | undefined {
+  if (!priorMemory) {
+    return undefined;
+  }
+
+  const recentSimilarDecisions = compactMemoryDecisionRecords(
+    priorMemory.recent_similar_decisions,
+  );
+  const repeatedPatterns = compactTextArray(priorMemory.repeated_patterns);
+  const consistencyNotes = compactTextArray(priorMemory.consistency_notes);
+
+  const compacted: Partial<MemoryState> = {
+    ...(recentSimilarDecisions.length > 0
+      ? { recent_similar_decisions: recentSimilarDecisions }
+      : {}),
+    ...(repeatedPatterns.length > 0 ? { repeated_patterns: repeatedPatterns } : {}),
+    ...(consistencyNotes.length > 0 ? { consistency_notes: consistencyNotes } : {}),
+  };
+
+  return Object.keys(compacted).length > 0 ? compacted : undefined;
+}
+
+function compactMemoryDecisionRecords(
+  values: readonly MemoryDecisionRecord[] | undefined,
+): MemoryDecisionRecord[] {
+  return (values ?? [])
+    .map((record) => ({
+      topic: record.topic.trim(),
+      selected_option: record.selected_option.trim(),
+      outcome_note: record.outcome_note.trim(),
+    }))
+    .filter(
+      (record) =>
+        record.topic.length > 0 &&
+        record.selected_option.length > 0 &&
+        record.outcome_note.length > 0,
+    );
+}
+
+function compactTextArray(values: readonly string[] | undefined): string[] {
+  return (values ?? [])
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
 }
