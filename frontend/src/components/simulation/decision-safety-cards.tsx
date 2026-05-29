@@ -26,46 +26,48 @@ export function AdvisorCard({
       : `Option ${advisor.decision}`;
 
   return (
-    <section className="card-surface-strong rounded-[32px] p-6">
-      <p className="section-label">Advisor</p>
+    <section className="rounded-[32px] border border-slate-900 bg-slate-950 p-6 text-white shadow-[0_24px_70px_rgba(15,23,42,0.22)]">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/60">
+        Advisor
+      </p>
       <div className="mt-3 flex items-center justify-between gap-3">
-        <h3 className="display-font text-2xl font-semibold text-slate-950">
+        <h3 className="display-font text-2xl font-semibold text-white">
           최종 판단
         </h3>
-        <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
+        <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-950">
           {decisionLabel}
         </span>
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+        <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
             Decision
           </p>
-          <p className="mt-2 text-xl font-semibold text-slate-950">
+          <p className="mt-2 text-xl font-semibold text-white">
             {advisor.decision}
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+        <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
             Decision Confidence
           </p>
-          <p className="mt-2 text-xl font-semibold text-slate-950">
+          <p className="mt-2 text-xl font-semibold text-white">
             {formatConfidence(advisor.confidence)}
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+        <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
             Guardrail Applied
           </p>
-          <p className="mt-2 text-xl font-semibold text-slate-950">
+          <p className="mt-2 text-xl font-semibold text-white">
             {advisor.guardrail_applied ? "yes" : "no"}
           </p>
         </div>
       </div>
-      <p className="mt-4 text-sm leading-7 text-slate-700">
+      <p className="mt-4 text-sm leading-7 text-white/80">
         {formatUserFacingNarrative(advisor.reason)}
       </p>
-      <p className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4 text-sm leading-7 text-slate-700">
+      <p className="mt-3 rounded-2xl border border-white/10 bg-white/8 p-4 text-sm leading-7 text-white/80">
         {formatUserFacingNarrative(advisor.reasoning_basis.core_why)}
       </p>
       {requestId ? (
@@ -145,12 +147,12 @@ export function GuardrailCard({
           </p>
         </div>
       </div>
-      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+      <div className="mt-3 grid gap-3 md:grid-cols-3">
         <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
             Triggers
           </p>
-          <p className="mt-2 text-sm leading-7 text-slate-700">
+          <p className="mt-2 break-words text-sm leading-7 text-slate-700">
             {guardrail.triggers.length > 0
               ? guardrail.triggers.join(", ")
               : "none"}
@@ -160,22 +162,22 @@ export function GuardrailCard({
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
             Strategy
           </p>
-          <p className="mt-2 text-sm leading-7 text-slate-700">
+          <p className="mt-2 break-words text-sm leading-7 text-slate-700">
             {guardrail.strategy.length > 0
               ? guardrail.strategy.join(", ")
               : "none"}
           </p>
         </div>
-      </div>
-      <div className="mt-3 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-          Reasoning Signals
-        </p>
-        <p className="mt-2 text-sm leading-7 text-slate-700">
-          {activeReasoningSignals.length > 0
-            ? activeReasoningSignals.join(", ")
-            : "none"}
-        </p>
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Reasoning Signals
+          </p>
+          <p className="mt-2 break-words text-sm leading-7 text-slate-700">
+            {activeReasoningSignals.length > 0
+              ? activeReasoningSignals.join(", ")
+              : "none"}
+          </p>
+        </div>
       </div>
       {requestId ? (
         <>

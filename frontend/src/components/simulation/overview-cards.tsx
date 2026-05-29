@@ -143,7 +143,7 @@ export function StateContextCard({
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
             Profile State
           </p>
-          <div className="mt-3 grid gap-3">
+          <div className="mt-3 grid gap-3 md:grid-cols-[1fr_1fr_1.5fr]">
             <div className="rounded-2xl border border-slate-900/8 bg-slate-50/80 p-4">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
                 Risk Preference
@@ -187,7 +187,7 @@ export function StateContextCard({
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
             Situational State
           </p>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {[
               ["career_stage", situational_state.career_stage],
               ["financial_pressure", situational_state.financial_pressure],

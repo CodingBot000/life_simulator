@@ -235,29 +235,21 @@ export function ReasoningCard({
           ) : null}
         </div>
 
-        <div className="rounded-[24px] border border-slate-900/8 bg-slate-950 p-5 text-white">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
-            Final Selection
+        <div className="rounded-[24px] border border-amber-900/10 bg-amber-50/70 p-5 text-slate-950">
+          <p className="text-sm font-bold text-amber-900">
+            A/B Reasoning에 의한 중간 결론
           </p>
-          <div className="mt-4 grid gap-3">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
-                Selected Reasoning
-              </p>
-              <p className="mt-2 text-2xl font-semibold">
-                {reasoning.reasoning.final_selection.selected_reasoning}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
                 Selected Option
               </p>
               <p className="mt-2 text-2xl font-semibold">
                 {reasoning.reasoning.final_selection.selected_option}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+            <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
                 Confidence
               </p>
               <p className="mt-2 text-2xl font-semibold">
@@ -267,7 +259,7 @@ export function ReasoningCard({
               </p>
             </div>
           </div>
-          <p className="mt-4 text-sm leading-7 text-white/80">
+          <p className="mt-4 text-sm leading-7 text-slate-700">
             {formatUserFacingNarrative(
               reasoning.reasoning.final_selection.why_selected,
             )}
