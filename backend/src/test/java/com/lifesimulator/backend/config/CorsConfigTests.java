@@ -33,4 +33,30 @@ class CorsConfigTests {
       .andExpect(status().isOk())
       .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "https://ai-miracle.cloud"));
   }
+
+  @Test
+  void allowsHighLocalFrontendPortPreflight() throws Exception {
+    mockMvc
+      .perform(
+        options("/api/session-memory/decisions")
+          .header(HttpHeaders.ORIGIN, "http://127.0.0.1:47174")
+          .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+          .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, "content-type")
+      )
+      .andExpect(status().isOk())
+      .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://127.0.0.1:47174"));
+  }
+
+  @Test
+  void allowsSessionMemoryDeletePreflight() throws Exception {
+    mockMvc
+      .perform(
+        options("/api/session-memory/decisions")
+          .header(HttpHeaders.ORIGIN, "https://ai-miracle.cloud")
+          .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "DELETE")
+          .header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, "x-session-id")
+      )
+      .andExpect(status().isOk())
+      .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "https://ai-miracle.cloud"));
+  }
 }

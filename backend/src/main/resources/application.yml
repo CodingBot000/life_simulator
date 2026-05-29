@@ -24,8 +24,13 @@ simulator:
     username: ${BACKEND_DATABASE_USERNAME:life_sim_user}
     password: ${BACKEND_DATABASE_PASSWORD:life_sim_password}
     migrate: ${BACKEND_DATABASE_MIGRATE:true}
+  session-memory:
+    enabled: ${SIMULATOR_SESSION_MEMORY_ENABLED:true}
+    max-stored-decisions: ${SIMULATOR_SESSION_MEMORY_MAX_STORED_DECISIONS:10}
+    prior-memory-limit: ${SIMULATOR_SESSION_MEMORY_PRIOR_MEMORY_LIMIT:5}
+    ttl: ${SIMULATOR_SESSION_MEMORY_TTL:30d}
   cors:
-    allowed-origins: ${SIMULATOR_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,https://ai-miracle.cloud,https://www.ai-miracle.cloud,http://ai-miracle.cloud,http://www.ai-miracle.cloud,http://35.164.88.121}
+    allowed-origins: ${SIMULATOR_CORS_ALLOWED_ORIGINS:http://localhost:47174,http://127.0.0.1:47174,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,https://ai-miracle.cloud,https://www.ai-miracle.cloud,http://ai-miracle.cloud,http://www.ai-miracle.cloud,http://35.164.88.121}
   security:
     rate-limit:
       enabled: ${SIMULATOR_RATE_LIMIT_ENABLED:true}

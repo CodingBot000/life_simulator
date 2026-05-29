@@ -29,5 +29,6 @@ cd frontend
 npm run dev
 ```
 
-The frontend runs on `http://localhost:5173` by default and reads the backend URL from `VITE_API_BASE_URL`, falling back to `http://localhost:8080`.
+For local development, the backend runs on `http://localhost:48080` and the frontend runs on `http://localhost:47174`.
+The frontend reads the backend URL from `VITE_API_BASE_URL`, falling back to `http://localhost:48080` for localhost.
 Never put `OPENAI_API_KEY` in frontend `VITE_*` variables; the browser app only calls the backend.

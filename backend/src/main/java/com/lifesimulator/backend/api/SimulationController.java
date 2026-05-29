@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lifesimulator.backend.config.SimulatorProperties;
 import com.lifesimulator.backend.logging.SimulationLogService;
+import com.lifesimulator.backend.memory.SessionIdResolver;
+import com.lifesimulator.backend.memory.SessionMemoryService;
 import com.lifesimulator.backend.security.SimulationRateLimitService;
 import com.lifesimulator.backend.security.SimulationRateLimitService.RateLimitDecision;
 import com.lifesimulator.backend.simulation.SimulationProgressWriter;
@@ -35,19 +37,25 @@ public class SimulationController {
   private final SimulationRateLimitService rateLimitService;
   private final SimulationLogService simulationLogService;
   private final SimulationService simulationService;
+  private final SessionIdResolver sessionIdResolver;
+  private final SessionMemoryService sessionMemoryService;
 
   public SimulationController(
     ObjectMapper objectMapper,
     SimulatorProperties properties,
     SimulationRateLimitService rateLimitService,
     SimulationLogService simulationLogService,
-    SimulationService simulationService
+    SimulationService simulationService,
+    SessionIdResolver sessionIdResolver,
+    SessionMemoryService sessionMemoryService
   ) {
     this.objectMapper = objectMapper;
     this.properties = properties;
     this.rateLimitService = rateLimitService;
     this.simulationLogService = simulationLogService;
     this.simulationService = simulationService;
+    this.sessionIdResolver = sessionIdResolver;
+    this.sessionMemoryService = sessionMemoryService;
   }
 
   @PostMapping("/api/simulate")
@@ -58,12 +66,14 @@ public class SimulationController {
   ) throws IOException {
     String traceId = firstHeader(headers, "x-trace-id", UUID.randomUUID().toString());
     String locale = firstHeader(headers, "x-ui-locale", "ko");
-    RateLimitDecision rateLimit = rateLimit(headers, request);
+    String sessionId = sessionIdResolver.resolve(headers);
+    RateLimitDecision rateLimit = rateLimit(sessionId, request);
     if (!rateLimit.allowed()) {
       return rateLimitJsonResponse(rateLimit, traceId);
     }
 
-    SimulationRunResult result = simulationService.run(body, traceId, locale, null);
+    JsonNode enrichedBody = sessionMemoryService.enrichPriorMemory(body, sessionId);
+    SimulationRunResult result = simulationService.run(enrichedBody, traceId, locale, sessionId, null);
     JsonNode response = result.response();
     simulationLogService.persistBestEffort(result.envelope());
     return ResponseEntity
@@ -85,15 +95,17 @@ public class SimulationController {
   ) {
     String traceId = firstHeader(headers, "x-trace-id", UUID.randomUUID().toString());
     String locale = firstHeader(headers, "x-ui-locale", "ko");
-    RateLimitDecision rateLimit = rateLimit(headers, request);
+    String sessionId = sessionIdResolver.resolve(headers);
+    RateLimitDecision rateLimit = rateLimit(sessionId, request);
     if (!rateLimit.allowed()) {
       return rateLimitStreamResponse(rateLimit, traceId);
     }
+    JsonNode enrichedBody = sessionMemoryService.enrichPriorMemory(body, sessionId);
 
     StreamingResponseBody stream = output -> {
       SimulationProgressWriter progress = new SimulationProgressWriter(objectMapper, output);
       try {
-        SimulationRunResult result = simulationService.run(body, traceId, locale, progress);
+        SimulationRunResult result = simulationService.run(enrichedBody, traceId, locale, sessionId, progress);
         JsonNode response = result.response();
         simulationLogService.persistBestEffort(result.envelope());
         progress.write(Map.of("type", "result", "request_id", response.get("request_id").asText(), "response", response));
@@ -130,8 +142,8 @@ public class SimulationController {
     return message == null || message.isBlank() ? error.getClass().getSimpleName() : message;
   }
 
-  private RateLimitDecision rateLimit(HttpHeaders headers, HttpServletRequest request) {
-    return rateLimitService.check(clientIp(request), firstHeader(headers, "x-session-id", ""));
+  private RateLimitDecision rateLimit(String sessionId, HttpServletRequest request) {
+    return rateLimitService.check(clientIp(request), sessionId);
   }
 
   private ResponseEntity<JsonNode> rateLimitJsonResponse(

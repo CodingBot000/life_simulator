@@ -19,6 +19,8 @@
 
   <properties>
     <java.version>21</java.version>
+    <local.backend.port>48080</local.backend.port>
+    <local.cors.allowed-origins>http://localhost:47174,http://127.0.0.1:47174,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,https://ai-miracle.cloud,https://www.ai-miracle.cloud,http://ai-miracle.cloud,http://www.ai-miracle.cloud,http://35.164.88.121</local.cors.allowed-origins>
   </properties>
 
   <dependencies>
@@ -63,6 +65,12 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <environmentVariables>
+            <SERVER_PORT>${local.backend.port}</SERVER_PORT>
+            <SIMULATOR_CORS_ALLOWED_ORIGINS>${local.cors.allowed-origins}</SIMULATOR_CORS_ALLOWED_ORIGINS>
+          </environmentVariables>
+        </configuration>
       </plugin>
     </plugins>
   </build>

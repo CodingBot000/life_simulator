@@ -25,13 +25,17 @@ export function SessionMemoryPanel({
   onSave,
   onDelete,
   onClear,
+  syncStatus,
+  syncError,
 }: {
   request: SimulationRequest;
   response: SimulationResponse;
   decisions: SavedSessionDecision[];
-  onSave: (input: SessionDecisionInput) => void;
-  onDelete: (id: string) => void;
-  onClear: () => void;
+  onSave: (input: SessionDecisionInput) => void | Promise<unknown>;
+  onDelete: (id: string) => void | Promise<unknown>;
+  onClear: () => void | Promise<unknown>;
+  syncStatus: "idle" | "syncing" | "synced" | "local_only";
+  syncError: string | null;
 }) {
   const defaultTopic = useMemo(
     () => defaultMemoryTopic(request, response),
@@ -62,19 +66,21 @@ export function SessionMemoryPanel({
       return;
     }
 
-    onSave({
-      topic,
-      selected_option: selectedOption,
-      outcome_note: outcomeNote,
-      sourceRequestId: response.request_id,
-      sourceCaseId: response.stateContext.case_id,
-    });
+    void Promise.resolve(
+      onSave({
+        topic,
+        selected_option: selectedOption,
+        outcome_note: outcomeNote,
+        sourceRequestId: response.request_id,
+        sourceCaseId: response.stateContext.case_id,
+      }),
+    );
     setOutcomeNote("");
     setStatus("저장되었습니다. 다음 시뮬레이션부터 반영됩니다.");
   }
 
   function handleDelete(id: string) {
-    onDelete(id);
+    void Promise.resolve(onDelete(id));
     setStatus("삭제되었습니다.");
   }
 
@@ -87,7 +93,7 @@ export function SessionMemoryPanel({
       return;
     }
 
-    onClear();
+    void Promise.resolve(onClear());
     setStatus("전체 세션 메모리를 삭제했습니다.");
   }
 
@@ -100,7 +106,10 @@ export function SessionMemoryPanel({
             이번 선택 기억
           </h3>
           <p className="mt-2 text-sm leading-7 text-slate-600">
-            이 브라우저에만 저장됩니다.
+            이 브라우저와 서버 세션에 저장됩니다.
+          </p>
+          <p className="mt-1 text-sm leading-7 text-slate-500">
+            {syncLabel(syncStatus, syncError)}
           </p>
         </div>
         <button
@@ -217,6 +226,22 @@ export function SessionMemoryPanel({
       </div>
     </section>
   );
+}
+
+function syncLabel(
+  syncStatus: "idle" | "syncing" | "synced" | "local_only",
+  syncError: string | null,
+) {
+  if (syncStatus === "syncing") {
+    return "동기화 중";
+  }
+  if (syncStatus === "synced") {
+    return "서버 세션 동기화됨";
+  }
+  if (syncStatus === "local_only") {
+    return syncError ? `로컬 저장만 사용 중: ${syncError}` : "로컬 저장만 사용 중";
+  }
+  return "세션 준비 중";
 }
 
 function defaultMemoryTopic(

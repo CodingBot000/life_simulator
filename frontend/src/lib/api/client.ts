@@ -31,12 +31,12 @@ export class ApiError extends Error {
 
 function defaultApiBaseUrl() {
   if (typeof window === "undefined") {
-    return "http://localhost:8080";
+    return "http://localhost:48080";
   }
 
   const { hostname, origin } = window.location;
   if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") {
-    return "http://localhost:8080";
+    return "http://localhost:48080";
   }
 
   return origin;

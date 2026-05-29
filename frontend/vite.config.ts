@@ -3,6 +3,9 @@ import path from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
+const LOCAL_DEV_PORT = 47174;
+const LOCAL_PREVIEW_PORT = 45175;
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -11,9 +14,11 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
+    port: LOCAL_DEV_PORT,
+    strictPort: true,
   },
   preview: {
-    port: 4173,
+    port: LOCAL_PREVIEW_PORT,
+    strictPort: true,
   },
 });

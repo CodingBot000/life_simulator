@@ -19,6 +19,7 @@ public class SimulatorProperties {
   private final Cors cors = new Cors();
   private final Security security = new Security();
   private final Recommendations recommendations = new Recommendations();
+  private final SessionMemory sessionMemory = new SessionMemory();
 
   public enum LlmProvider {
     CODEX,
@@ -63,6 +64,10 @@ public class SimulatorProperties {
 
   public Recommendations getRecommendations() {
     return recommendations;
+  }
+
+  public SessionMemory getSessionMemory() {
+    return sessionMemory;
   }
 
   public static class Frontend {
@@ -624,6 +629,45 @@ public class SimulatorProperties {
 
     public void setHourWindow(Duration hourWindow) {
       this.hourWindow = hourWindow;
+    }
+  }
+
+  public static class SessionMemory {
+    private boolean enabled = true;
+    private int maxStoredDecisions = 10;
+    private int priorMemoryLimit = 5;
+    private Duration ttl = Duration.ofDays(30);
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public int getMaxStoredDecisions() {
+      return maxStoredDecisions;
+    }
+
+    public void setMaxStoredDecisions(int maxStoredDecisions) {
+      this.maxStoredDecisions = maxStoredDecisions;
+    }
+
+    public int getPriorMemoryLimit() {
+      return priorMemoryLimit;
+    }
+
+    public void setPriorMemoryLimit(int priorMemoryLimit) {
+      this.priorMemoryLimit = priorMemoryLimit;
+    }
+
+    public Duration getTtl() {
+      return ttl;
+    }
+
+    public void setTtl(Duration ttl) {
+      this.ttl = ttl;
     }
   }
 

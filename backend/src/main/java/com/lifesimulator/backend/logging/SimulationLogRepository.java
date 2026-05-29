@@ -33,17 +33,18 @@ public class SimulationLogRepository {
     jdbcTemplate.update(
       """
         INSERT INTO life_simul_request_logs (
-          request_id, trace_id, route_name, path, model, prompt_version,
+          request_id, trace_id, user_id, session_id, route_name, path, model, prompt_version,
           context_version, decision, confidence, guardrail_flags, latency_ms,
           total_tokens, estimated_cost_usd, fallback_used, retry_count, cache_hit,
           schema_valid, error_code, request_payload, response_payload, created_at
         )
         VALUES (
-          ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?,
+          ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?,
           ?, ?::jsonb, ?::jsonb, ?
         )
         ON CONFLICT (request_id) DO UPDATE SET
           trace_id = EXCLUDED.trace_id,
+          session_id = EXCLUDED.session_id,
           route_name = EXCLUDED.route_name,
           path = EXCLUDED.path,
           model = EXCLUDED.model,
@@ -62,6 +63,8 @@ public class SimulationLogRepository {
         """,
       envelope.requestId(),
       envelope.traceId(),
+      null,
+      envelope.sessionId(),
       envelope.routeName(),
       json(envelope.selectedPath()),
       envelope.selectedModel(),
@@ -89,16 +92,17 @@ public class SimulationLogRepository {
       jdbcTemplate.update(
         """
           INSERT INTO life_simul_stage_logs (
-          request_id, trace_id, route_name, path, stage_name, model, decision,
+          request_id, trace_id, user_id, session_id, route_name, path, stage_name, model, decision,
             confidence, guardrail_flags, latency_ms, input_tokens, cached_input_tokens,
             output_tokens, total_tokens, estimated_cost_usd, fallback_used, retry_count,
             cache_hit, schema_valid, error_code, request_payload, response_payload, created_at
           )
           VALUES (
-            ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?, ?,
             ?, ?, ?, ?::jsonb, ?::jsonb, ?
           )
           ON CONFLICT (request_id, stage_name) DO UPDATE SET
+            session_id = EXCLUDED.session_id,
             model = EXCLUDED.model,
             decision = EXCLUDED.decision,
             confidence = EXCLUDED.confidence,
@@ -119,6 +123,8 @@ public class SimulationLogRepository {
           """,
         stage.requestId(),
         stage.traceId(),
+        null,
+        stage.sessionId(),
         stage.routeName(),
         json(stage.selectedPath()),
         stage.stageName(),
@@ -148,14 +154,15 @@ public class SimulationLogRepository {
     jdbcTemplate.update(
       """
         INSERT INTO life_simul_guardrail_events (
-          request_id, trace_id, route_name, path, model, decision, confidence,
+          request_id, trace_id, user_id, session_id, route_name, path, model, decision, confidence,
           guardrail_flags, latency_ms, total_tokens, estimated_cost_usd,
           fallback_used, retry_count, cache_hit, schema_valid, error_code, created_at
         )
         VALUES (
-          ?, ?, ?, ?::jsonb, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?, ?, ?
+          ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )
         ON CONFLICT (request_id) DO UPDATE SET
+          session_id = EXCLUDED.session_id,
           guardrail_flags = EXCLUDED.guardrail_flags,
           decision = EXCLUDED.decision,
           confidence = EXCLUDED.confidence,
@@ -165,6 +172,8 @@ public class SimulationLogRepository {
         """,
       envelope.requestId(),
       envelope.traceId(),
+      null,
+      envelope.sessionId(),
       envelope.routeName(),
       json(envelope.selectedPath()),
       envelope.selectedModel(),
@@ -191,17 +200,19 @@ public class SimulationLogRepository {
     jdbcTemplate.update(
       """
         INSERT INTO life_simul_anomaly_events (
-          request_id, trace_id, route_name, path, model, decision, confidence,
+          request_id, trace_id, user_id, session_id, route_name, path, model, decision, confidence,
           guardrail_flags, latency_ms, total_tokens, estimated_cost_usd,
           fallback_used, retry_count, cache_hit, schema_valid, error_code, created_at
         )
         VALUES (
-          ?, ?, ?, ?::jsonb, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?, ?, ?
+          ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )
         ON CONFLICT (request_id, created_at) DO NOTHING
         """,
       envelope.requestId(),
       envelope.traceId(),
+      null,
+      envelope.sessionId(),
       envelope.routeName(),
       json(envelope.selectedPath()),
       envelope.selectedModel(),

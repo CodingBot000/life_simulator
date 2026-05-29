@@ -65,8 +65,18 @@ public class SimulationService implements DecisionEngine {
     String locale,
     SimulationProgressWriter progress
   ) throws IOException {
+    return run(request, traceId, locale, "", progress);
+  }
+
+  public SimulationRunResult run(
+    JsonNode request,
+    String traceId,
+    String locale,
+    String sessionId,
+    SimulationProgressWriter progress
+  ) throws IOException {
     DecisionEngineResult result = run(
-      new DecisionEngineRequest(request, UUID.randomUUID().toString(), traceId, locale),
+      new DecisionEngineRequest(request, UUID.randomUUID().toString(), traceId, locale, sessionId),
       new DecisionEngineOptions(progress != null),
       progress
     );
@@ -83,6 +93,7 @@ public class SimulationService implements DecisionEngine {
     String requestId = engineRequest.requestId();
     String traceId = engineRequest.traceId();
     String locale = engineRequest.locale();
+    String sessionId = engineRequest.sessionId();
     long startedAtMillis = System.currentTimeMillis();
     responseFactory.validateRequest(request);
     BackendRoutingDecision routingDecision = router.route(request, model());
@@ -127,7 +138,7 @@ public class SimulationService implements DecisionEngine {
     response.put("request_id", requestId);
     return new DecisionEngineResult(
       response,
-      envelopeFactory.create(request, response, traceId, startedAtMillis, stageRecords)
+      envelopeFactory.create(request, response, traceId, sessionId, startedAtMillis, stageRecords)
     );
   }
 

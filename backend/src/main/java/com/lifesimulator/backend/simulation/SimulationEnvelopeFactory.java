@@ -22,6 +22,7 @@ public class SimulationEnvelopeFactory {
     JsonNode request,
     JsonNode response,
     String traceId,
+    String sessionId,
     long startedAtMillis,
     List<StageExecutionRecord> stageRecords
   ) {
@@ -33,6 +34,7 @@ public class SimulationEnvelopeFactory {
     List<SimulationStageLog> stageLogs = stageLogs(
       requestId,
       traceId,
+      sessionId,
       executionMode,
       selectedPath,
       selectedModel,
@@ -57,6 +59,7 @@ public class SimulationEnvelopeFactory {
     return new SimulationExecutionEnvelope(
       requestId,
       traceId,
+      sessionId,
       "simulate",
       executionMode,
       selectedPath,
@@ -82,6 +85,7 @@ public class SimulationEnvelopeFactory {
   private List<SimulationStageLog> stageLogs(
     String requestId,
     String traceId,
+    String sessionId,
     String executionMode,
     List<String> selectedPath,
     String selectedModel,
@@ -96,6 +100,7 @@ public class SimulationEnvelopeFactory {
         new SimulationStageLog(
           requestId,
           traceId,
+          sessionId,
           "simulate",
           executionMode,
           selectedPath,

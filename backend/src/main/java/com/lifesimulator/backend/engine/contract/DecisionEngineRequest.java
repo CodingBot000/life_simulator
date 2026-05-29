@@ -6,5 +6,6 @@ public record DecisionEngineRequest(
   JsonNode payload,
   String requestId,
   String traceId,
-  String locale
+  String locale,
+  String sessionId
 ) {}

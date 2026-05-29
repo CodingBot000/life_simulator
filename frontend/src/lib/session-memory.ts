@@ -40,6 +40,38 @@ export function listSessionMemoryDecisions(): SessionMemoryDecision[] {
   return normalized;
 }
 
+export function replaceSessionMemoryDecisions(
+  decisions: readonly SessionMemoryDecision[],
+): SessionMemoryDecision[] {
+  const nextDecisions = normalizeDecisions(decisions);
+  writeStore({
+    version: SESSION_MEMORY_VERSION,
+    updatedAt: new Date().toISOString(),
+    decisions: nextDecisions,
+  });
+  return nextDecisions;
+}
+
+export function mergeSessionMemoryDecisions(
+  decisions: readonly SessionMemoryDecision[],
+): SessionMemoryDecision[] {
+  const merged = normalizeDecisions([
+    ...decisions,
+    ...listSessionMemoryDecisions(),
+  ]);
+  const seenKeys = new Set<string>();
+  const deduped = merged.filter((decision) => {
+    const key = decisionKey(decision);
+    if (seenKeys.has(key)) {
+      return false;
+    }
+    seenKeys.add(key);
+    return true;
+  });
+
+  return replaceSessionMemoryDecisions(deduped);
+}
+
 export function listRecentDecisionRecords(
   limit = DEFAULT_RECENT_DECISION_LIMIT,
 ): MemoryDecisionRecord[] {

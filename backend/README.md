@@ -9,6 +9,7 @@ Spring Boot backend for the Life Simulator migration.
 ```
 
 This keeps the API usable with in-memory/fallback behavior.
+Local `spring-boot:run` pins the HTTP server to `http://localhost:48080`.
 YouTube search reads `YOUTUBE_API_KEY` from the process environment or from `backend/.env`.
 Naver search reads `NAVER_CLIENT_ID` and `NAVER_CLIENT_SECRET` the same way.
 
@@ -59,7 +60,7 @@ Stage calls use `gpt-5.3-codex-spark`, low reasoning/verbosity, fast service tie
 SIMULATOR_LLM_PROVIDER=openai OPENAI_API_KEY=... ./mvnw spring-boot:run
 ```
 
-Use OpenAI mode for AWS/cloud deployments. Inject `OPENAI_API_KEY` into the backend runtime environment through your deployment secret mechanism. Do not expose it through frontend `VITE_*` variables.
+Use OpenAI mode for AWS/cloud deployments. The `remote` Spring profile forces OpenAI mode even if a local default or environment value selects Codex. Inject `OPENAI_API_KEY` into the backend runtime environment through your deployment secret mechanism. Do not expose it through frontend `VITE_*` variables.
 
 ## Worker Jobs
 

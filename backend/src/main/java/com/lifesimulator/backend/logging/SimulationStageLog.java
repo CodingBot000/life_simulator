@@ -7,6 +7,7 @@ import java.util.List;
 public record SimulationStageLog(
   String requestId,
   String traceId,
+  String sessionId,
   String routeName,
   String executionMode,
   List<String> selectedPath,

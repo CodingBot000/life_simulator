@@ -237,7 +237,7 @@ export default function SimulationPage() {
                     onClick={() => applyPreset(selectedPreset)}
                     className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-900/20 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    다시 채우기
+                    예시로 자동 채우기
                   </button>
                 ) : null}
               </div>
@@ -580,6 +580,8 @@ export default function SimulationPage() {
                   onSave={sessionMemory.saveDecision}
                   onDelete={sessionMemory.deleteDecision}
                   onClear={sessionMemory.clearDecisions}
+                  syncStatus={sessionMemory.syncStatus}
+                  syncError={sessionMemory.syncError}
                 />
               ) : null}
               <ResultVersionSummary locale={uiLocale} versions={versions} />

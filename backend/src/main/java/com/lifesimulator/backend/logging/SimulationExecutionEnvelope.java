@@ -7,6 +7,7 @@ import java.util.List;
 public record SimulationExecutionEnvelope(
   String requestId,
   String traceId,
+  String sessionId,
   String routeName,
   String executionMode,
   List<String> selectedPath,

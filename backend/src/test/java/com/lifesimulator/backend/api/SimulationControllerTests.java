@@ -17,6 +17,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lifesimulator.backend.config.SimulatorProperties;
 import com.lifesimulator.backend.logging.SimulationExecutionEnvelope;
 import com.lifesimulator.backend.logging.SimulationLogService;
+import com.lifesimulator.backend.memory.SessionIdResolver;
+import com.lifesimulator.backend.memory.SessionMemoryService;
 import com.lifesimulator.backend.security.SimulationRateLimitService;
 import com.lifesimulator.backend.simulation.SimulationProgressWriter;
 import com.lifesimulator.backend.simulation.SimulationRunResult;
@@ -46,16 +48,20 @@ class SimulationControllerTests {
         any(JsonNode.class),
         anyString(),
         anyString(),
+        anyString(),
         isNull(SimulationProgressWriter.class)
       )
     ).thenReturn(new SimulationRunResult(response(), envelope));
+    SessionMemoryService sessionMemoryService = sessionMemoryService();
 
     SimulationController controller = new SimulationController(
       objectMapper,
       properties,
       new SimulationRateLimitService(properties),
       logService,
-      simulationService
+      simulationService,
+      new SessionIdResolver(),
+      sessionMemoryService
     );
 
     var response = controller.simulate(validRequest(), new HttpHeaders(), request("203.0.113.11"));
@@ -81,10 +87,11 @@ class SimulationControllerTests {
         any(JsonNode.class),
         anyString(),
         anyString(),
+        anyString(),
         isNotNull(SimulationProgressWriter.class)
       )
     ).thenAnswer(invocation -> {
-      SimulationProgressWriter progress = invocation.getArgument(3);
+      SimulationProgressWriter progress = invocation.getArgument(4);
       progress.write(
         java.util.Map.of(
           "type",
@@ -97,13 +104,16 @@ class SimulationControllerTests {
       );
       return new SimulationRunResult(response(), envelope);
     });
+    SessionMemoryService sessionMemoryService = sessionMemoryService();
 
     SimulationController controller = new SimulationController(
       objectMapper,
       properties,
       new SimulationRateLimitService(properties),
       logService,
-      simulationService
+      simulationService,
+      new SessionIdResolver(),
+      sessionMemoryService
     );
 
     var response = controller.simulateStream(validRequest(), new HttpHeaders(), request("203.0.113.12"));
@@ -146,16 +156,20 @@ class SimulationControllerTests {
         any(JsonNode.class),
         anyString(),
         anyString(),
+        anyString(),
         isNull(SimulationProgressWriter.class)
       )
     ).thenReturn(new SimulationRunResult(response(), mock(SimulationExecutionEnvelope.class)));
+    SessionMemoryService sessionMemoryService = sessionMemoryService();
 
     SimulationController controller = new SimulationController(
       objectMapper,
       properties,
       new SimulationRateLimitService(properties),
       logService,
-      simulationService
+      simulationService,
+      new SessionIdResolver(),
+      sessionMemoryService
     );
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRemoteAddr("203.0.113.10");
@@ -171,8 +185,16 @@ class SimulationControllerTests {
       any(JsonNode.class),
       anyString(),
       anyString(),
+      anyString(),
       isNull(SimulationProgressWriter.class)
     );
+  }
+
+  private SessionMemoryService sessionMemoryService() {
+    SessionMemoryService service = mock(SessionMemoryService.class);
+    when(service.enrichPriorMemory(any(JsonNode.class), anyString()))
+      .thenAnswer(invocation -> invocation.getArgument(0));
+    return service;
   }
 
   private void assertSimulationResponseContract(JsonNode response) {
