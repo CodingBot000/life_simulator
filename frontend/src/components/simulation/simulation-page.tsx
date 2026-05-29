@@ -20,6 +20,7 @@ import {
 import { ResultVersionSummary } from "@/components/simulation/result-version-summary";
 import { SessionMemoryPanel } from "@/components/simulation/session-memory-panel";
 import { InputField } from "@/components/simulation/shared";
+import { SimulatorFlowInfo } from "@/components/simulation/simulator-flow-info";
 import { getLocalizedText, useCasePresets } from "@/hooks/use-case-presets";
 import { usePriorityCatalog } from "@/hooks/use-priority-catalog";
 import { useSessionMemory } from "@/hooks/use-session-memory";
@@ -159,18 +160,12 @@ export default function SimulationPage() {
               <h1 className="display-font mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
                 의사결정 시뮬레이션 Agent
               </h1>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
-                사용자 프로필과 두 가지 선택지를 입력하면 State Loader가 먼저
-                사용자 상태를 구조화하고, 이어서 Planner, Scenario, Risk, A/B
-                Reasoning, Guardrail, Advisor, Reflection 단계가 그 상태를
-                공통으로 사용합니다. 실제 실행 경로는 요청 위험도에 따라
-                `light`, `standard`, `careful`, `full` 중 하나로 선택됩니다.
-              </p>
+              <SimulatorFlowInfo />
             </div>
 
             <div
               aria-label="표시 언어"
-              className="inline-flex w-fit shrink-0 rounded-full border border-slate-900/10 bg-white/80 p-1"
+              className="hidden w-fit shrink-0 rounded-full border border-slate-900/10 bg-white/80 p-1"
             >
               {[
                 { locale: "ko", label: "한국어" },
@@ -196,28 +191,6 @@ export default function SimulationPage() {
                 );
               })}
             </div>
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            {[
-              "1. State Loader",
-              "2. Planner",
-              "3. Scenario A",
-              "4. Scenario B",
-              "5. Risk A",
-              "6. Risk B",
-              "7. A/B Reasoning",
-              "8. Guardrail",
-              "9. Advisor",
-              "10. Reflection",
-            ].map((step) => (
-              <span
-                key={step}
-                className="rounded-full border border-slate-900/8 bg-white/70 px-3 py-1 text-sm text-slate-700"
-              >
-                {step}
-              </span>
-            ))}
           </div>
 
           <form className="mt-8 grid gap-8" onSubmit={handleSubmit}>

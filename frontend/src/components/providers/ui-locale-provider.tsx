@@ -34,11 +34,7 @@ function readStoredLocale(): PriorityLocale | null {
 }
 
 function resolveInitialLocale(): PriorityLocale {
-  if (typeof window === "undefined") {
-    return "ko";
-  }
-
-  return readStoredLocale() ?? "ko";
+  return "ko";
 }
 
 export function UiLocaleProvider({ children }: { children: ReactNode }) {
@@ -63,7 +59,7 @@ export function UiLocaleProvider({ children }: { children: ReactNode }) {
   const value = useMemo<UiLocaleContextValue>(
     () => ({
       locale,
-      setLocale: setLocaleState,
+      setLocale: () => setLocaleState("ko"),
       isReady,
     }),
     [isReady, locale],

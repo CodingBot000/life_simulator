@@ -10,6 +10,21 @@ import type {
 
 import { formatUserFacingNarrative } from "./narrative";
 
+const ROUTING_PATH_STAGES = [
+  "planner",
+  "scenario",
+  "risk",
+  "ab_reasoning",
+  "guardrail",
+  "advisor",
+  "reflection",
+] as const;
+
+const DERIVED_ROUTING_STAGES = new Set<(typeof ROUTING_PATH_STAGES)[number]>([
+  "guardrail",
+  "reflection",
+]);
+
 export function TimelineCard({
   title,
   scenario,
@@ -320,6 +335,9 @@ export function RoutingCard({
 }: {
   routing: SimulationResponse["routing"];
 }) {
+  const selectedStages = new Set(routing.selected_path);
+  const isDerivedStage = (stage: (typeof ROUTING_PATH_STAGES)[number]) =>
+    DERIVED_ROUTING_STAGES.has(stage) && !selectedStages.has(stage);
   const routingSummaryRows: Array<[string, string | number]> = [
     ["risk_band", routing.risk_profile.risk_band],
     ["complexity", routing.risk_profile.complexity],
@@ -340,44 +358,94 @@ export function RoutingCard({
         </div>
       </div>
 
-      <div className="mt-5 rounded-2xl border border-slate-900/8 bg-white/70 p-4 font-mono text-sm leading-7 text-slate-700">
-        {routingSummaryRows.map(([label, value]) => (
-          <p key={label}>
-            <span>{label}=</span>
-            <span className="font-bold text-blue-700">{value}</span>
-          </p>
-        ))}
-      </div>
-
-      <div className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-          Selected Path
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {routing.selected_path.map((stage) => (
-            <span
-              key={stage}
-              className="rounded-full border border-amber-900/10 bg-amber-600/[0.08] px-3 py-1 text-sm font-medium text-amber-900"
-            >
-              {stage}
-            </span>
+      <div className="mt-5 grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4 font-mono text-sm leading-7 text-slate-700">
+          {routingSummaryRows.map(([label, value]) => (
+            <p key={label}>
+              <span>{label}=</span>
+              <span className="font-bold text-blue-700">{value}</span>
+            </p>
           ))}
+        </div>
+
+        <div className="rounded-2xl border border-slate-900/8 bg-white/70 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Stage Model Plan
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {Object.entries(routing.stage_model_plan).map(([stage, model]) => (
+              <div
+                key={stage}
+                className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm text-slate-700"
+              >
+                <span className="font-semibold text-slate-950">{stage}</span>: {model}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="mt-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-          Stage Model Plan
-        </p>
-        <div className="mt-3 grid gap-2 sm:grid-cols-2">
-          {Object.entries(routing.stage_model_plan).map(([stage, model]) => (
-            <div
-              key={stage}
-              className="rounded-2xl border border-slate-900/8 bg-slate-50/80 px-4 py-3 text-sm text-slate-700"
-            >
-              <span className="font-semibold text-slate-950">{stage}</span>: {model}
-            </div>
-          ))}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+            Selected Path
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+              <span
+                aria-hidden="true"
+                className="h-3 w-8 rounded-full border border-amber-900/10 bg-amber-600/[0.18]"
+              />
+              선택된 경로
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+              <span
+                aria-hidden="true"
+                className="inline-flex h-5 items-center rounded-full border border-slate-400/20 bg-slate-200 px-2 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-600"
+              >
+                derived
+              </span>
+              파생 실행됨
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+              <span
+                aria-hidden="true"
+                className="h-3 w-8 rounded-full border border-slate-900/8 bg-slate-100"
+              />
+              실행 안 됨
+            </span>
+          </div>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          {ROUTING_PATH_STAGES.map((stage, index) => {
+            const selected = selectedStages.has(stage);
+            const derived = isDerivedStage(stage);
+            return (
+              <span key={stage} className="inline-flex items-center gap-2">
+                {index > 0 ? (
+                  <span className="text-sm font-semibold text-slate-300">
+                    →
+                  </span>
+                ) : null}
+                <span
+                  className={
+                    selected
+                      ? "rounded-full border border-amber-900/10 bg-amber-600/[0.08] px-3 py-1 text-sm font-medium text-amber-900"
+                      : derived
+                        ? "inline-flex items-center gap-2 rounded-full border border-slate-400/20 bg-slate-200 px-3 py-1 text-sm font-medium text-slate-600"
+                        : "rounded-full border border-slate-900/8 bg-slate-100 px-3 py-1 text-sm font-medium text-slate-400"
+                  }
+                >
+                  {stage}
+                  {derived ? (
+                    <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
+                      derived
+                    </span>
+                  ) : null}
+                </span>
+              </span>
+            );
+          })}
         </div>
       </div>
 
