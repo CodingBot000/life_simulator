@@ -23,9 +23,3 @@ npm-debug.log*
 docs/*
 !docs/deployment/
 !docs/deployment/*.md
-!docs/refact/
-!docs/refact/*.md
-!docs/refact/*/
-!docs/refact/**/*.md
-!docs/template/
-!docs/template/*.md
