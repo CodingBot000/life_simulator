@@ -9,7 +9,7 @@ Spring Boot backend for the Life Simulator migration.
 ```
 
 This keeps the API usable with in-memory/fallback behavior.
-Local `spring-boot:run` pins the HTTP server to `http://localhost:48080`.
+Local `spring-boot:run` pins the HTTP server to `http://localhost:48087`.
 YouTube search reads `YOUTUBE_API_KEY` from the process environment or from `backend/.env`.
 Naver search reads `NAVER_CLIENT_ID` and `NAVER_CLIENT_SECRET` the same way.
 
@@ -35,7 +35,7 @@ When `BACKEND_DATABASE_ENABLED=true`, Flyway applies migrations from `src/main/r
 
 ## LLM Provider Mode
 
-The backend uses OpenAI API mode by default. Choose a different model runner with `SIMULATOR_LLM_PROVIDER`.
+The backend uses Codex CLI mode by default for local development. Choose a different model runner with `SIMULATOR_LLM_PROVIDER`.
 
 ### Mock smoke test
 
@@ -48,7 +48,7 @@ This requires no model credentials and is the fastest public-repo smoke path.
 ### Codex CLI
 
 ```sh
-SIMULATOR_LLM_PROVIDER=codex ./mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
 Codex mode uses local Codex CLI subscription authentication and does not require `OPENAI_API_KEY`.

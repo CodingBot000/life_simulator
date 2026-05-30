@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SimulatorProperties {
 
   private final Frontend frontend = new Frontend();
-  private LlmProvider llmProvider = LlmProvider.OPENAI;
+  private LlmProvider llmProvider = LlmProvider.CODEX;
   private final Codex codex = new Codex();
   private final OpenAi openai = new OpenAi();
   private final Mock mock = new Mock();

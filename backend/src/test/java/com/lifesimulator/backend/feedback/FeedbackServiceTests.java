@@ -82,6 +82,48 @@ class FeedbackServiceTests {
   }
 
   @Test
+  void createReturnsFallbackResponseWhenDatabaseUnavailable() {
+    FeedbackService fallbackService = service(null, null);
+
+    FeedbackResponse response = fallbackService.create(
+      new FeedbackRequest(" request-1 ", "advisor", "A", "agree", 4, List.of(), null, null),
+      "session-1"
+    );
+
+    assertThat(response.feedbackId()).startsWith("fb_");
+    assertThat(response.requestId()).isEqualTo("request-1");
+    assertThat(response.targetType()).isEqualTo("advisor");
+    assertThat(response.feedbackSignal()).isEqualTo("agree");
+    assertThat(response.rating()).isEqualTo(4);
+    assertThat(response.createdAt()).isNotBlank();
+    assertThat(response.updatedAt()).isEqualTo(response.createdAt());
+  }
+
+  @Test
+  void updateReturnsFallbackResponseWhenDatabaseUnavailable() {
+    FeedbackService fallbackService = service(null, null);
+
+    FeedbackResponse response = fallbackService.update(
+      "fb-local",
+      new FeedbackRequest("request-1", "advisor", "A", "helpful", 5, List.of(), null, null),
+      "session-1"
+    );
+
+    assertThat(response.feedbackId()).isEqualTo("fb-local");
+    assertThat(response.requestId()).isEqualTo("request-1");
+    assertThat(response.feedbackSignal()).isEqualTo("helpful");
+  }
+
+  @Test
+  void summaryReturnsEmptyItemsWhenDatabaseUnavailable() {
+    FeedbackService fallbackService = service(null, null);
+
+    assertThat(fallbackService.summary("request-1"))
+      .containsEntry("requestId", "request-1")
+      .containsEntry("items", List.of());
+  }
+
+  @Test
   void rejectsOutOfRangeRating() {
     assertThatThrownBy(() -> service.create(
       new FeedbackRequest("request-1", "advisor", "A", "agree", 6, List.of(), null, null),
@@ -89,5 +131,18 @@ class FeedbackServiceTests {
     ))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("rating");
+  }
+
+  private FeedbackService service(
+    FeedbackRepository repository,
+    SimulationLogLookupRepository logLookup
+  ) {
+    return new FeedbackService(
+      objectMapper,
+      providerOf(repository),
+      providerOf(logLookup),
+      new LifeEvaluationTargetMapper(),
+      new LifeFeedbackLabelMapper()
+    );
   }
 }

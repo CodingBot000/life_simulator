@@ -48,7 +48,7 @@
 - Treat `frontend/outputs/` as generated/runtime data, not source of truth for code changes.
 - Do not invent commands, directories, or framework layers that are not present in this repo.
 - Keep source files under 500-800 lines; split controllers, services, adapters, and domain helpers by role.
-- Keep OpenAI API mode as the default LLM path for local development. Require `OPENAI_API_KEY` only in the backend runtime environment, never in frontend `VITE_*` variables. Codex CLI remains opt-in through `SIMULATOR_LLM_PROVIDER=codex`.
+- Keep Codex CLI mode as the default LLM path for local development. Local runs authenticate through the Codex CLI and must not require `OPENAI_API_KEY`. OpenAI API mode remains opt-in through `SIMULATOR_LLM_PROVIDER=openai`; require `OPENAI_API_KEY` only in the backend runtime environment, never in frontend `VITE_*` variables.
 
 ## Response Format
 

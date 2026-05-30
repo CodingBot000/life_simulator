@@ -20,7 +20,7 @@ type SeedCase = {
 };
 
 const DEFAULT_BASE_URL =
-  process.env.SIMULATE_BASE_URL?.trim() || "http://127.0.0.1:8080";
+  process.env.SIMULATE_BASE_URL?.trim() || "http://127.0.0.1:48087";
 const DEFAULT_SEED_INPUT_PATH = path.join(
   process.cwd(),
   "scripts",

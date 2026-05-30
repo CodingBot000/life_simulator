@@ -6,10 +6,10 @@
     "node": ">=22.18.0"
   },
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
+    "dev": "vite --host 0.0.0.0 --port 47174 --strictPort",
     "build": "tsc -p tsconfig.app.json --noEmit && vite build",
-    "preview": "vite preview --host 0.0.0.0",
-    "start": "vite preview --host 0.0.0.0",
+    "preview": "vite preview --host 0.0.0.0 --port 45175 --strictPort",
+    "start": "vite preview --host 0.0.0.0 --port 45175 --strictPort",
     "typecheck": "npm run typecheck:app",
     "typecheck:app": "tsc -p tsconfig.app.json --noEmit",
     "run:simulate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/run-simulate.ts"

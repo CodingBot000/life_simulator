@@ -1,6 +1,7 @@
 package com.lifesimulator.backend.memory;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -84,10 +85,58 @@ class SessionMemoryServiceTests {
       .hasMessageContaining("topic_required");
   }
 
+  @Test
+  void listReturnsEmptyWhenRepositoryUnavailable() {
+    SessionMemoryService service = serviceWithoutRepository();
+
+    SessionMemoryDecisionListResponse response = service.list("session-a");
+
+    assertThat(response.decisions()).isEmpty();
+  }
+
+  @Test
+  void saveReturnsFallbackDecisionWhenRepositoryUnavailable() {
+    SessionMemoryService service = serviceWithoutRepository();
+
+    SessionMemoryDecision response = service.save(
+      "session-a",
+      new SessionMemoryDecisionRequest(
+        "mem-local",
+        "커리어",
+        "A",
+        "로컬 저장",
+        "request-a",
+        "case-a"
+      )
+    );
+
+    assertThat(response.id()).isEqualTo("mem-local");
+    assertThat(response.topic()).isEqualTo("커리어");
+    assertThat(response.selected_option()).isEqualTo("A");
+    assertThat(response.outcome_note()).isEqualTo("로컬 저장");
+    assertThat(response.sourceRequestId()).isEqualTo("request-a");
+    assertThat(response.sourceCaseId()).isEqualTo("case-a");
+  }
+
+  @Test
+  void deleteAndClearAreNoopWhenRepositoryUnavailable() {
+    SessionMemoryService service = serviceWithoutRepository();
+
+    assertThatCode(() -> service.delete("session-a", "mem-local")).doesNotThrowAnyException();
+    assertThatCode(() -> service.clear("session-a")).doesNotThrowAnyException();
+  }
+
   @SuppressWarnings("unchecked")
   private SessionMemoryService service(SessionMemoryRepository repository) {
     ObjectProvider<SessionMemoryRepository> provider = mock(ObjectProvider.class);
     when(provider.getIfAvailable()).thenReturn(repository);
+    return new SessionMemoryService(objectMapper, new SimulatorProperties(), provider);
+  }
+
+  @SuppressWarnings("unchecked")
+  private SessionMemoryService serviceWithoutRepository() {
+    ObjectProvider<SessionMemoryRepository> provider = mock(ObjectProvider.class);
+    when(provider.getIfAvailable()).thenReturn(null);
     return new SessionMemoryService(objectMapper, new SimulatorProperties(), provider);
   }
 

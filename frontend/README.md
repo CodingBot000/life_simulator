@@ -14,10 +14,10 @@ Copy `.env.local.example` into `.env.local` and set only the fields you need.
 
 Key variables:
 
-- `VITE_API_BASE_URL`: backend base URL, default `http://localhost:48080`.
+- `VITE_API_BASE_URL`: backend base URL, default `http://localhost:48087`.
 - `VITE_RECOMMENDATIONS_ENABLED`: result recommendation panel flag, default enabled unless set to `false`.
 - `VITE_RECOMMENDATION_PROVIDERS`: comma-separated backend providers, default `catalog,naver,youtube`.
-- `SIMULATE_BASE_URL`: backend base URL for legacy monitoring scripts, default `http://127.0.0.1:48080`.
+- `SIMULATE_BASE_URL`: backend base URL for legacy monitoring scripts, default `http://127.0.0.1:48087`.
 
 Do not put backend secrets such as `OPENAI_API_KEY` or `YOUTUBE_API_KEY` in frontend `VITE_*` variables. LLM provider mode and YouTube search credentials are selected by the backend.
 

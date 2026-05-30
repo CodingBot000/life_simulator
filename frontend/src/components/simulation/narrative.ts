@@ -43,7 +43,7 @@ const TEXT_TOKEN_REPLACEMENTS_BY_LOCALE: Record<
     },
     {
       pattern: /user_state\.memory_state/g,
-      replacement: "기억 상태",
+      replacement: "저장 상태",
     },
     {
       pattern: /\bstateContext\.state_summary\b/g,
@@ -63,7 +63,7 @@ const TEXT_TOKEN_REPLACEMENTS_BY_LOCALE: Record<
     },
     {
       pattern: /\bmemory_state\b/g,
-      replacement: "기억 상태",
+      replacement: "저장 상태",
     },
     {
       pattern: /\bcurrent_constraint\b/g,

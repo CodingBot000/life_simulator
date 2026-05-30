@@ -38,44 +38,77 @@ public class SessionMemoryService {
 
   public SessionMemoryDecisionListResponse list(String sessionId) {
     String normalizedSessionId = requireSessionId(sessionId);
-    return new SessionMemoryDecisionListResponse(
-      repository().list(normalizedSessionId, properties.getSessionMemory().getMaxStoredDecisions())
-    );
+    SessionMemoryRepository resolved = optionalRepository();
+    if (resolved == null) {
+      return new SessionMemoryDecisionListResponse(List.of());
+    }
+
+    try {
+      return new SessionMemoryDecisionListResponse(
+        resolved.list(normalizedSessionId, properties.getSessionMemory().getMaxStoredDecisions())
+      );
+    } catch (RuntimeException error) {
+      return new SessionMemoryDecisionListResponse(List.of());
+    }
   }
 
   public SessionMemoryDecision save(String sessionId, SessionMemoryDecisionRequest request) {
     String normalizedSessionId = requireSessionId(sessionId);
     SessionMemoryRecord record = validate(request);
-    String memoryId = textOrNull(request.id());
-    if (memoryId == null) {
-      memoryId = "mem_" + UUID.randomUUID();
+    String memoryId = memoryId(request);
+    SessionMemoryRepository resolved = optionalRepository();
+    if (resolved == null) {
+      return fallbackDecision(memoryId, record, request);
     }
 
-    return repository()
-      .upsert(
-        new SessionMemoryRepository.SessionMemoryRow(
-          memoryId,
-          normalizedSessionId,
-          dedupeKey(record),
-          record.topic(),
-          record.selectedOption(),
-          record.outcomeNote(),
-          textOrNull(request.sourceRequestId()),
-          textOrNull(request.sourceCaseId()),
-          Instant.now().plus(properties.getSessionMemory().getTtl())
-        ),
-        properties.getSessionMemory().getMaxStoredDecisions()
-      );
+    try {
+      return resolved
+        .upsert(
+          new SessionMemoryRepository.SessionMemoryRow(
+            memoryId,
+            normalizedSessionId,
+            dedupeKey(record),
+            record.topic(),
+            record.selectedOption(),
+            record.outcomeNote(),
+            textOrNull(request.sourceRequestId()),
+            textOrNull(request.sourceCaseId()),
+            Instant.now().plus(properties.getSessionMemory().getTtl())
+          ),
+          properties.getSessionMemory().getMaxStoredDecisions()
+        );
+    } catch (RuntimeException error) {
+      return fallbackDecision(memoryId, record, request);
+    }
   }
 
   public void delete(String sessionId, String memoryId) {
     String normalizedSessionId = requireSessionId(sessionId);
     String normalizedMemoryId = requireText(memoryId, "memoryId");
-    repository().delete(normalizedSessionId, normalizedMemoryId);
+    SessionMemoryRepository resolved = optionalRepository();
+    if (resolved == null) {
+      return;
+    }
+
+    try {
+      resolved.delete(normalizedSessionId, normalizedMemoryId);
+    } catch (RuntimeException error) {
+      // Local-only fallback keeps the UI usable when the database is unavailable.
+    }
   }
 
   public void clear(String sessionId) {
-    repository().clear(requireSessionId(sessionId));
+    String normalizedSessionId = requireSessionId(sessionId);
+    SessionMemoryRepository resolved = optionalRepository();
+    if (resolved == null) {
+      return;
+    }
+
+    try {
+      resolved.clear(normalizedSessionId);
+    } catch (RuntimeException error) {
+      // Local-only fallback keeps the UI usable when the database is unavailable.
+    }
   }
 
   public JsonNode enrichPriorMemory(JsonNode request, String sessionId) {
@@ -105,6 +138,27 @@ public class SessionMemoryService {
     priorMemory.set("recent_similar_decisions", recentSimilarDecisions);
     nextRequest.set("prior_memory", priorMemory);
     return nextRequest;
+  }
+
+  private String memoryId(SessionMemoryDecisionRequest request) {
+    String memoryId = textOrNull(request.id());
+    return memoryId == null ? "mem_" + UUID.randomUUID() : memoryId;
+  }
+
+  private SessionMemoryDecision fallbackDecision(
+    String memoryId,
+    SessionMemoryRecord record,
+    SessionMemoryDecisionRequest request
+  ) {
+    return new SessionMemoryDecision(
+      memoryId,
+      Instant.now().toString(),
+      record.topic(),
+      record.selectedOption(),
+      record.outcomeNote(),
+      textOrNull(request.sourceRequestId()),
+      textOrNull(request.sourceCaseId())
+    );
   }
 
   private List<SessionMemoryRecord> dbRecords(String sessionId) {
@@ -208,15 +262,11 @@ public class SessionMemoryService {
     return value.trim();
   }
 
-  private SessionMemoryRepository repository() {
+  private SessionMemoryRepository optionalRepository() {
     if (!properties.getSessionMemory().isEnabled()) {
-      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "session_memory_disabled");
+      return null;
     }
-    SessionMemoryRepository resolved = repository.getIfAvailable();
-    if (resolved == null) {
-      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "database_disabled");
-    }
-    return resolved;
+    return repository.getIfAvailable();
   }
 
   private String dedupeKey(SessionMemoryRecord record) {

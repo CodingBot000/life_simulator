@@ -6,6 +6,7 @@ import com.lifesimulator.backend.engine.domain.life.evaluation.LifeFeedbackLabel
 import com.lifesimulator.backend.engine.evaluation.DecisionEvaluationTarget;
 import com.lifesimulator.backend.engine.evaluation.FeedbackSignal;
 import com.lifesimulator.backend.logging.SimulationLogLookupRepository;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -44,7 +45,12 @@ public class FeedbackService {
     ensureRequestExists(request.requestId());
     DecisionEvaluationTarget target = targetMapper.targetFor(request.targetType());
     FeedbackSignal signal = labelMapper.feedbackSignalFor(request.feedbackSignal());
-    return repo().insert(row("fb_" + UUID.randomUUID(), request, sessionId, target, signal));
+    String feedbackId = "fb_" + UUID.randomUUID();
+    FeedbackRepository resolved = repository.getIfAvailable();
+    if (resolved == null) {
+      return fallbackResponse(feedbackId, request, target, signal);
+    }
+    return resolved.insert(row(feedbackId, request, sessionId, target, signal));
   }
 
   public FeedbackResponse update(String feedbackId, FeedbackRequest request, String sessionId) {
@@ -52,7 +58,11 @@ public class FeedbackService {
     ensureRequestExists(request.requestId());
     DecisionEvaluationTarget target = targetMapper.targetFor(request.targetType());
     FeedbackSignal signal = labelMapper.feedbackSignalFor(request.feedbackSignal());
-    FeedbackResponse response = repo().update(feedbackId, row(feedbackId, request, sessionId, target, signal));
+    FeedbackRepository resolved = repository.getIfAvailable();
+    if (resolved == null) {
+      return fallbackResponse(feedbackId, request, target, signal);
+    }
+    FeedbackResponse response = resolved.update(feedbackId, row(feedbackId, request, sessionId, target, signal));
     if (response == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "feedback_not_found");
     }
@@ -62,7 +72,13 @@ public class FeedbackService {
   public Map<String, Object> summary(String requestId) {
     requireText(requestId, "requestId");
     ensureRequestExists(requestId);
-    return Map.of("requestId", requestId, "items", repo().summary(requestId));
+    FeedbackRepository resolved = repository.getIfAvailable();
+    return Map.of(
+      "requestId",
+      requestId,
+      "items",
+      resolved == null ? List.of() : resolved.summary(requestId)
+    );
   }
 
   private FeedbackRepository.FeedbackRow row(
@@ -75,7 +91,7 @@ public class FeedbackService {
     return new FeedbackRepository.FeedbackRow(
       feedbackId,
       request.requestId().trim(),
-      lookup().traceIdFor(request.requestId().trim()),
+      traceIdFor(request.requestId().trim()),
       null,
       sessionId,
       target.value(),
@@ -100,25 +116,39 @@ public class FeedbackService {
   }
 
   private void ensureRequestExists(String requestId) {
-    if (!lookup().existsRequest(requestId.trim())) {
+    SimulationLogLookupRepository resolved = logLookup.getIfAvailable();
+    if (resolved == null) {
+      return;
+    }
+    if (!resolved.existsRequest(requestId.trim())) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "request_not_found");
     }
   }
 
-  private FeedbackRepository repo() {
-    FeedbackRepository resolved = repository.getIfAvailable();
-    if (resolved == null) {
-      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "database_disabled");
-    }
-    return resolved;
-  }
-
-  private SimulationLogLookupRepository lookup() {
+  private String traceIdFor(String requestId) {
     SimulationLogLookupRepository resolved = logLookup.getIfAvailable();
     if (resolved == null) {
-      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "database_disabled");
+      return null;
     }
-    return resolved;
+    return resolved.traceIdFor(requestId);
+  }
+
+  private FeedbackResponse fallbackResponse(
+    String feedbackId,
+    FeedbackRequest request,
+    DecisionEvaluationTarget target,
+    FeedbackSignal signal
+  ) {
+    String now = Instant.now().toString();
+    return new FeedbackResponse(
+      feedbackId,
+      request.requestId().trim(),
+      target.value(),
+      signal.value(),
+      request.rating(),
+      now,
+      now
+    );
   }
 
   private void requireText(String value, String field) {

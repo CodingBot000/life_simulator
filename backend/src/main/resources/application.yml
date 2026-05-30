@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${BACKEND_SERVER_PORT:48087}
 
 spring:
   application:
@@ -15,7 +15,7 @@ management:
         include: health,info,metrics
 
 simulator:
-  llm-provider: ${SIMULATOR_LLM_PROVIDER:openai}
+  llm-provider: ${SIMULATOR_LLM_PROVIDER:codex}
   frontend:
     cases-dir: ../frontend/playground/inputs/cases
   database:
@@ -30,7 +30,7 @@ simulator:
     prior-memory-limit: ${SIMULATOR_SESSION_MEMORY_PRIOR_MEMORY_LIMIT:5}
     ttl: ${SIMULATOR_SESSION_MEMORY_TTL:30d}
   cors:
-    allowed-origins: ${SIMULATOR_CORS_ALLOWED_ORIGINS:http://localhost:47174,http://127.0.0.1:47174,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,https://ai-miracle.cloud,https://www.ai-miracle.cloud,http://ai-miracle.cloud,http://www.ai-miracle.cloud,http://35.164.88.121}
+    allowed-origins: ${SIMULATOR_CORS_ALLOWED_ORIGINS:http://localhost:47174,http://127.0.0.1:47174,http://localhost:45175,http://127.0.0.1:45175,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,https://ai-miracle.cloud,https://www.ai-miracle.cloud,http://ai-miracle.cloud,http://www.ai-miracle.cloud,http://35.164.88.121}
   security:
     rate-limit:
       enabled: ${SIMULATOR_RATE_LIMIT_ENABLED:true}

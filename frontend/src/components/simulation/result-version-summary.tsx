@@ -4,6 +4,7 @@ import {
 } from "@/lib/simulation/compare-results";
 import type { SimulationResultVersion } from "@/lib/simulation/result-version";
 import type { PriorityLocale } from "@/lib/priorities";
+import { EmptyState } from "@/components/ui/empty-state";
 
 import { formatConfidence, formatUserFacingNarrative } from "./narrative";
 
@@ -15,7 +16,13 @@ export function ResultVersionSummary({
   versions: SimulationResultVersion[];
 }) {
   if (versions.length < 2) {
-    return null;
+    return (
+      <EmptyState
+        label="Result Versions"
+        title="아직 재평가 기록이 없습니다"
+        description="조건 추가 재평가를 실행하면 이전 결과와 최신 결과의 비교가 표시됩니다."
+      />
+    );
   }
 
   const latest = versions[versions.length - 1];

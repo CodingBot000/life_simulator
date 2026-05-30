@@ -103,7 +103,7 @@ export function SessionMemoryPanel({
         <div>
           <p className="section-label">Session Memory</p>
           <h3 className="display-font mt-2 text-xl font-semibold text-slate-900">
-            이번 선택 기억
+            이번 선택 저장
           </h3>
           <p className="mt-2 text-sm leading-7 text-slate-600">
             이 브라우저와 서버 세션에 저장됩니다.
@@ -124,7 +124,7 @@ export function SessionMemoryPanel({
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.8fr)]">
         <div className="grid gap-4 rounded-2xl border border-slate-900/8 bg-white/70 p-4">
-          <InputField label="기억할 주제">
+          <InputField label="저장할 주제">
             <input
               type="text"
               value={topic}

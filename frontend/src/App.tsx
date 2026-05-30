@@ -1,5 +1,5 @@
-import SimulationPage from "@/components/simulation/simulation-page";
+import SimulationWorkspace from "@/components/workspace/simulation-workspace";
 
 export default function App() {
-  return <SimulationPage />;
+  return <SimulationWorkspace />;
 }
