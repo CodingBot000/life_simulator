@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-operations",
+    "title": {
+      "ko": "운영 데이터 신뢰도 문제",
+      "en": "Operations Template 12: 운영 데이터 신뢰도 문제"
+    },
+    "summary": {
+      "ko": "운영 데이터 신뢰도 문제에 대해 기존 데이터 활용과 재수집 비용 사이의 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 운영 데이터 신뢰도 문제."
+    },
+    "tags": [
+      "work-operations",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 36,
+    "job": "operations manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "stability",
+      "financial_efficiency",
+      "sustainability"
+    ]
+  },
+  "decision": {
+    "optionA": "기존 데이터를 활용한다",
+    "optionB": "비용이 들더라도 데이터를 다시 수집한다",
+    "context": "운영 담당자는 기존 데이터 활용과 재수집 비용 사이의 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “기존 데이터를 활용한다”와 “비용이 들더라도 데이터를 다시 수집한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 재무 효율, 지속 가능성을 함께 둔다."
+  }
+}

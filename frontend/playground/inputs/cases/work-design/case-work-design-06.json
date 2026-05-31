@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-design",
+    "title": {
+      "ko": "사용자 리서치 필요 여부",
+      "en": "Design / UX Template 6: 사용자 리서치 필요 여부"
+    },
+    "summary": {
+      "ko": "사용자 리서치 필요 여부에 대해 빠른 의사결정과 실제 사용자 이해 사이의 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 사용자 리서치 필요 여부."
+    },
+    "tags": [
+      "work-design",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 33,
+    "job": "product designer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "quality_of_life",
+      "trust",
+      "growth"
+    ]
+  },
+  "decision": {
+    "optionA": "빠른 의사결정을 우선한다",
+    "optionB": "실제 사용자 이해를 우선한다",
+    "context": "디자인/UX 담당자는 빠른 의사결정과 실제 사용자 이해 사이의 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “빠른 의사결정을 우선한다”와 “실제 사용자 이해를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 삶의 질, 신뢰, 성장을 함께 둔다."
+  }
+}

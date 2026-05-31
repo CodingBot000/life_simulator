@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-project",
+    "title": {
+      "ko": "품질 게이트 통과 기준",
+      "en": "Project / Program Template 10: 품질 게이트 통과 기준"
+    },
+    "summary": {
+      "ko": "품질 게이트 통과 기준에 대해 출시 승인과 추가 검증 사이의 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 품질 게이트 통과 기준."
+    },
+    "tags": [
+      "work-project",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 36,
+    "job": "project manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "stability",
+      "time_efficiency",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "출시 승인을 우선한다",
+    "optionB": "추가 검증을 우선한다",
+    "context": "프로젝트/프로그램 담당자는 출시 승인과 추가 검증 사이의 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “출시 승인을 우선한다”와 “추가 검증을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 시간 효율, 신뢰를 함께 둔다."
+  }
+}

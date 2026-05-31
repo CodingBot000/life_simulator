@@ -34,7 +34,7 @@ export function DashboardPage({
           <div>
             <p className="section-label">Dashboard</p>
             <h2 className="display-font mt-3 max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-              중요한 선택을 정리하고, 결과를 기록하는 작업 공간
+              집단지성 의사결정 시뮬레이터
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
               첫 화면에서는 시작과 최근 상태만 보여줍니다. 상세 분석, 내부

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-operations",
+    "title": {
+      "ko": "현장 예외 처리",
+      "en": "Operations Template 7: 현장 예외 처리"
+    },
+    "summary": {
+      "ko": "현장 예외 처리에 대해 고객 만족과 규정 준수 사이의 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 현장 예외 처리."
+    },
+    "tags": [
+      "work-operations",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 36,
+    "job": "operations manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "stability",
+      "financial_efficiency",
+      "sustainability"
+    ]
+  },
+  "decision": {
+    "optionA": "고객 만족을 우선한다",
+    "optionB": "규정 준수를 우선한다",
+    "context": "운영 담당자는 고객 만족과 규정 준수 사이의 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “고객 만족을 우선한다”와 “규정 준수를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 재무 효율, 지속 가능성을 함께 둔다."
+  }
+}

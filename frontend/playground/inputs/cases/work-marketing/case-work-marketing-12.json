@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-marketing",
+    "title": {
+      "ko": "단기 ROAS vs 장기 인지도",
+      "en": "Marketing Template 12: 단기 ROAS vs 장기 인지도"
+    },
+    "summary": {
+      "ko": "단기 ROAS vs 장기 인지도에 대해 성과 지표와 브랜드 축적 사이의 균형을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 단기 ROAS vs 장기 인지도."
+    },
+    "tags": [
+      "work-marketing",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 33,
+    "job": "marketing manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "income",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "단기 ROAS를 선택한다",
+    "optionB": "장기 인지도를 선택한다",
+    "context": "마케팅 담당자는 성과 지표와 브랜드 축적 사이의 균형. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “단기 ROAS를 선택한다”와 “장기 인지도를 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 수입, 신뢰를 함께 둔다."
+  }
+}

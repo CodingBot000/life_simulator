@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-engineering",
+    "title": {
+      "ko": "데이터 마이그레이션",
+      "en": "Engineering / IT Template 11: 데이터 마이그레이션"
+    },
+    "summary": {
+      "ko": "데이터 마이그레이션에 대해 구조 개선과 데이터 손상/다운타임 리스크 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 데이터 마이그레이션."
+    },
+    "tags": [
+      "work-engineering",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 34,
+    "job": "engineering manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "stability",
+      "future_optionality",
+      "sustainability"
+    ]
+  },
+  "decision": {
+    "optionA": "구조 개선을 우선한다",
+    "optionB": "데이터 손상/다운타임을 우선한다",
+    "context": "엔지니어링/IT 담당자는 구조 개선과 데이터 손상/다운타임 리스크 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “구조 개선을 우선한다”와 “데이터 손상/다운타임을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 미래 선택지, 지속 가능성을 함께 둔다."
+  }
+}

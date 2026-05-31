@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-sales",
+    "title": {
+      "ko": "고객 예산 부족 대응",
+      "en": "Sales Template 5: 고객 예산 부족 대응"
+    },
+    "summary": {
+      "ko": "고객 예산 부족 대응에 대해 저가안을 제시할지 구매 시점을 미룰지 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 고객 예산 부족 대응."
+    },
+    "tags": [
+      "work-sales",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 34,
+    "job": "sales manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "income",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "예산에 맞춘 저가안을 제시한다",
+    "optionB": "구매 시점을 늦추도록 제안한다",
+    "context": "영업 담당자는 저가안을 제시할지 구매 시점을 미룰지 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “예산에 맞춘 저가안을 제시한다”와 “구매 시점을 늦추도록 제안한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 수입, 신뢰를 함께 둔다."
+  }
+}

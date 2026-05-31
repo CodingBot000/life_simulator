@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-project",
+    "title": {
+      "ko": "마일스톤 재설정",
+      "en": "Project / Program Template 9: 마일스톤 재설정"
+    },
+    "summary": {
+      "ko": "마일스톤 재설정에 대해 현실 반영과 목표 약화 인식 사이의 균형을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 마일스톤 재설정."
+    },
+    "tags": [
+      "work-project",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 36,
+    "job": "project manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "stability",
+      "time_efficiency",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "현실 반영을 우선한다",
+    "optionB": "목표 약화 인식을 우선한다",
+    "context": "프로젝트/프로그램 담당자는 현실 반영과 목표 약화 인식 사이의 균형. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “현실 반영을 우선한다”와 “목표 약화 인식을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 시간 효율, 신뢰를 함께 둔다."
+  }
+}

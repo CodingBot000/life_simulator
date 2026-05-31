@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "relationship",
+    "title": {
+      "ko": "육아 분담 협상",
+      "en": "Relationship Template 11: 육아 분담 협상"
+    },
+    "summary": {
+      "ko": "육아 분담 협상에 대해 현실적 부담 분배와 관계 갈등 가능성 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 육아 분담 협상."
+    },
+    "tags": [
+      "relationship",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 31,
+    "job": "office worker",
+    "risk_tolerance": "medium",
+    "priority": [
+      "relationship_stability",
+      "trust",
+      "emotional_stability"
+    ]
+  },
+  "decision": {
+    "optionA": "현실적 부담을 명확히 나눠 협상한다",
+    "optionB": "관계 갈등을 줄이도록 완만히 조율한다",
+    "context": "관계 조율이 필요한 사용자는 현실적 부담 분배와 관계 갈등 가능성 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “현실적 부담을 명확히 나눠 협상한다”와 “관계 갈등을 줄이도록 완만히 조율한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 관계 안정성, 신뢰, 정서적 안정을 함께 둔다."
+  }
+}

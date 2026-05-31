@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "education",
+    "title": {
+      "ko": "부트캠프 참여",
+      "en": "Education Template 4: 부트캠프 참여"
+    },
+    "summary": {
+      "ko": "부트캠프 참여에 대해 집중 학습과 비용/시간 부담 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 부트캠프 참여."
+    },
+    "tags": [
+      "education",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 29,
+    "job": "career changer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "learning",
+      "expertise",
+      "employability"
+    ]
+  },
+  "decision": {
+    "optionA": "집중 학습을 우선한다",
+    "optionB": "비용/시간 부담을 낮추는 방향을 선택한다",
+    "context": "학습과 역량 투자를 고민하는 사용자는 집중 학습과 비용/시간 부담 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “집중 학습을 우선한다”와 “비용/시간 부담을 낮추는 방향을 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 학습, 전문성, 취업 가능성을 함께 둔다."
+  }
+}

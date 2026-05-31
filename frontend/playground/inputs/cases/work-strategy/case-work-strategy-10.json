@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-strategy",
+    "title": {
+      "ko": "B2B vs B2C 집중",
+      "en": "Strategy / Management Template 10: B2B vs B2C 집중"
+    },
+    "summary": {
+      "ko": "B2B vs B2C 집중에 대해 매출 안정성과 확장성 사이의 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating B2B vs B2C 집중."
+    },
+    "tags": [
+      "work-strategy",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 40,
+    "job": "strategy manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "future_optionality",
+      "financial_stability"
+    ]
+  },
+  "decision": {
+    "optionA": "B2B를 선택한다",
+    "optionB": "B2C 집중을 선택한다",
+    "context": "전략/경영 담당자는 매출 안정성과 확장성 사이의 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “B2B를 선택한다”와 “B2C 집중을 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 미래 선택지, 재정 안정성을 함께 둔다."
+  }
+}

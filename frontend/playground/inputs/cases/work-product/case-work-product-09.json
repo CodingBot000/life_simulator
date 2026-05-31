@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-product",
+    "title": {
+      "ko": "로드맵 변경",
+      "en": "Product Template 9: 로드맵 변경"
+    },
+    "summary": {
+      "ko": "로드맵 변경에 대해 새로운 기회 반영과 기존 약속 유지 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 로드맵 변경."
+    },
+    "tags": [
+      "work-product",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 35,
+    "job": "product manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "future_optionality",
+      "experience"
+    ]
+  },
+  "decision": {
+    "optionA": "새로운 기회 반영을 우선한다",
+    "optionB": "약속 유지를 우선한다",
+    "context": "제품 담당자는 새로운 기회 반영과 기존 약속 유지 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “새로운 기회 반영을 우선한다”와 “약속 유지를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 미래 선택지, 경험 확장을 함께 둔다."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-design",
+    "title": {
+      "ko": "모바일 우선순위",
+      "en": "Design / UX Template 9: 모바일 우선순위"
+    },
+    "summary": {
+      "ko": "모바일 우선순위에 대해 모바일 사용성과 데스크톱 업무 흐름 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 모바일 우선순위."
+    },
+    "tags": [
+      "work-design",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 33,
+    "job": "product designer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "quality_of_life",
+      "trust",
+      "growth"
+    ]
+  },
+  "decision": {
+    "optionA": "모바일 사용성을 우선한다",
+    "optionB": "데스크톱 업무 흐름을 우선한다",
+    "context": "디자인/UX 담당자는 모바일 사용성과 데스크톱 업무 흐름 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “모바일 사용성을 우선한다”와 “데스크톱 업무 흐름을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 삶의 질, 신뢰, 성장을 함께 둔다."
+  }
+}

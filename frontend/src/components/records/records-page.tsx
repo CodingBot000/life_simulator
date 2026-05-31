@@ -159,6 +159,7 @@ export function RecordsPage({
         <>
           <Drawer
             title="저장하기"
+            size="wide"
             isOpen={drawer === "memory"}
             onClose={() => setDrawer(null)}
           >

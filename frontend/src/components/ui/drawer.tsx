@@ -3,12 +3,14 @@ import { useEffect, type ReactNode } from "react";
 export function Drawer({
   title,
   description,
+  size = "default",
   isOpen,
   onClose,
   children,
 }: {
   title: string;
   description?: string;
+  size?: "default" | "wide";
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
@@ -32,6 +34,8 @@ export function Drawer({
     return null;
   }
 
+  const sizeClass = size === "wide" ? "w-full max-w-4xl" : "w-full max-w-xl";
+
   return (
     <div
       role="presentation"
@@ -42,7 +46,7 @@ export function Drawer({
         role="dialog"
         aria-modal="true"
         aria-labelledby="drawer-title"
-        className="h-full w-1/2 overflow-y-auto border-l border-slate-900/10 bg-[#fffaf2] p-5 shadow-[0_24px_80px_rgba(15,23,42,0.24)] sm:w-full sm:max-w-xl sm:p-7"
+        className={`${sizeClass} h-full overflow-y-auto border-l border-slate-900/10 bg-[#fffaf2] p-5 shadow-[0_24px_80px_rgba(15,23,42,0.24)] sm:p-7`}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4">

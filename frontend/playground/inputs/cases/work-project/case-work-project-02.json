@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-project",
+    "title": {
+      "ko": "범위 축소",
+      "en": "Project / Program Template 2: 범위 축소"
+    },
+    "summary": {
+      "ko": "범위 축소에 대해 핵심 가치 유지와 이해관계자 기대 조정 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 범위 축소."
+    },
+    "tags": [
+      "work-project",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 36,
+    "job": "project manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "stability",
+      "time_efficiency",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "핵심 가치 유지를 우선한다",
+    "optionB": "이해관계자 기대 조정을 우선한다",
+    "context": "프로젝트/프로그램 담당자는 핵심 가치 유지와 이해관계자 기대 조정 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “핵심 가치 유지를 우선한다”와 “이해관계자 기대 조정을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 시간 효율, 신뢰를 함께 둔다."
+  }
+}

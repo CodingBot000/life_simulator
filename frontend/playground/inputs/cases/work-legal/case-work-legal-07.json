@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-legal",
+    "title": {
+      "ko": "외주 계약 검토",
+      "en": "Legal / Compliance Template 7: 외주 계약 검토"
+    },
+    "summary": {
+      "ko": "외주 계약 검토에 대해 빠른 계약과 책임 범위 명확화 사이의 균형을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 외주 계약 검토."
+    },
+    "tags": [
+      "work-legal",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 37,
+    "job": "legal counsel",
+    "risk_tolerance": "low",
+    "priority": [
+      "stability",
+      "trust",
+      "future_optionality"
+    ]
+  },
+  "decision": {
+    "optionA": "빠른 계약을 우선한다",
+    "optionB": "책임 범위 명확화를 우선한다",
+    "context": "법무/컴플라이언스 담당자는 빠른 계약과 책임 범위 명확화 사이의 균형. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “빠른 계약을 우선한다”와 “책임 범위 명확화를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 신뢰, 미래 선택지를 함께 둔다."
+  }
+}

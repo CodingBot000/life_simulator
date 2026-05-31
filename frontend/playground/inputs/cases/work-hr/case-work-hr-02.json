@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-hr",
+    "title": {
+      "ko": "고성과자 보상",
+      "en": "HR / People Template 2: 고성과자 보상"
+    },
+    "summary": {
+      "ko": "고성과자 보상에 대해 개인 보상 강화와 팀 형평성 사이의 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 고성과자 보상."
+    },
+    "tags": [
+      "work-hr",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 38,
+    "job": "people manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "trust",
+      "stability",
+      "career_growth"
+    ]
+  },
+  "decision": {
+    "optionA": "개인 보상 강화를 우선한다",
+    "optionB": "팀 형평성을 우선한다",
+    "context": "인사/조직 담당자는 개인 보상 강화와 팀 형평성 사이의 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “개인 보상 강화를 우선한다”와 “팀 형평성을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 신뢰, 안정성, 커리어 성장을 함께 둔다."
+  }
+}

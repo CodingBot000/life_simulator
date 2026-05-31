@@ -6,9 +6,13 @@ import com.lifesimulator.backend.config.SimulatorProperties;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CasePresetService {
 
+  private static final String CATEGORIES_FILE = "categories.json";
   private static final Map<String, Map<String, String>> CATEGORY_LABELS = Map.of(
     "career",
     labels("커리어", "Career"),
@@ -44,27 +49,65 @@ public class CasePresetService {
   }
 
   public List<Map<String, Object>> listCasePresets() throws IOException {
+    Path casesDir = casesDir();
+    CaseCategoryRegistry registry = loadCategories(casesDir);
+    List<Map<String, Object>> presets = new ArrayList<>();
+    Set<String> seenSlugs = new LinkedHashSet<>();
+
+    for (Path file : caseFiles(casesDir)) {
+      Map<String, Object> preset = readPreset(file, casesDir, registry);
+      String slug = String.valueOf(preset.get("slug"));
+      if (!seenSlugs.add(slug)) {
+        throw new IllegalStateException("Duplicate case preset slug: " + slug);
+      }
+      presets.add(preset);
+    }
+
+    return presets;
+  }
+
+  public List<Map<String, Object>> listCategories() throws IOException {
+    return loadCategories(casesDir())
+      .categories()
+      .stream()
+      .map(this::categoryResponse)
+      .toList();
+  }
+
+  private Path casesDir() throws IOException {
     Path casesDir = Path.of(properties.getFrontend().getCasesDir()).toAbsolutePath().normalize();
     if (!Files.isDirectory(casesDir)) {
       throw new IOException("Case preset directory not found: " + casesDir);
     }
+    return casesDir;
+  }
 
-    try (var files = Files.list(casesDir)) {
+  private List<Path> caseFiles(Path casesDir) throws IOException {
+    try (var files = Files.walk(casesDir)) {
       return files
-        .filter(path -> path.getFileName().toString().endsWith(".json"))
-        .sorted(Comparator.comparing(path -> path.getFileName().toString()))
-        .map(this::readPreset)
+        .filter(Files::isRegularFile)
+        .filter(this::isCaseFile)
+        .sorted(Comparator.comparing(path -> casesDir.relativize(path).toString()))
         .toList();
     }
   }
 
-  private Map<String, Object> readPreset(Path file) {
+  private boolean isCaseFile(Path path) {
+    String fileName = path.getFileName().toString();
+    return fileName.endsWith(".json") && !CATEGORIES_FILE.equals(fileName);
+  }
+
+  private Map<String, Object> readPreset(
+    Path file,
+    Path casesDir,
+    CaseCategoryRegistry registry
+  ) {
     try {
       JsonNode request = objectMapper.readTree(file.toFile());
       JsonNode decision = request.path("decision");
       JsonNode metadata = request.path("metadata");
       String slug = file.getFileName().toString().replaceFirst("\\.json$", "");
-      String category = inferCategory(slug);
+      String category = categoryFor(file, casesDir, metadata, slug);
       String fallbackTitle = titleFromSlug(slug);
       String fallbackSummary = decision.path("context").asText("");
       Map<String, String> titleLabels = localizedLabels(
@@ -77,10 +120,7 @@ public class CasePresetService {
         fallbackSummary,
         fallbackSummary
       );
-      Map<String, String> categoryLabels = CATEGORY_LABELS.getOrDefault(
-        category,
-        CATEGORY_LABELS.get("other")
-      );
+      Map<String, String> categoryLabels = registry.labelsFor(category);
       return Map.of(
         "id",
         slug,
@@ -106,6 +146,89 @@ public class CasePresetService {
     } catch (IOException error) {
       throw new IllegalStateException("Failed to read case preset: " + file, error);
     }
+  }
+
+  private String categoryFor(Path file, Path casesDir, JsonNode metadata, String slug) {
+    String metadataCategory = text(metadata.path("category"));
+    if (!metadataCategory.isBlank()) {
+      return metadataCategory;
+    }
+
+    Path relativeParent = casesDir.relativize(file).getParent();
+    if (relativeParent != null && relativeParent.getNameCount() > 0) {
+      String parentCategory = relativeParent.getName(0).toString();
+      if (!parentCategory.isBlank()) {
+        return parentCategory;
+      }
+    }
+
+    String inferred = inferCategory(slug);
+    return inferred.isBlank() ? "other" : inferred;
+  }
+
+  private CaseCategoryRegistry loadCategories(Path casesDir) throws IOException {
+    Path categoriesFile = casesDir.resolve(CATEGORIES_FILE);
+    if (!Files.isRegularFile(categoriesFile)) {
+      return defaultCategoryRegistry();
+    }
+
+    JsonNode root = objectMapper.readTree(categoriesFile.toFile());
+    JsonNode categories = root.path("categories");
+    if (!categories.isArray()) {
+      return defaultCategoryRegistry();
+    }
+
+    List<CaseCategory> parsed = new ArrayList<>();
+    int fallbackOrder = 10;
+    for (JsonNode category : categories) {
+      String id = text(category.path("id"));
+      if (id.isBlank()) {
+        continue;
+      }
+      String fallbackLabel = humanizeCategoryId(id);
+      Map<String, String> labels = localizedLabels(
+        category.path("labels"),
+        fallbackLabel,
+        fallbackLabel
+      );
+      String domain = textOrDefault(category.path("domain"), "life");
+      String status = textOrDefault(category.path("status"), "active");
+      int order = category.path("order").isInt() ? category.path("order").asInt() : fallbackOrder;
+      parsed.add(new CaseCategory(id, labels, domain, order, status));
+      fallbackOrder += 10;
+    }
+
+    return parsed.isEmpty()
+      ? defaultCategoryRegistry()
+      : new CaseCategoryRegistry(parsed);
+  }
+
+  private CaseCategoryRegistry defaultCategoryRegistry() {
+    List<CaseCategory> categories = new ArrayList<>();
+    int order = 10;
+    for (String id : List.of("career", "relationship", "finance", "living", "education", "health", "other")) {
+      categories.add(
+        new CaseCategory(
+          id,
+          CATEGORY_LABELS.get(id),
+          "life",
+          order,
+          "active"
+        )
+      );
+      order += 10;
+    }
+    return new CaseCategoryRegistry(categories);
+  }
+
+  private Map<String, Object> categoryResponse(CaseCategory category) {
+    Map<String, Object> response = new LinkedHashMap<>();
+    response.put("id", category.id());
+    response.put("domain", category.domain());
+    response.put("order", category.order());
+    response.put("labels", category.labels());
+    response.put("status", category.status());
+    return response;
   }
 
   private String titleFromSlug(String slug) {
@@ -140,6 +263,25 @@ public class CasePresetService {
     return fallback;
   }
 
+  private String text(JsonNode node) {
+    return node.isTextual() ? node.asText().trim() : "";
+  }
+
+  private String textOrDefault(JsonNode node, String fallback) {
+    String value = text(node);
+    return value.isBlank() ? fallback : value;
+  }
+
+  private String humanizeCategoryId(String id) {
+    String[] parts = id.split("-");
+    for (int index = 0; index < parts.length; index += 1) {
+      if (!parts[index].isBlank()) {
+        parts[index] = parts[index].substring(0, 1).toUpperCase() + parts[index].substring(1);
+      }
+    }
+    return String.join(" ", parts);
+  }
+
   private String inferCategory(String slug) {
     if (containsAny(slug, "relationship", "marriage", "cohabitation")) {
       return "relationship";
@@ -166,5 +308,34 @@ public class CasePresetService {
       }
     }
     return false;
+  }
+
+  private record CaseCategory(
+    String id,
+    Map<String, String> labels,
+    String domain,
+    int order,
+    String status
+  ) {}
+
+  private record CaseCategoryRegistry(List<CaseCategory> categories) {
+    private Map<String, String> labelsFor(String categoryId) {
+      return categories
+        .stream()
+        .filter(category -> category.id().equals(categoryId))
+        .findFirst()
+        .map(CaseCategory::labels)
+        .orElseGet(() -> labels(humanize(categoryId), humanize(categoryId)));
+    }
+
+    private static String humanize(String categoryId) {
+      String[] parts = categoryId.split("-");
+      for (int index = 0; index < parts.length; index += 1) {
+        if (!parts[index].isBlank()) {
+          parts[index] = parts[index].substring(0, 1).toUpperCase() + parts[index].substring(1);
+        }
+      }
+      return String.join(" ", parts);
+    }
   }
 }

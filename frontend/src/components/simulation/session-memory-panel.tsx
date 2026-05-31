@@ -49,8 +49,7 @@ export function SessionMemoryPanel({
   const selectedOption = optionText(selectedMode, request, customSelectedOption);
   const canSave =
     topic.trim().length > 0 &&
-    selectedOption.trim().length > 0 &&
-    outcomeNote.trim().length > 0;
+    selectedOption.trim().length > 0;
 
   useEffect(() => {
     setTopic(defaultTopic);
@@ -62,7 +61,7 @@ export function SessionMemoryPanel({
 
   function handleSave() {
     if (!canSave) {
-      setStatus("주제, 선택, 메모를 모두 입력해야 저장됩니다.");
+      setStatus("주제와 선택을 입력해야 저장됩니다.");
       return;
     }
 
@@ -70,7 +69,7 @@ export function SessionMemoryPanel({
       onSave({
         topic,
         selected_option: selectedOption,
-        outcome_note: outcomeNote,
+        outcome_note: outcomeNote.trim() || "별도 메모 없음",
         sourceRequestId: response.request_id,
         sourceCaseId: response.stateContext.case_id,
       }),
@@ -159,7 +158,7 @@ export function SessionMemoryPanel({
             </InputField>
           ) : null}
 
-          <InputField label="메모">
+          <InputField label="메모 (선택)">
             <textarea
               rows={3}
               value={outcomeNote}

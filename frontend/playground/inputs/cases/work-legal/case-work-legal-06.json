@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-legal",
+    "title": {
+      "ko": "고객 데이터 요청 대응",
+      "en": "Legal / Compliance Template 6: 고객 데이터 요청 대응"
+    },
+    "summary": {
+      "ko": "고객 데이터 요청 대응에 대해 고객 요구 수용과 개인정보 보호 사이의 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 고객 데이터 요청 대응."
+    },
+    "tags": [
+      "work-legal",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 37,
+    "job": "legal counsel",
+    "risk_tolerance": "low",
+    "priority": [
+      "stability",
+      "trust",
+      "future_optionality"
+    ]
+  },
+  "decision": {
+    "optionA": "고객 요구 수용을 우선한다",
+    "optionB": "개인정보 보호를 우선한다",
+    "context": "법무/컴플라이언스 담당자는 고객 요구 수용과 개인정보 보호 사이의 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “고객 요구 수용을 우선한다”와 “개인정보 보호를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 신뢰, 미래 선택지를 함께 둔다."
+  }
+}

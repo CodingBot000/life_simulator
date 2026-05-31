@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "finance",
+    "title": {
+      "ko": "대출 상환 vs 투자",
+      "en": "Finance Template 3: 대출 상환 vs 투자"
+    },
+    "summary": {
+      "ko": "대출 상환 vs 투자에 대해 리스크 감소와 자산 성장 가능성 사이의 균형을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 대출 상환 vs 투자."
+    },
+    "tags": [
+      "finance",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 35,
+    "job": "office worker",
+    "risk_tolerance": "low",
+    "priority": [
+      "financial_stability",
+      "financial_efficiency",
+      "safety_net"
+    ]
+  },
+  "decision": {
+    "optionA": "대출 상환을 선택한다",
+    "optionB": "투자를 선택한다",
+    "context": "재정 결정을 앞둔 사용자는 리스크 감소와 자산 성장 가능성 사이의 균형. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “대출 상환을 선택한다”와 “투자를 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 재정 안정성, 재무 효율, 안전망을 함께 둔다."
+  }
+}

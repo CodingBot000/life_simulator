@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-procurement",
+    "title": {
+      "ko": "저가 업체 vs 신뢰 업체",
+      "en": "Procurement / Vendor Template 1: 저가 업체 vs 신뢰 업체"
+    },
+    "summary": {
+      "ko": "저가 업체 vs 신뢰 업체에 대해 비용 절감과 품질 안정성 사이의 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 저가 업체 vs 신뢰 업체."
+    },
+    "tags": [
+      "work-procurement",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 38,
+    "job": "procurement manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "financial_efficiency",
+      "stability",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "저가 업체를 선택해 비용을 낮춘다",
+    "optionB": "신뢰도 높은 업체를 선택해 품질을 지킨다",
+    "context": "구매/벤더 담당자는 비용 절감과 품질 안정성 사이의 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “저가 업체를 선택해 비용을 낮춘다”와 “신뢰도 높은 업체를 선택해 품질을 지킨다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 재무 효율, 안정성, 신뢰를 함께 둔다."
+  }
+}

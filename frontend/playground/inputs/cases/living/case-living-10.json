@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "living",
+    "title": {
+      "ko": "주거비 절감",
+      "en": "Living Template 10: 주거비 절감"
+    },
+    "summary": {
+      "ko": "주거비 절감에 대해 거주 만족도를 낮추더라도 재정 여유를 만들지 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 주거비 절감."
+    },
+    "tags": [
+      "living",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 34,
+    "job": "office worker",
+    "risk_tolerance": "medium",
+    "priority": [
+      "quality_of_life",
+      "cost_of_living",
+      "time_efficiency"
+    ]
+  },
+  "decision": {
+    "optionA": "주거비 절감을 적극적으로 추진한다",
+    "optionB": "주거비 절감을 보류하고 현재 방식을 유지한다",
+    "context": "생활 기반을 조정하려는 사용자는 거주 만족도를 낮추더라도 재정 여유를 만들지 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “주거비 절감을 적극적으로 추진한다”와 “주거비 절감을 보류하고 현재 방식을 유지한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 삶의 질, 생활비, 시간 효율을 함께 둔다."
+  }
+}

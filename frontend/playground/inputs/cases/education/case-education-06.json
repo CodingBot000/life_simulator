@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "education",
+    "title": {
+      "ko": "온라인 강의 vs 오프라인 학원",
+      "en": "Education Template 6: 온라인 강의 vs 오프라인 학원"
+    },
+    "summary": {
+      "ko": "온라인 강의 vs 오프라인 학원에 대해 유연성과 강제성, 피드백 품질 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 온라인 강의 vs 오프라인 학원."
+    },
+    "tags": [
+      "education",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 29,
+    "job": "career changer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "learning",
+      "expertise",
+      "employability"
+    ]
+  },
+  "decision": {
+    "optionA": "온라인 강의를 선택한다",
+    "optionB": "오프라인 학원을 선택한다",
+    "context": "학습과 역량 투자를 고민하는 사용자는 유연성과 강제성, 피드백 품질 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “온라인 강의를 선택한다”와 “오프라인 학원을 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 학습, 전문성, 취업 가능성을 함께 둔다."
+  }
+}

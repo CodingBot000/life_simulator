@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-hr",
+    "title": {
+      "ko": "문화 적합성 vs 역량",
+      "en": "HR / People Template 11: 문화 적합성 vs 역량"
+    },
+    "summary": {
+      "ko": "문화 적합성 vs 역량에 대해 현재 팀 안정성과 뛰어난 실력 사이의 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 문화 적합성 vs 역량."
+    },
+    "tags": [
+      "work-hr",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 38,
+    "job": "people manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "trust",
+      "stability",
+      "career_growth"
+    ]
+  },
+  "decision": {
+    "optionA": "문화 적합성을 선택한다",
+    "optionB": "역량을 선택한다",
+    "context": "인사/조직 담당자는 현재 팀 안정성과 뛰어난 실력 사이의 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “문화 적합성을 선택한다”와 “역량을 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 신뢰, 안정성, 커리어 성장을 함께 둔다."
+  }
+}

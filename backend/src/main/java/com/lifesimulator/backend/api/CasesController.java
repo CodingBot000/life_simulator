@@ -17,6 +17,11 @@ public class CasesController {
 
   @GetMapping("/api/cases")
   public Map<String, Object> listCases() throws IOException {
-    return Map.of("cases", casePresetService.listCasePresets());
+    return Map.of(
+      "categories",
+      casePresetService.listCategories(),
+      "cases",
+      casePresetService.listCasePresets()
+    );
   }
 }

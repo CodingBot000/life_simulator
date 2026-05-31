@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-legal",
+    "title": {
+      "ko": "지식재산권 이슈",
+      "en": "Legal / Compliance Template 8: 지식재산권 이슈"
+    },
+    "summary": {
+      "ko": "지식재산권 이슈에 대해 사용 편의성과 침해 리스크 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 지식재산권 이슈."
+    },
+    "tags": [
+      "work-legal",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 37,
+    "job": "legal counsel",
+    "risk_tolerance": "low",
+    "priority": [
+      "stability",
+      "trust",
+      "future_optionality"
+    ]
+  },
+  "decision": {
+    "optionA": "사용 편의성을 우선한다",
+    "optionB": "지식재산권 침해 리스크를 줄인다",
+    "context": "법무/컴플라이언스 담당자는 사용 편의성과 침해 리스크 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “사용 편의성을 우선한다”와 “지식재산권 침해 리스크를 줄인다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 신뢰, 미래 선택지를 함께 둔다."
+  }
+}

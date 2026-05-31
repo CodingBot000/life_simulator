@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-operations",
+    "title": {
+      "ko": "수작업 유지 vs 자동화",
+      "en": "Operations Template 2: 수작업 유지 vs 자동화"
+    },
+    "summary": {
+      "ko": "수작업 유지 vs 자동화에 대해 즉시 처리와 장기 효율화 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 수작업 유지 vs 자동화."
+    },
+    "tags": [
+      "work-operations",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 36,
+    "job": "operations manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "stability",
+      "financial_efficiency",
+      "sustainability"
+    ]
+  },
+  "decision": {
+    "optionA": "수작업 유지를 선택한다",
+    "optionB": "자동화를 선택한다",
+    "context": "운영 담당자는 즉시 처리와 장기 효율화 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “수작업 유지를 선택한다”와 “자동화를 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 재무 효율, 지속 가능성을 함께 둔다."
+  }
+}

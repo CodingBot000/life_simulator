@@ -292,6 +292,7 @@ export function ReportPage({
       <Drawer
         title="저장하기"
         description="저장한 선택은 다음 의사결정의 참고 사항으로 반영됩니다."
+        size="wide"
         isOpen={drawer === "memory"}
         onClose={() => setDrawer(null)}
       >

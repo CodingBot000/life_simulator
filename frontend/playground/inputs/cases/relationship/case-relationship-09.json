@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "relationship",
+    "title": {
+      "ko": "직장 내 인간관계 대응",
+      "en": "Relationship Template 9: 직장 내 인간관계 대응"
+    },
+    "summary": {
+      "ko": "직장 내 인간관계 대응에 대해 문제 제기와 관계 유지 사이의 균형을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 직장 내 인간관계 대응."
+    },
+    "tags": [
+      "relationship",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 31,
+    "job": "office worker",
+    "risk_tolerance": "medium",
+    "priority": [
+      "relationship_stability",
+      "trust",
+      "emotional_stability"
+    ]
+  },
+  "decision": {
+    "optionA": "문제 제기를 우선한다",
+    "optionB": "관계 유지를 우선한다",
+    "context": "관계 조율이 필요한 사용자는 문제 제기와 관계 유지 사이의 균형. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “문제 제기를 우선한다”와 “관계 유지를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 관계 안정성, 신뢰, 정서적 안정을 함께 둔다."
+  }
+}

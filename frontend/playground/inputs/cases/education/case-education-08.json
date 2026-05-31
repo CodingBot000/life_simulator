@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "education",
+    "title": {
+      "ko": "영어 공부 우선순위",
+      "en": "Education Template 8: 영어 공부 우선순위"
+    },
+    "summary": {
+      "ko": "영어 공부 우선순위에 대해 글로벌 기회와 현재 직무 역량 강화 사이의 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 영어 공부 우선순위."
+    },
+    "tags": [
+      "education",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 29,
+    "job": "career changer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "learning",
+      "expertise",
+      "employability"
+    ]
+  },
+  "decision": {
+    "optionA": "글로벌 기회를 우선한다",
+    "optionB": "직무 역량 강화를 우선한다",
+    "context": "학습과 역량 투자를 고민하는 사용자는 글로벌 기회와 현재 직무 역량 강화 사이의 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “글로벌 기회를 우선한다”와 “직무 역량 강화를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 학습, 전문성, 취업 가능성을 함께 둔다."
+  }
+}

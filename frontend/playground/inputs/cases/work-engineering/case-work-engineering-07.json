@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-engineering",
+    "title": {
+      "ko": "기술 스택 변경",
+      "en": "Engineering / IT Template 7: 기술 스택 변경"
+    },
+    "summary": {
+      "ko": "기술 스택 변경에 대해 장기 생산성과 전환 비용 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 기술 스택 변경."
+    },
+    "tags": [
+      "work-engineering",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 34,
+    "job": "engineering manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "stability",
+      "future_optionality",
+      "sustainability"
+    ]
+  },
+  "decision": {
+    "optionA": "장기 생산성을 우선한다",
+    "optionB": "전환 비용을 낮추는 방향을 선택한다",
+    "context": "엔지니어링/IT 담당자는 장기 생산성과 전환 비용 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “장기 생산성을 우선한다”와 “전환 비용을 낮추는 방향을 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 미래 선택지, 지속 가능성을 함께 둔다."
+  }
+}

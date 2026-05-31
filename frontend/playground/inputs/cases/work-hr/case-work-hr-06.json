@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-hr",
+    "title": {
+      "ko": "성과평가 이의제기",
+      "en": "HR / People Template 6: 성과평가 이의제기"
+    },
+    "summary": {
+      "ko": "성과평가 이의제기에 대해 기준 일관성과 개인 납득도 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 성과평가 이의제기."
+    },
+    "tags": [
+      "work-hr",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 38,
+    "job": "people manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "trust",
+      "stability",
+      "career_growth"
+    ]
+  },
+  "decision": {
+    "optionA": "기준 일관성을 우선한다",
+    "optionB": "개인 납득도를 우선한다",
+    "context": "인사/조직 담당자는 기준 일관성과 개인 납득도 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “기준 일관성을 우선한다”와 “개인 납득도를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 신뢰, 안정성, 커리어 성장을 함께 둔다."
+  }
+}

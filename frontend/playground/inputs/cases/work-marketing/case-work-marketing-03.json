@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-marketing",
+    "title": {
+      "ko": "자극적 카피 사용",
+      "en": "Marketing Template 3: 자극적 카피 사용"
+    },
+    "summary": {
+      "ko": "자극적 카피 사용에 대해 클릭률 상승과 신뢰도 훼손 가능성 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 자극적 카피 사용."
+    },
+    "tags": [
+      "work-marketing",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 33,
+    "job": "marketing manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "income",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "클릭률을 위해 강한 카피를 사용한다",
+    "optionB": "신뢰를 위해 절제된 메시지를 사용한다",
+    "context": "마케팅 담당자는 클릭률 상승과 신뢰도 훼손 가능성 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “클릭률을 위해 강한 카피를 사용한다”와 “신뢰를 위해 절제된 메시지를 사용한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 수입, 신뢰를 함께 둔다."
+  }
+}

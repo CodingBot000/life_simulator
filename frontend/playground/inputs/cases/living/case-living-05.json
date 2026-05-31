@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "living",
+    "title": {
+      "ko": "이사 시점",
+      "en": "Living Template 5: 이사 시점"
+    },
+    "summary": {
+      "ko": "이사 시점에 대해 당장 불편을 해결할지 비용과 타이밍을 더 기다릴지 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 이사 시점."
+    },
+    "tags": [
+      "living",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 34,
+    "job": "office worker",
+    "risk_tolerance": "medium",
+    "priority": [
+      "quality_of_life",
+      "cost_of_living",
+      "time_efficiency"
+    ]
+  },
+  "decision": {
+    "optionA": "지금 이사해 불편을 줄인다",
+    "optionB": "비용과 타이밍을 보며 기다린다",
+    "context": "생활 기반을 조정하려는 사용자는 당장 불편을 해결할지 비용과 타이밍을 더 기다릴지 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “지금 이사해 불편을 줄인다”와 “비용과 타이밍을 보며 기다린다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 삶의 질, 생활비, 시간 효율을 함께 둔다."
+  }
+}

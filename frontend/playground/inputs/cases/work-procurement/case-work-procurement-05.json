@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-procurement",
+    "title": {
+      "ko": "품질 문제 벤더 교체",
+      "en": "Procurement / Vendor Template 5: 품질 문제 벤더 교체"
+    },
+    "summary": {
+      "ko": "품질 문제 벤더 교체에 대해 전환 비용과 품질 개선 가능성 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 품질 문제 벤더 교체."
+    },
+    "tags": [
+      "work-procurement",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 38,
+    "job": "procurement manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "financial_efficiency",
+      "stability",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "전환 비용을 낮추는 방향을 선택한다",
+    "optionB": "품질 개선을 우선한다",
+    "context": "구매/벤더 담당자는 전환 비용과 품질 개선 가능성 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “전환 비용을 낮추는 방향을 선택한다”와 “품질 개선을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 재무 효율, 안정성, 신뢰를 함께 둔다."
+  }
+}

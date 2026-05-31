@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "education",
+    "title": {
+      "ko": "멘토링/코칭 비용 지불",
+      "en": "Education Template 12: 멘토링/코칭 비용 지불"
+    },
+    "summary": {
+      "ko": "멘토링/코칭 비용 지불에 대해 외부 피드백의 가치와 비용 부담 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 멘토링/코칭 비용 지불."
+    },
+    "tags": [
+      "education",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 29,
+    "job": "career changer",
+    "risk_tolerance": "medium",
+    "priority": [
+      "learning",
+      "expertise",
+      "employability"
+    ]
+  },
+  "decision": {
+    "optionA": "외부 피드백의 가치를 우선한다",
+    "optionB": "비용 부담을 낮추는 방향을 선택한다",
+    "context": "학습과 역량 투자를 고민하는 사용자는 외부 피드백의 가치와 비용 부담 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “외부 피드백의 가치를 우선한다”와 “비용 부담을 낮추는 방향을 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 학습, 전문성, 취업 가능성을 함께 둔다."
+  }
+}

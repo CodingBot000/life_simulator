@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-marketing",
+    "title": {
+      "ko": "고객 세그먼트 변경",
+      "en": "Marketing Template 7: 고객 세그먼트 변경"
+    },
+    "summary": {
+      "ko": "고객 세그먼트 변경에 대해 기존 타깃 유지와 신규 수요 탐색 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 고객 세그먼트 변경."
+    },
+    "tags": [
+      "work-marketing",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 33,
+    "job": "marketing manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "income",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "타깃 유지를 우선한다",
+    "optionB": "신규 수요 탐색을 우선한다",
+    "context": "마케팅 담당자는 기존 타깃 유지와 신규 수요 탐색 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “타깃 유지를 우선한다”와 “신규 수요 탐색을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 수입, 신뢰를 함께 둔다."
+  }
+}

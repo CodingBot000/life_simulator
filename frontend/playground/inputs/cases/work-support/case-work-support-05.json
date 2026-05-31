@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-support",
+    "title": {
+      "ko": "감정적 고객 대응",
+      "en": "Customer Support Template 5: 감정적 고객 대응"
+    },
+    "summary": {
+      "ko": "감정적 고객 대응에 대해 즉시 사과와 사실 확인의 순서 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 감정적 고객 대응."
+    },
+    "tags": [
+      "work-support",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 32,
+    "job": "customer support lead",
+    "risk_tolerance": "low",
+    "priority": [
+      "trust",
+      "stability",
+      "quality_of_life"
+    ]
+  },
+  "decision": {
+    "optionA": "먼저 사과하고 감정을 낮춘다",
+    "optionB": "사실관계를 먼저 확인한 뒤 답한다",
+    "context": "고객지원 담당자는 즉시 사과와 사실 확인의 순서 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “먼저 사과하고 감정을 낮춘다”와 “사실관계를 먼저 확인한 뒤 답한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 신뢰, 안정성, 삶의 질을 함께 둔다."
+  }
+}

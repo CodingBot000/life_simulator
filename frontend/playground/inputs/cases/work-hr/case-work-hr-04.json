@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-hr",
+    "title": {
+      "ko": "조직개편",
+      "en": "HR / People Template 4: 조직개편"
+    },
+    "summary": {
+      "ko": "조직개편에 대해 효율 개선과 구성원 불안 사이의 균형을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 조직개편."
+    },
+    "tags": [
+      "work-hr",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 38,
+    "job": "people manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "trust",
+      "stability",
+      "career_growth"
+    ]
+  },
+  "decision": {
+    "optionA": "효율 개선을 우선한다",
+    "optionB": "구성원 불안을 줄이는 방향을 선택한다",
+    "context": "인사/조직 담당자는 효율 개선과 구성원 불안 사이의 균형. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “효율 개선을 우선한다”와 “구성원 불안을 줄이는 방향을 선택한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 신뢰, 안정성, 커리어 성장을 함께 둔다."
+  }
+}

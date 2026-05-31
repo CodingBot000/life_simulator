@@ -91,16 +91,16 @@ export interface SimulationRequest {
   reevaluation?: SimulationReevaluationMetadata;
 }
 
-export type CasePresetCategory =
-  | "career"
-  | "relationship"
-  | "finance"
-  | "living"
-  | "education"
-  | "health"
-  | "other";
-
+export type CasePresetCategory = string;
 export type LocalizedText = Record<PriorityLocale, string>;
+
+export interface CasePresetCategoryInfo {
+  id: CasePresetCategory;
+  domain?: "life" | "work" | string;
+  order?: number;
+  labels: LocalizedText;
+  status?: string;
+}
 
 export interface CasePreset {
   id: string;

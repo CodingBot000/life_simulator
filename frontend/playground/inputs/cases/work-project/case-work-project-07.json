@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-project",
+    "title": {
+      "ko": "회의 줄이기",
+      "en": "Project / Program Template 7: 회의 줄이기"
+    },
+    "summary": {
+      "ko": "회의 줄이기에 대해 소통 비용 절감과 정보 누락 가능성 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 회의 줄이기."
+    },
+    "tags": [
+      "work-project",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 36,
+    "job": "project manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "stability",
+      "time_efficiency",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "회의를 줄이고 비동기 소통을 늘린다",
+    "optionB": "회의를 유지해 정보 누락을 줄인다",
+    "context": "프로젝트/프로그램 담당자는 소통 비용 절감과 정보 누락 가능성 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “회의를 줄이고 비동기 소통을 늘린다”와 “회의를 유지해 정보 누락을 줄인다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 시간 효율, 신뢰를 함께 둔다."
+  }
+}

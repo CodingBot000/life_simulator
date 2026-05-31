@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-sales",
+    "title": {
+      "ko": "VIP 고객 예외 처리",
+      "en": "Sales Template 10: VIP 고객 예외 처리"
+    },
+    "summary": {
+      "ko": "VIP 고객 예외 처리에 대해 특별 조건 제공과 내부 형평성 사이의 균형을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating VIP 고객 예외 처리."
+    },
+    "tags": [
+      "work-sales",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 34,
+    "job": "sales manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "income",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "특별 조건 제공을 우선한다",
+    "optionB": "내부 형평성을 우선한다",
+    "context": "영업 담당자는 특별 조건 제공과 내부 형평성 사이의 균형. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “특별 조건 제공을 우선한다”와 “내부 형평성을 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 수입, 신뢰를 함께 둔다."
+  }
+}

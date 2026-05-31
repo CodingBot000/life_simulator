@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "other",
+    "title": {
+      "ko": "가치관 충돌 선택",
+      "en": "Other Template 6: 가치관 충돌 선택"
+    },
+    "summary": {
+      "ko": "가치관 충돌 선택에 대해 현실적 이익과 개인 가치 사이의 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 가치관 충돌 선택."
+    },
+    "tags": [
+      "other",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 33,
+    "job": "office worker",
+    "risk_tolerance": "medium",
+    "priority": [
+      "stability",
+      "future_optionality",
+      "quality_of_life"
+    ]
+  },
+  "decision": {
+    "optionA": "현실적 이익을 우선한다",
+    "optionB": "개인 가치를 우선한다",
+    "context": "여러 조건이 섞인 결정을 앞둔 사용자는 현실적 이익과 개인 가치 사이의 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “현실적 이익을 우선한다”와 “개인 가치를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 안정성, 미래 선택지, 삶의 질을 함께 둔다."
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "categories": [
+    {
+      "id": "career",
+      "domain": "life",
+      "order": 10,
+      "labels": {
+        "ko": "커리어",
+        "en": "Career"
+      },
+      "status": "active"
+    },
+    {
+      "id": "relationship",
+      "domain": "life",
+      "order": 20,
+      "labels": {
+        "ko": "관계",
+        "en": "Relationship"
+      },
+      "status": "active"
+    },
+    {
+      "id": "finance",
+      "domain": "life",
+      "order": 30,
+      "labels": {
+        "ko": "재무",
+        "en": "Finance"
+      },
+      "status": "active"
+    },
+    {
+      "id": "living",
+      "domain": "life",
+      "order": 40,
+      "labels": {
+        "ko": "거주",
+        "en": "Living"
+      },
+      "status": "active"
+    },
+    {
+      "id": "education",
+      "domain": "life",
+      "order": 50,
+      "labels": {
+        "ko": "교육",
+        "en": "Education"
+      },
+      "status": "active"
+    },
+    {
+      "id": "health",
+      "domain": "life",
+      "order": 60,
+      "labels": {
+        "ko": "건강",
+        "en": "Health"
+      },
+      "status": "active"
+    },
+    {
+      "id": "other",
+      "domain": "life",
+      "order": 70,
+      "labels": {
+        "ko": "기타",
+        "en": "Other"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-sales",
+      "domain": "work",
+      "order": 110,
+      "labels": {
+        "ko": "영업",
+        "en": "Sales"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-support",
+      "domain": "work",
+      "order": 120,
+      "labels": {
+        "ko": "고객지원",
+        "en": "Customer Support"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-product",
+      "domain": "work",
+      "order": 130,
+      "labels": {
+        "ko": "제품",
+        "en": "Product"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-marketing",
+      "domain": "work",
+      "order": 140,
+      "labels": {
+        "ko": "마케팅",
+        "en": "Marketing"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-operations",
+      "domain": "work",
+      "order": 150,
+      "labels": {
+        "ko": "운영",
+        "en": "Operations"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-hr",
+      "domain": "work",
+      "order": 160,
+      "labels": {
+        "ko": "인사/조직",
+        "en": "HR / People"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-finance",
+      "domain": "work",
+      "order": 170,
+      "labels": {
+        "ko": "재무/회계",
+        "en": "Finance / Accounting"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-strategy",
+      "domain": "work",
+      "order": 180,
+      "labels": {
+        "ko": "전략/경영",
+        "en": "Strategy / Management"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-legal",
+      "domain": "work",
+      "order": 190,
+      "labels": {
+        "ko": "법무/컴플라이언스",
+        "en": "Legal / Compliance"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-engineering",
+      "domain": "work",
+      "order": 200,
+      "labels": {
+        "ko": "엔지니어링/IT",
+        "en": "Engineering / IT"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-design",
+      "domain": "work",
+      "order": 210,
+      "labels": {
+        "ko": "디자인/UX",
+        "en": "Design / UX"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-project",
+      "domain": "work",
+      "order": 220,
+      "labels": {
+        "ko": "프로젝트/프로그램",
+        "en": "Project / Program"
+      },
+      "status": "active"
+    },
+    {
+      "id": "work-procurement",
+      "domain": "work",
+      "order": 230,
+      "labels": {
+        "ko": "구매/벤더",
+        "en": "Procurement / Vendor"
+      },
+      "status": "active"
+    }
+  ]
+}

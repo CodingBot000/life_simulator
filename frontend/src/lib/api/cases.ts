@@ -1,8 +1,14 @@
 import { apiUrl, readJsonResponse } from "@/lib/api/client";
-import type { CasePreset } from "@/lib/types";
+import type { CasePreset, CasePresetCategoryInfo } from "@/lib/types";
 
 type CasesResponse = {
+  categories?: CasePresetCategoryInfo[];
   cases?: CasePreset[];
+};
+
+export type CasePresetCatalog = {
+  categories: CasePresetCategoryInfo[];
+  cases: CasePreset[];
 };
 
 export async function fetchCasePresets(signal?: AbortSignal) {
@@ -13,5 +19,8 @@ export async function fetchCasePresets(signal?: AbortSignal) {
     throw new Error("케이스 목록을 불러오지 못했습니다.");
   }
 
-  return data.cases;
+  return {
+    categories: data.categories ?? [],
+    cases: data.cases,
+  };
 }

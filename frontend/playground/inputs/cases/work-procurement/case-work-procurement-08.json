@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-procurement",
+    "title": {
+      "ko": "보안 검토 지연",
+      "en": "Procurement / Vendor Template 8: 보안 검토 지연"
+    },
+    "summary": {
+      "ko": "보안 검토 지연에 대해 공급 일정과 보안 리스크 통제 비교를 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 보안 검토 지연."
+    },
+    "tags": [
+      "work-procurement",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 38,
+    "job": "procurement manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "financial_efficiency",
+      "stability",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "공급 일정을 우선한다",
+    "optionB": "보안 검토를 완료한 뒤 진행한다",
+    "context": "구매/벤더 담당자는 공급 일정과 보안 리스크 통제 비교. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “공급 일정을 우선한다”와 “보안 검토를 완료한 뒤 진행한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 재무 효율, 안정성, 신뢰를 함께 둔다."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-marketing",
+    "title": {
+      "ko": "저성과 채널 중단",
+      "en": "Marketing Template 6: 저성과 채널 중단"
+    },
+    "summary": {
+      "ko": "저성과 채널 중단에 대해 실험 지속과 자원 재배분 사이의 판단을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 저성과 채널 중단."
+    },
+    "tags": [
+      "work-marketing",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 33,
+    "job": "marketing manager",
+    "risk_tolerance": "medium",
+    "priority": [
+      "growth",
+      "income",
+      "trust"
+    ]
+  },
+  "decision": {
+    "optionA": "저성과 채널을 중단하고 예산을 회수한다",
+    "optionB": "학습을 위해 제한적으로 실험을 지속한다",
+    "context": "마케팅 담당자는 실험 지속과 자원 재배분 사이의 판단. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “저성과 채널을 중단하고 예산을 회수한다”와 “학습을 위해 제한적으로 실험을 지속한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 성장, 수입, 신뢰를 함께 둔다."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "category": "work-finance",
+    "title": {
+      "ko": "감사 대응",
+      "en": "Finance / Accounting Template 11: 감사 대응"
+    },
+    "summary": {
+      "ko": "감사 대응에 대해 빠른 제출과 추가 검토 사이의 선택을 검토하는 템플릿입니다.",
+      "en": "A template for evaluating 감사 대응."
+    },
+    "tags": [
+      "work-finance",
+      "template-expansion"
+    ],
+    "status": "active"
+  },
+  "userProfile": {
+    "age": 39,
+    "job": "finance manager",
+    "risk_tolerance": "low",
+    "priority": [
+      "financial_stability",
+      "financial_efficiency",
+      "stability"
+    ]
+  },
+  "decision": {
+    "optionA": "빠른 제출을 우선한다",
+    "optionB": "추가 검토를 우선한다",
+    "context": "재무/회계 담당자는 빠른 제출과 추가 검토 사이의 선택. 지금 결정은 단기 결과와 장기 영향을 함께 만들 수 있으므로 “빠른 제출을 우선한다”와 “추가 검토를 우선한다” 중 어느 쪽이 현재 조건에 더 맞는지 비교해야 한다. 판단 기준은 재정 안정성, 재무 효율, 안정성을 함께 둔다."
+  }
+}
