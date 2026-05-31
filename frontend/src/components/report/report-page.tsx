@@ -80,6 +80,7 @@ export function ReportPage({
 }) {
   const [activeTab, setActiveTab] = useState<ReportTab>("summary");
   const [drawer, setDrawer] = useState<ReportDrawer>(null);
+  const shouldShowProgress = isLoading || hasProgressHistory(progress);
 
   if (isLoading && !result) {
     return (
@@ -94,9 +95,7 @@ export function ReportPage({
             있습니다.
           </p>
         </section>
-        {hasProgressHistory(progress) ? (
-          <LoadingStageStrip progress={progress} />
-        ) : null}
+        <LoadingStageStrip progress={progress} />
       </div>
     );
   }
@@ -151,6 +150,8 @@ export function ReportPage({
             {error}
           </InlineBanner>
         ) : null}
+
+        {shouldShowProgress ? <LoadingStageStrip progress={progress} /> : null}
 
         <section className="card-surface-strong rounded-[32px] p-6 sm:p-8">
           <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
